@@ -4,7 +4,6 @@ Minimalistic and Modern Discussion Software
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/b434e4594827418681e9fbe21566b45e)](https://www.codacy.com/gh/min-forum/min-forum/dashboard?utm_source=github.com&utm_medium=referral&utm_content=min-forum/min-forum&utm_campaign=Badge_Grade)
 ![git workflow](https://github.com/min-forum/min-forum/actions/workflows/main.yml/badge.svg?branch=main)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/kimolalekan/min-forum)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ### Prerequisite
@@ -49,6 +48,7 @@ yarn production
 - &#x2611; Coin and reward
 - &#x2611; Reports and flag
 - &#x2611; Advert settings
+- &#x2611; Site wide announcement
 - &#x2611; Analytics, pageviews and post views
 - &#x2611; Ban words
 - &#x2610; Docker image

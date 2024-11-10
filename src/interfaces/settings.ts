@@ -20,4 +20,6 @@ export interface settingsProp {
   };
   banWords?: string;
   status?: string;
+  announcementText?: string;
+  announcementLink?: string;
 }

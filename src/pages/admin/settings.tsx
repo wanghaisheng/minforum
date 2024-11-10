@@ -11,6 +11,7 @@ import {
   Image,
   Select
 } from '@geist-ui/core';
+import { setCookie, parseCookies } from 'nookies';
 import { Image as Picture } from '@geist-ui/icons';
 import AdminNavbar from 'components/admin/Navbar';
 import Sidebar from 'components/admin/Sidebar';
@@ -21,6 +22,7 @@ import { useTranslation, Translation } from 'components/intl/Translation';
 
 const Settings = observer(() => {
   const [store] = useState(() => new SettingsStore());
+  const cookie = parseCookies();
   const { loading, settings, setSettings, getSettings, update, uploadImage } =
     store;
   const { coin, email, advert, banWords } = settings;
@@ -300,6 +302,83 @@ const Settings = observer(() => {
                     type="secondary"
                     loading={loading}
                     onClick={save}
+                  >
+                    <Translation lang={settings?.language} value="Save" />
+                  </Button>
+                </div>
+              </div>
+            </Collapse>
+            <Collapse
+              title={useTranslation({
+                lang: settings?.language,
+                value: 'Announcement'
+              })}
+            >
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Announcement text"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Textarea
+                    width={'100%'}
+                    rows={5}
+                    value={settings.announcementText}
+                    onChange={(e: any) =>
+                      setSettings({
+                        ...settings,
+                        announcementText: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Announcement link"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Input
+                    htmlType="url"
+                    width={'100%'}
+                    value={settings.announcementLink}
+                    onChange={(e: any) =>
+                      setSettings({
+                        ...settings,
+                        announcementLink: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6></Text>
+                </div>
+                <div className="item">
+                  <Button
+                    shadow
+                    type="secondary"
+                    loading={loading}
+                    onClick={() => {
+                      if (settings?.announcementText) {
+                        let c = Number(cookie?.isAnnounce) || '0';
+                        c = Number(c) - 1;
+                        setCookie(null, 'isAnnounce', `${c}`, {
+                          path: '/'
+                        });
+                      }
+                      save();
+                    }}
                   >
                     <Translation lang={settings?.language} value="Save" />
                   </Button>

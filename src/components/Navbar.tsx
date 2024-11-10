@@ -14,7 +14,8 @@ import {
   Badge,
   Image,
   Input,
-  Tabs
+  Tabs,
+  Modal
 } from '@geist-ui/core';
 import {
   Sun,
@@ -48,6 +49,7 @@ const Navbar = observer((props: navbarProps) => {
   const cookie = parseCookies();
   const [theme, setTheme] = useState('weiss-light');
   const [show, setMenu] = useState(false);
+  const [announcementModal, toggleAnnouncement] = useState<any>(false);
   const [modal, toggleSearch] = useState<any>(false);
   const { title, description, hide, startConversation } = props;
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
@@ -60,9 +62,13 @@ const Navbar = observer((props: navbarProps) => {
   );
 
   useEffect(() => {
-    cookie && cookie.theme ? setTheme(cookie.theme) : '';
     getSettings();
+    cookie && cookie.theme ? setTheme(cookie.theme) : false;
+
     token.id ? getUnreadNotification(token.id) : null;
+    cookie && isNaN(Number(cookie?.isAnnounce))
+      ? toggleAnnouncement(true)
+      : false;
   }, [theme, token]);
 
   const switchTheme = (val: string) => {
@@ -74,6 +80,18 @@ const Navbar = observer((props: navbarProps) => {
   const getFirstName = (name: string) => {
     let first: any = name.split(' ');
     return first[0];
+  };
+
+  const handleAnnouncement = (accept: boolean) => {
+    setCookie(null, 'isAnnounce', `1`, {
+      path: '/'
+    });
+
+    toggleAnnouncement(false);
+
+    if (accept) {
+      window.location.href = settings?.announcementLink;
+    }
   };
 
   const handleSearch = async (val: string) => {
@@ -277,6 +295,36 @@ const Navbar = observer((props: navbarProps) => {
         <title>{title}</title>
         <link rel="icon" href={`/storage/${settings.siteFavicon}`} />
       </Head>
+
+      <Modal
+        disableBackdropClick
+        visible={announcementModal}
+        onClose={() => toggleAnnouncement(!announcementModal)}
+      >
+        <h3>Announcement</h3>
+        <Modal.Content>
+          <div
+            dangerouslySetInnerHTML={{ __html: settings?.announcementText }}
+          />
+          <Spacer h={3} />
+          <Grid.Container gap={2} justify="center">
+            <Grid xs={12}>
+              <Button width={'100%'} onClick={() => handleAnnouncement(false)}>
+                <b>Ignore</b>
+              </Button>
+            </Grid>
+            <Grid xs={12}>
+              <Button
+                width={'100%'}
+                type="secondary-light"
+                onClick={() => handleAnnouncement(true)}
+              >
+                <b>Ok</b>
+              </Button>
+            </Grid>
+          </Grid.Container>
+        </Modal.Content>
+      </Modal>
 
       {modal ? (
         <div className="custom-modal">

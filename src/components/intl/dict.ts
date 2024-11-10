@@ -2698,6 +2698,36 @@ const dict = [
     ja: 'Cloudflareターンスタイルの秘密キー',
     ko: 'Cloudflare 회전식 보안키',
     ru: 'Секретный ключ турникета Cloudflare'
+  },
+  {
+    en: 'Announcement',
+    es: 'Anuncio',
+    fr: 'Annonce',
+    de: 'Ankündigung',
+    cn: '公告',
+    ja: 'お知らせ',
+    ru: 'Объявление',
+    ko: '공지'
+  },
+  {
+    en: 'Announcement text',
+    es: 'Texto del anuncio',
+    fr: "Texte de l'annonce",
+    de: 'Ankündigungstext',
+    cn: '公告内容',
+    ja: 'お知らせの内容',
+    ru: 'Текст объявления',
+    ko: '공지 내용'
+  },
+  {
+    en: 'Announcement link',
+    es: 'Enlace del anuncio',
+    fr: "Lien de l'annonce",
+    de: 'Ankündigungslink',
+    cn: '公告链接',
+    ja: 'お知らせリンク',
+    ru: 'Ссылка на объявление',
+    ko: '공지 링크'
   }
 ];
 
