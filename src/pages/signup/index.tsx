@@ -205,22 +205,6 @@ const Signup = observer(() => {
                 )}
               />
               <Spacer h={1} />
-              {/* settings?.socialAccount?.github */}
-              <GitHubLogin
-                clientId={'Ov23liO9sbgK51vICdUL'}
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                style={{ background: 'none', border: 'none' }}
-              >
-                <Button
-                  auto
-                  width="100%"
-                  icon={<img src="/images/github.svg" height={20} />}
-                >
-                  Login with Github
-                </Button>
-              </GitHubLogin>
-              <Spacer h={1} />
               <Button
                 width="100%"
                 icon={<img src="/images/google.svg" height={20} />}
