@@ -12,7 +12,9 @@ import {
   ButtonDropdown,
   Spacer,
   Image,
-  Loading
+  Loading,
+  useClipboard,
+  useToasts
 } from '@geist-ui/core';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
@@ -45,6 +47,8 @@ import { Translation, useTranslation } from 'components/intl/Translation';
 const Discussion = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const clipboard = useClipboard();
+  const { setToast } = useToasts();
   const { slug }: any = router.query;
   const [modal, toggleModal] = useState(false);
   const [reply, toggleReply] = useState<any>({
@@ -98,6 +102,11 @@ const Discussion = observer(() => {
         })
       : null;
   }, [router]);
+
+  const copyLink = (link: string) => {
+    clipboard.copy(link);
+    setToast({ text: 'Link copied.' });
+  };
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -472,6 +481,21 @@ const Discussion = observer(() => {
                           &nbsp;&nbsp;{' '}
                           <span style={{ position: 'relative', top: -5 }}>
                             Email
+                          </span>
+                        </Link>
+                      </ButtonDropdown.Item>
+                      <ButtonDropdown.Item
+                        onClick={() =>
+                          copyLink(
+                            `${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`
+                          )
+                        }
+                      >
+                        <Link href="#">
+                          <Image src="/images/copy.svg" height={'18px'} />
+                          &nbsp;&nbsp;{' '}
+                          <span style={{ position: 'relative', top: -5 }}>
+                            Copy
                           </span>
                         </Link>
                       </ButtonDropdown.Item>
