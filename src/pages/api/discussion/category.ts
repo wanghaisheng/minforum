@@ -1,12 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  r,
-  Discussion,
-  Comment,
-  Category
-} from '../../../components/api/model';
-import { asyncForEach, withAuth } from '../../../components/api/utils';
+import { r, Discussion, Comment, Category } from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
 
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

@@ -4,8 +4,8 @@ import formidable from 'formidable';
 import path from 'path';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Upload } from '../../../components/api/model';
-import { slug, isImage, getEXT } from '../../../components/api/utils';
+import { Upload } from 'components/api/model';
+import { slug, isImage, getEXT } from 'components/api/utils';
 
 const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = req.query.id;

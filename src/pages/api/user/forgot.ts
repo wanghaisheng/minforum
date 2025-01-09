@@ -1,8 +1,8 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth, code } from '../../../components/api/utils';
-import { forgotTemplate } from '../../../components/api/mail-template';
+import { User } from 'components/api/model';
+import { withAuth, code } from 'components/api/utils';
+import { forgotTemplate } from 'components/api/mail-template';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

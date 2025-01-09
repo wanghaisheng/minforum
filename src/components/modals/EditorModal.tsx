@@ -104,21 +104,29 @@ const EditorModal = observer((props: editorProps) => {
             <Editor
               height={_height}
               value={content}
+              button={
+                <>
+                  {isAuthenticate ? (
+                    <Button
+                      loading={loading}
+                      type="success-light"
+                      onClick={save}
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Link href="/login">
+                      <Button loading={loading} type="success-light">
+                        Sign in to Publish
+                      </Button>
+                    </Link>
+                  )}
+                </>
+              }
               onChange={(value) => {
                 actionTrigger({ content: value });
               }}
             />
-            {isAuthenticate ? (
-              <Button loading={loading} type="success-light" onClick={save}>
-                Publish
-              </Button>
-            ) : (
-              <Link href="/login">
-                <Button loading={loading} type="success-light">
-                  Sign in to Publish
-                </Button>
-              </Link>
-            )}
           </div>
         </div>
       ) : (

@@ -120,8 +120,6 @@ const Home = observer(() => {
             ''
           )}
 
-          <CategoryHeader />
-
           <div className="custom-tab">
             <NextLink href="/popular">
               <Link>

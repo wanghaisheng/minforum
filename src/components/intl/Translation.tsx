@@ -1,10 +1,19 @@
+import { pluralize } from 'components/api/utils';
 import dict from './dict';
+
+interface timeTranslationProps {
+  lang: LangCode;
+  date: Date;
+}
+
+type LangCode = 'en' | 'es' | 'fr' | 'de' | 'ru' | 'cn' | 'ja' | 'ko';
 
 type translationProps = {
   lang: string;
   value: string;
   number?: any;
   name?: any;
+  duration?: number;
 };
 
 const useReplyTranslation = (props: translationProps) => {
@@ -130,6 +139,115 @@ const useLikedPostTranslation = (props: translationProps) => {
   }
 };
 
+const timePluralize = (number: number, lang: LangCode): string => {
+  if (lang === 'en') {
+    return number > 1 ? 's' : '';
+  } else if (lang === 'es') {
+    return number > 1 ? 's' : '';
+  } else if (lang === 'fr') {
+    return number > 1 ? 's' : '';
+  } else if (lang === 'de') {
+    return number > 1 ? 'e' : '';
+  } else if (lang === 'ru') {
+    return number > 1 ? 'ы' : 'а';
+  } else if (lang === 'cn') {
+    return '';
+  } else if (lang === 'ja') {
+    return '';
+  } else if (lang === 'ko') {
+    return '';
+  }
+  return '';
+};
+
+const useTimeTranslation = (props: timeTranslationProps): string => {
+  const { lang, date } = props;
+
+  const durationMap: Record<LangCode, string[]> = {
+    en: ['min', 'hour', 'day', 'month', 'year'],
+    es: ['minuto', 'hora', 'día', 'mes', 'año'],
+    fr: ['minute', 'heure', 'jour', 'mois', 'an'],
+    de: ['Minute', 'Stunde', 'Tag', 'Monat', 'Jahr'],
+    ru: ['минута', 'час', 'день', 'месяц', 'год'],
+    cn: ['分钟', '小时', '天', '个月', '年'],
+    ja: ['分', '時間', '日', 'ヶ月', '年'],
+    ko: ['분', '시간', '일', '개월', '년']
+  };
+
+  // Step 1: Calculate the difference between the current date and the given date
+  const now = new Date();
+  const diffInMs = now.getTime() - date.getTime();
+
+  // Step 2: If the difference is less than 1 minute, return "just now"
+  if (diffInMs < 60 * 1000) {
+    const justNowMap: Record<LangCode, string> = {
+      en: 'Just now',
+      es: 'Ahora mismo',
+      fr: "À l'instant",
+      de: 'Gerade jetzt',
+      ru: 'Только что',
+      cn: '刚刚',
+      ja: 'たった今',
+      ko: '방금 전'
+    };
+    return justNowMap[lang];
+  }
+
+  // Step 2: Determine the duration and unit
+  const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  const diffInMonths = Math.floor(diffInDays / 30);
+  const diffInYears = Math.floor(diffInDays / 365);
+
+  let number: number;
+  let duration: string;
+
+  if (diffInMinutes < 60) {
+    number = diffInMinutes;
+    duration = 'min';
+  } else if (diffInHours < 24) {
+    number = diffInHours;
+    duration = 'hour';
+  } else if (diffInDays < 30) {
+    number = diffInDays;
+    duration = 'day';
+  } else if (diffInMonths < 12) {
+    number = diffInMonths;
+    duration = 'month';
+  } else {
+    number = diffInYears;
+    duration = 'year';
+  }
+
+  // Step 3: Get the unit based on the language
+  const unit =
+    durationMap[lang][
+      ['min', 'hour', 'day', 'month', 'year'].indexOf(duration)
+    ];
+
+  // Step 4: Return the translated string based on the language
+  if (lang === 'en') {
+    return `${number} ${unit}${timePluralize(number, lang)} ago`;
+  } else if (lang === 'es') {
+    return `hace ${number} ${unit}${timePluralize(number, lang)}`;
+  } else if (lang === 'fr') {
+    return `il y a ${number} ${unit}${timePluralize(number, lang)}`;
+  } else if (lang === 'de') {
+    return `vor ${number} ${unit}${timePluralize(number, lang)}`;
+  } else if (lang === 'ru') {
+    return `${number} ${unit}${timePluralize(number, lang)} назад`;
+  } else if (lang === 'cn') {
+    return `${number}${unit}前`;
+  } else if (lang === 'ja') {
+    return `${number}${unit}前`;
+  } else if (lang === 'ko') {
+    return `${number}${unit} 전`;
+  }
+
+  return '';
+};
+
 const useTranslation = (props: translationProps) => {
   let translation: any = dict
     .filter((item) => item.en === props.value)
@@ -153,5 +271,6 @@ export {
   useRepliedPostTranslation,
   useLikedReplyTranslation,
   useReplyTranslation,
+  useTimeTranslation,
   Translation
 };

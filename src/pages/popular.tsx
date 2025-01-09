@@ -1,15 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
-import {
-  Spacer,
-  Pagination,
-  Link,
-  Button,
-  Card,
-  Loading
-} from '@geist-ui/core';
-import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
-import { useRouter } from 'next/router';
+import { Spacer, Link, Button, Card, Loading } from '@geist-ui/core';
+
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
@@ -24,22 +16,35 @@ import CategoryHeader from 'components/CategoryHeader';
 
 const Home = observer(() => {
   const token = useToken();
-  const router = useRouter();
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
-    { loading, page, total, limit, discussions, setPage, getPopularDiscussions }
+    { loading, page, nomore, discussions, setPage, getPopularDiscussions }
   ] = useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
 
   useEffect(() => {
     getSettings();
-    getPopularDiscussions();
+    getPopularDiscussions(false);
   }, [token]);
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getPopularDiscussions();
-  };
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getPopularDiscussions(true);
+      }
+    }
+  }, [discussions, nomore, page]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -113,7 +118,7 @@ const Home = observer(() => {
           ) : (
             ''
           )}
-          <CategoryHeader />
+
           <div className="custom-tab">
             <NextLink href="/popular">
               <Link className="active">
@@ -126,25 +131,12 @@ const Home = observer(() => {
                 <Translation lang={settings?.language} value="Recent" />
               </Link>
             </NextLink>
-            <NextLink href="/unanswered">
+            <NextLink href="/category">
               <Link>
-                <Translation lang={settings?.language} value="Unanswered" />
+                <Translation lang={settings?.language} value="Categories" />
               </Link>
             </NextLink>
           </div>
-
-          {loading ? (
-            <div>
-              <Spacer h={3} />
-              <Loading>
-                <Translation lang={settings?.language} value="Loading" />
-                &nbsp;
-                <Translation lang={settings?.language} value="Discussions" />
-              </Loading>
-            </div>
-          ) : (
-            ''
-          )}
 
           {discussions.map((item) => (
             <Post
@@ -163,21 +155,15 @@ const Home = observer(() => {
               date={item.createdAt}
             />
           ))}
-          {total >= limit ? (
-            <div className="pagination">
-              <Pagination
-                count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
-                onChange={paginate}
-              >
-                <Pagination.Next>
-                  <ChevronRightCircle />
-                </Pagination.Next>
-                <Pagination.Previous>
-                  <ChevronLeftCircle />
-                </Pagination.Previous>
-              </Pagination>
+
+          {loading ? (
+            <div>
+              <Spacer h={3} />
+              <Loading>
+                <Translation lang={settings?.language} value="Loading" />
+                &nbsp;
+                <Translation lang={settings?.language} value="Discussions" />
+              </Loading>
             </div>
           ) : (
             ''

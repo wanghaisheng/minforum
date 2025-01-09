@@ -19,8 +19,10 @@ import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const CreateCategory = observer(() => {
+  const token = useToken();
   const router = useRouter();
   const [showColor, toggleColor] = useState(false);
   const [{ users, getModerators }] = useState(() => new UserStore());
@@ -33,14 +35,14 @@ const CreateCategory = observer(() => {
   useEffect(() => {
     getSettings();
     getModerators();
-  }, []);
+  }, [token?.id]);
 
   const save = async () => {
     if (!title || title.length < 3) {
       toast.error(
         useTranslation({
           lang: settings?.language,
-          value: 'Title is too short.'
+          value: 'Title is too short. Minimum of 3 characters.'
         })
       );
     } else if (!description) {
@@ -78,7 +80,7 @@ const CreateCategory = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <Toaster />
       <AdminNavbar
         title={useTranslation({
@@ -92,7 +94,11 @@ const CreateCategory = observer(() => {
       />
 
       <div className="page-container top-100">
-        <Sidebar active="categories" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="categories"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <div className="boxed">

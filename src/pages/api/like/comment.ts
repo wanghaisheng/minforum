@@ -7,8 +7,8 @@ import {
   Comment,
   Notification,
   Discussion
-} from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+} from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { User } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 import bcrypt from 'bcryptjs';
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,12 +17,10 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
             await User.get(id)
               .update({ id, name, email, username })
               .then(() => {
-                res
-                  .status(200)
-                  .json({
-                    success: true,
-                    data: 'Account updated successfully!'
-                  });
+                res.status(200).json({
+                  success: true,
+                  data: 'Account updated successfully!'
+                });
               });
           } else {
             res.send({

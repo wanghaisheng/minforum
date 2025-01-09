@@ -37,10 +37,10 @@ const Contributors = observer((props: contributorProps) => {
                   lang: props.lang,
                   value: `Discussion${pluralize(item.discussion!)}`
                 })}{' '}
-                &nbsp;- {item.coin}{' '}
+                &nbsp;- {item.point}{' '}
                 {useTranslation({
                   lang: props.lang,
-                  value: `Coin${pluralize(item.coin!)}`
+                  value: `point${pluralize(item.point!)}`
                 })}
               </Text>
             </User>

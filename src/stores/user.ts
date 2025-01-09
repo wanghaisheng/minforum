@@ -1,6 +1,6 @@
-import { resProp } from './../interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
-import { userProp } from '../interfaces/user';
+import { resProp } from 'interfaces/res';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
+import { userProp } from 'interfaces/user';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -424,7 +424,9 @@ export default class UserStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.files = res.data;
+          runInAction(() => {
+            this.files = res.data;
+          });
         }
       })
       .catch((err) => console.log(err));

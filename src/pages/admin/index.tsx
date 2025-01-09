@@ -16,21 +16,17 @@ import DateModal from 'components/modals/DateModal';
 import AnalyticsStore from 'stores/analytics';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useSocket from 'components/Socket';
+import useToken from 'components/Token';
 
 const Dashboard = observer(() => {
+  const token = useToken();
+  const socket = useSocket();
   const [modal, toggleDate] = useState(false);
+  const [active, setActive] = useState(0);
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
   const [
-    {
-      loading,
-      users,
-      discussions,
-      pageviews,
-      getUsers,
-      getDiscussions,
-      getPageviews
-    }
+    { users, discussions, pageviews, getUsers, getDiscussions, getPageviews }
   ] = useState(() => new AnalyticsStore());
 
   const [date, setDate] = useState([
@@ -48,7 +44,15 @@ const Dashboard = observer(() => {
     getUsers(from, to);
     getDiscussions(from, to);
     getPageviews(from, to);
-  }, []);
+
+    return () => {
+      socket ? socket.close() : null;
+    };
+  }, [active, token?.id]);
+
+  socket?.on('activeUsers', (count) => {
+    setActive(count);
+  });
 
   const processAnalytics = async () => {
     let from = moment(date[0].startDate).format('YYYY-MM-DD');
@@ -124,7 +128,7 @@ const Dashboard = observer(() => {
   const lang = settings.language;
 
   return (
-    <Auth>
+    <Auth roles={['admin', 'moderator']}>
       <Navbar
         title={useTranslation({
           lang: settings?.language,
@@ -144,7 +148,7 @@ const Dashboard = observer(() => {
         actionTrigger={processAnalytics}
       />
       <div className="page-container top-100">
-        <Sidebar active="dashboard" lang={settings?.language} />
+        <Sidebar role={token?.role} active="users" lang={settings?.language} />
 
         <main className="main for-admin">
           <div className="dashboard-header">
@@ -161,35 +165,35 @@ const Dashboard = observer(() => {
                     lang === 'es'
                       ? es
                       : lang === 'fr'
-                      ? fr
-                      : lang === 'en'
-                      ? enUS
-                      : lang === 'ru'
-                      ? ru
-                      : lang === 'de'
-                      ? de
-                      : lang === 'cn'
-                      ? zhCN
-                      : lang === 'ja'
-                      ? ja
-                      : null
+                        ? fr
+                        : lang === 'en'
+                          ? enUS
+                          : lang === 'ru'
+                            ? ru
+                            : lang === 'de'
+                              ? de
+                              : lang === 'cn'
+                                ? zhCN
+                                : lang === 'ja'
+                                  ? ja
+                                  : null
                 })} - ${format(date[0].endDate, 'MMM d, yyyy', {
                   locale:
                     lang === 'es'
                       ? es
                       : lang === 'fr'
-                      ? fr
-                      : lang === 'en'
-                      ? enUS
-                      : lang === 'ru'
-                      ? ru
-                      : lang === 'de'
-                      ? de
-                      : lang === 'cn'
-                      ? zhCN
-                      : lang === 'ja'
-                      ? ja
-                      : null
+                        ? fr
+                        : lang === 'en'
+                          ? enUS
+                          : lang === 'ru'
+                            ? ru
+                            : lang === 'de'
+                              ? de
+                              : lang === 'cn'
+                                ? zhCN
+                                : lang === 'ja'
+                                  ? ja
+                                  : null
                 })}`}
                 onClick={() => toggleDate(true)}
               />
@@ -197,7 +201,18 @@ const Dashboard = observer(() => {
           </div>
 
           <Grid.Container gap={2}>
-            <Grid xs={24} md={8}>
+            <Grid xs={24} md={6}>
+              <Card shadow width={'100%'}>
+                <Text h3 my={0}>
+                  <CountUp prefix="" start={0} end={active} separator="," />
+                </Text>
+                <Text h6 my={0}>
+                  <span style={{ color: '#36AF61' }}>&#x25cf; </span>
+                  <Translation lang={settings?.language} value="Online users" />
+                </Text>
+              </Card>
+            </Grid>
+            <Grid xs={24} md={6}>
               <Card shadow width={'100%'}>
                 <Text h3 my={0}>
                   <CountUp prefix="" start={0} end={userTotal} separator="," />
@@ -207,7 +222,7 @@ const Dashboard = observer(() => {
                 </Text>
               </Card>
             </Grid>
-            <Grid xs={24} md={8}>
+            <Grid xs={24} md={6}>
               <Card shadow width={'100%'}>
                 <Text h3 my={0}>
                   <CountUp
@@ -222,7 +237,7 @@ const Dashboard = observer(() => {
                 </Text>
               </Card>
             </Grid>
-            <Grid xs={24} md={8}>
+            <Grid xs={24} md={6}>
               <Card shadow width={'100%'}>
                 <Text h3 my={0}>
                   <CountUp

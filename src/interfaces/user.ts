@@ -11,7 +11,7 @@ export interface userProp {
   photo?: string | any;
   discussion?: number;
   comment?: number;
-  coin?: number;
+  point?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

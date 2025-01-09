@@ -1,7 +1,7 @@
-import { resProp } from './../interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
-import { userProp } from '../interfaces/user';
-import { settingsProp } from '../interfaces/settings';
+import { resProp } from 'interfaces/res';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
+import { userProp } from 'interfaces/user';
+import { settingsProp } from 'interfaces/settings';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -117,7 +117,10 @@ export default class SettingsStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.settings = res.data;
+          runInAction(() => {
+            this.settings = res.data;
+          });
+
           return res;
         }
       })

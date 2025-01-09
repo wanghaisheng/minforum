@@ -7,9 +7,9 @@ import {
   User,
   Discussion,
   Notification
-} from '../../../components/api/model';
-import { withAuth, slug } from '../../../components/api/utils';
-import { settingsProp } from './../../../interfaces/settings';
+} from 'components/api/model';
+import { withAuth, slug } from 'components/api/utils';
+import { settingsProp } from 'interfaces/settings';
 
 const getSettings = async () => {
   return await Settings.orderBy(r.asc('createdAt'))
@@ -33,7 +33,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
             await User.get(data.userId).then(async (p: any) => {
               await User.get(data.userId)
                 .update({
-                  coin: Number(p.coin + config.coin?.comment)
+                  point: Number(p.point + config.point?.comment)
                 })
                 .then(async () => {
                   await Discussion.get(req.body.discussionId)

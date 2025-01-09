@@ -19,7 +19,7 @@ Minimalistic and Modern Discussion Software
 ### Installation
 
 ```
-sh <(curl https://raw.githubusercontent.com/min-forum/min-forum/main/install.sh)
+sh <(curl https://raw.githubusercontent.com/min-forum/min-forum/main/install/setup.sh)
 ```
 
 ### Development
@@ -36,21 +36,23 @@ yarn production
 
 ### Roadmap
 
-- &#x2611; User system (member & moderator)
+- &#x2611; User system (member, moderator and admin)
 - &#x2611; Communities or categories
 - &#x2611; Post and comment
+- &#x2611; Direct messaging with controls to block or accept messages from users
 - &#x2611; Social share
 - &#x2610; Email notification
 - &#x2611; Web notification
 - &#x2610; Push notification
-- &#x2611; Theming: Light and Dark
+- &#x2610; Theming: Light and Dark
 - &#x2611; Language & Translation (English, French, Spanish, Deutsch, Chinese, Japanese, Korean, and Russian)
-- &#x2611; Coin and reward
+- &#x2611; Points system: Reward users with points for their activities and contributions.
 - &#x2611; Reports and flag
 - &#x2611; Advert settings
 - &#x2611; Site wide announcement
 - &#x2611; Analytics, pageviews and post views
 - &#x2611; Ban words
+- &#x2610; Monetization: Offer premium features via paywalls, subscription plans, and secure payment integration
 - &#x2610; Docker image
 - &#x2610; Digital ocean marketplace
 - &#x2610; AWS marketplace

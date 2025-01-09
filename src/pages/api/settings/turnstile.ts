@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Settings, r } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { Settings, r } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const turnstile = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

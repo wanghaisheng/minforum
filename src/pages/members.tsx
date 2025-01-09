@@ -47,20 +47,20 @@ const Members = observer(() => {
             lang === 'es'
               ? es
               : lang === 'fr'
-              ? fr
-              : lang === 'en'
-              ? enUS
-              : lang === 'ru'
-              ? ru
-              : lang === 'de'
-              ? de
-              : lang === 'cn'
-              ? zhCN
-              : lang === 'ja'
-              ? ja
-              : lang === 'ko'
-              ? ko
-              : null
+                ? fr
+                : lang === 'en'
+                  ? enUS
+                  : lang === 'ru'
+                    ? ru
+                    : lang === 'de'
+                      ? de
+                      : lang === 'cn'
+                        ? zhCN
+                        : lang === 'ja'
+                          ? ja
+                          : lang === 'ko'
+                            ? ko
+                            : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -95,14 +95,6 @@ const Members = observer(() => {
                 {useTranslation({
                   lang: settings?.language,
                   value: `Discussion${pluralize(item.discussion!)}`
-                })}
-              </Text>
-              <Spacer inline />
-              <Text small>
-                {formatNumber(item.coin!)}{' '}
-                {useTranslation({
-                  lang: settings?.language,
-                  value: `Coin${pluralize(item.coin!)}`
                 })}
               </Text>
             </div>

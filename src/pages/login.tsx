@@ -91,13 +91,17 @@ const Login = observer(() => {
               </Text>
 
               {status === 'inactive' ? (
-                <Text>
+                <Text className="error">
                   <Translation
                     lang={settings?.language}
                     value="Account is inactive."
                   />
                   <Translation lang={settings?.language} value="Click" />{' '}
-                  <Link href="/account/verify" color>
+                  <Link
+                    href="/account/verify"
+                    color
+                    style={{ textDecoration: 'underline' }}
+                  >
                     <Translation
                       lang={settings?.language}
                       value="Click here to verify your account."
@@ -166,7 +170,12 @@ const Login = observer(() => {
                   value="Forgotten Password?"
                 />
                 &nbsp;
-                <Link href="/forgot" color underline>
+                <Link
+                  href="/forgot"
+                  color
+                  underline
+                  style={{ fontWeight: '500' }}
+                >
                   <Translation lang={settings?.language} value="Reset here" />{' '}
                 </Link>
               </Text>
@@ -174,7 +183,12 @@ const Login = observer(() => {
               <Text font={'14px'}>
                 <Translation lang={settings?.language} value="Not a member?" />
                 &nbsp;
-                <Link href="/signup" color underline>
+                <Link
+                  href="/signup"
+                  color
+                  underline
+                  style={{ fontWeight: '500' }}
+                >
                   <Translation lang={settings?.language} value="Signup here" />
                 </Link>
               </Text>

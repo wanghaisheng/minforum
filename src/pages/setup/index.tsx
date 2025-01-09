@@ -25,7 +25,7 @@ const Setup = observer(() => {
   const router = useRouter();
   const [store] = useState(() => new SettingsStore());
   const [loading, setLoading] = useState(true);
-  const { admin, setAdmin, settings, setSettings, getSettings } = store;
+  const { admin, setAdmin, settings, setSettings } = store;
 
   useEffect(() => {
     setTimeout(() => {

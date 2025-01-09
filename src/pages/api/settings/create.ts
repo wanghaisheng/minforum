@@ -1,13 +1,13 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Settings } from '../../../components/api/model';
-import { withAuth, slug } from '../../../components/api/utils';
+import { Settings } from 'components/api/model';
+import { withAuth, slug } from 'components/api/utils';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
       req.body.slug = slug();
-      req.body.language = req.body.language ? req.body.language : "en";
+      req.body.language = req.body.language ? req.body.language : 'en';
       let settings = new Settings(req.body);
       await settings
         .save()

@@ -3,8 +3,12 @@ import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 
+type authProps = {
+  children: JSX.Element | JSX.Element[] | string;
+  roles: string[];
+};
 
-const Auth = (props: { children: any }) => {
+const Auth = (prop: authProps) => {
   const router = useRouter();
   const cookie = parseCookies();
   const [user, setUser] = React.useState<any>({ id: '', role: '' });
@@ -13,22 +17,22 @@ const Auth = (props: { children: any }) => {
     let user: any = cookie;
     user = user && user._w_auth ? JSON.parse(user._w_auth) : null;
     setUser(user);
-    if (user?.role !== 'admin') {
+
+    if (user && prop.roles.includes(user.role) === false) {
       toast.error('You are not authorized to access this page', {
         duration: 3000
       });
-      router.push('/no-auth');
+      router.push('/404');
     }
   }, [router]);
 
-  if (user && user?.role !== 'admin') {
-    // router.push('/login');
+  if (user && prop.roles.includes(user.role) === false) {
     return <></>;
   } else {
     return (
       <div>
         <Toaster />
-        {props.children}
+        {prop.children}
       </div>
     );
   }

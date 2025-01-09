@@ -540,24 +540,24 @@ const dict = [
     ko: '아동 학대'
   },
   {
-    en: 'Coin',
-    es: 'Moneda',
-    fr: 'Pièce de monnaie',
-    de: 'Münze',
-    cn: '硬币',
-    ja: 'コイン',
-    ru: 'Монета',
-    ko: '코인'
+    en: 'point',
+    es: 'punto',
+    fr: 'point',
+    de: 'Punkt',
+    cn: '积分',
+    ja: 'ポイント',
+    ru: 'балл',
+    ko: '포인트'
   },
   {
-    en: 'Coins',
-    es: 'Monedas',
-    fr: 'Pièces de monnaie',
-    de: 'Münzen',
-    cn: '硬币',
-    ja: 'コイン',
-    ru: 'Монеты',
-    ko: '코인들'
+    en: 'points',
+    es: 'puntos',
+    fr: 'points',
+    de: 'Punkte',
+    cn: '积分',
+    ja: 'ポイント',
+    ru: 'баллы',
+    ko: '포인트'
   },
   {
     en: 'Discussion Title',
@@ -1208,16 +1208,6 @@ const dict = [
     ja: '追加',
     ru: 'Добавить',
     ko: '추가'
-  },
-  {
-    en: 'Title is too short.',
-    es: 'El título es demasiado corto.',
-    fr: 'Le titre est trop court.',
-    de: 'Titel ist zu kurz.',
-    cn: '标题太短。',
-    ja: 'タイトルが短すぎます。',
-    ru: 'Заголовок слишком короткий.',
-    ko: '제목이 너무 짧습니다.'
   },
   {
     en: 'Description is required',
@@ -1940,14 +1930,14 @@ const dict = [
     ko: '광고 설정'
   },
   {
-    en: "Note: Changing coin values will affect users' current value.",
-    es: 'Nota: Cambiar los valores de las monedas afectará el valor actual de los usuarios.',
-    fr: 'Remarque : La modification des valeurs des pièces affectera la valeur actuelle des utilisateurs.',
-    de: 'Hinweis: Die Änderung der Münzwerte wirkt sich auf den aktuellen Wert der Benutzer aus.',
-    cn: '注意：更改硬币值将影响用户的当前值。',
-    ja: '注：コインの値を変更すると、ユーザーの現在の値に影響します。',
-    ru: 'Примечание: Изменение значения монеты повлияет на текущее значение пользователей.',
-    ko: '참고: 코인 값 변경은 사용자의 현재 값을 영향을 미칩니다.'
+    en: "Note: Changing the point value will affect users' current points.",
+    es: 'Nota: Cambiar el valor de los puntos afectará los puntos actuales de los usuarios.',
+    fr: 'Remarque : Modifier la valeur des points affectera les points actuels des utilisateurs.',
+    de: 'Hinweis: Das Ändern des Punktwerts wirkt sich auf die aktuellen Punkte der Benutzer aus.',
+    cn: '注意：更改积分值将影响用户的当前积分。',
+    ja: '注意：ポイントの値を変更すると、ユーザーの現在のポイントに影響します。',
+    ru: 'Примечание: Изменение значения баллов повлияет на текущие баллы пользователей.',
+    ko: '참고: 포인트 값을 변경하면 사용자의 현재 포인트에 영향을 미칩니다.'
   },
   {
     en: 'Top',
@@ -2060,7 +2050,7 @@ const dict = [
     ko: '보상 설정'
   },
   {
-    en: 'Note: Changing coin values will affect users current value',
+    en: 'Note: Changing point values will affect users current value',
     es: 'Nota: El cambio de los valores de las monedas afectará el valor actual de los usuarios',
     fr: 'Remarque: la modification des valeurs des pièces affectera la valeur actuelle des utilisateurs',
     de: 'Hinweis: Die Änderung der Münzwerte wirkt sich auf den aktuellen Wert der Benutzer aus',
@@ -2351,7 +2341,7 @@ const dict = [
   },
   {
     en: 'Passwords does not matched!',
-    es: '¡Las contraseñas no coinciden!',
+    es: '¡Las contraseñas no pointciden!',
     fr: 'Les mots de passe ne correspondent pas!',
     de: 'Passwörter stimmen nicht überein!',
     cn: '密码不匹配！',
@@ -2728,6 +2718,536 @@ const dict = [
     ja: 'お知らせリンク',
     ru: 'Ссылка на объявление',
     ko: '공지 링크'
+  },
+  {
+    en: 'Just now',
+    es: 'En este momento',
+    fr: "Tout à l' heure",
+    de: 'Soeben',
+    cn: '现在',
+    ja: 'ちょうど今',
+    ru: 'Прямо сейчас',
+    ko: '방금'
+  },
+  {
+    en: 'Unblock user to send messages',
+    es: 'Desbloquear usuario para enviar mensajes',
+    fr: "Débloquer l'utilisateur pour envoyer des messages",
+    de: 'Benutzer freischalten, um Nachrichten zu senden',
+    cn: '解除屏蔽用户以发送消息',
+    ja: 'メッセージを送信するためにユーザーのブロックを解除する',
+    ru: 'Разблокировать пользователя, чтобы отправить сообщение',
+    ko: '메시지를 보내려면 사용자 차단을 해제하세요'
+  },
+  {
+    en: 'You can no longer send messages in this chat',
+    es: 'Ya no puedes enviar mensajes en este chat',
+    fr: 'Vous ne pouvez plus envoyer de messages dans ce chat',
+    de: 'Sie können in diesem Chat keine Nachrichten mehr senden',
+    cn: '您无法再在此聊天中发送消息',
+    ja: 'このチャットでメッセージを送信できなくなりました',
+    ru: 'Вы больше не можете отправлять сообщения в этом чате',
+    ko: '이 채팅에서 더 이상 메시지를 보낼 수 없습니다'
+  },
+  {
+    en: 'Block',
+    es: 'Bloquear',
+    fr: 'Bloquer',
+    de: 'Blockieren',
+    cn: '屏蔽',
+    ja: 'ブロック',
+    ru: 'Заблокировать',
+    ko: '차단'
+  },
+  {
+    en: 'Unblock',
+    es: 'Desbloquear',
+    fr: 'Débloquer',
+    de: 'Entblockieren',
+    cn: '解除屏蔽',
+    ja: 'ブロック解除',
+    ru: 'Разблокировать',
+    ko: '차단 해제'
+  },
+  {
+    en: 'Search emoji...',
+    es: 'Buscar emoji...',
+    fr: 'Rechercher un emoji...',
+    de: 'Emoji suchen...',
+    cn: '搜索表情...',
+    ja: '絵文字を検索...',
+    ru: 'Поиск эмодзи...',
+    ko: '이모지 검색...'
+  },
+  {
+    en: 'Smileys & Emotions',
+    es: 'Emoticonos y Emociones',
+    fr: 'Smileys et Émotions',
+    de: 'Smileys und Emotionen',
+    cn: '表情与情感',
+    ja: '笑顔と感情',
+    ru: 'Смайлики и Эмоции',
+    ko: '스마일리와 감정'
+  },
+  {
+    en: 'People & Body',
+    es: 'Personas y Cuerpo',
+    fr: 'Personnes et Corps',
+    de: 'Menschen und Körper',
+    cn: '人与身体',
+    ja: '人と体',
+    ru: 'Люди и Тело',
+    ko: '사람과 몸'
+  },
+  {
+    en: 'Animals & Nature',
+    es: 'Animales y Naturaleza',
+    fr: 'Animaux et Nature',
+    de: 'Tiere und Natur',
+    cn: '动物与自然',
+    ja: '動物と自然',
+    ru: 'Животные и Природа',
+    ko: '동물과 자연'
+  },
+  {
+    en: 'Food & Drink',
+    es: 'Comida y Bebida',
+    fr: 'Nourriture et Boissons',
+    de: 'Essen und Trinken',
+    cn: '食物与饮品',
+    ja: '食べ物と飲み物',
+    ru: 'Еда и Напитки',
+    ko: '음식과 음료'
+  },
+  {
+    en: 'Travel & Places',
+    es: 'Viajes y Lugares',
+    fr: 'Voyage et Lieux',
+    de: 'Reisen und Orte',
+    cn: '旅行与地点',
+    ja: '旅行と場所',
+    ru: 'Путешествия и Места',
+    ko: '여행과 장소'
+  },
+  {
+    en: 'Activities',
+    es: 'Actividades',
+    fr: 'Activités',
+    de: 'Aktivitäten',
+    cn: '活动',
+    ja: 'アクティビティ',
+    ru: 'Мероприятия',
+    ko: '활동'
+  },
+  {
+    en: 'Objects',
+    es: 'Objetos',
+    fr: 'Objets',
+    de: 'Objekte',
+    cn: '物品',
+    ja: '物',
+    ru: 'Объекты',
+    ko: '물건'
+  },
+  {
+    en: 'Symbols',
+    es: 'Símbolos',
+    fr: 'Symboles',
+    de: 'Symbole',
+    cn: '符号',
+    ja: '記号',
+    ru: 'Символы',
+    ko: '기호'
+  },
+  {
+    en: 'Flags',
+    es: 'Banderas',
+    fr: 'Drapeaux',
+    de: 'Flaggen',
+    cn: '旗帜',
+    ja: '旗',
+    ru: 'Флаги',
+    ko: '깃발'
+  },
+  {
+    en: 'Homepage settings',
+    es: 'Configuración de la página de inicio',
+    fr: "Paramètres de la page d'accueil",
+    de: 'Startseiteneinstellungen',
+    cn: '主页设置',
+    ja: 'ホームページ設定',
+    ru: 'Настройки главной страницы',
+    ko: '홈페이지 설정'
+  },
+  {
+    en: 'Background color',
+    es: 'Color de fondo',
+    fr: 'Couleur de fond',
+    de: 'Hintergrundfarbe',
+    cn: '背景颜色',
+    ja: '背景色',
+    ru: 'Цвет фона',
+    ko: '배경색'
+  },
+  {
+    en: 'Banner',
+    es: 'Banner',
+    fr: 'Bannière',
+    de: 'Banner',
+    cn: '横幅',
+    ja: 'バナー',
+    ru: 'Баннер',
+    ko: '배너'
+  },
+  {
+    en: 'Upload banner',
+    es: 'Subir banner',
+    fr: 'Télécharger la bannière',
+    de: 'Banner hochladen',
+    cn: '上传横幅',
+    ja: 'バナーをアップロード',
+    ru: 'Загрузить баннер',
+    ko: '배너 업로드'
+  },
+  {
+    en: 'Site banner',
+    es: 'Banner del sitio',
+    fr: 'Bannière du site',
+    de: 'Website-Banner',
+    cn: '网站横幅',
+    ja: 'サイトバナー',
+    ru: 'Баннер сайта',
+    ko: '사이트 배너'
+  },
+  {
+    en: 'Facebook appId',
+    es: 'Facebook appId',
+    fr: 'Facebook appId',
+    de: 'Facebook appId',
+    cn: 'Facebook 应用ID',
+    ja: 'FacebookアプリID',
+    ru: 'Facebook appId',
+    ko: 'Facebook 앱 ID'
+  },
+  {
+    en: 'Github clientId',
+    es: 'Github clientId',
+    fr: 'Github clientId',
+    de: 'Github clientId',
+    cn: 'Github 客户端ID',
+    ja: 'GithubクライアントID',
+    ru: 'Github clientId',
+    ko: 'Github 클라이언트 ID'
+  },
+  {
+    en: 'Google clientId',
+    es: 'Google clientId',
+    fr: 'Google clientId',
+    de: 'Google clientId',
+    cn: 'Google 客户端ID',
+    ja: 'GoogleクライアントID',
+    ru: 'Google clientId',
+    ko: 'Google 클라이언트 ID'
+  },
+  {
+    en: 'Legal settings',
+    es: 'Configuración legal',
+    fr: 'Paramètres juridiques',
+    de: 'Rechtliche Einstellungen',
+    cn: '法律设置',
+    ja: '法的設定',
+    ru: 'Юридические настройки',
+    ko: '법적 설정'
+  },
+  {
+    en: 'Terms & conditions',
+    es: 'Términos y condiciones',
+    fr: 'Conditions générales',
+    de: 'Geschäftsbedingungen',
+    cn: '条款和条件',
+    ja: '利用規約',
+    ru: 'Пользовательское соглашение',
+    ko: '이용 약관'
+  },
+  {
+    en: 'Privacy policy',
+    es: 'Política de privacidad',
+    fr: 'Politique de confidentialité',
+    de: 'Datenschutzrichtlinie',
+    cn: '隐私政策',
+    ja: 'プライバシーポリシー',
+    ru: 'Политика конфиденциальности',
+    ko: '개인정보 처리방침'
+  },
+  {
+    en: 'Monetization settings',
+    es: 'Configuración de monetización',
+    fr: 'Paramètres de monétisation',
+    de: 'Monetarisierungseinstellungen',
+    cn: '盈利设置',
+    ja: '収益化設定',
+    ru: 'Настройки монетизации',
+    ko: '수익화 설정'
+  },
+  {
+    en: 'Analytics',
+    es: 'Analíticas',
+    fr: 'Analytique',
+    de: 'Analysen',
+    cn: '分析',
+    ja: '分析',
+    ru: 'Аналитика',
+    ko: '분석'
+  },
+  {
+    en: 'Location',
+    es: 'Ubicación',
+    fr: 'Localisation',
+    de: 'Standort',
+    cn: '位置',
+    ja: '位置',
+    ru: 'Местоположение',
+    ko: '위치'
+  },
+  {
+    en: 'URL',
+    es: 'URL',
+    fr: 'URL',
+    de: 'URL',
+    cn: '网址',
+    ja: 'URL',
+    ru: 'URL',
+    ko: 'URL'
+  },
+  {
+    en: 'Browser',
+    es: 'Navegador',
+    fr: 'Navigateur',
+    de: 'Browser',
+    cn: '浏览器',
+    ja: 'ブラウザ',
+    ru: 'Браузер',
+    ko: '브라우저'
+  },
+  {
+    en: 'Device',
+    es: 'Dispositivo',
+    fr: 'Appareil',
+    de: 'Gerät',
+    cn: '设备',
+    ja: 'デバイス',
+    ru: 'Устройство',
+    ko: '기기'
+  },
+  {
+    en: 'Top Devices',
+    es: 'Dispositivos principales',
+    fr: 'Appareils les plus utilisés',
+    de: 'Top-Geräte',
+    cn: '热门设备',
+    ja: 'トップデバイス',
+    ru: 'Топ устройств',
+    ko: '인기 기기'
+  },
+  {
+    en: 'Top Browsers',
+    es: 'Navegadores principales',
+    fr: 'Navigateurs les plus utilisés',
+    de: 'Top-Browser',
+    cn: '热门浏览器',
+    ja: 'トップブラウザ',
+    ru: 'Топ браузеров',
+    ko: '인기 브라우저'
+  },
+  {
+    en: 'Top Pages',
+    es: 'Páginas principales',
+    fr: 'Pages les plus visitées',
+    de: 'Top-Seiten',
+    cn: '热门页面',
+    ja: 'トップページ',
+    ru: 'Топ страниц',
+    ko: '인기 페이지'
+  },
+  {
+    en: 'Top Cities',
+    es: 'Ciudades principales',
+    fr: 'Villes les plus actives',
+    de: 'Top-Städte',
+    cn: '热门城市',
+    ja: 'トップ都市',
+    ru: 'Топ городов',
+    ko: '인기 도시'
+  },
+  {
+    en: 'Top Countries',
+    es: 'Países principales',
+    fr: 'Pays les plus actifs',
+    de: 'Top-Länder',
+    cn: '热门国家',
+    ja: 'トップ国',
+    ru: 'Топ стран',
+    ko: '인기 국가'
+  },
+  {
+    en: 'Top Sources',
+    es: 'Fuentes principales',
+    fr: 'Sources les plus utilisées',
+    de: 'Top-Quellen',
+    cn: '热门来源',
+    ja: 'トップソース',
+    ru: 'Топ источников',
+    ko: '인기 소스'
+  },
+  {
+    en: 'Graph',
+    es: 'Gráfico',
+    fr: 'Graphique',
+    de: 'Diagramm',
+    cn: '图表',
+    ja: 'グラフ',
+    ru: 'График',
+    ko: '그래프'
+  },
+  {
+    en: 'Top Activities',
+    es: 'Actividades principales',
+    fr: 'Activités les plus populaires',
+    de: 'Top-Aktivitäten',
+    cn: '热门活动',
+    ja: 'トップアクティビティ',
+    ru: 'Топ активностей',
+    ko: '인기 활동'
+  },
+  {
+    en: 'Online users',
+    es: 'Usuarios en línea',
+    fr: 'Utilisateurs en ligne',
+    de: 'Benutzer online',
+    cn: '在线用户',
+    ja: 'オンラインユーザー',
+    ru: 'Пользователи онлайн',
+    ko: '온라인 사용자'
+  },
+  {
+    en: 'Themes',
+    es: 'Temas',
+    fr: 'Thèmes',
+    de: 'Themen',
+    cn: '主题',
+    ja: 'テーマ',
+    ru: 'Темы',
+    ko: '테마'
+  },
+  {
+    en: 'Create theme',
+    es: 'Crear tema',
+    fr: 'Créer un thème',
+    de: 'Thema erstellen',
+    cn: '创建主题',
+    ja: 'テーマを作成',
+    ru: 'Создать тему',
+    ko: '테마 만들기'
+  },
+  {
+    en: 'Update theme',
+    es: 'Actualizar tema',
+    fr: 'Mettre à jour le thème',
+    de: 'Design aktualisieren',
+    cn: '更新主题',
+    ja: 'テーマを更新',
+    ru: 'Обновить тему',
+    ko: '테마 업데이트'
+  },
+  {
+    en: 'Theme created successfully!',
+    es: '¡Tema creado con éxito!',
+    fr: 'Thème créé avec succès !',
+    de: 'Design erfolgreich erstellt!',
+    cn: '主题创建成功！',
+    ja: 'テーマが正常に作成されました！',
+    ru: 'Тема успешно создана!',
+    ko: '테마가 성공적으로 생성되었습니다!'
+  },
+  {
+    en: 'Theme updated successfully!',
+    es: '¡Tema actualizado con éxito!',
+    fr: 'Thème mis à jour avec succès !',
+    de: 'Design erfolgreich aktualisiert!',
+    cn: '主题更新成功！',
+    ja: 'テーマが正常に更新されました！',
+    ru: 'Тема успешно обновлена!',
+    ko: '테마가 성공적으로 업데이트되었습니다!'
+  },
+  {
+    en: 'Unable to create theme. Please try again!',
+    es: 'No se pudo crear el tema. ¡Por favor, inténtelo de nuevo!',
+    fr: 'Impossible de créer le thème. Veuillez réessayer !',
+    de: 'Design konnte nicht erstellt werden. Bitte versuchen Sie es erneut!',
+    cn: '无法创建主题。请再试一次！',
+    ja: 'テーマを作成できませんでした。もう一度お試しください！',
+    ru: 'Не удалось создать тему. Пожалуйста, попробуйте еще раз!',
+    ko: '테마를 생성할 수 없습니다. 다시 시도해 주세요!'
+  },
+  {
+    en: 'Unable to update theme. Please try again!',
+    es: 'No se pudo actualizar el tema. ¡Por favor, inténtelo de nuevo!',
+    fr: 'Impossible de mettre à jour le thème. Veuillez réessayer !',
+    de: 'Design konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut!',
+    cn: '无法更新主题。请再试一次！',
+    ja: 'テーマを更新できませんでした。もう一度お試しください！',
+    ru: 'Не удалось обновить тему. Пожалуйста, попробуйте еще раз!',
+    ko: '테마를 업데이트할 수 없습니다. 다시 시도해 주세요!'
+  },
+  {
+    en: 'Title is too short. Minimum of 3 characters.',
+    es: 'El título es demasiado corto. Mínimo 3 caracteres.',
+    fr: 'Le titre est trop court. Minimum de 3 caractères.',
+    de: 'Der Titel ist zu kurz. Mindestens 3 Zeichen.',
+    cn: '标题太短。至少需要3个字符。',
+    ja: 'タイトルが短すぎます。最低3文字必要です。',
+    ru: 'Название слишком короткое. Минимум 3 символа.',
+    ko: '제목이 너무 짧습니다. 최소 3자 이상이어야 합니다.'
+  },
+  {
+    en: 'Theme code cannot be empty!',
+    es: '¡El código del tema no puede estar vacío!',
+    fr: 'Le code du thème ne peut pas être vide !',
+    de: 'Der Themen-Code darf nicht leer sein!',
+    cn: '主题代码不能为空！',
+    ja: 'テーマコードは空にできません！',
+    ru: 'Код темы не может быть пустым!',
+    ko: '테마 코드는 비워둘 수 없습니다!'
+  },
+  {
+    en: 'Edit theme',
+    es: 'Editar tema',
+    fr: 'Modifier le thème',
+    de: 'Thema bearbeiten',
+    cn: '编辑主题',
+    ja: 'テーマを編集',
+    ru: 'Редактировать тему',
+    ko: '테마 편집'
+  },
+  {
+    en: 'Inactive',
+    es: 'Inactivo',
+    fr: 'Inactif',
+    de: 'Inaktiv',
+    cn: '未激活',
+    ja: '非アクティブ',
+    ru: 'Неактивно',
+    ko: '비활성'
+  },
+  {
+    en: 'You cannot disable the currently active theme. Please enable another theme first to disable this one',
+    es: 'No puedes desactivar el tema actualmente activo. Por favor, activa otro tema primero para desactivar este.',
+    fr: "Vous ne pouvez pas désactiver le thème actuellement actif. Veuillez d'abord activer un autre thème pour désactiver celui-ci.",
+    de: 'Sie können das aktuell aktive Theme nicht deaktivieren. Bitte aktivieren Sie zuerst ein anderes Theme, um dieses zu deaktivieren.',
+    cn: '您无法禁用当前启用的主题。请先启用其他主题以禁用此主题。',
+    ja: '現在有効なテーマを無効にすることはできません。別のテーマを有効にしてから、このテーマを無効にしてください。',
+    ru: 'Вы не можете отключить текущую активную тему. Пожалуйста, сначала включите другую тему, чтобы отключить эту.',
+    ko: '현재 활성화된 테마를 비활성화할 수 없습니다. 다른 테마를 먼저 활성화한 후 이 테마를 비활성화하세요.'
   }
 ];
 

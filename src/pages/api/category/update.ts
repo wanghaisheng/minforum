@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Category } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { Category } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

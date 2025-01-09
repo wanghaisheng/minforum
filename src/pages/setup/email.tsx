@@ -41,8 +41,8 @@ const EmailSetup = observer(() => {
     } else if (!email.password) {
       toast.error('Please provide SMTP password.');
     } else {
-      //Default coin settings
-      const coin = {
+      //Default point settings
+      const point = {
         login: 1,
         discussion: 2,
         comment: 1,
@@ -51,13 +51,14 @@ const EmailSetup = observer(() => {
 
       const _settings = {
         ...settings,
-        ...{ coin },
+        ...{ point },
         banWords: 'motherfucker, bullshit, fuck, shit',
-        status: 'completed'
+        status: 'completed',
+        theme: 'weiss'
       };
 
       await userStore
-        .setup({ ...admin, ...{ coin: 1, status: 'active', role: 'admin' } })
+        .setup({ ...admin, ...{ point: 1, status: 'active', role: 'admin' } })
         .then(async (res: any) => {
           await categoryStore.newCategory({
             title: 'General',

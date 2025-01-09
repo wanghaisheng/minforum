@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Category } from '../../../components/api/model';
-import { withAuth, slug } from '../../../components/api/utils';
+import { Category } from 'components/api/model';
+import { withAuth, slug } from 'components/api/utils';
 import slugify from 'slugify';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {

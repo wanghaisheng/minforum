@@ -163,20 +163,20 @@ const Discussion = observer(() => {
             lang === 'es'
               ? es
               : lang === 'fr'
-              ? fr
-              : lang === 'en'
-              ? enUS
-              : lang === 'ru'
-              ? ru
-              : lang === 'de'
-              ? de
-              : lang === 'cn'
-              ? zhCN
-              : lang === 'ja'
-              ? ja
-              : lang === 'ko'
-              ? ko
-              : null
+                ? fr
+                : lang === 'en'
+                  ? enUS
+                  : lang === 'ru'
+                    ? ru
+                    : lang === 'de'
+                      ? de
+                      : lang === 'cn'
+                        ? zhCN
+                        : lang === 'ja'
+                          ? ja
+                          : lang === 'ko'
+                            ? ko
+                            : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -466,7 +466,7 @@ const Discussion = observer(() => {
                       <ButtonDropdown.Item>
                         <Link
                           target="_blank"
-                          href={`mailto:info@example.com?&subject=${discussion.title}&body=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`}
+                          href={`mailto:?&subject=${discussion.title}&body=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`}
                         >
                           <Image src="/images/mail.svg" height={'18px'} />
                           &nbsp;&nbsp;{' '}
@@ -497,17 +497,12 @@ const Discussion = observer(() => {
                               name={profile?.name}
                             >
                               <Text p>
-                                <span className="capitalize">
+                                <span>
                                   <Translation
                                     lang={settings?.language}
                                     value={profile?.role}
                                   />
-                                </span>{' '}
-                                - {profile?.coin}{' '}
-                                <Translation
-                                  lang={settings?.language}
-                                  value={`Coin${pluralize(profile?.coin!)}`}
-                                />
+                                </span>
                               </Text>
                             </User>
                           </Link>
@@ -620,7 +615,6 @@ const Discussion = observer(() => {
                   activeUser={token.id!}
                   name={item.author.name}
                   role={item.author.role}
-                  coin={item.author.coin}
                   photo={
                     item.author.photo
                       ? `/storage/` + item.author.photo

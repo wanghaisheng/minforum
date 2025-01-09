@@ -1,7 +1,7 @@
 'use strict';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import signale from 'signale';
-import { Upload } from '../../../components/api/model';
+import { Upload } from 'components/api/model';
 
 const deleteFile = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = req.query.id;

@@ -18,8 +18,10 @@ import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const Categories = observer(() => {
+  const token = useToken();
   const [{ users, getModerators }] = useState(() => new UserStore());
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
@@ -39,7 +41,7 @@ const Categories = observer(() => {
     getSettings();
     getModerators();
     getCategories();
-  }, []);
+  }, [token?.id]);
 
   const handleSearch = (e: any) => {
     setPage(1);
@@ -77,7 +79,7 @@ const Categories = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <AdminNavbar
         title={useTranslation({
           lang: settings?.language,
@@ -90,7 +92,11 @@ const Categories = observer(() => {
       />
 
       <div className="page-container top-100">
-        <Sidebar active="categories" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="categories"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <SearchHeading

@@ -19,33 +19,23 @@ import Auth from 'components/admin/Auth';
 import ReportStore from 'stores/report';
 import { reportProp } from 'interfaces/report';
 import toast, { Toaster } from 'react-hot-toast';
-import moment from 'moment';
 import DiscussionStore from 'stores/discussion';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const Reports = observer(() => {
+  const token = useToken();
   const [{ updateDiscussion }] = useState(() => new DiscussionStore());
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
 
-  const [
-    {
-      loading,
-      page,
-      limit,
-      total,
-      reports,
-      setPage,
-      getReports,
-      updateReport,
-      searchReport
-    }
-  ] = useState(() => new ReportStore());
+  const [{ loading, page, limit, total, reports, setPage, getReports }] =
+    useState(() => new ReportStore());
 
   useEffect(() => {
     getSettings();
     getReports();
-  }, []);
+  }, [token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
@@ -74,13 +64,9 @@ const Reports = observer(() => {
   };
 
   const renderStatus = (value: string) => {
-    return value === 'answered' ? (
+    return value === 'active' ? (
       <Badge type="success">
-        <Translation lang={settings?.language} value="Answered" />
-      </Badge>
-    ) : value === 'unanswered' ? (
-      <Badge type="warning">
-        <Translation lang={settings?.language} value="Unanswered" />
+        <Translation lang={settings?.language} value="Active" />
       </Badge>
     ) : value === 'banned' ? (
       <Badge type="error">
@@ -98,10 +84,10 @@ const Reports = observer(() => {
             settings?.language === 'es'
               ? es
               : settings?.language === 'fr'
-              ? fr
-              : settings?.language === 'en'
-              ? enUS
-              : null
+                ? fr
+                : settings?.language === 'en'
+                  ? enUS
+                  : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -132,11 +118,8 @@ const Reports = observer(() => {
         // value={rowData.status}
         onChange={(value: any) => handleChange(value, rowData.post.id!)}
       >
-        <Select.Option value="answered">
-          <Translation lang={settings?.language} value="Answered" />
-        </Select.Option>
-        <Select.Option value="unanswered">
-          <Translation lang={settings?.language} value="Unanswered" />
+        <Select.Option value="active">
+          <Translation lang={settings?.language} value="Active" />
         </Select.Option>
         <Select.Option value="banned">
           <Translation lang={settings?.language} value="Banned" />
@@ -146,7 +129,7 @@ const Reports = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin', 'moderator']}>
       <AdminNavbar
         title={useTranslation({
           lang: settings?.language,
@@ -159,7 +142,11 @@ const Reports = observer(() => {
       />
       <Toaster />
       <div className="page-container top-100">
-        <Sidebar active="reports" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="reports"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <SearchHeading

@@ -1,6 +1,6 @@
-import { resProp } from './../interfaces/res';
+import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable } from 'mobx';
-import { likeProp } from '../interfaces/like';
+import { likeProp } from 'interfaces/like';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;

@@ -1,6 +1,6 @@
-import { resProp } from './../interfaces/res';
+import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable } from 'mobx';
-import { commentProp } from '../interfaces/comment';
+import { commentProp } from 'interfaces/comment';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -9,7 +9,7 @@ export default class CommentStore {
   @observable _loading: boolean = false;
   @observable more: boolean = false;
   @observable page: number = 1;
-  @observable limit: number = 20;
+  @observable limit: number = 100;
   @observable comment: commentProp = {};
   @observable comments: commentProp[] = [];
 

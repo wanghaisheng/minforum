@@ -20,7 +20,7 @@ type replyProp = {
   activeUser: string;
   name?: string;
   role?: string;
-  coin?: number;
+  point?: number;
   photo?: string;
   content?: string;
   replies?: replyProp[];
@@ -38,7 +38,7 @@ const Reply = (props: replyProp) => {
     activeUser,
     name,
     role,
-    coin,
+    point,
     photo,
     content,
     replies,
@@ -66,20 +66,20 @@ const Reply = (props: replyProp) => {
             lang === 'es'
               ? es
               : lang === 'fr'
-              ? fr
-              : lang === 'en'
-              ? enUS
-              : lang === 'ru'
-              ? ru
-              : lang === 'de'
-              ? de
-              : lang === 'cn'
-              ? zhCN
-              : lang === 'ja'
-              ? ja
-              : lang === 'ko'
-              ? ko
-              : null
+                ? fr
+                : lang === 'en'
+                  ? enUS
+                  : lang === 'ru'
+                    ? ru
+                    : lang === 'de'
+                      ? de
+                      : lang === 'cn'
+                        ? zhCN
+                        : lang === 'ja'
+                          ? ja
+                          : lang === 'ko'
+                            ? ko
+                            : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -94,9 +94,7 @@ const Reply = (props: replyProp) => {
             <div style={{ padding: '0 10px' }}>
               <Link color href="#">
                 <User src={photo} name={name}>
-                  <Text p>
-                    {role} - {coin} coins
-                  </Text>
+                  <Text p>{role}</Text>
                 </User>
               </Link>
             </div>
@@ -193,9 +191,7 @@ const Reply = (props: replyProp) => {
                                 }
                                 name={i.author.name}
                               >
-                                <Text p>
-                                  {i.author.role} - {i.author.coin} coins
-                                </Text>
+                                <Text p>{i.author.role}</Text>
                               </User>
                             </Link>
                           </div>

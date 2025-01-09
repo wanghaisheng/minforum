@@ -19,8 +19,10 @@ import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const EditCategory = observer(() => {
+  const token = useToken();
   const router = useRouter();
   const { id } = router.query;
   const [showColor, toggleColor] = useState(false);
@@ -35,14 +37,14 @@ const EditCategory = observer(() => {
     getModerators();
     let _id: any = id;
     router.isReady ? getCategory(_id) : null;
-  }, [router]);
+  }, [router, token?.id]);
 
   const save = async () => {
     if (!title || title.length < 3) {
       toast.error(
         useTranslation({
           lang: settings?.language,
-          value: 'Title is too short.'
+          value: 'Title is too short. Minimum of 3 characters.'
         })
       );
     } else if (!description) {
@@ -81,7 +83,7 @@ const EditCategory = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <Toaster />
       <AdminNavbar
         title={useTranslation({
@@ -95,7 +97,11 @@ const EditCategory = observer(() => {
       />
 
       <div className="page-container top-100">
-        <Sidebar active="categories" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="categories"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <div className="boxed">

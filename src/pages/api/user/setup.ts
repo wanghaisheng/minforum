@@ -1,8 +1,8 @@
 import signale from 'signale';
 import bcrypt from 'bcryptjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth, guid } from '../../../components/api/utils';
+import { User } from 'components/api/model';
+import { withAuth, guid } from 'components/api/utils';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   /*

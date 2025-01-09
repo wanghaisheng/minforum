@@ -15,17 +15,17 @@ import {
   Image,
   Input,
   Tabs,
-  Modal
+  Modal,
+  useMediaQuery
 } from '@geist-ui/core';
 import {
-  Sun,
-  Moon,
   Bell,
   Search,
   Menu,
   ChevronDown,
   Edit,
-  XCircleFill
+  XCircleFill,
+  Mail
 } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
@@ -35,6 +35,8 @@ import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
 import NotificationStore from 'stores/notification';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import MessageStore from 'stores/message';
+import { oneKFormat } from './api/utils';
 
 type navbarProps = {
   title?: string;
@@ -43,15 +45,18 @@ type navbarProps = {
   startConversation?: () => void;
 };
 
+const roles = ['admin', 'moderator'];
+
 const Navbar = observer((props: navbarProps) => {
   const token = useToken();
   const router = useRouter();
   const cookie = parseCookies();
-  const [theme, setTheme] = useState('weiss-light');
+  const isXS = useMediaQuery('mobile');
   const [show, setMenu] = useState(false);
+  const [loaded, setLoaded] = useState(true);
   const [announcementModal, toggleAnnouncement] = useState<any>(false);
   const [modal, toggleSearch] = useState<any>(false);
-  const { title, description, hide, startConversation } = props;
+  const { title, description, hide } = props;
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ unread, getUnreadNotification }] = useState(
     () => new NotificationStore()
@@ -60,22 +65,23 @@ const Navbar = observer((props: navbarProps) => {
   const [{ discussions, setDiscussions, publicDiscussionSearch }] = useState(
     () => new DiscussionStore()
   );
+  const [{ unread_message, getUnreadMessage }] = useState(
+    () => new MessageStore()
+  );
 
   useEffect(() => {
     getSettings();
-    cookie && cookie.theme ? setTheme(cookie.theme) : false;
 
     token.id ? getUnreadNotification(token.id) : null;
+    token.id ? getUnreadMessage(token.id) : null;
     cookie && isNaN(Number(cookie?.isAnnounce))
       ? toggleAnnouncement(true)
       : false;
-  }, [theme, token]);
 
-  const switchTheme = (val: string) => {
-    setCookie(null, 'theme', val, {
-      path: '/'
-    });
-  };
+    setTimeout(() => {
+      setLoaded(false);
+    }, 1000);
+  }, [token]);
 
   const getFirstName = (name: string) => {
     let first: any = name.split(' ');
@@ -120,7 +126,7 @@ const Navbar = observer((props: navbarProps) => {
         </NextLink>
       </Popover.Item>
       <Popover.Item line />
-      {token.role === 'admin' ? (
+      {roles.includes(token.role) ? (
         <>
           <Popover.Item>
             <NextLink href="/admin">
@@ -149,24 +155,6 @@ const Navbar = observer((props: navbarProps) => {
         </Link>
       </Popover.Item>
     </div>
-  );
-
-  const themeMenu = () => (
-    <>
-      <Popover.Item>
-        <Link onClick={() => switchTheme('weiss-light')}>
-          <Sun size={15} /> <Spacer w={0.5} />
-          <Translation lang={settings?.language} value="Light" />
-        </Link>
-      </Popover.Item>
-      <Popover.Item line />
-      <Popover.Item>
-        <Link onClick={() => switchTheme('weiss-dark')}>
-          <Moon size={15} /> <Spacer w={0.5} />
-          <Translation lang={settings?.language} value="Dark" />
-        </Link>
-      </Popover.Item>
-    </>
   );
 
   const MenuItem = () => (
@@ -218,7 +206,7 @@ const Navbar = observer((props: navbarProps) => {
               </Link>
             </NextLink>
           </Text>
-          {token.role === 'admin' ? (
+          {roles.includes(token.role) ? (
             <Text p>
               <NextLink href="/admin">
                 <Link>
@@ -286,292 +274,338 @@ const Navbar = observer((props: navbarProps) => {
   );
 
   return (
-    <div className="navbar">
-      <Head>
-        <meta
-          name="description"
-          content={`${description} - ${settings.siteName}`}
-        />
-        <title>{title}</title>
-        <link rel="icon" href={`/storage/${settings.siteFavicon}`} />
-      </Head>
-
-      <Modal
-        disableBackdropClick
-        visible={announcementModal}
-        onClose={() => toggleAnnouncement(!announcementModal)}
-      >
-        <h3>Announcement</h3>
-        <Modal.Content>
-          <div
-            dangerouslySetInnerHTML={{ __html: settings?.announcementText }}
-          />
-          <Spacer h={3} />
-          <Grid.Container gap={2} justify="center">
-            <Grid xs={12}>
-              <Button width={'100%'} onClick={() => handleAnnouncement(false)}>
-                <b>Ignore</b>
-              </Button>
-            </Grid>
-            <Grid xs={12}>
-              <Button
-                width={'100%'}
-                type="secondary-light"
-                onClick={() => handleAnnouncement(true)}
-              >
-                <b>Ok</b>
-              </Button>
-            </Grid>
-          </Grid.Container>
-        </Modal.Content>
-      </Modal>
-
-      {modal ? (
-        <div className="custom-modal">
-          <span className="close" onClick={() => toggleSearch(!modal)}>
-            <XCircleFill size={30} />
-          </span>
-          <div className="inner">
-            <Spacer h={3} />
-            <Input
-              scale={4 / 3}
-              width="100%"
-              iconRight={<Search />}
-              placeholder={useTranslation({
-                lang: settings.language ? settings.language : '',
-                value: 'Search discussion, user, email.....'
-              })}
-              clearable
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-            <Spacer h={3} />
-
-            <div>
-              <Tabs initialValue="1" leftSpace="0">
-                <Tabs.Item
-                  value="1"
-                  label={useTranslation({
-                    lang: settings?.language,
-                    value: 'Discussion'
-                  })}
-                >
-                  {discussions.map((item) => (
-                    <div key={item.id}>
-                      <NextLink href={`/d/${item.slug}`}>
-                        <Link width="100%">
-                          <Text h4 mb="0">
-                            {item.title}
-                          </Text>
-                        </Link>
-                      </NextLink>
-                    </div>
-                  ))}
-                </Tabs.Item>
-                <Tabs.Item
-                  value="2"
-                  label={useTranslation({
-                    lang: settings?.language,
-                    value: 'User'
-                  })}
-                >
-                  <Spacer h={2} />
-                  {users.map((item) => (
-                    <div key={item.id}>
-                      <NextLink href={`/u/${item.username}`}>
-                        <Link width="100%" mb={1}>
-                          <User
-                            scale={3}
-                            src={`${
-                              item.photo
-                                ? '/storage/' + item.photo
-                                : '/images/avatar.png'
-                            }`}
-                            name={
-                              <h4 style={{ marginTop: 10 }}>
-                                {item.name} &nbsp;&nbsp;
-                                <Text small className="username">
-                                  @{item.username}
-                                </Text>
-                              </h4>
-                            }
-                          ></User>
-                        </Link>
-                      </NextLink>
-                    </div>
-                  ))}
-                </Tabs.Item>
-              </Tabs>
-              <Spacer h={3} />
-            </div>
-          </div>
+    <>
+      {loaded ? (
+        <div className="custom-modal loaded">
+          <div className="inner"></div>
         </div>
       ) : (
-        ''
-      )}
+        <div className="navbar">
+          <Head>
+            <meta
+              name="description"
+              content={`${description} - ${settings.siteName}`}
+            />
+            <title>{title}</title>
+            <link rel="icon" href={`/storage/${settings.siteFavicon}`} />
+          </Head>
 
-      <Card
-        shadow
-        width="100%"
-        className="without-radius"
-        style={{
-          display: hide ? 'none' : 'inherit'
-        }}
-      >
-        <div className="inner">
-          <Grid.Container gap={0}>
-            <Grid xs={16} md={5}>
-              <NextLink href="/">
-                <Link>
-                  {settings.siteLogo ? (
-                    <Image
-                      className="site-logo"
-                      alt={settings?.siteName}
-                      src={`/storage/${settings.siteLogo}`}
-                      style={{ width: 'auto', height: 30 }}
-                    />
-                  ) : (
-                    <Text b>{settings.siteName}</Text>
-                  )}
-                </Link>
-              </NextLink>
-            </Grid>
-            <Grid xs={0} md={13}>
-              <NextLink href="/">
-                <Link>
-                  <Translation lang={settings?.language} value="Discussions" />
-                </Link>
-              </NextLink>
+          <Modal
+            disableBackdropClick
+            visible={announcementModal}
+            onClose={() => toggleAnnouncement(!announcementModal)}
+          >
+            <h3>Announcement</h3>
+            <Modal.Content>
+              <div
+                dangerouslySetInnerHTML={{ __html: settings?.announcementText }}
+              />
+              <Spacer h={3} />
+              <Grid.Container gap={1} justify="center">
+                <Grid xs={12}>
+                  <Button
+                    width={'100%'}
+                    onClick={() => handleAnnouncement(false)}
+                  >
+                    <b>Ignore</b>
+                  </Button>
+                </Grid>
+                <Grid xs={12}>
+                  <Button
+                    width={'100%'}
+                    type="secondary-light"
+                    onClick={() => handleAnnouncement(true)}
+                  >
+                    <b>Ok</b>
+                  </Button>
+                </Grid>
+              </Grid.Container>
+            </Modal.Content>
+          </Modal>
 
-              <Spacer inline />
-              <NextLink href="/category">
-                <Link>
-                  <Translation lang={settings?.language} value="Categories" />
-                </Link>
-              </NextLink>
-              <Spacer inline />
-              <NextLink href="/members">
-                <Link>
-                  <Translation lang={settings?.language} value="Members" />
-                </Link>
-              </NextLink>
-            </Grid>
-            <Grid xs={8} md={0}>
-              <span className="pointer" onClick={() => toggleSearch(!modal)}>
-                <Search />
+          {modal ? (
+            <div className="custom-modal">
+              <span className="close" onClick={() => toggleSearch(!modal)}>
+                <XCircleFill size={30} />
               </span>
-              <Spacer w={3} inline />
-              {token.id ? (
-                <Badge.Anchor>
-                  {unread ? (
-                    <Badge type="error" scale={0.5}>
-                      {unread}
-                    </Badge>
+              <div className="inner">
+                <Spacer h={3} />
+                <Input
+                  scale={4 / 3}
+                  width="100%"
+                  iconRight={<Search />}
+                  placeholder={useTranslation({
+                    lang: settings.language ? settings.language : '',
+                    value: 'Search discussion, user, email.....'
+                  })}
+                  clearable
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+                <Spacer h={3} />
+
+                <div>
+                  <Tabs initialValue="1" leftSpace="0">
+                    <Tabs.Item
+                      value="1"
+                      label={useTranslation({
+                        lang: settings?.language,
+                        value: 'Discussion'
+                      })}
+                    >
+                      {discussions.map((item) => (
+                        <div key={item.id}>
+                          <NextLink href={`/d/${item.slug}`}>
+                            <Link width="100%">
+                              <Text h5 mb="0">
+                                {item.title}
+                              </Text>
+                            </Link>
+                          </NextLink>
+                        </div>
+                      ))}
+                    </Tabs.Item>
+                    <Tabs.Item
+                      value="2"
+                      label={useTranslation({
+                        lang: settings?.language,
+                        value: 'User'
+                      })}
+                    >
+                      <Spacer h={2} />
+                      {users.map((item) => (
+                        <div key={item.id}>
+                          <NextLink href={`/u/${item.username}`}>
+                            <Link width="100%" mb={1}>
+                              <User
+                                scale={2}
+                                src={`${
+                                  item.photo
+                                    ? '/storage/' + item.photo
+                                    : '/images/avatar.png'
+                                }`}
+                                name={
+                                  <h5 style={{ marginTop: 10 }}>
+                                    {item.name} &nbsp;&nbsp;
+                                    <Text small className="username">
+                                      @{item.username}
+                                    </Text>
+                                  </h5>
+                                }
+                              ></User>
+                            </Link>
+                          </NextLink>
+                        </div>
+                      ))}
+                    </Tabs.Item>
+                  </Tabs>
+                  <Spacer h={3} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            ''
+          )}
+
+          <Card
+            shadow
+            width="100%"
+            className="without-radius"
+            style={{
+              display: hide ? 'none' : 'inherit'
+            }}
+          >
+            <div className="inner">
+              <Grid.Container gap={0}>
+                <Grid xs={12} md={5}>
+                  <NextLink href="/">
+                    <Link>
+                      {settings.siteLogo ? (
+                        <Image
+                          className="site-logo"
+                          alt={settings?.siteName}
+                          src={`/storage/${settings.siteLogo}`}
+                          style={{ width: 'auto', height: 30 }}
+                        />
+                      ) : (
+                        <Text b>{settings.siteName}</Text>
+                      )}
+                    </Link>
+                  </NextLink>
+                </Grid>
+                <Grid xs={0} md={12}>
+                  <NextLink href="/">
+                    <Link>
+                      <Translation
+                        lang={settings?.language}
+                        value="Discussions"
+                      />
+                    </Link>
+                  </NextLink>
+
+                  <Spacer inline />
+                  <NextLink href="/category">
+                    <Link>
+                      <Translation
+                        lang={settings?.language}
+                        value="Categories"
+                      />
+                    </Link>
+                  </NextLink>
+                  <Spacer inline />
+                  <NextLink href="/members">
+                    <Link>
+                      <Translation lang={settings?.language} value="Members" />
+                    </Link>
+                  </NextLink>
+                </Grid>
+                <Grid xs={12} md={0}>
+                  <span
+                    className="pointer"
+                    onClick={() => toggleSearch(!modal)}
+                  >
+                    <Search />
+                  </span>
+                  <Spacer w={isXS ? 5 : 3} inline />
+                  {token.id ? (
+                    <Badge.Anchor>
+                      {unread_message ? (
+                        <Badge type="error" scale={0.5}>
+                          {oneKFormat(unread_message)}
+                        </Badge>
+                      ) : (
+                        ''
+                      )}
+                      <NextLink href="/messages">
+                        <Link>
+                          <Mail />
+                        </Link>
+                      </NextLink>
+                    </Badge.Anchor>
                   ) : (
                     ''
                   )}
-                  <NextLink href="/notifications">
-                    <Link>
-                      <Bell />
-                    </Link>
-                  </NextLink>
-                </Badge.Anchor>
-              ) : (
-                ''
-              )}
-              <Spacer w={3} inline />
-              <span className="pointer" onClick={() => setMenu(!show)}>
-                <Menu />
-              </span>
-              <Spacer w={2} inline />
-            </Grid>
-
-            <Grid xs={0} md={6}>
-              {token.id ? (
-                <>
-                  <span
-                    className="pointer"
-                    onClick={() => toggleSearch(!modal)}
-                  >
-                    <Search />
-                  </span>
-                  <Spacer w={1.5} inline />
-                  <NextLink href="/start-discussion">
-                    <Link>
-                      <Edit />
-                    </Link>
-                  </NextLink>
-
-                  <Spacer w={1.5} inline />
-                  <Badge.Anchor>
-                    {unread ? (
-                      <Badge type="error" scale={0.5}>
-                        {unread}
-                      </Badge>
-                    ) : (
-                      ''
-                    )}
-                    <NextLink href="/notifications">
-                      <Link>
-                        <Bell />
-                      </Link>
-                    </NextLink>
-                  </Badge.Anchor>
-                  <Spacer w={1.5} inline />
-                  <Popover offset={0} content={menu}>
-                    <User
-                      className="pointer"
-                      src={
-                        token.photo
-                          ? `/storage/${token.photo}`
-                          : '/images/avatar.png'
-                      }
-                      name={getFirstName(token.name!)}
-                    />
-                    <ChevronDown size={16} className="caret" />
-                  </Popover>
-                </>
-              ) : (
-                <>
-                  <Spacer w={4} inline />
-                  <span
-                    className="pointer"
-                    onClick={() => toggleSearch(!modal)}
-                  >
-                    <Search />
-                  </span>
-                  <Spacer w={2} inline />
-                  <NextLink href="/signup">
-                    <Link>
-                      <Translation lang={settings?.language} value="Signup" />
-                    </Link>
-                  </NextLink>
-                  <Spacer w={2} inline />
-                  <NextLink href="/login">
-                    <Link>
-                      <Translation lang={settings?.language} value="Login" />
-                    </Link>
-                  </NextLink>
-                </>
-              )}
-            </Grid>
-            {/* <Grid xs={0} lg={1}>
-              <Popover content={themeMenu}>
-                <Button type="abort" auto scale={2 / 3}>
-                  {theme === 'weiss-dark' ? (
-                    <Moon />
-                  ) : theme === 'weiss-light' ? (
-                    <Sun />
+                  <Spacer w={isXS ? 5 : 3} inline />
+                  {token.id ? (
+                    <Badge.Anchor>
+                      {unread ? (
+                        <Badge type="error" scale={0.5}>
+                          {unread}
+                        </Badge>
+                      ) : (
+                        ''
+                      )}
+                      <NextLink href="/notifications">
+                        <Link>
+                          <Bell />
+                        </Link>
+                      </NextLink>
+                    </Badge.Anchor>
                   ) : (
-                    <Sun />
+                    ''
                   )}
-                </Button>
-              </Popover>
-            </Grid> */}
-          </Grid.Container>
+                  <Spacer w={isXS ? 5 : 3} inline />
+                  <span className="pointer" onClick={() => setMenu(!show)}>
+                    <Menu />
+                  </span>
+                </Grid>
+
+                <Grid xs={0} md={7}>
+                  {token.id ? (
+                    <>
+                      <span
+                        className="pointer"
+                        onClick={() => toggleSearch(!modal)}
+                      >
+                        <Search />
+                      </span>
+                      <Spacer w={1.5} inline />
+                      <NextLink href="/start-discussion">
+                        <Link>
+                          <Edit />
+                        </Link>
+                      </NextLink>
+
+                      <Spacer w={1.5} inline />
+                      <Badge.Anchor>
+                        {unread_message ? (
+                          <Badge type="error" scale={0.5}>
+                            {oneKFormat(unread_message)}
+                          </Badge>
+                        ) : (
+                          ''
+                        )}
+                        <NextLink href="/messages">
+                          <Link>
+                            <Mail />
+                          </Link>
+                        </NextLink>
+                      </Badge.Anchor>
+                      <Spacer w={1.5} inline />
+                      <Badge.Anchor>
+                        {unread ? (
+                          <Badge type="error" scale={0.5}>
+                            {unread}
+                          </Badge>
+                        ) : (
+                          ''
+                        )}
+                        <NextLink href="/notifications">
+                          <Link>
+                            <Bell />
+                          </Link>
+                        </NextLink>
+                      </Badge.Anchor>
+                      <Spacer w={1.5} inline />
+                      <Popover offset={0} content={menu}>
+                        <User
+                          className="pointer"
+                          src={
+                            token.photo
+                              ? `/storage/${token.photo}`
+                              : '/images/avatar.png'
+                          }
+                          name={getFirstName(token.name!)}
+                        />
+                        <ChevronDown size={16} className="caret" />
+                      </Popover>
+                    </>
+                  ) : (
+                    <>
+                      <Spacer w={4} inline />
+                      <span
+                        className="pointer"
+                        onClick={() => toggleSearch(!modal)}
+                      >
+                        <Search />
+                      </span>
+                      <Spacer w={2} inline />
+                      <NextLink href="/signup">
+                        <Link>
+                          <Translation
+                            lang={settings?.language}
+                            value="Signup"
+                          />
+                        </Link>
+                      </NextLink>
+                      <Spacer w={2} inline />
+                      <NextLink href="/login">
+                        <Link>
+                          <Translation
+                            lang={settings?.language}
+                            value="Login"
+                          />
+                        </Link>
+                      </NextLink>
+                    </>
+                  )}
+                </Grid>
+              </Grid.Container>
+            </div>
+          </Card>
+          {show ? <MenuItem /> : ''}
         </div>
-      </Card>
-      {show ? <MenuItem /> : ''}
-    </div>
+      )}
+    </>
   );
 });
 

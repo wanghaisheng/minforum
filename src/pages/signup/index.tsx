@@ -8,7 +8,8 @@ import {
   Card,
   Loading,
   Image,
-  Tooltip
+  Tooltip,
+  Divider
 } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import { setCookie } from 'nookies';
@@ -22,6 +23,8 @@ import { validateEmail } from 'components/api/utils';
 import Router from 'next/router';
 import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import { useGoogleLogin } from '@react-oauth/google';
+import FacebookLogin from '@greatsumini/react-facebook-login';
 
 const Signup = observer(() => {
   const token = useToken();
@@ -120,6 +123,35 @@ const Signup = observer(() => {
     }
   };
 
+  const googleAuth = useGoogleLogin({
+    scope: 'email profile',
+    onSuccess: async (tokenResponse) => {
+      console.log('Login Success:', tokenResponse);
+
+      // Use the access token to fetch user info
+      try {
+        const userInfoResponse = await fetch(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`
+            }
+          }
+        );
+
+        if (!userInfoResponse.ok) {
+          throw new Error('Failed to fetch user info');
+        }
+
+        const userInfo = await userInfoResponse.json();
+        console.log('User Info:', userInfo);
+        // You can now store the user info in your app's state or send it to your backend
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      }
+    }
+  });
+
   return (
     <div>
       <Navbar
@@ -151,6 +183,53 @@ const Signup = observer(() => {
                   value="Create your account"
                 />
               </Text>
+              <Spacer h={1} />
+              <FacebookLogin
+                appId={settings?.socialAccount?.facebook}
+                onSuccess={(response) => {
+                  console.log('Login Success!', response);
+                }}
+                onFail={(error) => {
+                  console.log('Login Failed!', error);
+                }}
+                onProfileSuccess={(response) => {
+                  console.log('Get Profile Success!', response);
+                }}
+                render={({ onClick, logout }) => (
+                  <Button
+                    width="100%"
+                    icon={<img src="/images/facebook.svg" height={20} />}
+                  >
+                    Login with Facebook
+                  </Button>
+                )}
+              />
+              <Spacer h={1} />
+              {/* settings?.socialAccount?.github */}
+              <GitHubLogin
+                clientId={'Ov23liO9sbgK51vICdUL'}
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+                style={{ background: 'none', border: 'none' }}
+              >
+                <Button
+                  auto
+                  width="100%"
+                  icon={<img src="/images/github.svg" height={20} />}
+                >
+                  Login with Github
+                </Button>
+              </GitHubLogin>
+              <Spacer h={1} />
+              <Button
+                width="100%"
+                icon={<img src="/images/google.svg" height={20} />}
+                onClick={() => googleAuth()}
+              >
+                Signup using Google
+              </Button>
+              <Spacer h={1} />
+              <Divider>Or</Divider>
               <Spacer h={1} />
               <Input
                 placeholder={useTranslation({

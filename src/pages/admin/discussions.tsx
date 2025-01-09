@@ -19,8 +19,10 @@ import { discussionProp } from 'interfaces/discussion';
 import toast, { Toaster } from 'react-hot-toast';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const Discussions = observer(() => {
+  const token = useToken();
   const [
     {
       loading,
@@ -29,7 +31,7 @@ const Discussions = observer(() => {
       total,
       discussions,
       setPage,
-      getDiscussions,
+      getAdminDiscussions,
       updateDiscussion,
       searchDiscussion
     }
@@ -38,19 +40,19 @@ const Discussions = observer(() => {
 
   useEffect(() => {
     getSettings();
-    getDiscussions();
-  }, []);
+    getAdminDiscussions(false);
+  }, [token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
-    getDiscussions();
+    getAdminDiscussions(true);
   };
 
   const handleSearch = (e: any) => {
     setPage(1);
     let value = e.target.value;
     value = value.trim();
-    value.length ? searchDiscussion(value) : getDiscussions();
+    value.length ? searchDiscussion(value) : getAdminDiscussions(false);
   };
 
   const handleChange = async (status: string, id: string) => {
@@ -62,7 +64,7 @@ const Discussions = observer(() => {
             value: 'Discussion status updated'
           })
         );
-        getDiscussions();
+        getAdminDiscussions(false);
       } else {
         toast.error(
           useTranslation({
@@ -75,13 +77,9 @@ const Discussions = observer(() => {
   };
 
   const renderStatus = (value: string) => {
-    return value === 'answered' ? (
+    return value === 'active' ? (
       <Badge type="success">
-        <Translation lang={settings?.language} value="Answered" />
-      </Badge>
-    ) : value === 'unanswered' ? (
-      <Badge type="warning">
-        <Translation lang={settings?.language} value="Unanswered" />
+        <Translation lang={settings?.language} value="Active" />
       </Badge>
     ) : value === 'banned' ? (
       <Badge type="error">
@@ -113,11 +111,8 @@ const Discussions = observer(() => {
         value={value}
         onChange={(value: any) => handleChange(value, rowData.id!)}
       >
-        <Select.Option value="answered">
-          <Translation lang={settings?.language} value="Answered" />
-        </Select.Option>
-        <Select.Option value="unanswered">
-          <Translation lang={settings?.language} value="Unanswered" />
+        <Select.Option value="active">
+          <Translation lang={settings?.language} value="Active" />
         </Select.Option>
         <Select.Option value="banned">
           <Translation lang={settings?.language} value="Banned" />
@@ -127,7 +122,7 @@ const Discussions = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin', 'moderator']}>
       <AdminNavbar
         title={useTranslation({
           lang: settings?.language,
@@ -140,7 +135,11 @@ const Discussions = observer(() => {
       />
       <Toaster />
       <div className="page-container top-100">
-        <Sidebar active="discussions" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="discussions"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <SearchHeading

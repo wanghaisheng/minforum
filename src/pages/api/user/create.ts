@@ -1,9 +1,9 @@
 import signale from 'signale';
 import bcrypt from 'bcryptjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth, code, guid } from '../../../components/api/utils';
-import { signupTemplate } from '../../../components/api/mail-template';
+import { User } from 'components/api/model';
+import { withAuth, code, guid } from 'components/api/utils';
+import { signupTemplate } from 'components/api/mail-template';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   /*

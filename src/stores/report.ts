@@ -1,6 +1,6 @@
-import { resProp } from './../interfaces/res';
+import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable } from 'mobx';
-import { reportProp } from '../interfaces/report';
+import { reportProp } from 'interfaces/report';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -9,7 +9,7 @@ export default class ReportStore {
   @observable loading: boolean = false;
   @observable total: number = 0;
   @observable page: number = 1;
-  @observable limit: number = 20;
+  @observable limit: number = 50;
   @observable report: reportProp = {};
   @observable reports: reportProp[] = [];
 

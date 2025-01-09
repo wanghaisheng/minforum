@@ -210,39 +210,49 @@ const EditDiscussion = observer(() => {
             <Editor
               lang={settings?.language}
               value={content}
-              height="200px"
+              height="280px"
               placeholder={useTranslation({
                 lang: settings?.language,
                 value: 'Type something memorable...'
               })}
+              button={
+                <>
+                  {token.id ? (
+                    <>
+                      <Button
+                        loading={loading}
+                        type="secondary-light"
+                        onClick={save}
+                      >
+                        <Translation lang={settings?.language} value="Save" />
+                      </Button>
+                      <Spacer inline />
+                      <Button
+                        type="error"
+                        auto
+                        onClick={() => toggleModal(true)}
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  ) : (
+                    <Link href="/login">
+                      <Button loading={loading} type="secondary-light">
+                        <Translation
+                          lang={settings?.language}
+                          value={'Sign in to publish'}
+                        />
+                      </Button>
+                    </Link>
+                  )}
+                </>
+              }
               onChange={(val) => setContent(val)}
             />
           ) : (
             ''
           )}
 
-          {token.id ? (
-            <>
-              <Button loading={loading} type="secondary-light" onClick={save}>
-                <Translation lang={settings?.language} value="Save" />
-              </Button>
-              <Button
-                type="abort"
-                auto
-                icon={<Trash2 />}
-                onClick={() => toggleModal(true)}
-              />
-            </>
-          ) : (
-            <Link href="/login">
-              <Button loading={loading} type="secondary-light">
-                <Translation
-                  lang={settings?.language}
-                  value={'Sign in to publish'}
-                />
-              </Button>
-            </Link>
-          )}
           <Spacer h={5} />
         </div>
       </div>

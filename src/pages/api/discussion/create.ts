@@ -1,8 +1,8 @@
-import { settingsProp } from './../../../interfaces/settings';
+import { settingsProp } from 'interfaces/settings';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, Discussion, Settings, User } from '../../../components/api/model';
-import { withAuth, slug } from '../../../components/api/utils';
+import { r, Discussion, Settings, User } from 'components/api/model';
+import { withAuth, slug } from 'components/api/utils';
 import slugify from 'slugify';
 
 const getSettings = async () => {
@@ -36,7 +36,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
             await User.get(data.userId).then(async (p: any) => {
               await User.get(data.userId)
                 .update({
-                  coin: Number(p.coin + config.coin?.discussion)
+                  point: Number(p.point + config.point?.discussion)
                 })
                 .then(() => {
                   res.send({ success: true, data });

@@ -1,7 +1,7 @@
-import { resProp } from './../interfaces/res';
+import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable } from 'mobx';
 import { userProp } from 'interfaces/user';
-import { discussionProp } from './../interfaces/discussion';
+import { discussionProp } from 'interfaces/discussion';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;

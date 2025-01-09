@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { setCookie, parseCookies, destroyCookie } from 'nookies';
+import { parseCookies, destroyCookie } from 'nookies';
 import {
   Text,
   Popover,
@@ -14,21 +14,13 @@ import {
   Badge,
   Image
 } from '@geist-ui/core';
-import {
-  Sun,
-  Moon,
-  Bell,
-  Power,
-  Menu,
-  ChevronDown,
-  ExternalLink
-} from '@geist-ui/icons';
+import { Bell, Menu, ChevronDown } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import useToken from '../Token';
 import SettingsStore from 'stores/settings';
 import NotificationStore from 'stores/notification';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/Translation';
 
 type navbarProps = {
   title: string;
@@ -40,7 +32,6 @@ const Navbar = observer((props: navbarProps) => {
   const token = useToken();
   const router = useRouter();
   const cookie = parseCookies();
-  const [theme, setTheme] = useState('weiss-light');
   const [show, setMenu] = useState(false);
   const { title, description, hide } = props;
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
@@ -49,16 +40,9 @@ const Navbar = observer((props: navbarProps) => {
   );
 
   useEffect(() => {
-    cookie && cookie.theme ? setTheme(cookie.theme) : '';
     getSettings();
     token.id ? getUnreadNotification(token.id) : null;
-  }, [theme, token]);
-
-  const switchTheme = (val: string) => {
-    setCookie(null, 'theme', val, {
-      path: '/'
-    });
-  };
+  }, [token]);
 
   const getFirstName = (name: string) => {
     let first: any = name.split(' ');
@@ -107,24 +91,6 @@ const Navbar = observer((props: navbarProps) => {
         </Link>
       </Popover.Item>
     </div>
-  );
-
-  const themeMenu = () => (
-    <>
-      <Popover.Item>
-        <Link onClick={() => switchTheme('weiss-light')}>
-          <Sun size={15} /> <Spacer w={0.5} />
-          <Translation lang={settings?.language} value="Light" />
-        </Link>
-      </Popover.Item>
-      <Popover.Item line />
-      <Popover.Item>
-        <Link onClick={() => switchTheme('weiss-dark')}>
-          <Moon size={15} /> <Spacer w={0.5} />
-          <Translation lang={settings?.language} value="Dark" />
-        </Link>
-      </Popover.Item>
-    </>
   );
 
   const MenuItem = () => (

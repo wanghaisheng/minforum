@@ -97,22 +97,33 @@ const ReplyModal = observer((props: editorProps) => {
               lang={lang}
               height={_height}
               value={content}
+              button={
+                <>
+                  {' '}
+                  {isAuthenticate ? (
+                    <Button
+                      loading={loading}
+                      type="success-light"
+                      onClick={save}
+                    >
+                      <Translation lang={props.lang} value="Send reply" />
+                    </Button>
+                  ) : (
+                    <Link href="/login">
+                      <Button loading={loading} type="success-light">
+                        <Translation
+                          lang={props.lang}
+                          value="Sign in to reply"
+                        />
+                      </Button>
+                    </Link>
+                  )}
+                </>
+              }
               onChange={(value) => {
                 actionTrigger(value);
               }}
             />
-
-            {isAuthenticate ? (
-              <Button loading={loading} type="success-light" onClick={save}>
-                <Translation lang={props.lang} value="Send reply" />
-              </Button>
-            ) : (
-              <Link href="/login">
-                <Button loading={loading} type="success-light">
-                  <Translation lang={props.lang} value="Sign in to reply" />
-                </Button>
-              </Link>
-            )}
           </div>
         </div>
       ) : (

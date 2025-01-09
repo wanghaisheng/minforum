@@ -1,14 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
-import {
-  Spacer,
-  Pagination,
-  Button,
-  Card,
-  Link,
-  Loading
-} from '@geist-ui/core';
-import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
+import { Spacer, Button, Card, Link, Loading } from '@geist-ui/core';
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
@@ -25,20 +17,33 @@ import CategoryHeader from 'components/CategoryHeader';
 const Home = observer(() => {
   const token = useToken();
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
-  const [
-    { loading, page, total, limit, discussions, setPage, getDiscussions }
-  ] = useState(() => new DiscussionStore());
+  const [{ loading, page, nomore, discussions, setPage, getDiscussions }] =
+    useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
 
   useEffect(() => {
     getSettings();
-    getDiscussions();
+    getDiscussions(false);
   }, [token]);
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getDiscussions();
-  };
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getDiscussions(true);
+      }
+    }
+  }, [discussions, nomore, page]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -111,8 +116,6 @@ const Home = observer(() => {
             ''
           )}
 
-          <CategoryHeader />
-
           <div className="custom-tab">
             <NextLink href="/popular">
               <Link>
@@ -124,25 +127,13 @@ const Home = observer(() => {
                 <Translation lang={settings?.language} value="Recent" />
               </Link>
             </NextLink>
-            <NextLink href="/unanswered">
+            <NextLink href="/category">
               <Link>
-                <Translation lang={settings?.language} value="Unanswered" />
+                <Translation lang={settings?.language} value="Categories" />
               </Link>
             </NextLink>
           </div>
 
-          {loading ? (
-            <div>
-              <Spacer h={3} />
-              <Loading>
-                <Translation lang={settings?.language} value="Loading" />
-                &nbsp;
-                <Translation lang={settings?.language} value="Discussions" />
-              </Loading>
-            </div>
-          ) : (
-            ''
-          )}
           {discussions?.map((item) => (
             <Post
               key={item.id}
@@ -155,27 +146,21 @@ const Home = observer(() => {
                   : '/images/avatar.png'
               }
               author={item.profile?.name}
+              authorRole={item.profile?.role}
+              authorUsername={item.profile?.username}
               title={removeBanWords(item.title)}
               comment={item.comment}
               date={item.createdAt}
             />
           ))}
-
-          {total >= limit ? (
-            <div className="pagination">
-              <Pagination
-                count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
-                onChange={paginate}
-              >
-                <Pagination.Next>
-                  <ChevronRightCircle />
-                </Pagination.Next>
-                <Pagination.Previous>
-                  <ChevronLeftCircle />
-                </Pagination.Previous>
-              </Pagination>
+          {loading ? (
+            <div>
+              <Spacer h={3} />
+              <Loading>
+                <Translation lang={settings?.language} value="Loading" />
+                &nbsp;
+                <Translation lang={settings?.language} value="Discussions" />
+              </Loading>
             </div>
           ) : (
             ''

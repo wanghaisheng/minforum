@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, User, Discussion } from '../../../components/api/model';
-import { asyncForEach, withAuth } from '../../../components/api/utils';
+import { r, User, Discussion } from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
 import { userProp } from 'interfaces/user';
 import { discussionProp } from 'interfaces/discussion';
 

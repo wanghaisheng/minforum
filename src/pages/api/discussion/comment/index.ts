@@ -6,8 +6,8 @@ import {
   LikeComment,
   Reply,
   LikeReply
-} from '../../../../components/api/model';
-import { asyncForEach, withAuth } from '../../../../components/api/utils';
+} from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
 
 const getReplies = async (id: string) => {
   return new Promise(async (resolve) => {

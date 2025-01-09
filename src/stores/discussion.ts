@@ -1,16 +1,17 @@
-import { commentProp } from './../interfaces/comment';
+import { commentProp } from 'interfaces/comment';
 import { resProp } from 'interfaces/res';
 import { observable, action, makeAutoObservable } from 'mobx';
-import { discussionProp } from './../interfaces/discussion';
+import { discussionProp } from 'interfaces/discussion';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
 export default class DiscussionStore {
   @observable page: number = 1;
-  @observable limit: number = 20;
+  @observable limit: number = 100;
   @observable total: number = 0;
   @observable loading: boolean = false;
+  @observable nomore: boolean = false;
   @observable commentLoading: boolean = false;
   @observable discussions: discussionProp[] = [];
   @observable discussion: discussionProp = {};
@@ -85,7 +86,29 @@ export default class DiscussionStore {
   };
 
   @action
-  getDiscussions = async () => {
+  getDiscussions = async (paginate: boolean) => {
+    let uri = `${API_URL}/discussion/public?page=${this.page}&limit=${this.limit}`;
+    this.loading = true;
+
+    await fetch(uri, {
+      headers: this.headers
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        const threads = this.discussions;
+        const data = paginate ? [...threads, ...res.data] : res.data;
+        let nomore = res.data.length < this.limit ? true : false;
+
+        this.discussions = data;
+
+        this.total = res.count;
+        this.nomore = nomore;
+        this.loading = false;
+      })
+      .catch((err) => console.log(err));
+  };
+
+  @action getAdminDiscussions = async (paginate: boolean) => {
     let uri = `${API_URL}/discussion?page=${this.page}&limit=${this.limit}`;
     this.loading = true;
 
@@ -94,10 +117,15 @@ export default class DiscussionStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        let data = res.data;
-        this.loading = false;
+        const threads = this.discussions;
+        const data = paginate ? [...threads, ...res.data] : res.data;
+        let nomore = res.data.length < this.limit ? true : false;
+
         this.discussions = data;
+
         this.total = res.count;
+        this.nomore = nomore;
+        this.loading = false;
       })
       .catch((err) => console.log(err));
   };
@@ -139,7 +167,7 @@ export default class DiscussionStore {
   };
 
   @action
-  getPopularDiscussions = async () => {
+  getPopularDiscussions = async (paginate: boolean) => {
     let uri = `${API_URL}/discussion/popular?page=${this.page}&limit=${this.limit}`;
     this.loading = true;
 
@@ -148,10 +176,15 @@ export default class DiscussionStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        let data = res.data;
-        this.loading = false;
+        const threads = this.discussions;
+        const data = paginate ? [...threads, ...res.data] : res.data;
+        let nomore = res.data.length < this.limit ? true : false;
+
         this.discussions = data;
+
         this.total = res.count;
+        this.nomore = nomore;
+        this.loading = false;
       })
       .catch((err) => console.log(err));
   };

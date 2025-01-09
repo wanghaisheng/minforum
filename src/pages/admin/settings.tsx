@@ -9,27 +9,34 @@ import {
   Tabs,
   Spacer,
   Image,
-  Select
+  Select,
+  Radio,
+  Divider
 } from '@geist-ui/core';
 import { setCookie, parseCookies } from 'nookies';
+import { ChromePicker } from 'react-color';
 import { Image as Picture } from '@geist-ui/icons';
 import AdminNavbar from 'components/admin/Navbar';
 import Sidebar from 'components/admin/Sidebar';
 import SettingsStore from 'stores/settings';
 import Auth from 'components/admin/Auth';
 import toast, { Toaster } from 'react-hot-toast';
+import Editor from 'components/Editor';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const Settings = observer(() => {
+  const token = useToken();
   const [store] = useState(() => new SettingsStore());
   const cookie = parseCookies();
+  const [showColor, toggleColor] = useState(false);
   const { loading, settings, setSettings, getSettings, update, uploadImage } =
     store;
-  const { coin, email, advert, banWords } = settings;
+  const { point, email, advert, banWords } = settings;
 
   useEffect(() => {
     getSettings();
-  }, []);
+  }, [token?.id]);
 
   const handleUpload = async (id: string) => {
     let t = toast.loading('Uploading image....');
@@ -44,8 +51,12 @@ const Settings = observer(() => {
         if (res?.success) {
           if (id === '#site-logo') {
             setSettings({ ...settings, siteLogo: res.file });
-          } else {
+          } else if (id === '#site-favicon') {
             setSettings({ ...settings, siteFavicon: res.file });
+          } else if (id === '#site-banner') {
+            let homepage = settings?.homepage;
+            homepage.image = res.file;
+            setSettings({ ...settings, homepage });
           }
 
           let _upload: any = document.querySelector(id);
@@ -87,7 +98,7 @@ const Settings = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <AdminNavbar
         title={useTranslation({
           lang: settings?.language,
@@ -100,7 +111,11 @@ const Settings = observer(() => {
       />
       <Toaster />
       <div className="page-container top-100">
-        <Sidebar active="settings" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="settings"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <Collapse.Group width={'100%'} className="settings">
@@ -126,7 +141,7 @@ const Settings = observer(() => {
                 <div className="item">
                   <div className="discussion-container">
                     <div>
-                      <Button icon={<Picture />} width="170px">
+                      <Button auto icon={<Picture />} width="190px">
                         <Translation
                           lang={settings?.language}
                           value="Upload favicon"
@@ -161,7 +176,7 @@ const Settings = observer(() => {
                 <div className="item">
                   <div className="discussion-container">
                     <div>
-                      <Button icon={<Picture />} width="170px">
+                      <Button auto icon={<Picture />} width="190px">
                         <Translation
                           lang={settings?.language}
                           value="Upload logo"
@@ -307,6 +322,287 @@ const Settings = observer(() => {
                   </Button>
                 </div>
               </div>
+            </Collapse>
+
+            {/* <Collapse
+              title={useTranslation({
+                lang: settings?.language,
+                value: 'Homepage settings'
+              })}
+            >
+              <Radio.Group value={settings?.homepage?.type} useRow>
+                <Radio
+                  value="color"
+                  onChange={() => {
+                    let homepage = settings?.homepage;
+                    homepage.type = 'color';
+                    setSettings({
+                      ...settings,
+                      ...{ homepage }
+                    });
+
+                    console.log(settings);
+                  }}
+                >
+                  <Translation
+                    lang={settings?.language}
+                    value="Background color"
+                  />
+                </Radio>
+                <Spacer inline />
+                <Radio
+                  value="banner"
+                  onChange={() => {
+                    let homepage = settings?.homepage;
+                    homepage.type = 'banner';
+                    setSettings({
+                      ...settings,
+                      homepage
+                    });
+                  }}
+                >
+                  <Translation lang={settings?.language} value="Banner" />
+                </Radio>
+              </Radio.Group>
+              <Spacer />
+              <Divider />
+              {settings?.homepage?.type === 'color' ? (
+                <>
+                  <div className="column">
+                    <div className="item">
+                      <Text h6>
+                        <Translation lang={settings?.language} value="Color" />
+                      </Text>
+                    </div>
+                    <div className="item">
+                      <div
+                        onClick={() => toggleColor(!showColor)}
+                        className="custom-badge with-border large"
+                        style={
+                          { '--category-color': '#fff' } as React.CSSProperties
+                        }
+                      >
+                        <div
+                          className="inner"
+                          style={
+                            {
+                              '--category-inner-color': settings?.homepage
+                                ?.bgColor
+                                ? settings?.homepage?.bgColor
+                                : '#000000'
+                            } as React.CSSProperties
+                          }
+                        >
+                          &nbsp;
+                        </div>
+                      </div>
+                      {showColor ? (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            marginTop: -15,
+                            zIndex: 5
+                          }}
+                        >
+                          <ChromePicker
+                            color={settings?.homepage?.bgColor}
+                            onChange={(val) => {
+                              let homepage = settings?.homepage;
+                              homepage.bgColor = val.hex;
+                              setSettings({
+                                ...settings,
+                                homepage
+                              });
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="item">
+                      <Text h6>
+                        <Translation lang={settings?.language} value="Title" />
+                      </Text>
+                    </div>
+                    <div className="item">
+                      <Input
+                        width={'100%'}
+                        value={settings?.homepage?.title}
+                        onChange={(e: any) => {
+                          let homepage = settings?.homepage;
+                          homepage.title = e.target.value;
+                          setSettings({
+                            ...settings,
+                            homepage
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="item">
+                      <Text h6>
+                        <Translation
+                          lang={settings?.language}
+                          value="Description"
+                        />
+                      </Text>
+                    </div>
+                    <div className="item">
+                      <Textarea
+                        width={'100%'}
+                        value={settings?.homepage?.description}
+                        onChange={(e: any) => {
+                          let homepage = settings?.homepage;
+                          homepage.title = e.target.value;
+                          setSettings({
+                            ...settings,
+                            homepage
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="item">
+                      <Text h6></Text>
+                    </div>
+                    <div className="item">
+                      <Button
+                        shadow
+                        type="secondary"
+                        loading={loading}
+                        onClick={save}
+                      >
+                        <Translation lang={settings?.language} value="Save" />
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="column">
+                    <div className="item">
+                      <Text h6>
+                        <Translation
+                          lang={settings?.language}
+                          value="Site banner"
+                        />
+                      </Text>
+                    </div>
+                    <div className="item">
+                      <div className="discussion-container">
+                        <div>
+                          <Button auto icon={<Picture />}>
+                            <Translation
+                              lang={settings?.language}
+                              value="Upload banner"
+                            />
+                            <input
+                              type="file"
+                              className="file-upload"
+                              id="site-banner"
+                              onChange={() => handleUpload('#site-banner')}
+                            />
+                          </Button>
+                        </div>
+                      </div>
+                      <Spacer />
+                      <div>
+                        {settings?.homepage?.image ? (
+                          <Image
+                            src={`/storage/${settings?.homepage?.image}`}
+                            style={{ width: 'auto', height: 80 }}
+                          />
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                      <Spacer />
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="item">
+                      <Text h6></Text>
+                    </div>
+                    <div className="item"></div>
+                  </div>
+                </>
+              )}
+            </Collapse> */}
+            <Collapse
+              title={useTranslation({
+                lang: settings?.language,
+                value: 'Social settings'
+              })}
+            >
+              <Tabs initialValue="1">
+                <Tabs.Item
+                  label={useTranslation({
+                    lang: settings?.language,
+                    value: 'Facebook appId'
+                  })}
+                  value="1"
+                >
+                  <Input
+                    width={'100%'}
+                    value={settings?.socialAccount?.facebook}
+                    onChange={(e: any) => {
+                      let socialAccount = {
+                        ...settings?.socialAccount,
+                        facebook: e.target.value
+                      };
+                      setSettings({
+                        ...settings,
+                        ...{ socialAccount }
+                      });
+                    }}
+                  />
+                  <Spacer />
+                  <Button
+                    shadow
+                    type="secondary"
+                    loading={loading}
+                    onClick={save}
+                  >
+                    <Translation lang={settings?.language} value="Save" />
+                  </Button>
+                </Tabs.Item>
+                <Tabs.Item
+                  label={useTranslation({
+                    lang: settings?.language,
+                    value: 'Google clientId'
+                  })}
+                  value="3"
+                >
+                  <Input
+                    width={'100%'}
+                    value={settings?.socialAccount?.google}
+                    onChange={(e: any) => {
+                      let socialAccount = {
+                        ...settings?.socialAccount,
+                        google: e.target.value
+                      };
+                      setSettings({
+                        ...settings,
+                        ...{ socialAccount }
+                      });
+                    }}
+                  />
+                  <Spacer />
+                  <Button
+                    shadow
+                    type="secondary"
+                    loading={loading}
+                    onClick={save}
+                  >
+                    <Translation lang={settings?.language} value="Save" />
+                  </Button>
+                </Tabs.Item>
+              </Tabs>
             </Collapse>
             <Collapse
               title={useTranslation({
@@ -682,7 +978,7 @@ const Settings = observer(() => {
               <Text small>
                 <Translation
                   lang={settings?.language}
-                  value="Note: Changing coin values will affect users' current value."
+                  value="Note: Changing the point value will affect users' current points."
                 />
               </Text>
               <div className="column">
@@ -698,11 +994,11 @@ const Settings = observer(() => {
                   <Input
                     htmlType="number"
                     width={'100%'}
-                    value={coin?.login.toString()}
+                    value={`${point?.login}`}
                     onChange={(e: any) =>
                       setSettings({
                         ...settings,
-                        coin: { ...coin, login: e.target.value }
+                        point: { ...point, login: Number(e.target.value) }
                       })
                     }
                   />
@@ -721,11 +1017,11 @@ const Settings = observer(() => {
                   <Input
                     htmlType="number"
                     width={'100%'}
-                    value={coin?.discussion.toString()}
+                    value={`${point?.discussion}`}
                     onChange={(e: any) =>
                       setSettings({
                         ...settings,
-                        coin: { ...coin, discussion: e.target.value }
+                        point: { ...point, discussion: Number(e.target.value) }
                       })
                     }
                   />
@@ -744,11 +1040,11 @@ const Settings = observer(() => {
                   <Input
                     htmlType="number"
                     width={'100%'}
-                    value={coin?.comment.toString()}
+                    value={`${point?.comment}`}
                     onChange={(e: any) =>
                       setSettings({
                         ...settings,
-                        coin: { ...coin, comment: e.target.value }
+                        point: { ...point, comment: Number(e.target.value) }
                       })
                     }
                   />
@@ -767,11 +1063,11 @@ const Settings = observer(() => {
                   <Input
                     htmlType="number"
                     width={'100%'}
-                    value={coin?.bestAnswer.toString()}
+                    value={`${point?.bestAnswer}`}
                     onChange={(e: any) =>
                       setSettings({
                         ...settings,
-                        coin: { ...coin, bestAnswer: e.target.value }
+                        point: { ...point, bestAnswer: Number(e.target.value) }
                       })
                     }
                   />
@@ -814,6 +1110,73 @@ const Settings = observer(() => {
               <Button shadow type="secondary" loading={loading} onClick={save}>
                 <Translation lang={settings?.language} value="Save" />
               </Button>
+            </Collapse>
+            <Collapse
+              title={useTranslation({
+                lang: settings?.language,
+                value: 'Legal settings'
+              })}
+            >
+              <Tabs initialValue="1">
+                <Tabs.Item
+                  label={useTranslation({
+                    lang: settings?.language,
+                    value: 'Terms & conditions'
+                  })}
+                  value="1"
+                >
+                  {settings?.terms && (
+                    <Editor
+                      lang={settings?.language}
+                      value={settings?.terms}
+                      height="200px"
+                      onChange={(val) =>
+                        setSettings({
+                          ...settings,
+                          terms: val
+                        })
+                      }
+                    />
+                  )}
+                  <Button
+                    shadow
+                    type="secondary"
+                    loading={loading}
+                    onClick={save}
+                  >
+                    <Translation lang={settings?.language} value="Save" />
+                  </Button>
+                </Tabs.Item>
+                <Tabs.Item
+                  label={useTranslation({
+                    lang: settings?.language,
+                    value: 'Privacy policy'
+                  })}
+                  value="2"
+                >
+                  {settings?.privacy && (
+                    <Editor
+                      lang={settings?.language}
+                      value={settings?.privacy}
+                      height="200px"
+                      onChange={(val) =>
+                        setSettings({
+                          ...settings,
+                          privacy: val
+                        })
+                      }
+                    />
+                  )}
+                  <Button
+                    shadow
+                    type="secondary"
+                    loading={loading}
+                    onClick={save}
+                  >
+                    <Translation lang={settings?.language} value="Save" />
+                  </Button>
+                </Tabs.Item>
+              </Tabs>
             </Collapse>
           </Collapse.Group>
         </main>

@@ -2,7 +2,7 @@
 
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Upload } from '../../../components/api/model';
+import { Upload } from 'components/api/model';
 
 const getFile = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = req.query.id;

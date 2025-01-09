@@ -23,8 +23,10 @@ import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
 import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
+import useToken from 'components/Token';
 
 const Admin = observer(() => {
+  const token = useToken();
   const [modal, toggleModal] = useState(false);
   const [{ settings, getSettings }] = useState(() => new SettingsStore());
 
@@ -47,7 +49,7 @@ const Admin = observer(() => {
   useEffect(() => {
     getSettings();
     getUsers();
-  }, []);
+  }, [token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
@@ -94,10 +96,10 @@ const Admin = observer(() => {
             settings?.language === 'es'
               ? es
               : settings?.language === 'fr'
-              ? fr
-              : settings?.language === 'en'
-              ? enUS
-              : null
+                ? fr
+                : settings?.language === 'en'
+                  ? enUS
+                  : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -132,7 +134,7 @@ const Admin = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <AdminNavbar
         title={useTranslation({
           lang: settings?.language,
@@ -153,7 +155,7 @@ const Admin = observer(() => {
         actionTrigger={handleChange}
       />
       <div className="page-container top-100">
-        <Sidebar active="users" lang={settings?.language} />
+        <Sidebar role={token?.role} active="users" lang={settings?.language} />
 
         <main className="main for-admin">
           <SearchHeading

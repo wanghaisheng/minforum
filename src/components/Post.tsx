@@ -9,6 +9,8 @@ type postProps = {
   title?: string;
   avatar?: string;
   author?: string;
+  authorUsername?: string;
+  authorRole?: string;
   slug?: string;
   category?: string;
   comment?: number;
@@ -17,13 +19,24 @@ type postProps = {
 };
 
 const Post = (props: postProps) => {
-  const { title, avatar, slug, category, comment, author, date, lang } = props;
+  const {
+    title,
+    avatar,
+    slug,
+    category,
+    comment,
+    author,
+    authorRole,
+    authorUsername,
+    date,
+    lang
+  } = props;
 
   const content = () => (
     <div style={{ padding: '0 10px' }}>
-      <Link color href="#">
+      <Link color href={`/u/${authorUsername}`}>
         <User src={avatar} name={author}>
-          <Translation lang={props.lang} value={'Moderator'} />
+          <Translation lang={props.lang} value={authorRole} />
         </User>
       </Link>
     </div>
@@ -36,20 +49,20 @@ const Post = (props: postProps) => {
             lang === 'es'
               ? es
               : lang === 'fr'
-              ? fr
-              : lang === 'en'
-              ? enUS
-              : lang === 'ru'
-              ? ru
-              : lang === 'de'
-              ? de
-              : lang === 'cn'
-              ? zhCN
-              : lang === 'ja'
-              ? ja
-              : lang === 'ko'
-              ? ko
-              : null
+                ? fr
+                : lang === 'en'
+                  ? enUS
+                  : lang === 'ru'
+                    ? ru
+                    : lang === 'de'
+                      ? de
+                      : lang === 'cn'
+                        ? zhCN
+                        : lang === 'ja'
+                          ? ja
+                          : lang === 'ko'
+                            ? ko
+                            : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
