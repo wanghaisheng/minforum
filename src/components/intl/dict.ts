@@ -3248,6 +3248,46 @@ const dict = [
     ja: '現在有効なテーマを無効にすることはできません。別のテーマを有効にしてから、このテーマを無効にしてください。',
     ru: 'Вы не можете отключить текущую активную тему. Пожалуйста, сначала включите другую тему, чтобы отключить эту.',
     ko: '현재 활성화된 테마를 비활성화할 수 없습니다. 다른 테마를 먼저 활성화한 후 이 테마를 비활성화하세요.'
+  },
+  {
+    en: 'Signup using Facebook',
+    es: 'Regístrate usando Facebook',
+    fr: 'Inscription via Facebook',
+    de: 'Registrierung mit Facebook',
+    cn: '使用 Facebook 注册',
+    ja: 'Facebookでサインアップ',
+    ru: 'Регистрация через Facebook',
+    ko: 'Facebook으로 가입하기'
+  },
+  {
+    en: 'Login using Facebook',
+    es: 'Inicia sesión con Facebook',
+    fr: 'Connexion via Facebook',
+    de: 'Anmelden mit Facebook',
+    cn: '使用 Facebook 登录',
+    ja: 'Facebookでログイン',
+    ru: 'Войти через Facebook',
+    ko: 'Facebook으로 로그인'
+  },
+  {
+    en: 'Login using Google',
+    es: 'Inicia sesión con Google',
+    fr: 'Connexion via Google',
+    de: 'Anmelden mit Google',
+    cn: '使用 Google 登录',
+    ja: 'Googleでログイン',
+    ru: 'Войти через Google',
+    ko: 'Google로 로그인'
+  },
+  {
+    en: 'Signup using Google',
+    es: 'Regístrate con Google',
+    fr: 'Inscription via Google',
+    de: 'Registrierung mit Google',
+    cn: '使用 Google 注册',
+    ja: 'Googleでサインアップ',
+    ru: 'Регистрация через Google',
+    ko: 'Google로 가입하기'
   }
 ];
 

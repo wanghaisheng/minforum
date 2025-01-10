@@ -18,16 +18,15 @@ import { CheckInCircle, CheckInCircleFill, XCircleFill } from '@geist-ui/icons';
 import Turnstile, { useTurnstile } from 'react-turnstile';
 import Navbar from 'components/Navbar';
 import UserStore from 'stores/user';
-import useToken from 'components/Token';
 import { validateEmail } from 'components/api/utils';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 
 const Signup = observer(() => {
-  const token = useToken();
+  const router = useRouter();
   const [status, setStatus] = useState('');
   const [show, showButton] = useState(false);
   const turnstile = useTurnstile();
@@ -35,12 +34,21 @@ const Signup = observer(() => {
     () => new SettingsStore()
   );
   const [
-    { loading, user, setUser, getUser, signup, checkUsername, updateUser }
+    {
+      loading,
+      user,
+      setUser,
+      getUser,
+      signup,
+      checkUsername,
+      updateUser,
+      socialConnect
+    }
   ] = useState(() => new UserStore());
 
   useEffect(() => {
     getSettings();
-  }, [token]);
+  }, [settings?.theme]);
 
   const processUsername = (val: string) => {
     if (val.length) {
@@ -123,11 +131,33 @@ const Signup = observer(() => {
     }
   };
 
+  const socialAccount = async (body) => {
+    await socialConnect(body).then((res) => {
+      if (res.success) {
+        const { name, id, role, photo, username, status } = res.data;
+        setCookie(
+          null,
+          '_w_auth',
+          JSON.stringify({ name, id, role, photo, username }),
+          {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/'
+          }
+        );
+        toast.success(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Successfully signed in!'
+          })
+        );
+        status === 'new' ? router.push('/settings') : router.push('/');
+      }
+    });
+  };
+
   const googleAuth = useGoogleLogin({
     scope: 'email profile',
     onSuccess: async (tokenResponse) => {
-      console.log('Login Success:', tokenResponse);
-
       // Use the access token to fetch user info
       try {
         const userInfoResponse = await fetch(
@@ -140,12 +170,17 @@ const Signup = observer(() => {
         );
 
         if (!userInfoResponse.ok) {
-          throw new Error('Failed to fetch user info');
+          toast.error('Unable to connect to google');
         }
 
         const userInfo = await userInfoResponse.json();
-        console.log('User Info:', userInfo);
-        // You can now store the user info in your app's state or send it to your backend
+        let body = {
+          name: `${userInfo?.name}`,
+          email: userInfo?.email,
+          platform: 'Google'
+        };
+
+        socialAccount(body);
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
@@ -184,36 +219,58 @@ const Signup = observer(() => {
                 />
               </Text>
               <Spacer h={1} />
-              <FacebookLogin
-                appId={settings?.socialAccount?.facebook}
-                onSuccess={(response) => {
-                  console.log('Login Success!', response);
-                }}
-                onFail={(error) => {
-                  console.log('Login Failed!', error);
-                }}
-                onProfileSuccess={(response) => {
-                  console.log('Get Profile Success!', response);
-                }}
-                render={({ onClick, logout }) => (
+              {settings?.socialAccount?.facebook && (
+                <>
+                  <FacebookLogin
+                    appId={settings?.socialAccount?.facebook}
+                    onFail={() => {
+                      toast.error('Login Failed!');
+                    }}
+                    onProfileSuccess={(response) => {
+                      const body = {
+                        name: response.name,
+                        email: response.email,
+                        platform: 'Facebook'
+                      };
+                      socialAccount(body);
+                    }}
+                    render={({ onClick }) => (
+                      <Button
+                        onClick={onClick}
+                        width="100%"
+                        icon={<img src="/images/facebook.svg" height={20} />}
+                      >
+                        <span style={{ textTransform: 'none' }}>
+                          <Translation
+                            lang={settings?.language}
+                            value="Signup using Facebook"
+                          />
+                        </span>
+                      </Button>
+                    )}
+                  />
+                  <Spacer h={1} />
+                </>
+              )}
+              {settings?.socialAccount?.google && (
+                <>
                   <Button
                     width="100%"
-                    icon={<img src="/images/facebook.svg" height={20} />}
+                    icon={<img src="/images/google.svg" height={20} />}
+                    onClick={() => googleAuth()}
                   >
-                    Login with Facebook
+                    <span style={{ textTransform: 'none' }}>
+                      <Translation
+                        lang={settings?.language}
+                        value="Signup using Google"
+                      />
+                    </span>
                   </Button>
-                )}
-              />
-              <Spacer h={1} />
-              <Button
-                width="100%"
-                icon={<img src="/images/google.svg" height={20} />}
-                onClick={() => googleAuth()}
-              >
-                Signup using Google
-              </Button>
-              <Spacer h={1} />
-              <Divider>Or</Divider>
+                  <Spacer h={1} />
+                </>
+              )}
+              {(settings?.socialAccount?.facebook ||
+                settings?.socialAccount?.google) && <Divider>OR</Divider>}
               <Spacer h={1} />
               <Input
                 placeholder={useTranslation({

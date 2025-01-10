@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Spacer, Text, Link, Button, Input, Card, Image } from '@geist-ui/core';
+import {
+  Spacer,
+  Text,
+  Link,
+  Button,
+  Input,
+  Card,
+  Image,
+  Divider
+} from '@geist-ui/core';
 import Turnstile, { useTurnstile } from 'react-turnstile';
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
@@ -7,6 +16,8 @@ import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import { useGoogleLogin } from '@react-oauth/google';
+import FacebookLogin from '@greatsumini/react-facebook-login';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
 
@@ -18,12 +29,14 @@ const Login = observer(() => {
   const [{ settings, getSettings, verifyTurnstile }] = useState(
     () => new SettingsStore()
   );
-  const [{ loading, user, setUser, login }] = useState(() => new UserStore());
+  const [{ loading, user, setUser, login, socialConnect }] = useState(
+    () => new UserStore()
+  );
   const { email, password } = user;
 
   useEffect(() => {
     getSettings();
-  }, [status]);
+  }, [status, settings?.theme]);
 
   const signIn = async () => {
     await login({ email, password }).then((res: any) => {
@@ -53,6 +66,62 @@ const Login = observer(() => {
       }
     });
   };
+
+  const socialAccount = async (body) => {
+    await socialConnect(body).then((res) => {
+      if (res.success) {
+        const { name, id, role, photo, username, status } = res.data;
+        setCookie(
+          null,
+          '_w_auth',
+          JSON.stringify({ name, id, role, photo, username }),
+          {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/'
+          }
+        );
+        toast.success(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Successfully signed in!'
+          })
+        );
+        status === 'new' ? router.push('/settings') : router.push('/');
+      }
+    });
+  };
+
+  const googleAuth = useGoogleLogin({
+    scope: 'email profile',
+    onSuccess: async (tokenResponse) => {
+      // Use the access token to fetch user info
+      try {
+        const userInfoResponse = await fetch(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`
+            }
+          }
+        );
+
+        if (!userInfoResponse.ok) {
+          toast.error('Unable to connect to google');
+        }
+
+        const userInfo = await userInfoResponse.json();
+        let body = {
+          name: `${userInfo?.name}`,
+          email: userInfo?.email,
+          platform: 'Google'
+        };
+
+        socialAccount(body);
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      }
+    }
+  });
 
   return (
     <div className="polkadot">
@@ -111,7 +180,60 @@ const Login = observer(() => {
               ) : (
                 ''
               )}
-              <Spacer h={2} />
+              <Spacer h={1} />
+              {settings?.socialAccount?.facebook && (
+                <>
+                  <FacebookLogin
+                    appId={settings?.socialAccount?.facebook}
+                    onFail={(error) => {
+                      toast.error('Login Failed!');
+                    }}
+                    onProfileSuccess={(response) => {
+                      const body = {
+                        name: response.name,
+                        email: response.email,
+                        platform: 'Facebook'
+                      };
+                      socialAccount(body);
+                    }}
+                    render={({ onClick }) => (
+                      <Button
+                        onClick={onClick}
+                        width="100%"
+                        icon={<img src="/images/facebook.svg" height={20} />}
+                      >
+                        <span style={{ textTransform: 'none' }}>
+                          <Translation
+                            lang={settings?.language}
+                            value="Login using Facebook"
+                          />
+                        </span>
+                      </Button>
+                    )}
+                  />
+                  <Spacer h={1} />
+                </>
+              )}
+              {settings?.socialAccount?.google && (
+                <>
+                  <Button
+                    width="100%"
+                    icon={<img src="/images/google.svg" height={20} />}
+                    onClick={() => googleAuth()}
+                  >
+                    <span style={{ textTransform: 'none' }}>
+                      <Translation
+                        lang={settings?.language}
+                        value="Login using Google"
+                      />
+                    </span>
+                  </Button>
+                  <Spacer h={1} />
+                </>
+              )}
+              {(settings?.socialAccount?.facebook ||
+                settings?.socialAccount?.google) && <Divider>OR</Divider>}
+              <Spacer h={1} />
               <Input
                 placeholder={useTranslation({
                   lang: settings?.language,

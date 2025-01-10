@@ -148,7 +148,11 @@ const Dashboard = observer(() => {
         actionTrigger={processAnalytics}
       />
       <div className="page-container top-100">
-        <Sidebar role={token?.role} active="users" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="dashboard"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <div className="dashboard-header">

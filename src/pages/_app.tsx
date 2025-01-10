@@ -77,15 +77,13 @@ const App = ({ Component, pageProps }: AppProps) => {
       >
         <CssBaseline />
         {useAnalytics()}
-        {settingsStore.settings?.socialAccount?.google ? (
-          <GoogleOAuthProvider
-            clientId={settingsStore.settings.socialAccount.google}
-          >
-            <Component {...pageProps} key={router.asPath} />
-          </GoogleOAuthProvider>
-        ) : (
+        <GoogleOAuthProvider
+          clientId={
+            settingsStore.settings.socialAccount.google || 'no-client-id'
+          }
+        >
           <Component {...pageProps} key={router.asPath} />
-        )}
+        </GoogleOAuthProvider>
       </GeistProvider>
     );
   }

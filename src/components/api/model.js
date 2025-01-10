@@ -18,7 +18,7 @@ const User = thinky.createModel('users', {
   username: type.string().required(),
   email: type.string().required(validator.isEmail),
   phone: type.string(),
-  password: type.string().required(),
+  password: type.string(),
   photo: type.string(),
   country: type.string(),
   state: type.string(),

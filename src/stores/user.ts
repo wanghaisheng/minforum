@@ -72,6 +72,25 @@ export default class UserStore {
       .catch((err) => console.log(err));
   };
 
+  @action socialConnect = async (body: userProp) => {
+    let url = `${API_URL}/user/social`;
+    this.loading = true;
+    return await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: API_KEY
+      },
+      body: JSON.stringify(body)
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.loading = false;
+        return res;
+      })
+      .catch((err) => console.log(err));
+  };
+
   @action forgot = async (body: any) => {
     let url = `${API_URL}/user/forgot`;
     this.loading = true;

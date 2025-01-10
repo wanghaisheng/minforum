@@ -13,8 +13,11 @@ Minimalistic and Modern Discussion Software
 
 ![image5](./public/screenshots/5.png)
 ![image1](./public/screenshots/1.png)
+![image1](./public/screenshots/1-1.png)
+![image1](./public/screenshots/1-2.png)
 ![image2](./public//screenshots/2.png)
 ![image3](./public//screenshots/3.png)
+![image3](./public//screenshots/6.png)
 
 ### Installation
 
@@ -41,14 +44,13 @@ yarn production
 - &#x2611; Post and comment
 - &#x2611; Direct messaging with controls to block or accept messages from users
 - &#x2611; Social share
-- &#x2610; Email notification
-- &#x2611; Web notification
-- &#x2610; Push notification
-- &#x2610; Theming: Light and Dark
+- &#x2611; Notifications for comments, replies, likes and messages
+- &#x2611; Themes
 - &#x2611; Language & Translation (English, French, Spanish, Deutsch, Chinese, Japanese, Korean, and Russian)
 - &#x2611; Points system: Reward users with points for their activities and contributions.
 - &#x2611; Reports and flag
 - &#x2611; Advert settings
+- &#x2610; Badge for activities
 - &#x2611; Site wide announcement
 - &#x2611; Analytics, pageviews and post views
 - &#x2611; Ban words
