@@ -89,7 +89,7 @@ detect_os_and_install
 
 setup_project (){
 #  Download the zip file using curl
-curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.1.zip
+curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.2.zip
 
 # Step 2: Unzip into a temporary directory
 unzip min-forum.zip -d minforum_temp
