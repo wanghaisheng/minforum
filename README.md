@@ -13,11 +13,11 @@ Minimalistic and Modern Discussion Software
 
 ![image5](./public/screenshots/5.png)
 ![image1](./public/screenshots/1.png)
-![image1](./public/screenshots/1-1.png)
-![image1](./public/screenshots/1-2.png)
+![image1-1](./public/screenshots/1-1.png)
+![image1-2](./public/screenshots/1-2.png)
 ![image2](./public//screenshots/2.png)
 ![image3](./public//screenshots/3.png)
-![image3](./public//screenshots/6.png)
+![image6](./public//screenshots/6.png)
 
 ### Installation
 
@@ -26,6 +26,11 @@ sh <(curl https://raw.githubusercontent.com/min-forum/min-forum/main/install/set
 ```
 
 ### Development
+
+**Install mkcert and generate certificate for localhost**
+```
+npm i -g mkcert
+```
 
 ```
 yarn dev

@@ -7,7 +7,10 @@
 /node_modules
 /.pnp
 .pnp.js
-
+ca.cert
+ca.crt
+ca.key
+cert.key
 # testing
 /coverage
 /test-results

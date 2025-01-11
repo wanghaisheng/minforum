@@ -88,22 +88,25 @@ detect_os_and_install
 
 
 setup_project (){
-#  Download the zip file using curl
+# Step 1: Download the zip file using curl
 curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.2.zip
 
 # Step 2: Unzip into a temporary directory
 unzip min-forum.zip -d minforum_temp
 
-# Step 3: Create the 'weiss' folder and move the contents into it
-mkdir min-forum
-mv minforum_temp/min-forum-1.0.1/* min-forum/
+# Step 3: Create the 'min-forum' folder and move the contents into it
+mkdir -p min-forum
+mv minforum_temp/min-forum-1.0.2/* min-forum/
 
 # Step 4: Clean up the temporary folder and zip file
 rm -rf minforum_temp
 rm min-forum.zip
+
+# Step 5: Navigate into the min-forum directory and run yarn setup and yarn live
 cd min-forum
 yarn setup
 yarn live
+
 }
 
 setup_project
