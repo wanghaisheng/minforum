@@ -105,14 +105,14 @@ install_nodejs() {
     fi
 }
 
-# Function to install Yarn
-install_yarn() {
-    echo "Installing Yarn..."
+# Function to install global npm packages
+install_global_npm_packages() {
+    echo "Installing global npm packages..."
     if command -v yarn &> /dev/null; then
         echo "Yarn is already installed. Skipping installation."
     else
         # Install Yarn using npm (which comes with Node.js)
-        npm install -g yarn
+        npm install -g yarn pm2 nodemon
         echo "Yarn installed successfully."
     fi
 }
@@ -175,5 +175,5 @@ check_rethinkdb_installed
 detect_os_and_install
 install_nginx
 install_nodejs
-install_yarn
+install_global_npm_packages
 setup_project

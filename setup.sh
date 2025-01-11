@@ -1,9 +1,9 @@
 #!/bin/bash
 
 server_setup() {
-
+  # Get the public IP address
   PUBLIC_IP=$(curl -s https://api.ipify.org)
-echo "Public IP: $PUBLIC_IP"
+  echo "Public IP: $PUBLIC_IP"
 
   # Install dependencies
   echo "Installing dependencies..."
@@ -16,7 +16,6 @@ echo "Public IP: $PUBLIC_IP"
   # Generate hash for API key
   md5="min-forum-random-hash"
   hash="$(echo -n "$md5" | openssl rand -hex 20)"
-
 
   # Insert values into .env file
   cat << EOF >> .env
@@ -88,15 +87,9 @@ show_loader() {
   printf "\r" # Clear the loader
 }
 
-# Function to run commands silently
-run_silently() {
-  echo "Starting server setup..."
-  server_setup &> /dev/null &
-  show_loader
-}
-
 # Execute the script
-run_silently
+echo "Starting server setup..."
+server_setup
 
 # Success message with folder path and instructions
 echo "===================================================="
