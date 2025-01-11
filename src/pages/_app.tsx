@@ -59,7 +59,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   if (loading && theme === null) {
     return <Suspense fallback={<Loading />}></Suspense>;
-  } else {
+  } else if (theme?.palette) {
     const { palette, expressiveness, font } = theme;
     const customTheme = palette
       ? Themes.createFromLight({
@@ -79,7 +79,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         {useAnalytics()}
         <GoogleOAuthProvider
           clientId={
-            settingsStore.settings.socialAccount.google || 'no-client-id'
+            settingsStore?.settings?.socialAccount?.google || 'no-client-id'
           }
         >
           <Component {...pageProps} key={router.asPath} />

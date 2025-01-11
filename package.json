@@ -6,7 +6,7 @@
     "setup": "sh setup.sh",
     "dev": "node serve-dev.js",
     "build": "next build",
-    "live": "yarn build && NODE_ENV=production node serve.js",
+    "live": "yarn build && NODE_ENV=production pm2 start serve.js",
     "live:restart": "yarn run build && NODE_ENV=production pm2 start serve.js -n 'min-forum' --update-env",
     "start_db": "rethinkdb --bind all",
     "test:e2e": "playwright test"

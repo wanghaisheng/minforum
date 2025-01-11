@@ -74,7 +74,7 @@ const Navbar = observer((props: navbarProps) => {
 
     token.id ? getUnreadNotification(token.id) : null;
     token.id ? getUnreadMessage(token.id) : null;
-    cookie && isNaN(Number(cookie?.isAnnounce))
+    cookie && settings?.announcementText && isNaN(Number(cookie?.isAnnounce))
       ? toggleAnnouncement(true)
       : false;
 

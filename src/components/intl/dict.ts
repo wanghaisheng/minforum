@@ -2470,6 +2470,26 @@ const dict = [
     ko: '사용자 이름이 너무 짧습니다. 최소 3자 이상이어야 합니다.'
   },
   {
+    en: 'Site name is too short. Minimum character is three.',
+    es: 'El nombre del sitio es demasiado corto. El mínimo de caracteres es tres.',
+    fr: 'Le nom du site est trop court. Le nombre minimum de caractères est de trois.',
+    de: 'Der Seitenname ist zu kurz. Die Mindestanzahl der Zeichen ist drei.',
+    cn: '站点名称太短。最少需要三个字符。',
+    ja: 'サイト名が短すぎます。最低3文字必要です。',
+    ru: 'Название сайта слишком короткое. Минимальное количество символов — три.',
+    ko: '사이트 이름이 너무 짧습니다. 최소 세 글자 이상이어야 합니다.'
+  },
+  {
+    en: 'Site description is too short. Minimum character is ten.',
+    es: 'La descripción del sitio es demasiado corta. El mínimo de caracteres es diez.',
+    fr: 'La description du site est trop courte. Le nombre minimum de caractères est de dix.',
+    de: 'Die Seitenbeschreibung ist zu kurz. Die Mindestanzahl der Zeichen ist zehn.',
+    cn: '站点描述太短。最少需要十个字符。',
+    ja: 'サイトの説明が短すぎます。最低10文字必要です。',
+    ru: 'Описание сайта слишком короткое. Минимальное количество символов — десять.',
+    ko: '사이트 설명이 너무 짧습니다. 최소 열 글자 이상이어야 합니다.'
+  },
+  {
     en: 'Invalid email address',
     es: 'Dirección de correo electrónico no válida',
     fr: 'Adresse e-mail non valide',

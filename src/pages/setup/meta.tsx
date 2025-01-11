@@ -70,7 +70,7 @@ const MetaSetup = observer(() => {
     const { siteName, siteDescription } = settings;
 
     if (!siteName || siteName.length < 3) {
-      toast.error('Username is too short!');
+      toast.error('Site name is too short. Minimum character is three.');
     } else if (!siteDescription || siteDescription.length < 10) {
       toast.error('Description is too short! Minimum character is 10.');
     } else {
@@ -162,9 +162,9 @@ const MetaSetup = observer(() => {
               <Spacer h={1.5} />
               <Button
                 onClick={() => router.back()}
-                type="secondary"
                 width="48%"
                 icon={<ChevronLeft />}
+                style={{ backgroundColor: '#f9f9f9' }}
               >
                 <Translation lang={lang} value="Back" />
               </Button>

@@ -39,7 +39,12 @@ const Settings = observer(() => {
   }, [token?.id]);
 
   const handleUpload = async (id: string) => {
-    let t = toast.loading('Uploading image....');
+    let t = toast.loading(
+      useTranslation({
+        lang: settings?.language,
+        value: 'Uploading image....'
+      })
+    );
 
     let upload: any = document.querySelector(id);
 
@@ -63,7 +68,12 @@ const Settings = observer(() => {
           _upload.value = '';
 
           toast.dismiss(t);
-          toast.success('Image uploaded successfully!');
+          toast.success(
+            useTranslation({
+              lang: settings?.language,
+              value: 'Image uploaded successfully!'
+            })
+          );
         } else {
           let _upload: any = document.querySelector(id);
           _upload.value = '';

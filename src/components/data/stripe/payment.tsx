@@ -20,7 +20,6 @@ const PaymentForm = ({ amount }) => {
       const response = await stripePayment({ amount });
 
       const data = await response.data;
-      console.log(data);
 
       const clientSecret = data;
 

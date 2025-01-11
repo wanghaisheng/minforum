@@ -25,9 +25,10 @@ const Setup = observer(() => {
   const router = useRouter();
   const [store] = useState(() => new SettingsStore());
   const [loading, setLoading] = useState(true);
-  const { admin, setAdmin, settings, setSettings } = store;
+  const { admin, setAdmin, settings, setSettings, getSettings } = store;
 
   useEffect(() => {
+    getSettings();
     setTimeout(() => {
       let setup =
         cookie && cookie._w_setup ? JSON.parse(cookie._w_setup) : null;
@@ -43,7 +44,7 @@ const Setup = observer(() => {
   const lang = settings?.language ? settings?.language : 'en';
 
   const _next = async () => {
-    const { username, email, password } = admin;
+    const { name, email, password } = admin;
 
     if (!settings.language) {
       toast.error(
@@ -52,7 +53,7 @@ const Setup = observer(() => {
           value: 'Please select a language'
         })
       );
-    } else if (!username || username.length < 3) {
+    } else if (!name || name.length < 3) {
       toast.error(
         useTranslation({
           lang: lang,
@@ -74,8 +75,9 @@ const Setup = observer(() => {
         })
       );
     } else {
-      admin.name = admin.username;
-      admin.username = admin.username.toLowerCase();
+      settings.language = settings.language || 'en';
+      admin.name = admin.name;
+      admin.username = admin.username;
       const setup = { settings, admin };
       setCookie(null, '_w_setup', JSON.stringify(setup), {
         maxAge: 30 * 24 * 60 * 60,
@@ -159,9 +161,13 @@ const Setup = observer(() => {
                   })}`}
                   width="100%"
                   scale={4 / 3}
-                  value={admin.username}
+                  value={admin.name}
                   onChange={(e) =>
-                    setAdmin({ ...admin, username: e.target.value })
+                    setAdmin({
+                      ...admin,
+                      name: e.target.value,
+                      username: e.target.value.toLowerCase().replace(/\s/, '')
+                    })
                   }
                 />
                 <Spacer h={1.5} />

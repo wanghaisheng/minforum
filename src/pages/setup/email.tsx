@@ -19,7 +19,7 @@ const EmailSetup = observer(() => {
   const [userStore] = useState(() => new UserStore());
   const [categoryStore] = useState(() => new CategoryStore());
   const [store] = useState(() => new SettingsStore());
-  const { loading, admin, setAdmin, settings, setSettings, create } = store;
+  const { loading, admin, setAdmin, settings, setSettings, update } = store;
   const { email } = settings;
 
   useEffect(() => {
@@ -79,9 +79,9 @@ const EmailSetup = observer(() => {
               }
             );
 
-            await create(_settings).then((res) => {
+            await update(_settings).then((res) => {
               destroyCookie(null, '_w_setup');
-              router.push('/admin');
+              router.push('/');
             });
           }
         });

@@ -240,20 +240,6 @@ const Navbar = observer((props: navbarProps) => {
                 <></>
               )}
             </Grid>
-            {/* <Grid xs={0} lg={1}>
-              <Spacer w={3} inline />
-              <Popover content={themeMenu}>
-                <Button type="abort" auto scale={2 / 3}>
-                  {theme === 'weiss-dark' ? (
-                    <Moon />
-                  ) : theme === 'weiss-light' ? (
-                    <Sun />
-                  ) : (
-                    <Sun />
-                  )}
-                </Button>
-              </Popover>
-            </Grid> */}
           </Grid.Container>
         </div>
       </Card>

@@ -12,6 +12,7 @@ import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/Contributors';
 import AdminVerify from 'components/admin/AdminVerify';
 import { Translation } from 'components/intl/Translation';
+import isSetup from 'components/Setup';
 
 const Home = observer(() => {
   const token = useToken();
@@ -21,6 +22,7 @@ const Home = observer(() => {
   const [modal, toggleModal] = useState(false);
 
   useEffect(() => {
+    isSetup();
     getSettings();
     getDiscussions(false);
   }, [token]);
