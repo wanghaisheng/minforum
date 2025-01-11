@@ -10,6 +10,7 @@ Minimalistic and Modern Discussion Software
 
 - [NodeJS 18 LTS upward](https://github.com/nvm-sh/nvm/blob/master/README.md)
 - [RethinkDB 2.4 upward](https://rethinkdb.com/docs/install/)
+- [Nginx latest version]()
 
 ![image5](./public/screenshots/5.png)
 ![image1](./public/screenshots/1.png)
@@ -28,6 +29,7 @@ sh <(curl https://raw.githubusercontent.com/min-forum/min-forum/main/install/set
 ### Development
 
 **Install mkcert and generate certificate for localhost**
+
 ```
 npm i -g mkcert
 ```
