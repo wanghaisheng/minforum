@@ -12,7 +12,7 @@ import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/Contributors';
 import AdminVerify from 'components/admin/AdminVerify';
 import { Translation } from 'components/intl/Translation';
-import CategoryHeader from 'components/CategoryHeader';
+import StripeModal from 'components/modals/StripeModal';
 
 const Home = observer(() => {
   const token = useToken();
@@ -69,6 +69,14 @@ const Home = observer(() => {
         startConversation={() => toggleModal(!modal)}
       />
       <Toaster />
+      <StripeModal
+        content={`Follow John Doe and get more access!`}
+        amount={394}
+        show={true}
+        toggleModal={null}
+        loading={false}
+        save={null}
+      />
       <div className="page-container top-100">
         <Sidebar
           active="home"

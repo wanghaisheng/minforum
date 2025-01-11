@@ -26,6 +26,8 @@ install_on_macos() {
 
 # Function to install RethinkDB on Debian-based systems (Ubuntu, Debian)
 install_on_debian() {
+    sudo apt-get update
+
     echo "Installing RethinkDB on Debian-based system..."
 
     # Add RethinkDB official repository
@@ -60,6 +62,62 @@ EOF
     rethinkdb --bind all &> /dev/null &
 }
 
+# Function to install Nginx
+install_nginx() {
+    echo "Installing Nginx..."
+    if command -v nginx &> /dev/null; then
+        echo "Nginx is already installed. Skipping installation."
+    else
+        # Install Nginx
+        if [[ "$(uname)" == "Darwin" ]]; then
+            brew install nginx
+        elif [[ -f /etc/os-release ]]; then
+            . /etc/os-release
+            if [[ "$ID" == "debian" || "$ID_LIKE" == *"debian"* ]]; then
+                sudo apt-get update
+                sudo apt-get install -y nginx
+            elif [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
+                sudo dnf install -y nginx
+            else
+                echo "Unsupported Linux distribution for Nginx installation."
+                return 1
+            fi
+        else
+            echo "Unknown OS for Nginx installation."
+            return 1
+        fi
+        echo "Nginx installed successfully."
+    fi
+}
+
+# Function to install Node.js
+install_nodejs() {
+    echo "Installing Node.js..."
+    if command -v node &> /dev/null; then
+        echo "Node.js is already installed. Skipping installation."
+    else
+        # Install Node.js using nvm (Node Version Manager)
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install node
+        echo "Node.js installed successfully."
+    fi
+}
+
+# Function to install Yarn
+install_yarn() {
+    echo "Installing Yarn..."
+    if command -v yarn &> /dev/null; then
+        echo "Yarn is already installed. Skipping installation."
+    else
+        # Install Yarn using npm (which comes with Node.js)
+        npm install -g yarn
+        echo "Yarn installed successfully."
+    fi
+}
+
+
 
 # Detect the OS and install RethinkDB accordingly
 detect_os_and_install() {
@@ -82,31 +140,37 @@ detect_os_and_install() {
     fi
 }
 
+# Function to set up the project
+setup_project() {
+    # Step 1: Download the zip file using curl
+    echo "Downloading min-forum project..."
+    curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.3.zip
+
+    # Step 2: Unzip into a temporary directory
+    echo "Unzipping min-forum project..."
+    unzip min-forum.zip -d minforum_temp
+
+    # Step 3: Create the 'min-forum' folder and move the contents into it
+    echo "Setting up min-forum directory..."
+    mkdir -p min-forum
+    mv minforum_temp/min-forum-1.0.3/* min-forum/
+
+    # Step 4: Clean up the temporary folder and zip file
+    echo "Cleaning up temporary files..."
+    rm -rf minforum_temp
+    rm min-forum.zip
+
+    # Step 5: Navigate into the min-forum directory and run yarn setup and yarn live
+    echo "Setting up the project..."
+    cd min-forum
+    yarn setup
+    yarn live
+}
+
 # Main execution
 check_rethinkdb_installed
 detect_os_and_install
-
-
-setup_project (){
-# Step 1: Download the zip file using curl
-curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.2.zip
-
-# Step 2: Unzip into a temporary directory
-unzip min-forum.zip -d minforum_temp
-
-# Step 3: Create the 'min-forum' folder and move the contents into it
-mkdir -p min-forum
-mv minforum_temp/min-forum-1.0.2/* min-forum/
-
-# Step 4: Clean up the temporary folder and zip file
-rm -rf minforum_temp
-rm min-forum.zip
-
-# Step 5: Navigate into the min-forum directory and run yarn setup and yarn live
-cd min-forum
-yarn setup
-yarn live
-
-}
-
+install_nginx
+install_nodejs
+install_yarn
 setup_project

@@ -19,7 +19,6 @@ import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/Contributors';
 import { Translation } from 'components/intl/Translation';
-import CategoryHeader from 'components/CategoryHeader';
 
 const Home = observer(() => {
   const token = useToken();

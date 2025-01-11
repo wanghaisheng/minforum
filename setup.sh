@@ -1,11 +1,9 @@
 #!/bin/bash
 
 server_setup() {
-  # Check if yarn is installed, if not, install it globally
-  if ! command -v yarn &> /dev/null; then
-    echo "Yarn not found. Installing yarn..."
-    npm i -g yarn || { echo "Failed to install yarn. Exiting..."; exit 1; }
-  fi
+
+  PUBLIC_IP=$(curl -s https://api.ipify.org)
+echo "Public IP: $PUBLIC_IP"
 
   # Install dependencies
   echo "Installing dependencies..."
@@ -13,11 +11,12 @@ server_setup() {
 
   # Empty the .env file
   echo "Configuring environment variables..."
-  echo "" > .env.local
+  echo "" > .env
 
   # Generate hash for API key
   md5="min-forum-random-hash"
   hash="$(echo -n "$md5" | openssl rand -hex 20)"
+
 
   # Insert values into .env file
   cat << EOF >> .env
@@ -29,20 +28,16 @@ GEO_URL="https://get.geojs.io/v1/ip/geo"
 
 NEXT_PUBLIC_API_URL="/api"
 NEXT_PUBLIC_API_KEY="$hash"
-NEXT_PUBLIC_CLIENT_ORIGINS="localhost:2323"
-NEXT_PUBLIC_BASE_URL="localhost:2323"
+NEXT_PUBLIC_CLIENT_ORIGINS="$PUBLIC_IP"
+NEXT_PUBLIC_BASE_URL="$PUBLIC_IP"
 EOF
-
-  # Prompt for domain or subdomain
-  echo -n "Enter domain or subdomain: "
-  read domain
 
   # Configure Nginx
   echo "Configuring Nginx..."
   cat << EOF | sudo tee /etc/nginx/sites-available/min-forum.conf > /dev/null
 server {
     listen 80;
-    server_name $domain;
+    server_name $PUBLIC_IP;
 
     location / {
         proxy_pass             http://127.0.0.1:2323;
@@ -108,5 +103,5 @@ echo "===================================================="
 echo "Setup completed!"
 echo "min-forum has been set up successfully!"
 echo "Project folder: $(pwd)"
-echo "To access your application, go to: http://$domain"
+echo "To access your application, go to: http://$PUBLIC_IP"
 echo "===================================================="
