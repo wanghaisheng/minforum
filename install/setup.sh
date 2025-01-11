@@ -143,8 +143,11 @@ detect_os_and_install() {
 # Function to set up the project
 setup_project() {
     # Step 1: Download the zip file using curl
+    #
+    cd /var/www/html
+
     echo "Downloading min-forum project..."
-    curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.4.zip
+    curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.0.5.zip
 
     # Step 2: Unzip into a temporary directory
     echo "Unzipping min-forum project..."
@@ -153,7 +156,7 @@ setup_project() {
     # Step 3: Create the 'min-forum' folder and move the contents into it
     echo "Setting up min-forum directory..."
     mkdir -p min-forum
-    mv minforum_temp/min-forum-1.0.4/* min-forum/
+    mv minforum_temp/min-forum-1.0.5/* min-forum/
 
     # Step 4: Clean up the temporary folder and zip file
     echo "Cleaning up temporary files..."
