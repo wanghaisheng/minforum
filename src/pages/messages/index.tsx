@@ -1,23 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Spacer, Loading } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
-import SettingsStore from 'stores/settings';
 import { Translation } from 'components/intl/Translation';
 import Auth from 'components/Auth';
+import useSettings from 'components/settings';
 
 const Index = observer(() => {
   const router = useRouter();
   const cookie = parseCookies();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   useEffect(() => {
     init();
   }, [router]);
 
   const init = async () => {
-    await getSettings();
     let msg = cookie && cookie?._msg_init ? JSON.parse(cookie?._msg_init) : {};
     msg?.channel
       ? router.push(`/messages/${msg?.channel}`)

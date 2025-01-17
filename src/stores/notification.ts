@@ -7,9 +7,9 @@ const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
 
 export default class NotificationStore {
   @observable loading: boolean = false;
-  @observable more: boolean = false;
+  @observable nomore: boolean = false;
   @observable page: number = 1;
-  @observable limit: number = 100;
+  @observable limit: number = 10;
   @observable total: number = 0;
   @observable unread: number = 0;
   @observable notification: notificationProp = {};
@@ -147,11 +147,12 @@ export default class NotificationStore {
           runInAction(() => {
             setTimeout(() => {
               if (paginate) {
-                this.more = res.count > this.limit;
+                this.nomore = res.data.length < this.limit;
                 let newNotification = this.notifications;
                 this.notifications = [...newNotification, ...res.data];
                 this.total = res.count;
               } else {
+                this.nomore = res.data.length < this.limit;
                 this.notifications = res.data;
                 this.total = res.count;
               }

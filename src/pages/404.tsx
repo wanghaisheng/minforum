@@ -1,18 +1,13 @@
-import { useState, useEffect } from 'react';
 import { Spacer, Text, Button } from '@geist-ui/core';
 import Navbar from 'components/Navbar';
 import Link from 'next/link';
-import SettingsStore from 'stores/settings';
 import { Translation } from 'components/intl/Translation';
 import { ChevronLeft } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
+import useSettings from 'components/settings';
 
 const PageNotFound = () => {
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
-  useEffect(() => {
-    getSettings();
-  }, []);
+  const settings = useSettings();
 
   return (
     <div>

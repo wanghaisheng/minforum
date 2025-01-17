@@ -85,6 +85,7 @@ const CommentModal = observer((props: editorProps) => {
                 <>
                   {isAuthenticate ? (
                     <Button
+                      auto
                       loading={loading}
                       type="success-light"
                       onClick={save}
@@ -93,7 +94,7 @@ const CommentModal = observer((props: editorProps) => {
                     </Button>
                   ) : (
                     <Link href="/login">
-                      <Button loading={loading} type="success-light">
+                      <Button auto loading={loading} type="success-light">
                         <Translation
                           lang={props.lang}
                           value="Sign in to reply"

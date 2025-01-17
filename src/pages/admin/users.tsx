@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import {
   Text,
   Link,
-  Badge,
   Table,
   Pagination,
   Button,
@@ -21,14 +20,14 @@ import toast, { Toaster } from 'react-hot-toast';
 import Auth from 'components/admin/Auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const Admin = observer(() => {
   const token = useToken();
   const [modal, toggleModal] = useState(false);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
 
   const [
     {
@@ -47,7 +46,6 @@ const Admin = observer(() => {
   ] = useState(() => new UserStore());
 
   useEffect(() => {
-    getSettings();
     getUsers();
   }, [token?.id]);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Spacer,
   Text,
@@ -9,7 +9,8 @@ import {
   Loading,
   Image,
   Tooltip,
-  Divider
+  Divider,
+  Checkbox
 } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import { setCookie } from 'nookies';
@@ -24,15 +25,16 @@ import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
+import useSettings from 'components/settings';
 
 const Signup = observer(() => {
+  const settings = useSettings();
   const router = useRouter();
   const [status, setStatus] = useState('');
   const [show, showButton] = useState(false);
+  const [checked, toggleCheck] = useState(false);
   const turnstile = useTurnstile();
-  const [{ settings, getSettings, verifyTurnstile }] = useState(
-    () => new SettingsStore()
-  );
+  const [{ verifyTurnstile }] = useState(() => new SettingsStore());
   const [
     {
       loading,
@@ -45,10 +47,6 @@ const Signup = observer(() => {
       socialConnect
     }
   ] = useState(() => new UserStore());
-
-  useEffect(() => {
-    getSettings();
-  }, [settings?.theme]);
 
   const processUsername = (val: string) => {
     if (val.length) {
@@ -97,6 +95,13 @@ const Signup = observer(() => {
         useTranslation({
           lang: settings?.language,
           value: 'Password is too short. Minimum character is six.'
+        })
+      );
+    } else if (!checked) {
+      toast.error(
+        useTranslation({
+          lang: settings?.language,
+          value: 'Please accept the terms of use and privacy policy'
         })
       );
     } else {
@@ -350,20 +355,58 @@ const Signup = observer(() => {
                 }}
               />
               <Spacer h={1} />
-              <div className="center">
-                <Turnstile
-                  sitekey={settings.cloudflarePublicKey}
-                  onVerify={(token) => {
-                    verifyTurnstile({ token }).then((res: any) => {
-                      if (res.success) {
-                        showButton(true);
-                      } else {
-                        turnstile.reset();
-                      }
-                    });
-                  }}
-                />
-              </div>
+              <Checkbox
+                scale={1}
+                checked={checked}
+                onChange={() => toggleCheck(!checked)}
+              >
+                I accept and agree with{' '}
+                <Link
+                  target="_blank"
+                  underline
+                  href="/terms"
+                  style={{ color: '#F6821E' }}
+                >
+                  terms of use
+                </Link>{' '}
+                and{' '}
+                <Link
+                  target="_blank"
+                  underline
+                  href="/privacy"
+                  style={{ color: '#F6821E' }}
+                >
+                  privacy policy
+                </Link>
+              </Checkbox>
+
+              <Spacer h={1} />
+              {settings.cloudflarePublicKey ? (
+                <div className="center">
+                  <Turnstile
+                    sitekey={settings.cloudflarePublicKey}
+                    onVerify={(token) => {
+                      verifyTurnstile({ token }).then((res: any) => {
+                        if (res.success) {
+                          showButton(true);
+                        } else {
+                          turnstile.reset();
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              ) : (
+                <Button
+                  shadow
+                  type="secondary"
+                  width="100%"
+                  loading={loading}
+                  onClick={save}
+                >
+                  <Translation lang={settings?.language} value="Signup" />
+                </Button>
+              )}
               {show && (
                 <Button
                   shadow

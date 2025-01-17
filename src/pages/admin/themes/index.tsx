@@ -15,18 +15,17 @@ import SearchHeading from 'components/SearchHeading';
 import Sidebar from 'components/admin/Sidebar';
 import Auth from 'components/admin/Auth';
 import ThemeStore from 'stores/theme';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const Themes = observer(() => {
   const token = useToken();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [{ loading, total, page, limit, themes, setPage, getThemes }] =
     useState(() => new ThemeStore());
 
   useEffect(() => {
-    getSettings();
     getThemes();
   }, [token?.id]);
 

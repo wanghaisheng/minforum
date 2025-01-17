@@ -1,8 +1,14 @@
 import { settingsProp } from 'interfaces/settings';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, Discussion, Settings, User } from 'components/api/model';
-import { withAuth, slug } from 'components/api/utils';
+import {
+  r,
+  Discussion,
+  Settings,
+  User,
+  Notification
+} from 'components/api/model';
+import { withAuth, slug, asyncForEach } from 'components/api/utils';
 import slugify from 'slugify';
 
 const getSettings = async () => {
@@ -12,6 +18,30 @@ const getSettings = async () => {
       return config;
     })
     .catch((err: any) => signale.fatal(err));
+};
+
+const notifyMentionedUser = (discussion, userId, postId) => {
+  const usernameRegex = /@(\w+)/g;
+
+  const matches = discussion.match(usernameRegex);
+  if (matches) {
+    asyncForEach(matches, async (item) => {
+      let username = item.replace('@', '');
+      let user = await User.filter({ username });
+      user = user[0] || {};
+      if (user.id) {
+        new Notification({
+          receiver: user.id,
+          filterType: 'mentioned',
+          type: 'post',
+          sender: userId,
+          message: 'mentioned you in their post',
+          action: postId,
+          read: false
+        }).save();
+      }
+    });
+  }
 };
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -34,6 +64,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
           if (data.id) {
             let config: settingsProp = await getSettings();
             await User.get(data.userId).then(async (p: any) => {
+              notifyMentionedUser(data.content, data.userId, data.slug);
               await User.get(data.userId)
                 .update({
                   point: Number(p.point + config.point?.discussion)

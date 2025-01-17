@@ -1,16 +1,16 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, Comment } from 'components/api/model';
+import { Reply } from 'components/api/model';
 import { withAuth } from 'components/api/utils';
 
-const update = async (req: NextApiRequest, res: NextApiResponse) => {
+const deleteReply = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
-      req.body.updatedAt = r.now();
-      await Comment.get(req.body.id)
-        .update(req.body)
+      let reply = await Reply.get(req.body.id);
+      await Reply.get(req.body.id)
+        .delete()
         .then(() => {
-          res.status(200).json({ success: true, data: 'Updated' });
+          res.status(200).json({ success: true, data: reply.slug });
         })
         .catch((err: any) => signale.fatal(err));
     } else {
@@ -19,4 +19,4 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 };
 
-export default update;
+export default deleteReply;

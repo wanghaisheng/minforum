@@ -12,23 +12,22 @@ import {
 } from '@geist-ui/core';
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
-import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { destroyCookie, parseCookies } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Confirm = observer(() => {
   const cookie = parseCookies();
   const router = useRouter();
+  const settings = useSettings();
   const [code, setCode] = useState('');
   const [_code, _setCode] = useState<{ data?: string; code?: number }>({});
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ user, getUser, updateUser }] = useState(() => new UserStore());
 
   useEffect(() => {
-    getSettings();
     let _code: any =
       cookie && cookie._w_code ? JSON.parse(cookie._w_code) : null;
     _setCode(_code);

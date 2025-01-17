@@ -1,50 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
-import {
-  Spacer,
-  Pagination,
-  Link,
-  Button,
-  Card,
-  Loading
-} from '@geist-ui/core';
-import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
+import { Spacer, Link, Button, Card, Loading } from '@geist-ui/core';
+
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
 import Post from 'components/Post';
 import Sidebar from 'components/Sidebar';
 import useToken from 'components/Token';
-import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/Contributors';
 import { Translation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Home = observer(() => {
   const token = useToken();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [
-    {
-      loading,
-      page,
-      total,
-      limit,
-      discussions,
-      setPage,
-      getUnansweredDiscussions
-    }
+    { loading, page, nomore, discussions, setPage, getUnansweredDiscussions }
   ] = useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
 
   useEffect(() => {
-    getSettings();
-    getUnansweredDiscussions();
-  }, [token]);
+    getUnansweredDiscussions(false);
+  }, [token?.id]);
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getUnansweredDiscussions();
-  };
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getUnansweredDiscussions(true);
+      }
+    }
+  }, [discussions, nomore, page]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -65,8 +63,8 @@ const Home = observer(() => {
   return (
     <div>
       <Navbar
-        title="Unanswered discussions"
-        description="Unanswered discussions"
+        title="Home"
+        description="Home"
         startConversation={() => toggleModal(!modal)}
       />
       <Toaster />
@@ -121,7 +119,7 @@ const Home = observer(() => {
 
           <div className="custom-tab">
             <NextLink href="/popular">
-              <Link>
+              <Link className="active">
                 <Translation lang={settings?.language} value="Popular" />
               </Link>
             </NextLink>
@@ -130,25 +128,12 @@ const Home = observer(() => {
                 <Translation lang={settings?.language} value="Recent" />
               </Link>
             </NextLink>
-            <NextLink href="/unanswered">
-              <Link className="active">
-                <Translation lang={settings?.language} value="Unanswered" />
+            <NextLink href="/category">
+              <Link>
+                <Translation lang={settings?.language} value="Categories" />
               </Link>
             </NextLink>
           </div>
-
-          {loading ? (
-            <div>
-              <Spacer h={3} />
-              <Loading>
-                <Translation lang={settings?.language} value="Loading" />
-                &nbsp;
-                <Translation lang={settings?.language} value="Discussions" />
-              </Loading>
-            </div>
-          ) : (
-            ''
-          )}
 
           {discussions.map((item) => (
             <Post
@@ -164,24 +149,33 @@ const Home = observer(() => {
               author={item.profile?.name}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              view={item.view}
               date={item.createdAt}
             />
           ))}
-          {total >= limit ? (
-            <div className="pagination">
-              <Pagination
-                count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
-                onChange={paginate}
-              >
-                <Pagination.Next>
-                  <ChevronRightCircle />
-                </Pagination.Next>
-                <Pagination.Previous>
-                  <ChevronLeftCircle />
-                </Pagination.Previous>
-              </Pagination>
+
+          {loading ? (
+            <div>
+              <Spacer h={3} />
+              <Loading>
+                <Translation lang={settings?.language} value="Loading" />
+                &nbsp;
+                <Translation lang={settings?.language} value="Discussions" />
+              </Loading>
+            </div>
+          ) : (
+            ''
+          )}
+
+          {!loading && discussions.length === 0 ? (
+            <div className="center">
+              <Spacer h={3} />
+              <p>
+                <Translation
+                  lang={settings?.language}
+                  value={`No Discussion`}
+                />
+              </p>
             </div>
           ) : (
             ''

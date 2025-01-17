@@ -17,12 +17,13 @@ import Auth from 'components/admin/Auth';
 import DiscussionStore from 'stores/discussion';
 import { discussionProp } from 'interfaces/discussion';
 import toast, { Toaster } from 'react-hot-toast';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const Discussions = observer(() => {
   const token = useToken();
+  const settings = useSettings();
   const [
     {
       loading,
@@ -36,10 +37,8 @@ const Discussions = observer(() => {
       searchDiscussion
     }
   ] = useState(() => new DiscussionStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
 
   useEffect(() => {
-    getSettings();
     getAdminDiscussions(false);
   }, [token?.id]);
 

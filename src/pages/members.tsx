@@ -3,34 +3,29 @@ import NextLink from 'next/link';
 import {
   Spacer,
   Text,
-  User,
   Card,
   Loading,
   Pagination,
   Avatar
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
+import { LicenseIcon, Medal06Icon } from 'hugeicons-react';
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
-import { format } from 'date-fns';
-import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import UserStore from 'stores/user';
 import useToken from 'components/Token';
-import { useRouter } from 'next/router';
-import SettingsStore from 'stores/settings';
-import { pluralize, formatNumber } from 'components/api/utils';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { pluralize, oneKFormat } from 'components/api/utils';
+import { Translation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Members = observer(() => {
   const token = useToken();
-  const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [{ loading, page, limit, total, users, setPage, getUsers }] = useState(
     () => new UserStore()
   );
 
   useEffect(() => {
-    getSettings();
     getUsers();
   }, [token]);
 
@@ -39,32 +34,6 @@ const Members = observer(() => {
     getUsers();
   };
 
-  const lang = settings.language;
-  const renderDate = (value: any) => {
-    const date: any = value
-      ? format(new Date(value), 'MMM d, yyyy @ h:mm a', {
-          locale:
-            lang === 'es'
-              ? es
-              : lang === 'fr'
-                ? fr
-                : lang === 'en'
-                  ? enUS
-                  : lang === 'ru'
-                    ? ru
-                    : lang === 'de'
-                      ? de
-                      : lang === 'cn'
-                        ? zhCN
-                        : lang === 'ja'
-                          ? ja
-                          : lang === 'ko'
-                            ? ko
-                            : null
-        })
-      : '';
-    return <span className="locale-time">{date}</span>;
-  };
   const user = users.map((item) => (
     <div className="pointer" key={item.id}>
       <NextLink href={`/u/${item.username}`}>
@@ -85,17 +54,26 @@ const Members = observer(() => {
                 <Spacer inline />
                 <small>@{item.username}</small>
               </Text>
-              <Text small>
-                <Translation lang={settings?.language} value="Joined" />{' '}
-                {renderDate(item.createdAt)}
-              </Text>
-              <Spacer inline />
-              <Text small>
-                {formatNumber(item.discussion!)}{' '}
-                {useTranslation({
-                  lang: settings?.language,
-                  value: `Discussion${pluralize(item.discussion!)}`
-                })}
+              <Text small className="lowercase">
+                <span className="icon-fit">
+                  <LicenseIcon size={14} />
+                </span>
+                {oneKFormat(item.discussion!)}{' '}
+                <Translation
+                  lang={settings?.language}
+                  value={`Discussion${pluralize(item.discussion!)}`}
+                />
+                <Spacer w={1} inline />
+                <span className="icon-fit">
+                  <Medal06Icon size={14} />
+                </span>
+                {oneKFormat(item.point!)}{' '}
+                <span>
+                  <Translation
+                    lang={settings?.language}
+                    value={`point${pluralize(item.point!)}`}
+                  />
+                </span>
               </Text>
             </div>
           </div>

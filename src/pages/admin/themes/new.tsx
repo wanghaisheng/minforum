@@ -7,16 +7,17 @@ import AdminNavbar from 'components/admin/Navbar';
 import Sidebar from 'components/admin/Sidebar';
 import Auth from 'components/admin/Auth';
 import ThemeStore from 'stores/theme';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { InfoFill } from '@geist-ui/icons';
+import useSettings from 'components/settings';
 
 const CreateTheme = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const [showColor, toggleColor] = useState(false);
   const [code, setCode] = useState(`{
   "palette": {
@@ -72,15 +73,11 @@ const CreateTheme = observer(() => {
   },
   "font": "'Inter', sans-serif"
 }`);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+
   const [{ loading, theme, setTheme, newTheme }] = useState(
     () => new ThemeStore()
   );
   const { title } = theme;
-
-  useEffect(() => {
-    getSettings();
-  }, [token?.id]);
 
   const save = async () => {
     if (!title || title.length < 3) {

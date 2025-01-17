@@ -39,9 +39,7 @@ body {
     right: 0;
     padding-right: 0;
     height: var(--geist-page-nav-height);
-    backdrop-filter: saturate(180%) blur(5px);
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 0 15px 0 rgb(0 0 0 / 10%);
+    background: #fff;
     z-index: 999;
 
     .inner {
@@ -51,6 +49,7 @@ body {
 
     .menu {
       padding: 10px;
+      border-bottom: 1px solid #ededed;
     }
   }
 
@@ -214,7 +213,7 @@ body {
     color: #fff;
     text-align: center;
     padding-top: 30px;
-    padding: 15px;
+    padding: 30px 15px;
     margin-top: 70px;
     margin-bottom: 20px;
 
@@ -222,9 +221,8 @@ body {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 100px auto;
-      grid-gap: 20px;
-
+      grid-template-columns: auto 1fr;
+      grid-gap: 30px;
       text-align: left;
     }
   }
@@ -260,6 +258,16 @@ body {
     text-transform: capitalize;
   }
 
+  .lowercase {
+    text-transform: lowercase;
+  }
+
+  .icon-fit {
+    position: relative;
+    top: 1px;
+    padding-right: 5px;
+  }
+
   .settings {
     .collapse {
       .title {
@@ -267,6 +275,16 @@ body {
           font-size: 20px !important;
         }
       }
+    }
+  }
+
+  .static-container {
+    h1 {
+      font-size: 20px;
+    }
+
+    h2 {
+      font-size: 18px;
     }
   }
 
@@ -320,6 +338,10 @@ body {
     grid-template-columns: 50px auto 140px;
     grid-gap: 20px;
     margin-top: 15px;
+
+    &:hover {
+      color: #666;
+    }
 
     &.without-right {
       grid-template-columns: 6vh auto;
@@ -377,7 +399,7 @@ body {
         }
         svg {
           position: absolute;
-          margin-left: 60px;
+          margin-left: 110px;
           margin-top: 5px;
           height: 20px;
         }
@@ -918,6 +940,38 @@ body {
     }
   }
 
+  .reward {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 1px;
+    align-items: center;
+    justify-content: center;
+    margin: 7px;
+    margin-left: 0;
+    cursor: pointer;
+  }
+
+  .user-alone {
+    padding-top: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ededed;
+    }
+  }
+
+  .inpost-username {
+    background-color: #ededed;
+    color: #444;
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px;
+  }
+
   .username {
     font-size: 0.875em !important;
     text-transform: lowercase;
@@ -928,6 +982,20 @@ body {
     top: 5px;
     padding-right: 10px;
     cursor: pointer;
+  }
+
+  .fade-out {
+    animation: fadeOut 2s forwards;
+    animation-delay: 3s;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
 
   .pointer {
@@ -984,6 +1052,7 @@ body {
         padding-right: 7px !important;
       }
     }
+
     aside {
       display: none;
 
@@ -1029,6 +1098,14 @@ body {
       grid-template-columns: 1fr;
     }
 
+    .category-box {
+      .gridlock {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        text-align: center;
+      }
+    }
+
     .page-container {
       width: 100%;
       padding-left: 10px;
@@ -1045,6 +1122,10 @@ body {
 
     .discussion-container {
       grid-template-columns: auto;
+      .discussion {
+        grid-template-columns: 25px auto;
+        gap: 15px;
+      }
     }
 
     .discuss-grid {
@@ -1060,6 +1141,11 @@ body {
     .post {
       display: grid;
       grid-template-columns: 50px auto !important;
+
+      &.without-right {
+        grid-template-columns: 30px auto !important;
+        gap: 10px;
+      }
 
       &.minimal {
         grid-template-columns: auto !important;

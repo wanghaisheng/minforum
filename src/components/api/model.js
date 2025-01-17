@@ -25,12 +25,14 @@ const User = thinky.createModel('users', {
   city: type.string(),
   zipCode: type.string(),
   point: type.number().default(0),
+  badges: type.array().default([]),
   role: type.string().enum(['member', 'moderator', 'admin']).default('member'),
   status: type
     .string()
     .enum(['pending', 'active', 'banned', 'suspended'])
     .default('pending'),
   suspendDuration: type.date(),
+  timestamp: type.number(),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -58,6 +60,7 @@ const Discussion = thinky.createModel('discussions', {
   status: type.string().enum(['active', 'banned']).default('active'),
   view: type.number().default(0),
   userId: type.string(),
+  edited: type.boolean().default(false),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -68,6 +71,7 @@ const Comment = thinky.createModel('comments', {
   status: type.string().enum(['answer', 'flag', 'normal']).default('normal'),
   userId: type.string(),
   discussionId: type.string(),
+  edited: type.boolean().default(false),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -79,6 +83,7 @@ const Reply = thinky.createModel('replies', {
   commentId: type.string(),
   userId: type.string(),
   discussionId: type.string(),
+  edited: type.boolean().default(false),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -140,6 +145,7 @@ const Notification = thinky.createModel('notifications', {
   sender: type.string(),
   receiver: type.string(),
   action: type.string(),
+  filterType: type.string(),
   type: type.string().enum(['admin', 'post', 'user']),
   read: type.boolean().default(false),
   createdAt: type.date().default(r.now),
@@ -212,6 +218,7 @@ User.ensureIndex('city');
 User.ensureIndex('status');
 User.ensureIndex('photo');
 User.ensureIndex('role');
+User.ensureIndex('timestamp');
 User.ensureIndex('createdAt');
 User.ensureIndex('updatedAt');
 

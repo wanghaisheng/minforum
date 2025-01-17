@@ -1,9 +1,17 @@
 require('dotenv').config();
-
+const cron = require('node-cron');
 const { createServer } = require('node:http');
 const next = require('next');
 const { Server } = require('socket.io');
 const socketChat = require('./src/components/api/socket');
+const {
+  rewardDevotee,
+  rewardVeteran,
+  rewardFavorite,
+  rewardPeopleChoice,
+  rewardProlific,
+  rewardWordsmith
+} = require('./src/components/api/reward');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -50,4 +58,13 @@ app.prepare().then(() => {
     .listen(port, () => {
       console.log(`> Ready on http://${hostname}:${port}`);
     });
+});
+
+cron.schedule('0 0-23 * * *', () => {
+  rewardDevotee();
+  rewardVeteran();
+  rewardFavorite();
+  rewardPeopleChoice();
+  rewardProlific();
+  rewardWordsmith();
 });

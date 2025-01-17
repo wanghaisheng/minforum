@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Spacer, Text, Link, Button, Input, Card, Image } from '@geist-ui/core';
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
@@ -6,19 +6,15 @@ import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Verify = observer(() => {
   const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [{ loading, user, setUser, verifyAccount }] = useState(
     () => new UserStore()
   );
-
-  useEffect(() => {
-    getSettings();
-  }, []);
 
   const verifyEmail = async () => {
     const { email } = user;

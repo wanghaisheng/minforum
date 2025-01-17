@@ -1,37 +1,35 @@
 import { useEffect, useState } from 'react';
 import { Spacer, Text, Input, Select, Button, Card } from '@geist-ui/core';
-import { Lock } from '@geist-ui/icons';
+import { Lock, XCircleFill } from '@geist-ui/icons';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
-import { toJS } from 'mobx';
 import DiscussionStore from 'stores/discussion';
 import useToken from 'components/Token';
 import { useRouter } from 'next/router';
 import Editor from 'components/Editor';
 import CategoryStore from 'stores/category';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const StartDiscussion = observer(() => {
   const token = useToken();
+  const settings = useSettings();
   const router = useRouter();
   const { channel } = router.query;
   const [content, setContent] = useState('');
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ categories, getCategories }] = useState(() => new CategoryStore());
   const [{ loading, discussion, setDiscussion, newDiscussion }] = useState(
     () => new DiscussionStore()
   );
 
   useEffect(() => {
-    getSettings();
     token.id ? getCategories() : null;
     router.isReady
       ? setDiscussion({ ...discussion, categoryId: channel })
       : null;
-  }, [token, router]);
+  }, [token?.id, router]);
 
   const save = async () => {
     const { title, categoryId } = discussion;
@@ -176,6 +174,7 @@ const StartDiscussion = observer(() => {
               <>
                 {token.id ? (
                   <Button
+                    auto
                     loading={loading}
                     type="secondary-light"
                     onClick={save}

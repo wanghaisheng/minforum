@@ -21,6 +21,7 @@ import useToken from '../Token';
 import SettingsStore from 'stores/settings';
 import NotificationStore from 'stores/notification';
 import { Translation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 type navbarProps = {
   title: string;
@@ -29,18 +30,17 @@ type navbarProps = {
 };
 
 const Navbar = observer((props: navbarProps) => {
+  const settings = useSettings();
   const token = useToken();
   const router = useRouter();
   const cookie = parseCookies();
   const [show, setMenu] = useState(false);
   const { title, description, hide } = props;
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ unread, getUnreadNotification }] = useState(
     () => new NotificationStore()
   );
 
   useEffect(() => {
-    getSettings();
     token.id ? getUnreadNotification(token.id) : null;
   }, [token]);
 

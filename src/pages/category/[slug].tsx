@@ -16,18 +16,18 @@ import Navbar from 'components/Navbar';
 import Post from 'components/Post';
 import Sidebar from 'components/Sidebar';
 import CategoryStore from 'stores/category';
-import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
 import useToken from 'components/Token';
 import Contributors from 'components/Contributors';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Category = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const { slug }: any = router.query;
   const [modal, toggleModal] = useState(false);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ category, getCategory }] = useState(() => new CategoryStore());
   const [
     {
@@ -42,13 +42,12 @@ const Category = observer(() => {
   ] = useState(() => new DiscussionStore());
 
   useEffect(() => {
-    getSettings();
     router.isReady
       ? getCategory(slug).then(() => {
           getDiscussionsByCategory(slug);
         })
       : null;
-  }, [router, token]);
+  }, [router, token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
@@ -133,19 +132,6 @@ const Category = observer(() => {
         />
 
         <main className="main with-right">
-          {loading ? (
-            <div>
-              <Spacer h={3} />
-              <Loading>
-                <Translation lang={settings?.language} value="Loading" />
-                &nbsp;
-                <Translation lang={settings?.language} value="discussions" />
-              </Loading>
-            </div>
-          ) : (
-            ''
-          )}
-
           {token.id ? (
             <div className="mobile">
               <Link href={`/start-discussion?channel=${category.slug}`}>
@@ -162,11 +148,25 @@ const Category = observer(() => {
             ''
           )}
 
+          {loading ? (
+            <div>
+              <Spacer h={3} />
+              <Loading>
+                <Translation lang={settings?.language} value="Loading" />
+                &nbsp;
+                <Translation lang={settings?.language} value="discussions" />
+              </Loading>
+            </div>
+          ) : (
+            ''
+          )}
+
           {discussions.map((item) => (
             <Post
               lang={settings?.language}
               key={item.id}
               category={item.category?.title}
+              color={item.category?.color}
               slug={item.slug}
               avatar={
                 item.profile && item.profile.photo
@@ -179,6 +179,20 @@ const Category = observer(() => {
               date={item.createdAt}
             />
           ))}
+
+          {!loading && discussions.length === 0 ? (
+            <div className="center">
+              <Spacer h={3} />
+              <Text>
+                <Translation
+                  lang={settings?.language}
+                  value={`No Discussion`}
+                />
+              </Text>
+            </div>
+          ) : (
+            ''
+          )}
 
           {total >= limit ? (
             <div className="pagination">

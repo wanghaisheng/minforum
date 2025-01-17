@@ -14,17 +14,17 @@ import Sidebar from 'components/admin/Sidebar';
 import Auth from 'components/admin/Auth';
 import DateModal from 'components/modals/DateModal';
 import AnalyticsStore from 'stores/analytics';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useSocket from 'components/Socket';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const Dashboard = observer(() => {
   const token = useToken();
   const socket = useSocket();
+  const settings = useSettings();
   const [modal, toggleDate] = useState(false);
   const [active, setActive] = useState(0);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
     { users, discussions, pageviews, getUsers, getDiscussions, getPageviews }
   ] = useState(() => new AnalyticsStore());
@@ -38,7 +38,6 @@ const Dashboard = observer(() => {
   ]);
 
   useEffect(() => {
-    getSettings();
     let from = moment(date[0].startDate).format('YYYY-MM-DD');
     let to = moment(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);

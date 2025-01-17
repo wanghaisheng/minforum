@@ -19,7 +19,6 @@ import SearchHeading from 'components/SearchHeading';
 import Sidebar from 'components/admin/Sidebar';
 import Auth from 'components/admin/Auth';
 import AnalyticsStore from 'stores/analytics';
-import SettingsStore from 'stores/settings';
 import PageviewStore from 'stores/pageview';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import DateModal from 'components/modals/DateModal';
@@ -30,13 +29,14 @@ import { emojis } from 'components/data/emoji/emoji';
 import { es, fr, enUS, de, ja, ru, zhCN } from 'date-fns/locale';
 import dynamic from 'next/dynamic';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false
 });
 
 const Analytics = observer(() => {
   const token = useToken();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [store] = useState(() => new AnalyticsStore());
   const [modal, toggleDate] = useState(false);
   const [date, setDate] = useState([
@@ -67,7 +67,6 @@ const Analytics = observer(() => {
   ] = useState(() => new PageviewStore());
 
   useEffect(() => {
-    getSettings();
     getPageviews();
     getTopPageview('country');
     getTopPageview('city');

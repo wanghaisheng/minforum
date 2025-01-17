@@ -13,6 +13,7 @@ export interface userProp {
   discussion?: number;
   comment?: number;
   point?: number;
+  badges?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }

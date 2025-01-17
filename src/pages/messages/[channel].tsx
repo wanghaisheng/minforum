@@ -27,7 +27,6 @@ import Emoji from 'components/data/emoji';
 import Navbar from 'components/Navbar';
 import UserStore from 'stores/user';
 import { useRouter } from 'next/router';
-import SettingsStore from 'stores/settings';
 import { getInitials, timeAgoShort } from 'components/api/utils';
 import {
   Translation,
@@ -42,8 +41,10 @@ import MessageStore from 'stores/message';
 import BlockStore from 'stores/block';
 import ChatBubble from 'components/ChatBubble';
 import Auth from 'components/Auth';
+import useSettings from 'components/settings';
 
 const Index = observer(() => {
+  const settings = useSettings();
   const router = useRouter();
   const { mobile } = router.query;
   const cookie = parseCookies();
@@ -60,7 +61,6 @@ const Index = observer(() => {
   const [image, setImage] = useState<any>('');
   const [active, setActive] = useState(true);
   const [imageModal, toggleImage] = useState(false);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ blockLoading, block, getBlock, blockAction }] = useState(
     () => new BlockStore()
   );
@@ -82,7 +82,6 @@ const Index = observer(() => {
   ] = useState(() => new MessageStore());
 
   useEffect(() => {
-    getSettings();
     token?.id && init();
 
     socket?.on('typing', function (typed) {

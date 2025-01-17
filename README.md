@@ -48,16 +48,17 @@ yarn production
 
 - &#x2611; User system (member, moderator and admin)
 - &#x2611; Communities or categories
-- &#x2611; Post and comment
+- &#x2611; Discussions, comments and replies with revision note and date.
 - &#x2611; Direct messaging with controls to block or accept messages from users
+- &#x2611; Social account (signup and login). Facebook and Google.
 - &#x2611; Social share
-- &#x2611; Notifications for comments, replies, likes and messages
+- &#x2611; Notifications for mentions, comments, replies, likes and messages
 - &#x2611; Themes
 - &#x2611; Language & Translation (English, French, Spanish, Deutsch, Chinese, Japanese, Korean, and Russian)
-- &#x2611; Points system: Reward users with points for their activities and contributions.
+- &#x2611; Points system: Reward users with points for their activities and contributions
 - &#x2611; Reports and flag
 - &#x2611; Advert settings
-- &#x2610; Badge for activities
+- &#x2611; Badge system for recognizing user activities and achievements
 - &#x2611; Site wide announcement
 - &#x2611; Analytics, pageviews and post views
 - &#x2611; Ban words

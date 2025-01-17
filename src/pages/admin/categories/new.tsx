@@ -17,23 +17,22 @@ import Sidebar from 'components/admin/Sidebar';
 import Auth from 'components/admin/Auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const CreateCategory = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const [showColor, toggleColor] = useState(false);
   const [{ users, getModerators }] = useState(() => new UserStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ loading, category, setCategory, newCategory }] = useState(
     () => new CategoryStore()
   );
   const { title, description, color, authRequired, moderator } = category;
 
   useEffect(() => {
-    getSettings();
     getModerators();
   }, [token?.id]);
 

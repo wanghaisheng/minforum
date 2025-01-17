@@ -14,7 +14,8 @@ import {
   Image,
   Loading,
   useClipboard,
-  useToasts
+  useToasts,
+  useMediaQuery
 } from '@geist-ui/core';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
@@ -32,7 +33,7 @@ import CountUp from 'react-countup';
 import Navbar from 'components/Navbar';
 import useToken from 'components/Token';
 import DiscussionStore from 'stores/discussion';
-import { pluralize } from 'components/api/utils';
+import { oneKFormat, parseUsername } from 'components/api/utils';
 import Reply from 'components/Reply';
 import Recommendation from 'components/Recommendation';
 import ReportStore from 'stores/report';
@@ -40,30 +41,50 @@ import toast, { Toaster } from 'react-hot-toast';
 import CommentModal from 'components/modals/CommentModal';
 import ReplyModal from 'components/modals/ReplyModal';
 import CommentStore from 'stores/comment';
-import SettingsStore from 'stores/settings';
 import LikeStore from 'stores/like';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Discussion = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const isXS = useMediaQuery('mobile');
+  const settings = useSettings();
   const clipboard = useClipboard();
   const { setToast } = useToasts();
   const { slug }: any = router.query;
   const [modal, toggleModal] = useState(false);
+  const [editModal, toggleEditModal] = useState(false);
   const [reply, toggleReply] = useState<any>({
     modal: false,
     replyId: '',
     username: '',
     comment: 0
   });
+
+  const [replyAction, toggleReplyAction] = useState<any>({
+    modal: false,
+    replyId: '',
+    username: '',
+    comment: 0
+  });
   const [content, setContent] = useState('');
+  const [commentId, setCommentId] = useState('');
+  const [replyId, setReplyId] = useState('');
   const [{ newReport }] = useState(() => new ReportStore());
-  const [{ newComment, newReply }] = useState(() => new CommentStore());
+  const [
+    {
+      newComment,
+      newReply,
+      updateComment,
+      updateReply,
+      deleteComment,
+      deleteReply
+    }
+  ] = useState(() => new CommentStore());
   const [{ likeDiscussion, likeComment, likeReply }] = useState(
     () => new LikeStore()
   );
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
     {
       loading,
@@ -76,7 +97,8 @@ const Discussion = observer(() => {
       refreshDiscussion,
       getComments,
       refreshComments,
-      updateDiscussion
+      updateDiscussion,
+      deleteDiscussion
     }
   ] = useState(() => new DiscussionStore());
 
@@ -86,7 +108,6 @@ const Discussion = observer(() => {
     let hash: any = router.isReady ? window.location.hash : '';
     hash = hash.replace('#', '');
 
-    getSettings();
     router.isReady
       ? getDiscussion(slug).then((data: any) => {
           if (data.id) {
@@ -109,6 +130,7 @@ const Discussion = observer(() => {
   };
 
   const removeBanWords = (data: string) => {
+    data = parseUsername(data);
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
     banWords = banWords.replace(/\s/gi, '');
     banWords = banWords.split(',');
@@ -224,7 +246,7 @@ const Discussion = observer(() => {
               toggleModal(!modal);
               setContent('');
               setTimeout(() => {
-                scrollToDiv(res.data.slug);
+                scrollToDiv(res.data.id);
               }, 1000);
             });
           } else {
@@ -235,6 +257,75 @@ const Discussion = observer(() => {
         })
         .catch((err) => console.log(err));
     }
+  };
+
+  const saveEditComment = async () => {
+    if (!content) {
+      toast.error(useTranslation({ lang: lang, value: 'Comment is blank!' }));
+    } else {
+      await updateComment({
+        comment: content,
+        id: commentId,
+        edited: true
+      })
+        .then((res: any) => {
+          if (res.success) {
+            setContent('');
+            getComments(discussion.id!).then(() => {
+              toggleEditModal(false);
+              setContent('');
+              setTimeout(() => {
+                scrollToDiv(res.data.id);
+              }, 1000);
+            });
+          } else {
+            toast.error(
+              useTranslation({ lang: lang, value: 'Unable to save comment.' })
+            );
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const saveEditReply = async () => {
+    if (!content) {
+      toast.error(useTranslation({ lang: lang, value: 'Comment is blank!' }));
+    } else {
+      await updateReply({
+        comment: content,
+        id: replyAction.replyId,
+        edited: true
+      })
+        .then((res: any) => {
+          if (res.success) {
+            setContent('');
+            getComments(discussion.id!).then(() => {
+              toggleReplyAction({ ...replyAction, modal: false });
+              setContent('');
+              setTimeout(() => {
+                scrollToDiv(res.data.id);
+              }, 1000);
+            });
+          } else {
+            toast.error(
+              useTranslation({ lang: lang, value: 'Unable to save comment.' })
+            );
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const editComment = async (id: string, commentData: string) => {
+    setCommentId(id);
+    setContent(commentData);
+    toggleEditModal(true);
+  };
+
+  const editReply = async (id: string, commentData: string) => {
+    setContent(commentData);
+    toggleReplyAction({ ...replyAction, replyId: id, modal: true });
   };
 
   const saveReply = async () => {
@@ -270,6 +361,60 @@ const Discussion = observer(() => {
         })
         .catch((err) => console.log(err));
     }
+  };
+
+  const commentDeletion = async (commentId: string) => {
+    await deleteComment({ id: commentId }).then((res: any) => {
+      let reply = document.getElementById(commentId);
+      reply.style.opacity = '0.9';
+      reply.style.opacity = '0.5';
+      reply.style.opacity = '0.1';
+      setTimeout(() => {
+        reply.style.display = 'none';
+
+        let hash: any = router.isReady ? window.location.hash : '';
+        hash = hash.replace('#', '');
+
+        getDiscussion(slug).then((data: any) => {
+          if (data.id) {
+            getComments(data.id).then((res) => {
+              res.data.length
+                ? setTimeout(() => {
+                    scrollToDiv(hash);
+                  }, 1000)
+                : null;
+            });
+          }
+        });
+      }, 2000);
+    });
+  };
+
+  const replyDeletion = async (id: string) => {
+    await deleteReply({ id }).then((res: any) => {
+      let reply = document.getElementById(res.data);
+      reply.style.opacity = '0.9';
+      reply.style.opacity = '0.5';
+      reply.style.opacity = '0.1';
+      setTimeout(() => {
+        reply.style.display = 'none';
+
+        let hash: any = router.isReady ? window.location.hash : '';
+        hash = hash.replace('#', '');
+
+        getDiscussion(slug).then((data: any) => {
+          if (data.id) {
+            getComments(data.id).then((res) => {
+              res.data.length
+                ? setTimeout(() => {
+                    scrollToDiv(hash);
+                  }, 1000)
+                : null;
+            });
+          }
+        });
+      }, 2000);
+    });
   };
 
   const likeDiscussionAction = async (id: string) => {
@@ -541,8 +686,9 @@ const Discussion = observer(() => {
                             ? `/storage/${profile.photo}`
                             : '/images/avatar.png'
                         }
-                        w={2.3}
-                        h={2.3}
+                        w={isXS ? 1.2 : 2.3}
+                        h={isXS ? 1.2 : 2.3}
+                        style={{ marginRight: isXS ? 5 : 0 }}
                       />
                     </NextLink>
                   </Popover>
@@ -573,7 +719,7 @@ const Discussion = observer(() => {
                         onClick={() => likeDiscussionAction(discussion.id!)}
                       >
                         {isActiveLiked(discussion.likes!) ? (
-                          <HeartFill size={16} />
+                          <HeartFill color="#cb0000" size={16} />
                         ) : (
                           <Heart size={16} />
                         )}
@@ -607,7 +753,9 @@ const Discussion = observer(() => {
                       }
                     >
                       <Text className="like-btn" span>
-                        {discussion.id ? discussion.likes!.length : 0}
+                        {discussion.id
+                          ? oneKFormat(discussion.likes!.length)
+                          : 0}
                       </Text>
                     </Popover>
                   </Tooltip>
@@ -634,10 +782,12 @@ const Discussion = observer(() => {
               {comments.map((item: any, key) => (
                 <Reply
                   lang={settings?.language}
-                  key={item.id}
-                  id={item.slug}
+                  key={item.slug}
+                  id={item.id}
                   activeUser={token.id!}
+                  userId={item.userId}
                   name={item.author.name}
+                  username={item.author.username}
                   role={item.author.role}
                   photo={
                     item.author.photo
@@ -647,12 +797,23 @@ const Discussion = observer(() => {
                   replies={item.replies}
                   likes={item.likes}
                   content={item.comment}
+                  edited={item.edited}
                   date={item.createdAt}
-                  replyTrigger={() =>
-                    toggleCommentBox(item.id, item.author.username, key + 1)
-                  }
+                  lastEdited={item.updatedAt}
+                  replyTrigger={() => {
+                    setContent('');
+                    toggleCommentBox(item.id, item.author.username, key + 1);
+                  }}
+                  commentDeletion={commentDeletion}
+                  replyDeletion={replyDeletion}
                   likeTrigger={() => likeCommentAction(item.id!)}
                   likeTriggerX={(val: string) => likeReplyAction(val)}
+                  commentUpdateTrigger={(id: string, comment: string) =>
+                    editComment(id, comment)
+                  }
+                  replyUpdateTrigger={(id: string, comment: string) =>
+                    editReply(id, comment)
+                  }
                 />
               ))}
               <Spacer />
@@ -706,6 +867,33 @@ const Discussion = observer(() => {
           toggleModal={() => toggleModal(!modal)}
           actionTrigger={setContent}
           save={saveComment}
+        />
+
+        <CommentModal
+          lang={settings.language}
+          loading={commentLoading}
+          content={content}
+          show={editModal}
+          isAuthenticate={token.id ? true : false}
+          toggleModal={() => toggleEditModal(!editModal)}
+          actionTrigger={setContent}
+          save={saveEditComment}
+        />
+
+        <ReplyModal
+          lang={settings.language}
+          loading={commentLoading}
+          content={content}
+          show={replyAction.modal}
+          replyId={replyAction.replyId}
+          replyUsername={replyAction.username}
+          commentNumber={replyAction.comment}
+          isAuthenticate={token.id ? true : false}
+          toggleModal={() =>
+            toggleReplyAction({ ...replyAction, modal: !replyAction.modal })
+          }
+          actionTrigger={setContent}
+          save={saveEditReply}
         />
 
         <ReplyModal

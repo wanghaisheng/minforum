@@ -16,14 +16,14 @@ import Sidebar from 'components/admin/Sidebar';
 import Auth from 'components/admin/Auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const Categories = observer(() => {
   const token = useToken();
+  const settings = useSettings();
   const [{ users, getModerators }] = useState(() => new UserStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
     {
       loading,
@@ -38,7 +38,6 @@ const Categories = observer(() => {
   ] = useState(() => new CategoryStore());
 
   useEffect(() => {
-    getSettings();
     getModerators();
     getCategories();
   }, [token?.id]);

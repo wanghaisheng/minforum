@@ -6,17 +6,13 @@ import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Forgot = observer(() => {
+  const settings = useSettings();
   const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ loading, user, setUser, forgot }] = useState(() => new UserStore());
-
-  useEffect(() => {
-    getSettings();
-  }, []);
 
   const resetPass = async () => {
     const { email } = user;

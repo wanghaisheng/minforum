@@ -8,23 +8,22 @@ import Navbar from 'components/Navbar';
 import Post from 'components/Post';
 import Sidebar from 'components/Sidebar';
 import useToken from 'components/Token';
-import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/Contributors';
 import { Translation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Home = observer(() => {
   const token = useToken();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [
     { loading, page, nomore, discussions, setPage, getPopularDiscussions }
   ] = useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
 
   useEffect(() => {
-    getSettings();
     getPopularDiscussions(false);
-  }, [token]);
+  }, [token?.id]);
 
   const handleScroll = useCallback(() => {
     const offset = 50;
@@ -121,7 +120,6 @@ const Home = observer(() => {
           <div className="custom-tab">
             <NextLink href="/popular">
               <Link className="active">
-                {' '}
                 <Translation lang={settings?.language} value="Popular" />
               </Link>
             </NextLink>
@@ -142,6 +140,7 @@ const Home = observer(() => {
               key={item.id}
               lang={settings?.language}
               category={item.category?.title}
+              color={item.category?.color}
               slug={item.slug}
               avatar={
                 item.profile && item.profile.photo
@@ -151,6 +150,7 @@ const Home = observer(() => {
               author={item.profile?.name}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              view={item.view}
               date={item.createdAt}
             />
           ))}
@@ -163,6 +163,20 @@ const Home = observer(() => {
                 &nbsp;
                 <Translation lang={settings?.language} value="Discussions" />
               </Loading>
+            </div>
+          ) : (
+            ''
+          )}
+
+          {!loading && discussions.length === 0 ? (
+            <div className="center">
+              <Spacer h={3} />
+              <p>
+                <Translation
+                  lang={settings?.language}
+                  value={`No Discussion`}
+                />
+              </p>
             </div>
           ) : (
             ''

@@ -37,6 +37,7 @@ import NotificationStore from 'stores/notification';
 import { Translation, useTranslation } from 'components/intl/Translation';
 import MessageStore from 'stores/message';
 import { oneKFormat } from './api/utils';
+import useSettings from './settings';
 
 type navbarProps = {
   title?: string;
@@ -48,6 +49,7 @@ type navbarProps = {
 const roles = ['admin', 'moderator'];
 
 const Navbar = observer((props: navbarProps) => {
+  const settings = useSettings();
   const token = useToken();
   const router = useRouter();
   const cookie = parseCookies();
@@ -57,7 +59,6 @@ const Navbar = observer((props: navbarProps) => {
   const [announcementModal, toggleAnnouncement] = useState<any>(false);
   const [modal, toggleSearch] = useState<any>(false);
   const { title, description, hide } = props;
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ unread, getUnreadNotification }] = useState(
     () => new NotificationStore()
   );
@@ -70,8 +71,6 @@ const Navbar = observer((props: navbarProps) => {
   );
 
   useEffect(() => {
-    getSettings();
-
     token.id ? getUnreadNotification(token.id) : null;
     token.id ? getUnreadMessage(token.id) : null;
     cookie && settings?.announcementText && isNaN(Number(cookie?.isAnnounce))
@@ -103,6 +102,7 @@ const Navbar = observer((props: navbarProps) => {
   const handleSearch = async (val: string) => {
     val = val.trim();
     if (val.length) {
+      val = val.replace('@', '');
       await publicDiscussionSearch(val);
       await searchUsers(val);
     } else {
@@ -416,7 +416,7 @@ const Navbar = observer((props: navbarProps) => {
           >
             <div className="inner">
               <Grid.Container gap={0}>
-                <Grid xs={12} md={5}>
+                <Grid xs={token?.id ? 12 : 19} md={5}>
                   <NextLink href="/">
                     <Link>
                       {settings.siteLogo ? (
@@ -458,52 +458,60 @@ const Navbar = observer((props: navbarProps) => {
                     </Link>
                   </NextLink>
                 </Grid>
-                <Grid xs={12} md={0}>
+                <Grid xs={token?.id ? 12 : 5} md={0}>
                   <span
                     className="pointer"
                     onClick={() => toggleSearch(!modal)}
                   >
                     <Search />
                   </span>
-                  <Spacer w={isXS ? 5 : 3} inline />
-                  {token.id ? (
-                    <Badge.Anchor>
-                      {unread_message ? (
-                        <Badge type="error" scale={0.5}>
-                          {oneKFormat(unread_message)}
-                        </Badge>
+                  {token?.id && (
+                    <>
+                      <Spacer w={isXS ? 5 : 3} inline />
+                      {token.id ? (
+                        <Badge.Anchor>
+                          {unread_message ? (
+                            <Badge type="error" scale={0.5}>
+                              {oneKFormat(unread_message)}
+                            </Badge>
+                          ) : (
+                            ''
+                          )}
+                          <NextLink href="/messages">
+                            <Link>
+                              <Mail />
+                            </Link>
+                          </NextLink>
+                        </Badge.Anchor>
                       ) : (
                         ''
                       )}
-                      <NextLink href="/messages">
-                        <Link>
-                          <Mail />
-                        </Link>
-                      </NextLink>
-                    </Badge.Anchor>
-                  ) : (
-                    ''
-                  )}
-                  <Spacer w={isXS ? 5 : 3} inline />
-                  {token.id ? (
-                    <Badge.Anchor>
-                      {unread ? (
-                        <Badge type="error" scale={0.5}>
-                          {unread}
-                        </Badge>
+                      <Spacer w={isXS ? 5 : 3} inline />
+                      {token.id ? (
+                        <Badge.Anchor>
+                          {unread ? (
+                            <Badge type="error" scale={0.5}>
+                              {unread}
+                            </Badge>
+                          ) : (
+                            ''
+                          )}
+                          <NextLink href="/notifications">
+                            <Link>
+                              <Bell />
+                            </Link>
+                          </NextLink>
+                        </Badge.Anchor>
                       ) : (
                         ''
                       )}
-                      <NextLink href="/notifications">
-                        <Link>
-                          <Bell />
-                        </Link>
-                      </NextLink>
-                    </Badge.Anchor>
-                  ) : (
-                    ''
+                    </>
                   )}
-                  <Spacer w={isXS ? 5 : 3} inline />
+                  {token?.id ? (
+                    <Spacer w={isXS ? 5 : 3} inline />
+                  ) : (
+                    <Spacer w={3} inline />
+                  )}
                   <span className="pointer" onClick={() => setMenu(!show)}>
                     <Menu />
                   </span>

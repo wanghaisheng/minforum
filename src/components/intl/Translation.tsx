@@ -1,12 +1,11 @@
 import { pluralize } from 'components/api/utils';
 import dict from './dict';
 
+type LangCode = 'en' | 'es' | 'fr' | 'de' | 'ru' | 'cn' | 'ja' | 'ko';
 interface timeTranslationProps {
-  lang: LangCode;
+  lang: string;
   date: Date;
 }
-
-type LangCode = 'en' | 'es' | 'fr' | 'de' | 'ru' | 'cn' | 'ja' | 'ko';
 
 type translationProps = {
   lang: string;

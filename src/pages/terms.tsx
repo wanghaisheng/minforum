@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Spacer, Text } from '@geist-ui/core';
-
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
-
-import SettingsStore from 'stores/settings';
 import { useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Terms = observer(() => {
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
-  useEffect(() => {
-    getSettings();
-  }, []);
+  const settings = useSettings();
 
   return (
     <div>
@@ -34,7 +27,10 @@ const Terms = observer(() => {
               value: 'Terms & conditions'
             })}
           </Text>
-          <div dangerouslySetInnerHTML={{ __html: settings?.terms }}></div>
+          <div
+            className="static-container"
+            dangerouslySetInnerHTML={{ __html: settings?.terms }}
+          ></div>
           <Spacer h={5} />
         </div>
       </div>

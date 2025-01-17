@@ -258,20 +258,35 @@ const Login = observer(() => {
                 }
               />
               <Spacer h={1} />
-              <div className="center">
-                <Turnstile
-                  sitekey={settings.cloudflarePublicKey}
-                  onVerify={(token) => {
-                    verifyTurnstile({ token }).then((res: any) => {
-                      if (res.success) {
-                        showButton(true);
-                      } else {
-                        turnstile.reset();
-                      }
-                    });
+
+              {settings?.cloudflarePublicKey ? (
+                <div className="center">
+                  <Turnstile
+                    sitekey={settings.cloudflarePublicKey}
+                    onVerify={(token) => {
+                      verifyTurnstile({ token }).then((res: any) => {
+                        if (res.success) {
+                          showButton(true);
+                        } else {
+                          turnstile.reset();
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              ) : (
+                <Button
+                  shadow
+                  type="secondary"
+                  width="100%"
+                  loading={loading}
+                  onClick={() => {
+                    email && password ? signIn() : null;
                   }}
-                />
-              </div>
+                >
+                  <Translation lang={settings?.language} value="Log In" />
+                </Button>
+              )}
               {show && (
                 <Button
                   shadow

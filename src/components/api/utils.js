@@ -193,6 +193,17 @@ const getInitials = (fullName) => {
   }
 };
 
+const parseUsername = (text) => {
+  const usernameRegex = /@(\w+)/g;
+
+  const linkedText = text?.replace(usernameRegex, (_, username) => {
+    const userLink = `<a class="inpost-username" href='/u/${username}'>@${username}</a>`;
+    return userLink;
+  });
+
+  return linkedText;
+};
+
 module.exports = {
   slug,
   code,
@@ -210,5 +221,6 @@ module.exports = {
   isDoc,
   isImage,
   pluralize,
-  getInitials
+  getInitials,
+  parseUsername
 };

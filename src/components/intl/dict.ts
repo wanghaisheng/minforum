@@ -3308,6 +3308,246 @@ const dict = [
     ja: 'Googleでサインアップ',
     ru: 'Регистрация через Google',
     ko: 'Google로 가입하기'
+  },
+  {
+    en: 'Please accept the terms of use and privacy policy',
+    es: 'Por favor, acepta los términos de uso y la política de privacidad',
+    fr: "Veuillez accepter les conditions d'utilisation et la politique de confidentialité",
+    de: 'Bitte akzeptieren Sie die Nutzungsbedingungen und die Datenschutzrichtlinie',
+    cn: '请接受使用条款和隐私政策',
+    ja: '利用規約とプライバシーポリシーに同意してください',
+    ru: 'Пожалуйста, примите условия использования и политику конфиденциальности',
+    ko: '이용 약관과 개인정보 처리방침에 동의해 주세요'
+  },
+  {
+    en: "You've been awarded the Favorite Badge for receiving 100+ likes on your posts!",
+    es: '¡Has recibido la Insignia Favorita por obtener más de 100 me gusta en tus publicaciones!',
+    fr: "Vous avez reçu le Badge Favori pour avoir obtenu plus de 100 j'aime sur vos publications !",
+    de: 'Du hast das Favorite-Badge erhalten, weil du mehr als 100 Likes auf deine Beiträge bekommen hast!',
+    cn: '您因帖子获得100多个赞而被授予最喜爱徽章！',
+    ja: '投稿が100以上いいねを獲得し、お気に入りバッジを授与されました！',
+    ru: 'Вы получили значок «Любимчик» за 100+ лайков на ваших постах!',
+    ko: '게시물에 100개 이상의 좋아요를 받아 팔로워 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Devotee Badge!",
+    es: '¡Has recibido la Insignia Devoto!',
+    fr: 'Vous avez reçu le Badge Dévoué !',
+    de: 'Du hast das Devotee-Badge erhalten!',
+    cn: '您已被授予忠实粉丝徽章！',
+    ja: '献身者バッジを授与されました！',
+    ru: 'Вы получили значок «Преданный»!',
+    ko: '헌신자 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Veteran Badge!",
+    es: '¡Has recibido la Insignia Veterano!',
+    fr: 'Vous avez reçu le Badge Vétéran !',
+    de: 'Du hast das Veteran-Badge erhalten!',
+    cn: '您已被授予资深用户徽章！',
+    ja: 'ベテランバッジを授与されました！',
+    ru: 'Вы получили значок «Ветеран»!',
+    ko: '베테랑 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Prolific Writer Badge!",
+    es: '¡Has recibido la Insignia de Escritor Prolífico!',
+    fr: 'Vous avez reçu le Badge Écrivain Prolifique !',
+    de: 'Du hast das Prolific Writer-Badge erhalten!',
+    cn: '您已被授予多产作者徽章！',
+    ja: '執筆者バッジを授与されました！',
+    ru: 'Вы получили значок «Активный автор»!',
+    ko: '다작 작가 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Wordsmith Badge!",
+    es: '¡Has recibido la Insignia de Maestro de las Palabras!',
+    fr: 'Vous avez reçu le Badge Maître des Mots !',
+    de: 'Du hast das Wordsmith-Badge erhalten!',
+    cn: '您已被授予文字大师徽章！',
+    ja: '言葉の匠バッジを授与されました！',
+    ru: 'Вы получили значок «Мастер слова»!',
+    ko: '워드스미스 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the People's Choice Badge for receiving 100+ likes on your posts!",
+    es: '¡Has recibido la Insignia Elección del Público por obtener más de 100 me gusta en tus publicaciones!',
+    fr: "Vous avez reçu le Badge Choix du Public pour avoir obtenu plus de 100 j'aime sur vos publications !",
+    de: "Du hast das People's Choice-Badge erhalten, weil du mehr als 100 Likes auf deine Beiträge bekommen hast!",
+    cn: '您因帖子获得100多个赞而被授予大众选择徽章！',
+    ja: '投稿が100以上いいねを獲得し、ピープルズチョイスバッジを授与されました！',
+    ru: 'Вы получили значок «Выбор народа» за 100+ лайков на ваших постах!',
+    ko: '게시물에 100개 이상의 좋아요를 받아 피플스 초이스 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Polymath Badge for providing 1000+ best answers!",
+    es: '¡Has recibido la Insignia Polímata por proporcionar más de 1000 mejores respuestas!',
+    fr: 'Vous avez reçu le Badge Polymathe pour avoir fourni plus de 1000 meilleures réponses !',
+    de: 'Du hast das Polymath-Badge erhalten, weil du mehr als 1000 beste Antworten gegeben hast!',
+    cn: '您因提供了1000多个最佳答案而被授予博学徽章！',
+    ja: '1000以上のベストアンサーを提供し、ポリマスバッジを授与されました！',
+    ru: 'Вы получили значок «Эрудит» за 1000+ лучших ответов!',
+    ko: '1000개 이상의 베스트 답변을 제공하여 폴리매스 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Genius Badge for providing 100+ best answers!",
+    es: '¡Has recibido la Insignia Genio por proporcionar más de 100 mejores respuestas!',
+    fr: 'Vous avez reçu le Badge Génie pour avoir fourni plus de 100 meilleures réponses !',
+    de: 'Du hast das Genius-Badge erhalten, weil du mehr als 100 beste Antworten gegeben hast!',
+    cn: '您因提供了100多个最佳答案而被授予天才徽章！',
+    ja: '100以上のベストアンサーを提供し、天才バッジを授与されました！',
+    ru: 'Вы получили значок «Гений» за 100+ лучших ответов!',
+    ko: '100개 이상의 베스트 답변을 제공하여 천재 배지를 획득하셨습니다!'
+  },
+  {
+    en: 'Polymath: Best Answers for 1000+ posts',
+    es: 'Polímata: Mejores respuestas en 1000+ publicaciones',
+    fr: 'Polymathe : Meilleures réponses pour 1000+ publications',
+    de: 'Universalgelehrter: Beste Antworten für 1000+ Beiträge',
+    cn: '博学者：1000多个帖子的最佳答案',
+    ja: 'ポリマス：1000以上の投稿へのベストアンサー',
+    ru: 'Эрудит: Лучшие ответы на 1000+ постов',
+    ko: '박식가: 1000개 이상 게시물의 베스트 답변'
+  },
+  {
+    en: 'Genius: Best Answers for 100+ posts',
+    es: 'Genio: Mejores respuestas en 100+ publicaciones',
+    fr: 'Génie : Meilleures réponses pour 100+ publications',
+    de: 'Genie: Beste Antworten für 100+ Beiträge',
+    cn: '天才：100多个帖子的最佳答案',
+    ja: '天才：100以上の投稿へのベストアンサー',
+    ru: 'Гений: Лучшие ответы на 100+ постов',
+    ko: '천재: 100개 이상 게시물의 베스트 답변'
+  },
+  {
+    en: 'Favorite: Answered 100+ likes',
+    es: 'Favorito: Respuestas con 100+ me gusta',
+    fr: "Favori : Réponses avec 100+ j'aime",
+    de: 'Favorit: Antworten mit 100+ Likes',
+    cn: '最喜爱：回答获得100多个赞',
+    ja: 'お気に入り：100以上いいねの回答',
+    ru: 'Любимчик: Ответы с 100+ лайков',
+    ko: '팔로워: 100개 이상 좋아요를 받은 답변'
+  },
+  {
+    en: "People's choice: 1000+ likes",
+    es: 'Elección del público: 1000+ me gusta',
+    fr: "Choix du public : 1000+ j'aime",
+    de: 'Publikumsliebling: 1000+ Likes',
+    cn: '大众选择：1000多个赞',
+    ja: 'ピープルズチョイス：1000以上いいね',
+    ru: 'Выбор народа: 1000+ лайков',
+    ko: '피플스 초이스: 1000개 이상 좋아요'
+  },
+  {
+    en: 'Prolific writer: Wrote 100+ discussions',
+    es: 'Escritor prolífico: Escribió 100+ discusiones',
+    fr: 'Écrivain prolifique : A écrit 100+ discussions',
+    de: 'Prolifischer Autor: Verfasste 100+ Diskussionen',
+    cn: '多产作者：撰写了100多个讨论',
+    ja: '執筆者：100以上のディスカッションを投稿',
+    ru: 'Активный автор: Написал 100+ обсуждений',
+    ko: '다작 작가: 100개 이상의 토론 작성'
+  },
+  {
+    en: 'Wordsmith: Wrote 1000+ discussions',
+    es: 'Maestro de las palabras: Escribió 1000+ discusiones',
+    fr: 'Maître des mots : A écrit 1000+ discussions',
+    de: 'Wortkünstler: Verfasste 1000+ Diskussionen',
+    cn: '文字大师：撰写了1000多个讨论',
+    ja: '言葉の匠：1000以上のディスカッションを投稿',
+    ru: 'Мастер слова: Написал 1000+ обсуждений',
+    ko: '워드스미스: 1000개 이상의 토론 작성'
+  },
+  {
+    en: 'Veteran: Actively engaged and contributing for 3+ years',
+    es: 'Veterano: Participación activa y contribuciones durante 3+ años',
+    fr: 'Vétéran : Engagement actif et contributions depuis 3+ ans',
+    de: 'Veteran: Seit 3+ Jahren aktiv engagiert und Beitragend',
+    cn: '资深用户：积极参与并贡献3年以上',
+    ja: 'ベテラン：3年以上の積極的な参加と貢献',
+    ru: 'Ветеран: Активное участие и вклад в течение 3+ лет',
+    ko: '베테랑: 3년 이상 적극적으로 참여 및 기여'
+  },
+  {
+    en: 'Devotee: Actively engaged and contributing for 1+ years',
+    es: 'Devoto: Participación activa y contribuciones durante 1+ años',
+    fr: 'Dévoué : Engagement actif et contributions depuis 1+ an',
+    de: 'Engagierter Nutzer: Seit 1+ Jahren aktiv engagiert und Beitragend',
+    cn: '忠实粉丝：积极参与并贡献1年以上',
+    ja: '献身者：1年以上の積極的な参加と貢献',
+    ru: 'Преданный: Активное участие и вклад в течение 1+ года',
+    ko: '헌신자: 1년 이상 적극적으로 참여 및 기여'
+  },
+  {
+    en: 'mentioned you in their post',
+    es: 'te mencionó en su publicación',
+    fr: 'vous a mentionné dans son post',
+    de: 'hat dich in ihrem Beitrag erwähnt',
+    cn: '在他们的帖子中提到了你',
+    ja: 'が投稿であなたに言及しました',
+    ru: 'упомянул вас в своем посте',
+    ko: '게시물에서 당신을 언급했습니다'
+  },
+  {
+    en: 'mentioned you in their comment',
+    es: 'te mencionó en su comentario',
+    fr: 'vous a mentionné dans son commentaire',
+    de: 'hat dich in ihrem Kommentar erwähnt',
+    cn: '在他们的评论中提到了你',
+    ja: 'がコメントであなたに言及しました',
+    ru: 'упомянул вас в своем комментарии',
+    ko: '댓글에서 당신을 언급했습니다'
+  },
+  {
+    en: 'mentioned you in their reply',
+    es: 'te mencionó en su respuesta',
+    fr: 'vous a mentionné dans sa réponse',
+    de: 'hat dich in ihrer Antwort erwähnt',
+    cn: '在他们的回复中提到了你',
+    ja: 'が返信であなたに言及しました',
+    ru: 'упомянул вас в своем ответе',
+    ko: '답글에서 당신을 언급했습니다'
+  },
+  {
+    en: 'Mention user',
+    es: 'Mencionar usuario',
+    fr: "Mentionner l'utilisateur",
+    de: 'Benutzer erwähnen',
+    cn: '提及用户',
+    ja: 'ユーザーをメンション',
+    ru: 'Упомянуть пользователя',
+    ko: '사용자 언급'
+  },
+  {
+    en: 'Search user....',
+    es: 'Buscar usuario....',
+    fr: 'Rechercher un utilisateur....',
+    de: 'Benutzer suchen....',
+    cn: '搜索用户....',
+    ja: 'ユーザーを検索....',
+    ru: 'Поиск пользователя....',
+    ko: '사용자 검색....'
+  },
+  {
+    en: '⚠️ Warning: Deleting this comment will also delete all its replies. This action cannot be undone. Are you sure you want to proceed?',
+    es: '⚠️ Advertencia: Eliminar este comentario también eliminará todas sus respuestas. Esta acción no se puede deshacer. ¿Estás seguro de que deseas continuar?',
+    fr: '⚠️ Avertissement : Supprimer ce commentaire supprimera également toutes ses réponses. Cette action est irréversible. Êtes-vous sûr de vouloir continuer ?',
+    de: '⚠️ Warnung: Das Löschen dieses Kommentars löscht auch alle Antworten darauf. Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie wirklich fortfahren?',
+    cn: '⚠️ 警告：删除此评论也将删除其所有回复。此操作无法撤消。您确定要继续吗？',
+    ja: '⚠️ 警告：このコメントを削除すると、すべての返信も削除されます。この操作は元に戻せません。本当に続行しますか？',
+    ru: '⚠️ Предупреждение: Удаление этого комментария также удалит все ответы на него. Это действие нельзя отменить. Вы уверены, что хотите продолжить?',
+    ko: '⚠️ 경고: 이 댓글을 삭제하면 모든 답글도 삭제됩니다. 이 작업은 취소할 수 없습니다. 계속 진행하시겠습니까?'
+  },
+  {
+    en: '⚠️ Warning: This action cannot be undone. Are you sure you want to delete this reply?',
+    es: '⚠️ Advertencia: Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta respuesta?',
+    fr: '⚠️ Avertissement : Cette action est irréversible. Êtes-vous sûr de vouloir supprimer cette réponse ?',
+    de: '⚠️ Warnung: Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie diese Antwort wirklich löschen?',
+    cn: '⚠️ 警告：此操作无法撤消。您确定要删除此回复吗？',
+    ja: '⚠️ 警告：この操作は元に戻せません。この返信を削除してもよろしいですか？',
+    ru: '⚠️ Предупреждение: Это действие нельзя отменить. Вы уверены, что хотите удалить этот ответ?',
+    ko: '⚠️ 경고: 이 작업은 취소할 수 없습니다. 이 답글을 삭제하시겠습니까?'
   }
 ];
 

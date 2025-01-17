@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
-import { Card, Text, Grid, Link } from '@geist-ui/core';
+import { Card, Text, Grid, Link, Spacer } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
 import CategoryStore from 'stores/category';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Category = observer(() => {
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-  const [{ loading, categories, getCategories }] = useState(
-    () => new CategoryStore()
-  );
+  const settings = useSettings();
+  const [{ categories, getCategories }] = useState(() => new CategoryStore());
 
   useEffect(() => {
-    getSettings();
     getCategories();
   }, []);
 
@@ -56,6 +53,7 @@ const Category = observer(() => {
             </div>
           ))}
         </div>
+        <Spacer h={5} />
       </div>
     </div>
   );

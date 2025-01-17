@@ -21,14 +21,15 @@ import CategoryStore from 'stores/category';
 import SettingsStore from 'stores/settings';
 import { resProp } from 'interfaces/res';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const EditDiscussion = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const { slug } = router.query;
   const [modal, toggleModal] = useState(false);
   const [content, setContent] = useState('');
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ categories, getCategories }] = useState(() => new CategoryStore());
   const [
     {
@@ -42,14 +43,13 @@ const EditDiscussion = observer(() => {
   ] = useState(() => new DiscussionStore());
 
   useEffect(() => {
-    getSettings();
     token.id ? getCategories() : null;
     router.isReady
       ? getDiscussion(slug).then((data) => {
           setContent(data.content!);
         })
       : null;
-  }, [token, router]);
+  }, [token?.id, router]);
 
   const deletePost = async (id: string) => {
     await deleteDiscussion({ id }).then((res: resProp) => {

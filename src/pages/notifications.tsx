@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Spacer, Text, Card, Loading, Button, Avatar } from '@geist-ui/core';
-import { ChevronDown } from '@geist-ui/icons';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import Navbar from 'components/Navbar';
@@ -8,7 +7,6 @@ import { observer } from 'mobx-react-lite';
 import NotificationStore from 'stores/notification';
 import useToken from 'components/Token';
 import { useRouter } from 'next/router';
-import moment from 'moment';
 import Auth from 'components/Auth';
 import {
   Translation,
@@ -19,18 +17,17 @@ import {
   useRepliedPostTranslation,
   useTranslation
 } from 'components/intl/Translation';
-import SettingsStore from 'stores/settings';
+import useSettings from 'components/settings';
 
 const Notifications = observer(() => {
   const token = useToken();
   const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [
     {
       loading,
       page,
-      limit,
-      total,
+      nomore,
       notifications,
       setPage,
       getNotifications,
@@ -39,15 +36,32 @@ const Notifications = observer(() => {
     }
   ] = useState(() => new NotificationStore());
 
+  const handleScroll = useCallback(() => {
+    const offset = 0;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        console.log('Dont do it');
+
+        setPage(page + 1);
+        getNotifications(token.id!, true);
+      }
+    }
+  }, [nomore, page]);
+
   useEffect(() => {
-    getSettings();
     token.id ? getNotifications(token.id, false) : null;
-  }, [token]);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [token?.id, handleScroll]);
 
   const read = async (id: string, action: string, type: string) => {
     await markRead(id).then((res: any) => {
       if (res.success) {
-        let t = type === 'user' ? '/u' : '/d';
+        let t = type === 'user' || type === 'admin' ? '/u' : '/d';
         router.push(`${t}/${action}`);
       }
     });
@@ -72,31 +86,30 @@ const Notifications = observer(() => {
             lang === 'es'
               ? es
               : lang === 'fr'
-              ? fr
-              : lang === 'en'
-              ? enUS
-              : lang === 'ru'
-              ? ru
-              : lang === 'de'
-              ? de
-              : lang === 'cn'
-              ? zhCN
-              : lang === 'ja'
-              ? ja
-              : lang === 'ko'
-              ? ko
-              : null
+                ? fr
+                : lang === 'en'
+                  ? enUS
+                  : lang === 'ru'
+                    ? ru
+                    : lang === 'de'
+                      ? de
+                      : lang === 'cn'
+                        ? zhCN
+                        : lang === 'ja'
+                          ? ja
+                          : lang === 'ko'
+                            ? ko
+                            : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
   };
 
-  const paginate = () => {
-    setPage(page + 1);
-    getNotifications(token.id!, true);
-  };
-
-  const renderNotifications = (name: string, type: string) => {
+  const renderNotifications = (
+    name: string,
+    type: string,
+    message?: string
+  ) => {
     if (type === 'like-post') {
       return useLikedPostTranslation({
         name,
@@ -130,10 +143,10 @@ const Notifications = observer(() => {
     }
   };
 
-  const notification = notifications.map((item) => (
+  const notification = notifications.map((item, index) => (
     <div
       className="pointer"
-      key={item.id}
+      key={item.id + index}
       onClick={() => read(item.id!, item.action!, item.type!)}
     >
       <Card
@@ -142,19 +155,32 @@ const Notifications = observer(() => {
       >
         <div className="notification">
           <div className="one">
-            <Avatar
-              src={
-                item.profile && item.profile.photo
-                  ? `/storage/${item.profile.photo}`
-                  : '/images/avatar.png'
-              }
-              w={2}
-              h={2}
-            />
+            {item?.filterType === 'reward' ? (
+              <img src={'/images/badge.png'} />
+            ) : (
+              <Avatar
+                src={
+                  item.profile && item.profile.photo
+                    ? `/storage/${item.profile.photo}`
+                    : '/images/avatar.png'
+                }
+                w={2}
+                h={2}
+              />
+            )}
           </div>
           <div className="two">
             <Text p className="text">
-              {renderNotifications(item?.name, item?.filterType)}
+              {item?.type === 'admin' ? (
+                <Translation lang={settings?.language} value={item.message} />
+              ) : item?.filterType === 'mentioned' ? (
+                <>
+                  {item.profile.name}{' '}
+                  <Translation lang={settings?.language} value={item.message} />
+                </>
+              ) : (
+                renderNotifications(item?.name, item?.filterType, item.message)
+              )}
             </Text>
             <Text small className="date">
               {renderDate(item.createdAt)}
@@ -222,21 +248,7 @@ const Notifications = observer(() => {
           ) : (
             ''
           )}
-          <Spacer />
-          <div className="pagination">
-            {total > notification.length ? (
-              <Button
-                auto
-                type="abort"
-                iconRight={<ChevronDown />}
-                onClick={paginate}
-              >
-                <Translation lang={settings?.language} value={'Load more'} />
-              </Button>
-            ) : (
-              ''
-            )}
-          </div>
+
           <Spacer h={5} />
         </div>
       </div>

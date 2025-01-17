@@ -149,7 +149,7 @@ export default class DiscussionStore {
   };
 
   @action
-  getUnansweredDiscussions = async () => {
+  getUnansweredDiscussions = async (paginate: boolean) => {
     let uri = `${API_URL}/discussion/unanswered?page=${this.page}&limit=${this.limit}`;
     this.loading = false;
 
@@ -158,10 +158,15 @@ export default class DiscussionStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        let data = res.data;
-        this.loading = false;
+        const threads = this.discussions;
+        const data = paginate ? [...threads, ...res.data] : res.data;
+        let nomore = res.data.length < this.limit ? true : false;
+
         this.discussions = data;
+
         this.total = res.count;
+        this.nomore = nomore;
+        this.loading = false;
       })
       .catch((err) => console.log(err));
   };

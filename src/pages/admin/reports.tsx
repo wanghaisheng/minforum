@@ -1,14 +1,6 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import {
-  Badge,
-  Table,
-  Pagination,
-  Link,
-  Select,
-  Loading,
-  Text
-} from '@geist-ui/core';
+import { Badge, Table, Pagination, Link, Select, Text } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
@@ -20,20 +12,18 @@ import ReportStore from 'stores/report';
 import { reportProp } from 'interfaces/report';
 import toast, { Toaster } from 'react-hot-toast';
 import DiscussionStore from 'stores/discussion';
-import SettingsStore from 'stores/settings';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import useSettings from 'components/settings';
 
 const Reports = observer(() => {
   const token = useToken();
+  const settings = useSettings();
   const [{ updateDiscussion }] = useState(() => new DiscussionStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
   const [{ loading, page, limit, total, reports, setPage, getReports }] =
     useState(() => new ReportStore());
 
   useEffect(() => {
-    getSettings();
     getReports();
   }, [token?.id]);
 

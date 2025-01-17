@@ -15,28 +15,29 @@ import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import {
   ChevronRightCircle,
   ChevronLeftCircle,
-  MessageCircle,
-  UserPlus
+  MessageCircle
 } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
 import UserStore from 'stores/user';
 import { useRouter } from 'next/router';
 import MinimalPost from 'components/MinimalPost';
-import SettingsStore from 'stores/settings';
-import { pluralize, formatNumber } from 'components/api/utils';
+import { pluralize, oneKFormat } from 'components/api/utils';
 import DiscussionStore from 'stores/discussion';
 import { Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
 import MessageStore from 'stores/message';
+import { LicenseIcon, Medal06Icon } from 'hugeicons-react';
+import useSettings from 'components/settings';
+import { Badges } from 'components/Badges';
 
 const User = observer(() => {
+  const settings = useSettings();
   const token = useToken();
   const router = useRouter();
   const isXS = useMediaQuery('mobile');
   const { username } = router.query;
   const [id, setId] = useState('');
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ user, getUsername }] = useState(() => new UserStore());
   const [{ channel, getChannel }] = useState(() => new MessageStore());
   const [
@@ -44,7 +45,6 @@ const User = observer(() => {
   ] = useState(() => new DiscussionStore());
 
   useEffect(() => {
-    getSettings();
     router.isReady
       ? getUsername(username as string).then((id) => {
           if (id) {
@@ -120,33 +120,49 @@ const User = observer(() => {
               <div className="gridlock">
                 <div className="item">
                   <Avatar
-                    w={3}
-                    h={3}
+                    w={5}
+                    h={5}
                     src={
                       user.photo
                         ? `/storage/${user.photo}`
                         : '/images/avatar.png'
                     }
-                  />
+                  />{' '}
                 </div>
                 <div className="item">
-                  <Text h3 className="capitalize">
+                  <div
+                    className="capitalize"
+                    style={{ fontWeight: '700', fontSize: 25, marginBottom: 2 }}
+                  >
                     {user.name}
-                  </Text>
+                  </div>
+                  <div style={{ marginBottom: 5 }}>
+                    <Badges
+                      language={lang}
+                      position={isXS ? 'top' : 'bottom'}
+                      awards={[user.role, ...user.badges]}
+                    />
+                  </div>
                   <Text small>
                     <Translation lang={settings?.language} value="Joined" />{' '}
                     {renderDate(user.createdAt)}
                   </Text>
                   <Spacer w={1} inline />
-                  <Text small>
-                    {formatNumber(user.discussion!)}{' '}
+                  <Text small className="lowercase">
+                    <span className="icon-fit">
+                      <LicenseIcon size={14} />
+                    </span>
+                    {oneKFormat(user.discussion!)}{' '}
                     <Translation
                       lang={settings?.language}
                       value={`Discussion${pluralize(user.discussion!)}`}
                     />
                     <Spacer w={1} inline />
-                    {formatNumber(user.point!)}{' '}
-                    <span className="capitalize">
+                    <span className="icon-fit">
+                      <Medal06Icon size={14} />
+                    </span>
+                    {oneKFormat(user.point!)}{' '}
+                    <span>
                       <Translation
                         lang={settings?.language}
                         value={`point${pluralize(user.point!)}`}
@@ -193,22 +209,34 @@ const User = observer(() => {
                     {renderDate(user.createdAt)}
                   </Text>
                   <Spacer h={1} />
-                  <Text small>
-                    {formatNumber(user.discussion!)}{' '}
+                  <Text small className="lowercase">
+                    <span className="icon-fit">
+                      <LicenseIcon size={14} />
+                    </span>
+                    {oneKFormat(user.discussion!)}{' '}
                     <Translation
                       lang={settings?.language}
                       value={`Discussion${pluralize(user.discussion!)}`}
                     />
                     <Spacer w={1} inline />
-                    {formatNumber(user.point!)}{' '}
-                    <span className="capitalize">
+                    <span className="icon-fit">
+                      <Medal06Icon size={14} />
+                    </span>
+                    {oneKFormat(user.point!)}{' '}
+                    <span>
                       <Translation
                         lang={settings?.language}
                         value={`point${pluralize(user.point!)}`}
                       />
                     </span>
                   </Text>
-                  <Spacer />
+                  <Text>
+                    <Badges
+                      language={lang}
+                      position={isXS ? 'top' : 'bottom'}
+                      awards={[user.role, ...user.badges]}
+                    />
+                  </Text>
                 </div>
               </div>
               <div className="mobile">
@@ -257,7 +285,9 @@ const User = observer(() => {
                 title={item.title}
                 slug={item.slug}
                 category={item.category?.title}
+                color={item.category?.color}
                 comment={item.comment}
+                view={item.view}
                 date={item.createdAt}
               />
             ))}

@@ -7,8 +7,8 @@
 /node_modules
 /.pnp
 .pnp.js
-ca.cert
 ca.crt
+cert.crt
 ca.key
 cert.key
 # testing

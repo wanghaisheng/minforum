@@ -8,7 +8,7 @@ import {
   Discussion,
   Notification
 } from 'components/api/model';
-import { withAuth, slug } from 'components/api/utils';
+import { withAuth, asyncForEach, slug } from 'components/api/utils';
 import { settingsProp } from 'interfaces/settings';
 
 const getSettings = async () => {
@@ -18,6 +18,30 @@ const getSettings = async () => {
       return config;
     })
     .catch((err: any) => signale.fatal(err));
+};
+
+const notifyMentionedUser = (discussion, userId, postId) => {
+  const usernameRegex = /@(\w+)/g;
+
+  const matches = discussion.match(usernameRegex);
+  if (matches) {
+    asyncForEach(matches, async (item) => {
+      let username = item.replace('@', '');
+      let user = await User.filter({ username });
+      user = user[0] || {};
+      if (user.id) {
+        new Notification({
+          receiver: user.id,
+          filterType: 'mentioned',
+          type: 'post',
+          sender: userId,
+          message: 'mentioned you in their comment',
+          action: postId,
+          read: false
+        }).save();
+      }
+    });
+  }
 };
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -39,6 +63,11 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
                   await Discussion.get(req.body.discussionId)
                     .getJoin()
                     .then(async (d: any) => {
+                      notifyMentionedUser(
+                        d.content,
+                        data.userId,
+                        `${d.slug}#${data.slug}`
+                      );
                       const notify = new Notification({
                         sender: data.userId,
                         receiver: d.userId,

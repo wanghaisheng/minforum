@@ -26,17 +26,18 @@ import UserStore from 'stores/user';
 import useToken from 'components/Token';
 import { validateEmail } from 'components/api/utils';
 import Auth from 'components/Auth';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Settings = observer(() => {
   const token = useToken();
+  const settings = useSettings();
   const [status, setStatus] = useState('');
   const [_password, setPassword] = useState({
     password: '',
     newPassword: ''
   });
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+
   const [
     {
       loading,
@@ -52,7 +53,6 @@ const Settings = observer(() => {
   ] = useState(() => new UserStore());
 
   useEffect(() => {
-    getSettings();
     token.id
       ? getUser(token.id).then((res: any) => {
           if (res.success) {
@@ -60,7 +60,7 @@ const Settings = observer(() => {
           }
         })
       : null;
-  }, [token]);
+  }, [token?.id]);
 
   const processUsername = (val: string) => {
     if (val.length) {

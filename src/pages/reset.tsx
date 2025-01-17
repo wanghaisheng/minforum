@@ -6,23 +6,22 @@ import { parseCookies, destroyCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Reset = observer(() => {
   const cookie = parseCookies();
   const router = useRouter();
+  const settings = useSettings();
   const [verify, setVerify] = useState(false);
   const [code, setCode] = useState('');
   const [_password, setPassword] = useState('');
   const [_code, _setCode] = useState<{ data?: string; code?: number }>({});
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ loading, user, setUser, getUser, updateUser }] = useState(
     () => new UserStore()
   );
 
   useEffect(() => {
-    getSettings();
     let _code: any =
       cookie && cookie._w_code ? JSON.parse(cookie._w_code) : null;
 

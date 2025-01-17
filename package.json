@@ -1,6 +1,6 @@
 {
   "name": "min-forum",
-  "version": "1.0.1",
+  "version": "1.0.8",
   "private": true,
   "scripts": {
     "setup": "sh setup.sh",
@@ -42,6 +42,7 @@
     "mobx-react-lite": "^3.4.0",
     "moment": "^2.29.3",
     "next": "14.2.21",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.9",
     "nookies": "^2.5.2",
     "plyr": "^3.7.2",

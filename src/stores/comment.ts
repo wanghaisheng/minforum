@@ -87,6 +87,72 @@ export default class CommentStore {
       .catch((err) => console.log(err));
   };
 
+  @action updateReply = async (body: any) => {
+    let url = `${API_URL}/comment/update-reply`;
+
+    return await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: API_KEY
+      },
+      body: JSON.stringify(body)
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          return { success: true, data: res.data };
+        } else {
+          return { success: false, message: res.message };
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  @action deleteComment = async (body: any) => {
+    let url = `${API_URL}/comment/delete-comment`;
+
+    return await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: API_KEY
+      },
+      body: JSON.stringify(body)
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          return { success: true, data: res.data };
+        } else {
+          return { success: false, message: res.message };
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  @action deleteReply = async (body: any) => {
+    let url = `${API_URL}/comment/delete-reply`;
+
+    return await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        apikey: API_KEY
+      },
+      body: JSON.stringify(body)
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          return { success: true, data: res.data };
+        } else {
+          return { success: false, message: res.message };
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   @action getComment = async (id?: string) => {
     let url = `${API_URL}/comment/${id}`;
 

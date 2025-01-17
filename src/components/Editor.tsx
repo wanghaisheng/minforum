@@ -1,14 +1,18 @@
 import 'suneditor/dist/css/suneditor.min.css';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import SunEditorCore from 'suneditor/src/lib/core';
 import dynamic from 'next/dynamic';
 const SunEditor = dynamic(() => import('suneditor-react'), {
   ssr: false
 });
-import { useTranslation } from './intl/Translation';
-import { Button, Popover, Spacer } from '@geist-ui/core';
+import { Translation, useTranslation } from './intl/Translation';
+import { Button, Popover, Spacer, Input, User, Loading } from '@geist-ui/core';
 import { Emoji as Emoticon } from '@geist-ui/icons';
+import { UserIcon } from 'hugeicons-react';
 import Emoji from './data/emoji';
+import UserStore from 'stores/user';
+import { userProp } from 'interfaces/user';
+import { observer } from 'mobx-react-lite';
 
 type editorProp = {
   lang?: any;
@@ -22,6 +26,8 @@ type editorProp = {
 
 const Editor = (prop: editorProp) => {
   const editor = useRef<SunEditorCore>();
+  const [modal, toggleModal] = useState(false);
+  const [store] = useState(() => new UserStore());
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -29,6 +35,21 @@ const Editor = (prop: editorProp) => {
 
   const handleEmoji = (val: string) => {
     editor.current.insertHTML(val);
+  };
+
+  const handleUser = (val: string) => {
+    editor.current.insertHTML(val);
+    toggleModal(false);
+  };
+
+  const handleSearch = async (val: string) => {
+    val = val.trim();
+    if (val.length) {
+      val = val.replace('@', '');
+      await store.searchUsers(val);
+    } else {
+      store.setUsers([]);
+    }
   };
 
   return (
@@ -51,7 +72,6 @@ const Editor = (prop: editorProp) => {
               'italic',
               'strike',
               'blockquote',
-              'showBlocks',
               'fontColor',
               'hiliteColor',
               'align',
@@ -87,11 +107,56 @@ const Editor = (prop: editorProp) => {
             </span>
           </Popover>
         )}
+        <Popover
+          placement="topStart"
+          visible={modal}
+          content={
+            <div
+              style={{ width: 230, height: 200, padding: 10, overflow: 'auto' }}
+            >
+              <Input
+                width={'100%'}
+                placeholder={useTranslation({
+                  lang: prop.lang,
+                  value: 'Search user....'
+                })}
+                iconRight={store.loading && <Loading />}
+                onKeyUp={(e) => handleSearch(e.target.value)}
+              />
+              <Spacer />
+              <div>
+                {store?.users?.map((item: userProp) => (
+                  <div
+                    className="user-alone"
+                    key={item.id}
+                    onClick={() => handleUser(`@${item.username} &nbsp;`)}
+                  >
+                    <User
+                      src={
+                        item.photo
+                          ? `/storage/${item.photo}`
+                          : `/images/avatar.png`
+                      }
+                      name={item.name}
+                    >
+                      @{item.username}
+                    </User>
+                  </div>
+                ))}
+              </div>
+            </div>
+          }
+        >
+          <Button auto icon={<UserIcon />} onClick={() => toggleModal(!modal)}>
+            <Translation lang={prop.lang} value={'Mention user'} />
+          </Button>
+        </Popover>
 
+        <Spacer inline />
         {prop.button}
       </div>
     </div>
   );
 };
 
-export default Editor;
+export default observer(Editor);

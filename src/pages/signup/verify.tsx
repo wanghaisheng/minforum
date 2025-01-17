@@ -8,17 +8,18 @@ import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Verify = observer(() => {
+  const settings = useSettings();
   const cookie = parseCookies();
   const router = useRouter();
   const [code, setCode] = useState('');
   const [_code, _setCode] = useState<{ data?: string; code?: number }>({});
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+
   const [{ user, getUser, updateUser }] = useState(() => new UserStore());
 
   useEffect(() => {
-    getSettings();
     let _code: any =
       cookie && cookie._w_code ? JSON.parse(cookie._w_code) : null;
     _setCode(_code);

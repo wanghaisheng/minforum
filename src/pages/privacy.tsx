@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Spacer, Text } from '@geist-ui/core';
-
 import Navbar from 'components/Navbar';
 import { observer } from 'mobx-react-lite';
-
-import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { useTranslation } from 'components/intl/Translation';
+import useSettings from 'components/settings';
 
 const Privacy = observer(() => {
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
-  useEffect(() => {
-    getSettings();
-  }, []);
+  const settings = useSettings();
 
   return (
     <div>
@@ -34,7 +27,10 @@ const Privacy = observer(() => {
               value: 'Privacy policy'
             })}
           </Text>
-          <div dangerouslySetInnerHTML={{ __html: settings?.privacy }}></div>
+          <div
+            className="static-container"
+            dangerouslySetInnerHTML={{ __html: settings?.privacy }}
+          ></div>
           <Spacer h={5} />
         </div>
       </div>
