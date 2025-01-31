@@ -1,1 +1,1 @@
-{"extensions":[{"name":"stripe2","path":"stripe2","active":false},{"name":"Flutterwave","path":"flutterwave","active":true},{"name":"stripe","path":"stripe","active":false}]}
+{"extensions":[{"name":"stripe2","path":"stripe2","active":false},{"name":"stripe","path":"stripe","active":false},{"name":"Flutterwave","path":"flutterwave","active":false}]}
