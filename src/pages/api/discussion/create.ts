@@ -29,7 +29,7 @@ const notifyMentionedUser = (discussion, userId, postId) => {
       let username = item.replace('@', '');
       let user = await User.filter({ username });
       user = user[0] || {};
-      if (user.id) {
+      if (user.id !== userId) {
         new Notification({
           receiver: user.id,
           filterType: 'mentioned',
@@ -49,7 +49,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
     if (auth.success) {
       req.body.slug = slugify(req.body.title, {
         replacement: '-', // replace spaces with replacement character, defaults to `-`
-        remove: /[*+~.()'"!:@#]/g, // remove characters that match regex, defaults to `undefined`
+        remove: /[*+~.()_'"!?%&:@#]/g, // remove characters that match regex, defaults to `undefined`
         lower: true, // convert to lower case, defaults to `false`
         strict: false, // strip special characters except replacement, defaults to `false`
         locale: 'vi' // language code of the locale to use
@@ -90,7 +90,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '50mb' // Set desired value here
+      sizeLimit: '50mb'
     }
   }
 };

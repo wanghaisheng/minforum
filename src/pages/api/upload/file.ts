@@ -52,3 +52,9 @@ const uploadFile = (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default uploadFile;
+
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};

@@ -5,14 +5,16 @@ import {
   Avatar,
   Spacer,
   User,
-  useMediaQuery
+  useMediaQuery,
+  Badge,
+  Tooltip
 } from '@geist-ui/core';
-import NextLink from 'next/link';
 import { format } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import { oneKFormat } from './api/utils';
-import { Translation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/Translation';
 import { Comment01Icon, ViewIcon } from 'hugeicons-react';
+import CustomIcon from './data/icon/icon';
 
 type postProps = {
   title?: string;
@@ -25,6 +27,7 @@ type postProps = {
   color?: string;
   comment?: number;
   view?: number;
+  premium?: boolean;
   date?: Date | string;
   lang: string;
 };
@@ -43,11 +46,12 @@ const Post = (props: postProps) => {
     authorRole,
     authorUsername,
     date,
-    lang
+    lang,
+    premium
   } = props;
 
   const content = () => (
-    <div style={{ padding: '0 10px' }}>
+    <div className="popover-adjust">
       <Link color href={`/u/${authorUsername}`}>
         <User src={avatar} name={author}>
           <Translation lang={props.lang} value={authorRole} />
@@ -83,43 +87,55 @@ const Post = (props: postProps) => {
   };
 
   return (
-    <NextLink href={`/d/${slug}`}>
-      <Link width="100%">
-        <div className="post without-right">
-          <div className="item">
-            <Popover trigger="hover" content={content}>
-              <Avatar src={avatar} w={isXS ? 1 : 1.7} h={isXS ? 1 : 1.7} />
-            </Popover>
+    <div className="post without-right">
+      <div className="item first desktop">
+        <Popover placement="rightStart" trigger="hover" content={content}>
+          <Avatar src={avatar} w={isXS ? 1 : 1.7} h={isXS ? 1 : 1.7} />
+        </Popover>
+      </div>
+      <div className="item">
+        <Link href={`/d/${slug}`}>
+          <div className="mobile-inner">
+            <div className="mobile">
+              <Popover placement="rightStart" trigger="hover" content={content}>
+                <Avatar src={avatar} w={isXS ? 1 : 1.7} h={isXS ? 1 : 1.7} />
+              </Popover>
+            </div>
+            <div>
+              <span>{title} &nbsp;</span>
+              {premium && (
+                <Tooltip text={useTranslation({ lang, value: 'Premium post' })}>
+                  <Badge scale={0.5} style={{ backgroundColor: '#8B00F6' }}>
+                    <CustomIcon name="crown" color="#fff" size={14} />
+                  </Badge>
+                </Tooltip>
+              )}
+            </div>
           </div>
-          <div className="item">
-            <Text h1 className="title">
-              {title}
-            </Text>
-            <Text b className="name" style={{ color }}>
-              {category}
-            </Text>
-            <Spacer w={1} inline />
-            <Text span className="date">
-              {renderDate(date)}
-            </Text>
-            <Spacer w={1} inline />
-            <Text span className="comment">
-              <span style={{ position: 'relative', top: 5 }}>
-                <ViewIcon size={20} />
-              </span>{' '}
-              {oneKFormat(view)}
-            </Text>
-            <Spacer w={1} inline />
-            <Text span className="comment">
-              <span style={{ position: 'relative', top: 5 }}>
-                <Comment01Icon size={18} />
-              </span>{' '}
-              {oneKFormat(comment)}
-            </Text>
-          </div>
-        </div>
-      </Link>
-    </NextLink>
+          <Text b className="name" style={{ color }}>
+            {category}
+          </Text>
+          <Spacer w={1} inline />
+          <Text span className="date">
+            {renderDate(date)}
+          </Text>
+          <Spacer w={1} inline />
+          <Text span className="comment">
+            <span style={{ position: 'relative', top: 5 }}>
+              <ViewIcon size={20} />
+            </span>{' '}
+            {oneKFormat(view)}
+          </Text>
+          <Spacer w={1} inline />
+          <Text span className="comment">
+            <span style={{ position: 'relative', top: 5 }}>
+              <Comment01Icon size={18} />
+            </span>{' '}
+            {oneKFormat(comment)}
+          </Text>
+        </Link>
+      </div>
+    </div>
   );
 };
 

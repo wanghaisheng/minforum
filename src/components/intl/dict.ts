@@ -2460,14 +2460,14 @@ const dict = [
     ko: '성명이 너무 짧습니다.'
   },
   {
-    en: 'Username is too short. Minimum character is three.',
-    es: 'El nombre de usuario es demasiado corto. El carácter mínimo es tres.',
-    fr: "Le nom d'utilisateur est trop court. Le caractère minimum est de trois.",
-    de: 'Benutzername ist zu kurz. Mindestens drei Zeichen erforderlich.',
-    cn: '用户名太短。最少三个字符。',
-    ja: 'ユーザー名が短すぎます。最小3文字以上を入力してください。',
-    ru: 'Имя пользователя слишком короткое. Минимальное количество символов - три.',
-    ko: '사용자 이름이 너무 짧습니다. 최소 3자 이상이어야 합니다.'
+    en: 'Please enter a username with at least 3 characters. Only letters, numbers, and underscores are supported.',
+    es: 'Por favor, ingrese un nombre de usuario con al menos 3 caracteres. Solo se permiten letras, números y guiones bajos.',
+    fr: "Veuillez entrer un nom d'utilisateur d'au moins 3 caractères. Seules les lettres, les chiffres et les traits de soulignement sont autorisés.",
+    de: 'Bitte geben Sie einen Benutzernamen mit mindestens 3 Zeichen ein. Es werden nur Buchstaben, Zahlen und Unterstriche unterstützt.',
+    cn: '请输入至少 3 个字符的用户名。仅支持字母、数字和下划线。',
+    ja: 'ユーザー名は3文字以上で入力してください。使用できるのは文字、数字、アンダースコアのみです。',
+    ru: 'Пожалуйста, введите имя пользователя длиной не менее 3 символов. Поддерживаются только буквы, цифры и символы подчеркивания.',
+    ko: '사용자 이름은 최소 3자 이상 입력해 주세요. 문자, 숫자 및 밑줄만 지원됩니다.'
   },
   {
     en: 'Site name is too short. Minimum character is three.',
@@ -3548,6 +3548,595 @@ const dict = [
     ja: '⚠️ 警告：この操作は元に戻せません。この返信を削除してもよろしいですか？',
     ru: '⚠️ Предупреждение: Это действие нельзя отменить. Вы уверены, что хотите удалить этот ответ?',
     ko: '⚠️ 경고: 이 작업은 취소할 수 없습니다. 이 답글을 삭제하시겠습니까?'
+  },
+  {
+    en: 'Click to mark this comment the best response',
+    es: 'Haz clic para marcar este comentario como la mejor respuesta',
+    fr: 'Cliquez pour marquer ce commentaire comme la meilleure réponse',
+    de: 'Klicken Sie, um diesen Kommentar als die beste Antwort zu markieren',
+    cn: '点击将此评论标记为最佳回复',
+    ja: 'このコメントをベストレスポンスとしてマークするにはクリックしてください',
+    ru: 'Нажмите, чтобы отметить этот комментарий как лучший ответ',
+    ko: '이 댓글을 최고의 응답으로 표시하려면 클릭하세요'
+  },
+  {
+    en: 'Click to remove this comment as the best response',
+    es: 'Haz clic para eliminar este comentario como la mejor respuesta',
+    fr: 'Cliquez pour supprimer ce commentaire comme meilleure réponse',
+    de: 'Klicken Sie, um diesen Kommentar als beste Antwort zu entfernen',
+    cn: '点击移除此评论的最佳回复标记',
+    ja: 'このコメントのベストレスポンスを解除するにはクリックしてください',
+    ru: 'Нажмите, чтобы убрать этот комментарий как лучший ответ',
+    ko: '이 댓글의 최고의 응답 표시를 해제하려면 클릭하세요'
+  },
+  {
+    en: 'Best response',
+    es: 'Mejor respuesta',
+    fr: 'Meilleure réponse',
+    de: 'Beste Antwort',
+    cn: '最佳回复',
+    ja: 'ベストレスポンス',
+    ru: 'Лучший ответ',
+    ko: '최고의 응답'
+  },
+  {
+    en: 'Mark best response',
+    es: 'Marcar como mejor respuesta',
+    fr: 'Marquer comme meilleure réponse',
+    de: 'Als beste Antwort markieren',
+    cn: '标记为最佳回复',
+    ja: 'ベストレスポンスとしてマーク',
+    ru: 'Отметить как лучший ответ',
+    ko: '최고의 응답으로 표시'
+  },
+  {
+    en: 'Newest',
+    es: 'Más nuevo',
+    fr: 'Le plus récent',
+    de: 'Neueste',
+    cn: '最新',
+    ja: '最新',
+    ru: 'Самый новый'
+  },
+  {
+    en: 'Most Active',
+    es: 'Más activo',
+    fr: 'Le plus actif',
+    de: 'Am aktivsten',
+    cn: '最活跃',
+    ja: '最も活発',
+    ru: 'Самый активный'
+  },
+  {
+    en: 'Extensions',
+    es: 'Extensiones',
+    fr: 'Extensions',
+    de: 'Erweiterungen',
+    cn: '扩展',
+    ja: '拡張機能',
+    ru: 'Расширения'
+  },
+  {
+    en: 'Upload extension',
+    es: 'Subir extensión',
+    fr: 'Téléverser une extension',
+    de: 'Erweiterung hochladen',
+    cn: '上传扩展',
+    ja: '拡張機能をアップロード',
+    ru: 'Загрузить расширение'
+  },
+  {
+    en: 'Please upload valid zip file',
+    es: 'Por favor, suba un archivo zip válido',
+    fr: 'Veuillez téléverser un fichier zip valide',
+    de: 'Bitte laden Sie eine gültige Zip-Datei hoch',
+    cn: '请上传有效的zip文件',
+    ja: '有効なzipファイルをアップロードしてください',
+    ru: 'Пожалуйста, загрузите действительный zip-файл'
+  },
+  {
+    en: 'Error uploading extensions. Please check the extension documentation for support',
+    es: 'Error al subir extensiones. Consulte la documentación de la extensión para obtener soporte',
+    fr: "Erreur lors du téléversement des extensions. Consultez la documentation de l'extension pour obtenir de l'aide",
+    de: 'Fehler beim Hochladen der Erweiterungen. Überprüfen Sie die Dokumentation der Erweiterung für Unterstützung',
+    cn: '上传扩展时出错。请查看扩展文档以获取支持',
+    ja: '拡張機能のアップロード中にエラーが発生しました。サポートについては拡張機能のドキュメントを確認してください',
+    ru: 'Ошибка при загрузке расширений. Проверьте документацию расширения для получения поддержки'
+  },
+  {
+    en: 'Uploading extension....',
+    es: 'Subiendo extensión....',
+    fr: "Téléversement de l'extension....",
+    de: 'Erweiterung wird hochgeladen....',
+    cn: '正在上传扩展....',
+    ja: '拡張機能をアップロード中....',
+    ru: 'Загрузка расширения....'
+  },
+  {
+    en: 'Extension uploaded successfully!',
+    es: '¡Extensión subida correctamente!',
+    fr: 'Extension téléversée avec succès !',
+    de: 'Erweiterung erfolgreich hochgeladen!',
+    cn: '扩展上传成功！',
+    ja: '拡張機能が正常にアップロードされました！',
+    ru: 'Расширение успешно загружено!'
+  },
+  {
+    en: 'Extension variables',
+    es: 'Variables de extensión',
+    fr: "Variables d'extension",
+    de: 'Erweiterungsvariablen',
+    cn: '扩展变量',
+    ja: '拡張機能の変数',
+    ru: 'Переменные расширения'
+  },
+  {
+    en: 'Extension name is required',
+    es: 'El nombre de la extensión es obligatorio',
+    fr: "Le nom de l'extension est requis",
+    de: 'Der Name der Erweiterung ist erforderlich',
+    cn: '扩展名称是必填项',
+    ja: '拡張機能の名前は必須です',
+    ru: 'Название расширения обязательно'
+  },
+  {
+    en: 'Help',
+    es: 'Ayuda',
+    fr: 'Aide',
+    de: 'Hilfe',
+    cn: '帮助',
+    ja: 'ヘルプ',
+    ru: 'Помощь'
+  },
+  {
+    en: 'Note: The name for the extension should be unique, written in lowercase, with no spaces—only hyphens are allowed.',
+    es: 'Nota: El nombre de la extensión debe ser único, escrito en minúsculas, sin espacios; solo se permiten guiones.',
+    fr: "Remarque : Le nom de l'extension doit être unique, écrit en minuscules, sans espaces—seuls les traits d'union sont autorisés.",
+    de: 'Hinweis: Der Name der Erweiterung sollte eindeutig sein, in Kleinbuchstaben geschrieben und ohne Leerzeichen—nur Bindestriche sind erlaubt.',
+    cn: '注意：扩展的名称应唯一，使用小写字母书写，不能有空格，只允许使用连字符。',
+    ja: '注意：拡張機能の名前は一意である必要があり、小文字で記述し、スペースを入れず、ハイフンのみが許可されます。',
+    ru: 'Примечание: Название расширения должно быть уникальным, написано строчными буквами, без пробелов—допускаются только дефисы.'
+  },
+  {
+    en: 'Extension slug name',
+    es: 'Nombre del slug de la extensión',
+    fr: "Nom du slug de l'extension",
+    de: 'Slug-Name der Erweiterung',
+    cn: '扩展 slug 名称',
+    ja: '拡張機能スラッグ名',
+    ru: 'Слаг имени расширения'
+  },
+  {
+    en: 'Add extension',
+    es: 'Agregar extensión',
+    fr: 'Ajouter une extension',
+    de: 'Erweiterung hinzufügen',
+    cn: '添加扩展',
+    ja: '拡張機能を追加',
+    ru: 'Добавить расширение'
+  },
+  {
+    en: 'Are you sure you want to delete this extension?',
+    es: '¿Estás seguro de que deseas eliminar esta extensión?',
+    fr: 'Êtes-vous sûr de vouloir supprimer cette extension ?',
+    de: 'Sind Sie sicher, dass Sie diese Erweiterung löschen möchten?',
+    cn: '你确定要删除这个扩展吗？',
+    ja: 'この拡張機能を削除してもよろしいですか？',
+    ru: 'Вы уверены, что хотите удалить это расширение?'
+  },
+  {
+    en: 'Extension slug name exists. Please use another name.',
+    es: 'El nombre del slug de la extensión ya existe. Por favor, use otro nombre.',
+    fr: "Le nom du slug de l'extension existe déjà. Veuillez utiliser un autre nom.",
+    de: 'Der Slug-Name der Erweiterung existiert bereits. Bitte verwenden Sie einen anderen Namen.',
+    cn: '扩展 slug 名称已存在。请使用其他名称。',
+    ja: '拡張機能のスラッグ名は既に存在します。別の名前を使用してください。',
+    ru: 'Слаг имени расширения уже существует. Пожалуйста, используйте другое имя.'
+  },
+  {
+    en: 'Key',
+    es: 'Clave',
+    fr: 'Clé',
+    de: 'Schlüssel',
+    cn: '键',
+    ja: 'キー',
+    ru: 'Ключ'
+  },
+  {
+    en: 'Value',
+    es: 'Valor',
+    fr: 'Valeur',
+    de: 'Wert',
+    cn: '值',
+    ja: '値',
+    ru: 'Значение'
+  },
+  {
+    en: 'Extension variables',
+    es: 'Variables de extensión',
+    fr: "Variables d'extension",
+    de: 'Erweiterungsvariablen',
+    cn: '扩展变量',
+    ja: '拡張変数',
+    ru: 'Переменные расширения'
+  },
+  {
+    en: 'Subscription',
+    es: 'Suscripción',
+    fr: 'Abonnement',
+    de: 'Abonnement',
+    cn: '订阅',
+    ja: 'サブスクリプション',
+    ru: 'Подписка'
+  },
+  {
+    en: 'Monthly subscription fee',
+    es: 'Cuota de suscripción mensual',
+    fr: "Frais d'abonnement mensuel",
+    de: 'Monatliche Abonnementgebühr',
+    cn: '每月订阅费',
+    ja: '月額サブスクリプション料金',
+    ru: 'Ежемесячная абонентская плата'
+  },
+  {
+    en: 'Subscribe to get access to my exclusive contents via premium posts and priority DM',
+    es: 'Suscríbete para acceder a mis contenidos exclusivos a través de publicaciones premium y mensajes directos prioritarios',
+    fr: 'Abonnez-vous pour accéder à mes contenus exclusifs via des publications premium et des messages prioritaires',
+    de: 'Abonniere, um Zugang zu meinen exklusiven Inhalten über Premium-Posts und priorisierte Nachrichten zu erhalten',
+    cn: '订阅以通过高级帖子和优先私信访问我的独家内容',
+    ja: 'プレミアム投稿と優先DMを通じて私の独占コンテンツにアクセスするために購読する',
+    ru: 'Подпишитесь, чтобы получить доступ к моим эксклюзивным материалам через премиум-посты и приоритетные сообщения'
+  },
+  {
+    en: 'Subscription amount cannot be empty or zero.',
+    es: 'El monto de la suscripción no puede estar vacío o ser cero.',
+    fr: "Le montant de l'abonnement ne peut pas être vide ou nul.",
+    de: 'Der Abonnementbetrag darf nicht leer oder null sein.',
+    cn: '订阅金额不能为空或为零。',
+    ja: 'サブスクリプションの金額は空またはゼロにすることはできません。',
+    ru: 'Сумма подписки не может быть пустой или равной нулю.'
+  },
+  {
+    en: 'Subscription amount is lesser than minimum amount.',
+    es: 'El monto de la suscripción es menor que el monto mínimo.',
+    fr: "Le montant de l'abonnement est inférieur au montant minimum.",
+    de: 'Der Abonnementbetrag ist geringer als der Mindestbetrag.',
+    cn: '订阅金额低于最低金额。',
+    ja: 'サブスクリプションの金額が最低金額より少ないです。',
+    ru: 'Сумма подписки меньше минимальной суммы.'
+  },
+  {
+    en: 'Description is too short. Minimum character is ten.',
+    es: 'La descripción es demasiado corta. El mínimo de caracteres es diez.',
+    fr: 'La description est trop courte. Le nombre minimum de caractères est de dix.',
+    de: 'Die Beschreibung ist zu kurz. Die Mindestanzahl an Zeichen beträgt zehn.',
+    cn: '描述太短。最少字符数为十。',
+    ja: '説明が短すぎます。最小文字数は10文字です。',
+    ru: 'Описание слишком короткое. Минимальное количество символов - десять.'
+  },
+  {
+    en: 'Leave empty or zero, if not applicable',
+    es: 'Dejar vacío o cero, si no aplica',
+    fr: 'Laisser vide ou zéro, si non applicable',
+    de: 'Leer lassen oder null, falls nicht zutreffend',
+    cn: '如不适用，请留空或为零',
+    ja: '該当しない場合は空またはゼロのままにしてください',
+    ru: 'Оставьте пустым или нулем, если не применимо'
+  },
+  {
+    en: 'Payment settings',
+    es: 'Configuración de pagos',
+    fr: 'Paramètres de paiement',
+    de: 'Zahlungseinstellungen',
+    cn: '支付设置',
+    ja: '支払い設定',
+    ru: 'Настройки оплаты'
+  },
+  {
+    en: 'Currency',
+    es: 'Moneda',
+    fr: 'Devise',
+    de: 'Währung',
+    cn: '货币',
+    ja: '通貨',
+    ru: 'Валюта'
+  },
+  {
+    en: 'Choose one',
+    es: 'Elige uno',
+    fr: 'Choisissez-en un',
+    de: 'Wähle eins',
+    cn: '选择一个',
+    ja: '1つ選んでください',
+    ru: 'Выберите один'
+  },
+  {
+    en: 'Premium access fee (monthly)',
+    es: 'Cuota de acceso premium (mensual)',
+    fr: "Frais d'accès premium (mensuel)",
+    de: 'Premium-Zugangsgebühr (monatlich)',
+    cn: '高级访问费（月度）',
+    ja: 'プレミアムアクセス料金（月額）',
+    ru: 'Плата за премиум-доступ (ежемесячно)'
+  },
+  {
+    en: 'User subscription fee (monthly)',
+    es: 'Cuota de suscripción del usuario (mensual)',
+    fr: "Frais d'abonnement utilisateur (mensuel)",
+    de: 'Benutzerabonnementgebühr (monatlich)',
+    cn: '用户订阅费（月度）',
+    ja: 'ユーザーのサブスクリプション料金（月額）',
+    ru: 'Абонентская плата пользователя (ежемесячно)'
+  },
+  {
+    en: 'Percentage',
+    es: 'Porcentaje',
+    fr: 'Pourcentage',
+    de: 'Prozentsatz',
+    cn: '百分比',
+    ja: '割合',
+    ru: 'Процент'
+  },
+  {
+    en: 'Note: Payment received by the user when others subscribe to their premium content',
+    es: 'Nota: Pago recibido por el usuario cuando otros se suscriben a su contenido premium',
+    fr: "Remarque : Paiement reçu par l'utilisateur lorsque d'autres s'abonnent à leur contenu premium",
+    de: 'Hinweis: Zahlung, die der Benutzer erhält, wenn andere ihr Premium-Inhalt abonnieren',
+    cn: '注意：用户在其他人订阅其高级内容时收到的付款',
+    ja: '注：他のユーザーがプレミアムコンテンツを購読すると、ユーザーが受け取る支払い',
+    ru: 'Примечание: Платеж, полученный пользователем, когда другие подписываются на их премиум-контент'
+  },
+  {
+    en: 'Minimum amount',
+    es: 'Cantidad mínima',
+    fr: 'Montant minimum',
+    de: 'Mindestbetrag',
+    cn: '最低金额',
+    ja: '最低金額',
+    ru: 'Минимальная сумма'
+  },
+  {
+    en: 'Message',
+    es: 'Mensaje',
+    fr: 'Message',
+    de: 'Nachricht',
+    cn: '信息',
+    ja: 'メッセージ',
+    ru: 'Сообщение'
+  },
+  {
+    en: 'Subscribe',
+    es: 'Suscribirse',
+    fr: "S'abonner",
+    de: 'Abonnieren',
+    cn: '订阅',
+    ja: '購読する',
+    ru: 'Подписаться'
+  },
+  {
+    en: 'Free or Premium?',
+    es: '¿Gratis o Premium?',
+    fr: 'Gratuit ou Premium?',
+    de: 'Kostenlos oder Premium?',
+    cn: '免费还是高级？',
+    ja: '無料またはプレミアム？',
+    ru: 'Бесплатно или Премиум?'
+  },
+  {
+    en: 'For everyone',
+    es: 'Para todos',
+    fr: 'Pour tout le monde',
+    de: 'Für alle',
+    cn: '为所有人',
+    ja: 'みんなのために',
+    ru: 'Для всех'
+  },
+  {
+    en: 'For my subscribers',
+    es: 'Para mis suscriptores',
+    fr: 'Pour mes abonnés',
+    de: 'Für meine Abonnenten',
+    cn: '给我的订阅者',
+    ja: '私の購読者のために',
+    ru: 'Для моих подписчиков'
+  },
+  {
+    en: 'Percentage charged on user subscription fee',
+    es: 'Porcentaje cobrado en la tarifa de suscripción del usuario',
+    fr: "Pourcentage facturé sur les frais d'abonnement de l'utilisateur",
+    de: 'Prozentsatz, der auf die Abonnementgebühr des Benutzers erhoben wird',
+    cn: '用户订阅费用的百分比',
+    ja: 'ユーザーのサブスクリプション料金に対する課金率',
+    ru: 'Процент, взимаемый с абонентской платы пользователя'
+  },
+  {
+    en: 'Premium',
+    es: 'Prima',
+    fr: 'Prime',
+    de: 'Prämie',
+    cn: '高级',
+    ja: 'プレミアム',
+    ru: 'Премиум'
+  },
+  {
+    en: 'Premium post',
+    es: 'Publicación premium',
+    fr: 'Publication premium',
+    de: 'Premium-Beitrag',
+    cn: '高级帖子',
+    ja: 'プレミアム投稿',
+    ru: 'Премиум пост'
+  },
+  {
+    en: 'Icon',
+    es: 'Icono',
+    fr: 'Icône',
+    de: 'Symbol',
+    cn: '图标',
+    ja: 'アイコン',
+    ru: 'Иконка'
+  },
+  {
+    en: 'Transactions',
+    es: 'Transacciones',
+    fr: 'Transactions',
+    de: 'Transaktionen',
+    cn: '交易',
+    ja: '取引',
+    ru: 'Транзакции'
+  },
+  {
+    en: 'Subscriptions',
+    es: 'Suscripciones',
+    fr: 'Abonnements',
+    de: 'Abonnements',
+    cn: '订阅',
+    ja: 'サブスクリプション',
+    ru: 'Подписки'
+  },
+  {
+    en: 'Amount',
+    es: 'Cantidad',
+    fr: 'Montant',
+    de: 'Betrag',
+    cn: '金额',
+    ja: '金額',
+    ru: 'Сумма'
+  },
+  {
+    en: 'Narration',
+    es: 'Narración',
+    fr: 'Narration',
+    de: 'Erzählung',
+    cn: '叙述',
+    ja: 'ナレーション',
+    ru: 'Повествование'
+  },
+  {
+    en: 'Success',
+    es: 'Éxito',
+    fr: 'Succès',
+    de: 'Erfolg',
+    cn: '成功',
+    ja: '成功',
+    ru: 'Успех'
+  },
+  {
+    en: 'Failure',
+    es: 'Fracaso',
+    fr: 'Échec',
+    de: 'Fehler',
+    cn: '失败',
+    ja: '失敗',
+    ru: 'Неудача'
+  },
+  {
+    en: 'Pending',
+    es: 'Pendiente',
+    fr: 'En attente',
+    de: 'Ausstehend',
+    cn: '待定',
+    ja: '保留中',
+    ru: 'В ожидании'
+  },
+  {
+    en: 'Subscribers',
+    es: 'Suscriptores',
+    fr: 'Abonnés',
+    de: 'Abonnenten',
+    cn: '订阅者',
+    ja: '購読者',
+    ru: 'Подписчики'
+  },
+  {
+    en: 'Get access',
+    es: 'Obtener acceso',
+    fr: "Obtenir l'accès",
+    de: 'Zugang erhalten',
+    cn: '获取访问权限',
+    ja: 'アクセスを取得',
+    ru: 'Получить доступ'
+  },
+  {
+    en: 'Subscription is required to access premium content',
+    es: 'Se requiere suscripción para acceder al contenido premium',
+    fr: "L'abonnement est requis pour accéder au contenu premium",
+    de: 'Ein Abonnement ist erforderlich, um auf Premium-Inhalte zuzugreifen',
+    cn: '需要订阅才能访问高级内容',
+    ja: 'プレミアムコンテンツにアクセスするにはサブスクリプションが必要です',
+    ru: 'Для доступа к премиум-контенту требуется подписка'
+  },
+  {
+    en: 'Subscribed',
+    es: 'Suscrito',
+    fr: 'Abonné',
+    de: 'Abonniert',
+    cn: '已订阅',
+    ja: '購読中',
+    ru: 'Подписан'
+  },
+  {
+    en: 'This month',
+    es: 'Este mes',
+    fr: 'Ce mois-ci',
+    de: 'Diesen Monat',
+    cn: '这个月',
+    ja: '今月',
+    ru: 'Этот месяц'
+  },
+  {
+    en: 'Last month',
+    es: 'El mes pasado',
+    fr: 'Le mois dernier',
+    de: 'Letzten Monat',
+    cn: '上个月',
+    ja: '先月',
+    ru: 'В прошлом месяце'
+  },
+  {
+    en: '2 months ago',
+    es: 'hace 2 meses',
+    fr: 'il y a 2 mois',
+    de: 'vor 2 Monaten',
+    cn: '2个月前',
+    ja: '2ヶ月前',
+    ru: '2 месяца назад'
+  },
+  {
+    en: '3 months ago',
+    es: 'hace 3 meses',
+    fr: 'il y a 3 mois',
+    de: 'vor 3 Monaten',
+    cn: '3个月前',
+    ja: '3ヶ月前',
+    ru: '3 месяца назад'
+  },
+  {
+    en: '4 months ago',
+    es: 'hace 4 meses',
+    fr: 'il y a 4 mois',
+    de: 'vor 4 Monaten',
+    cn: '4个月前',
+    ja: '4ヶ月前',
+    ru: '4 месяца назад'
+  },
+  {
+    en: '5 months ago',
+    es: 'hace 5 meses',
+    fr: 'il y a 5 mois',
+    de: 'vor 5 Monaten',
+    cn: '5个月前',
+    ja: '5ヶ月前',
+    ru: '5 месяца назад'
+  },
+  {
+    en: '6 months ago',
+    es: 'hace 6 meses',
+    fr: 'il y a 6 mois',
+    de: 'vor 6 Monaten',
+    cn: '6个月前',
+    ja: '6ヶ月前',
+    ru: '6 месяца назад'
   }
 ];
 

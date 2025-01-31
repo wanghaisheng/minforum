@@ -105,7 +105,7 @@ export const Badge = ({
   position,
   language
 }: BadgeProps) => (
-  <span
+  <div
     className="reward"
     style={{
       backgroundColor: color
@@ -117,7 +117,7 @@ export const Badge = ({
     >
       {icon}
     </Tooltip>
-  </span>
+  </div>
 );
 
 export const Badges = ({ awards, position, language }: BadgesProps) => {

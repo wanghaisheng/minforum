@@ -1,12 +1,12 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { themeProp } from 'interfaces/theme';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
 
 export default class ThemeStore {
-  @observable loading: boolean = true;
+  @observable loading: boolean = false;
   @observable total: number = 0;
   @observable page: number = 1;
   @observable limit: number = 20;
@@ -75,7 +75,10 @@ export default class ThemeStore {
 
   @action getTheme = async (slug: string) => {
     let url = `${API_URL}/theme/${slug}`;
-    this.loading = true;
+
+    runInAction(() => {
+      this.loading = false;
+    });
 
     return await fetch(url, {
       headers: {
@@ -86,8 +89,11 @@ export default class ThemeStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.theme = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.theme = res.data;
+            this.loading = false;
+          });
+
           return res.data;
         } else {
           return false;
@@ -97,7 +103,9 @@ export default class ThemeStore {
   };
 
   @action getThemes = async () => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/theme?page=${this.page}&limit=${this.limit}`;
 
     await fetch(url, {
@@ -108,12 +116,14 @@ export default class ThemeStore {
     })
       .then((res) => res.json())
       .then((res: resProp) => {
-        if (res.success) {
-          this.themes = res.data;
-          this.loading = false;
-        } else {
-          this.loading = false;
-        }
+        runInAction(() => {
+          if (res.success) {
+            this.themes = res.data;
+            this.loading = false;
+          } else {
+            this.loading = false;
+          }
+        });
       })
       .catch((err) => console.log(err));
   };

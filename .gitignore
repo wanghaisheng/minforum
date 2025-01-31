@@ -22,6 +22,10 @@ cert.key
 # production
 /build
 
+**/__MACOSX/
+.DS_Store
+
+
 # misc
 .DS_Store
 *.pem

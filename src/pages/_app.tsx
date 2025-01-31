@@ -1,7 +1,4 @@
 import 'styles/custom.scss';
-import { config } from '@fortawesome/fontawesome-svg-core';
-import '@fortawesome/fontawesome-svg-core/styles.css';
-config.autoAddCss = false;
 
 import { useEffect, useState, useMemo, Suspense } from 'react';
 import type { AppProps } from 'next/app';
@@ -13,6 +10,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import SettingsStore from 'stores/settings';
 import ThemeStore from 'stores/theme';
 import { themeProp } from 'interfaces/theme';
+import { Extension } from 'interfaces/extension';
+import loadExtensions from 'extensions';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -24,38 +23,41 @@ const App = ({ Component, pageProps }: AppProps) => {
   const settingsStore = useMemo(() => new SettingsStore(), []);
 
   useEffect(() => {
+    const initializeExtensions = async () => {
+      const extensions: Extension[] = await loadExtensions();
+      extensions.forEach((extension: Extension) => extension.initialize?.());
+    };
+
+    initializeExtensions();
+  }, []);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      try {
+        const settings: any = await settingsStore.getSettings();
+        const themeSlug = settings?.data?.theme;
+        setThemeSlug(themeSlug);
+
+        if (themeSlug) {
+          const fetchedTheme: themeProp = await themeStore.getTheme(themeSlug);
+          let _theme =
+            fetchedTheme && fetchedTheme?.code
+              ? JSON.parse(fetchedTheme?.code)
+              : {};
+          _theme && setTheme(_theme);
+        }
+      } catch (error) {
+        console.error('Failed to fetch theme:', error);
+      } finally {
+        setLoading(false);
+        setTimeout(() => {
+          setLoaded(true);
+        }, 2000);
+      }
+    };
+
     fetchTheme();
   }, [settingsStore, themeStore]);
-
-  const fetchTheme = async () => {
-    try {
-      // Get the theme from cookies or settings
-      const settings: any = await settingsStore.getSettings();
-
-      const themeSlug = settings?.data?.theme;
-      setThemeSlug(themeSlug);
-
-      if (themeSlug) {
-        const fetchedTheme: themeProp = await themeStore.getTheme(themeSlug);
-
-        let _theme =
-          fetchedTheme && fetchedTheme?.code
-            ? JSON.parse(fetchedTheme?.code)
-            : {};
-
-        _theme && setTheme(_theme);
-      }
-    } catch (error) {
-      console.error('Failed to fetch theme:', error);
-    } finally {
-      setLoading(false);
-      setTimeout(() => {
-        setLoaded(true);
-      }, 2000);
-    }
-  };
-
-  // Create custom theme
 
   if (loading && theme === null) {
     return <Suspense fallback={<Loading />}></Suspense>;
@@ -87,6 +89,8 @@ const App = ({ Component, pageProps }: AppProps) => {
       </GeistProvider>
     );
   }
+
+  return null;
 };
 
 export default App;

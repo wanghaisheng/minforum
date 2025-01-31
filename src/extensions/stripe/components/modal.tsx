@@ -1,20 +1,40 @@
 import { useRef, useState } from 'react';
-import Link from 'next/link';
 import { Spacer, Button, Modal } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
-import { Translation } from 'components/intl/Translation';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import PaymentForm from 'components/data/stripe/payment';
+import PaymentForm from './payment';
+
+enum StripeCurrency {
+  USD = 'USD', // United States Dollar
+  EUR = 'EUR', // Euro
+  GBP = 'GBP', // British Pound Sterling
+  CAD = 'CAD', // Canadian Dollar
+  AUD = 'AUD', // Australian Dollar
+  JPY = 'JPY', // Japanese Yen
+  CHF = 'CHF', // Swiss Franc
+  CNY = 'CNY', // Chinese Yuan
+  SEK = 'SEK', // Swedish Krona
+  NZD = 'NZD', // New Zealand Dollar
+  MXN = 'MXN', // Mexican Peso
+  SGD = 'SGD', // Singapore Dollar
+  HKD = 'HKD', // Hong Kong Dollar
+  NOK = 'NOK', // Norwegian Krone
+  KRW = 'KRW', // South Korean Won
+  TRY = 'TRY', // Turkish Lira
+  INR = 'INR', // Indian Rupee
+  BRL = 'BRL', // Brazilian Real
+  ZAR = 'ZAR', // South African Rand
+  AED = 'AED' // United Arab Emirates Dirham
+}
 
 type stripeProps = {
-  lang?: string;
   loading: boolean;
   content?: string;
   show: boolean;
   amount: number;
   toggleModal: () => void;
-  save: (value: any) => void;
+  handlePayment: (value: any) => void;
 };
 
 const stripePromise = loadStripe(
@@ -22,10 +42,10 @@ const stripePromise = loadStripe(
 );
 
 const StripeModal = observer((props: stripeProps) => {
-  const { lang, loading, content, show, amount, toggleModal, save } = props;
+  const { loading, content, show, amount, toggleModal, handlePayment } = props;
 
   return (
-    <Modal visible={true}>
+    <Modal visible={show} disableBackdropClick onClose={() => toggleModal()}>
       <Modal.Content>
         <Elements stripe={stripePromise}>
           <h3>{content}</h3>

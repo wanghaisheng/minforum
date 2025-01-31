@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
 import {
   Text,
@@ -15,21 +15,15 @@ import {
   Loading,
   useClipboard,
   useToasts,
-  useMediaQuery
+  useMediaQuery,
+  Badge,
+  Grid
 } from '@geist-ui/core';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
-import {
-  ChevronDown,
-  Lock,
-  Eye,
-  Heart,
-  HeartFill,
-  AlertTriangle
-} from '@geist-ui/icons';
+import { Eye, Heart, HeartFill, AlertTriangle } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
-import CountUp from 'react-countup';
 import Navbar from 'components/Navbar';
 import useToken from 'components/Token';
 import DiscussionStore from 'stores/discussion';
@@ -42,8 +36,14 @@ import CommentModal from 'components/modals/CommentModal';
 import ReplyModal from 'components/modals/ReplyModal';
 import CommentStore from 'stores/comment';
 import LikeStore from 'stores/like';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import {
+  Translation,
+  useTranslation,
+  useTimeTranslation
+} from 'components/intl/Translation';
 import useSettings from 'components/settings';
+import { Paywall } from 'components/subscriber';
+import CustomIcon from 'components/data/icon/icon';
 
 const Discussion = observer(() => {
   const token = useToken();
@@ -54,6 +54,7 @@ const Discussion = observer(() => {
   const { setToast } = useToasts();
   const { slug }: any = router.query;
   const [modal, toggleModal] = useState(false);
+  const [showReplies, showRepliesAction] = useState(false);
   const [editModal, toggleEditModal] = useState(false);
   const [reply, toggleReply] = useState<any>({
     modal: false,
@@ -70,7 +71,6 @@ const Discussion = observer(() => {
   });
   const [content, setContent] = useState('');
   const [commentId, setCommentId] = useState('');
-  const [replyId, setReplyId] = useState('');
   const [{ newReport }] = useState(() => new ReportStore());
   const [
     {
@@ -88,21 +88,42 @@ const Discussion = observer(() => {
   const [
     {
       loading,
-      total,
-      limit,
+      nomore,
+      page,
       commentLoading,
       discussion,
       comments,
+      setPage,
       getDiscussion,
       refreshDiscussion,
       getComments,
       refreshComments,
-      updateDiscussion,
-      deleteDiscussion
+      updateDiscussion
     }
   ] = useState(() => new DiscussionStore());
-
   const { profile, category } = discussion;
+
+  const handleScroll = useCallback(() => {
+    let hash: any = router.isReady ? window.location.hash : '';
+    hash = hash.replace('#', '');
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getComments(discussion.id, true).then((res) => {
+          res.data.length
+            ? setTimeout(() => {
+                scrollToDiv(hash);
+              }, 1000)
+            : null;
+        });
+      }
+    }
+  }, [comments, nomore, page]);
 
   useEffect(() => {
     let hash: any = router.isReady ? window.location.hash : '';
@@ -111,7 +132,7 @@ const Discussion = observer(() => {
     router.isReady
       ? getDiscussion(slug).then((data: any) => {
           if (data.id) {
-            getComments(data.id).then((res) => {
+            getComments(data.id, false).then((res) => {
               res.data.length
                 ? setTimeout(() => {
                     scrollToDiv(hash);
@@ -122,7 +143,12 @@ const Discussion = observer(() => {
           }
         })
       : null;
-  }, [router]);
+  }, [router, showReplies]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const copyLink = (link: string) => {
     clipboard.copy(link);
@@ -242,7 +268,7 @@ const Discussion = observer(() => {
       })
         .then((res: any) => {
           if (res.success) {
-            getComments(discussion.id!).then(() => {
+            getComments(discussion.id!, false).then(() => {
               toggleModal(!modal);
               setContent('');
               setTimeout(() => {
@@ -271,7 +297,7 @@ const Discussion = observer(() => {
         .then((res: any) => {
           if (res.success) {
             setContent('');
-            getComments(discussion.id!).then(() => {
+            getComments(discussion.id!, false).then(() => {
               toggleEditModal(false);
               setContent('');
               setTimeout(() => {
@@ -300,10 +326,11 @@ const Discussion = observer(() => {
         .then((res: any) => {
           if (res.success) {
             setContent('');
-            getComments(discussion.id!).then(() => {
+            getComments(discussion.id!, false).then(() => {
               toggleReplyAction({ ...replyAction, modal: false });
               setContent('');
               setTimeout(() => {
+                showRepliesAction(true);
                 scrollToDiv(res.data.id);
               }, 1000);
             });
@@ -341,7 +368,7 @@ const Discussion = observer(() => {
       })
         .then((res: any) => {
           if (res.success) {
-            getComments(discussion.id!).then(() => {
+            getComments(discussion.id!, false).then(() => {
               toggleReply({
                 modal: false,
                 replyId: '',
@@ -350,6 +377,7 @@ const Discussion = observer(() => {
               });
               setContent('');
               setTimeout(() => {
+                showRepliesAction(true);
                 scrollToDiv(res.data.slug);
               }, 1000);
             });
@@ -377,7 +405,7 @@ const Discussion = observer(() => {
 
         getDiscussion(slug).then((data: any) => {
           if (data.id) {
-            getComments(data.id).then((res) => {
+            getComments(data.id, false).then((res) => {
               res.data.length
                 ? setTimeout(() => {
                     scrollToDiv(hash);
@@ -404,9 +432,10 @@ const Discussion = observer(() => {
 
         getDiscussion(slug).then((data: any) => {
           if (data.id) {
-            getComments(data.id).then((res) => {
+            getComments(data.id, false).then((res) => {
               res.data.length
                 ? setTimeout(() => {
+                    showRepliesAction(true);
                     scrollToDiv(hash);
                   }, 1000)
                 : null;
@@ -414,6 +443,21 @@ const Discussion = observer(() => {
           }
         });
       }, 2000);
+    });
+  };
+
+  const bestAnswer = async (value: string) => {
+    await updateDiscussion({
+      id: discussion?.id,
+      bestAnswer: value,
+      status: value ? 'answered' : 'unanswered'
+    }).then(() => {
+      getDiscussion(slug).then((data: any) => {
+        if (data.id) {
+          getComments(data.id, false);
+          updateDiscussion({ id: data.id, view: data.view + 1 });
+        }
+      });
     });
   };
 
@@ -469,17 +513,23 @@ const Discussion = observer(() => {
           <div className="inner">
             <Card shadow>
               <div className="center">
-                <Lock size={30} />
-                <Text>
+                <CustomIcon name={'lock-alt'} size={50} type="solid" />
+                <Spacer h={2} />
+                <Text h4>
                   <Translation
                     lang={settings?.language}
                     value={'You are required to login to access this page'}
                   />
                 </Text>
-                <Spacer />
+                <Spacer h={2} />
                 <Link href="/login">
                   <Button type="secondary">
-                    <Translation lang={settings?.language} value={'Sign in'} />
+                    <b>
+                      <Translation
+                        lang={settings?.language}
+                        value={'Sign in'}
+                      />
+                    </b>
                   </Button>
                 </Link>
                 <Spacer />
@@ -496,420 +546,626 @@ const Discussion = observer(() => {
         description={removeBanWords(discussion.title)}
       />
 
-      <div className="page-container top-100">
-        <div className="discussion-container">
-          {loading ? (
-            <Loading>
-              <Translation lang={settings?.language} value="Loading" />
-            </Loading>
-          ) : (
-            <div className="item">
-              <Text h2>{removeBanWords(discussion.title)} </Text>
-              <div className="discuss-grid block">
+      {discussion?.id && (
+        <Paywall
+          premium={discussion?.premium}
+          plan={discussion?.userId}
+          username={discussion?.profile?.username}
+          userId={token?.id}
+          language={settings?.language}
+        >
+          <div className="page-container top-100">
+            <div className="discussion-container">
+              {loading ? (
+                <Loading>
+                  <Translation lang={settings?.language} value="Loading" />
+                </Loading>
+              ) : (
                 <div className="item">
-                  <NextLink href={`/category/${category?.slug}`}>
-                    <Link font={'14px'}>
-                      <Translation lang={settings?.language} value="Category" />
-                      :&nbsp;
-                      <span style={{ color: category?.color }}>
-                        {category?.title}
-                      </span>
-                    </Link>
-                  </NextLink>{' '}
-                  {token.id === discussion.userId ? (
-                    <span>
-                      -{' '}
-                      <NextLink href={`/edit/${discussion.slug}`}>
-                        <Link font={'14px'}>
-                          <Translation
-                            lang={settings?.language}
-                            value="Edit discussion"
-                          />
-                        </Link>
-                      </NextLink>
-                    </span>
+                  {!token.id && category && category.authRequired === true ? (
+                    <div className="center">
+                      <Grid.Container gap={2} justify="center">
+                        <Grid xs={24}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                      </Grid.Container>
+                      <Grid.Container gap={2} justify="center">
+                        <Grid xs={24}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                      </Grid.Container>
+                      <Grid.Container gap={2} justify="center">
+                        <Grid xs={24}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={12}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                        <Grid xs={6}>
+                          <Card shadow width="100%" height="50px" />
+                        </Grid>
+                      </Grid.Container>
+                    </div>
                   ) : (
-                    ''
-                  )}
-                  {token.id ? (
                     <>
-                      &nbsp; - &nbsp;
-                      <Popover
-                        offset={0}
-                        content={
-                          <div>
-                            {reports.map((item: string, key) => (
-                              <Popover.Item key={key}>
-                                <Link
-                                  href="#"
-                                  onClick={() => report(discussion.id!, item)}
-                                >
-                                  {useTranslation({ lang: lang, value: item })}{' '}
-                                </Link>
-                              </Popover.Item>
-                            ))}
-                          </div>
-                        }
-                      >
-                        <Button
-                          auto
-                          scale={0.2}
-                          type="warning"
-                          font={'13px'}
-                          iconRight={<AlertTriangle size={15} />}
-                        >
-                          <Translation
-                            lang={settings?.language}
-                            value="Report"
-                          />
-                        </Button>
-                      </Popover>
-                    </>
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div className="item">
-                  <span className="right">
-                    <Text span style={{ position: 'relative', top: 7 }}>
-                      <Eye />
-                      <span
-                        style={{
-                          position: 'relative',
-                          top: -5,
-                          width: 50,
-                          paddingLeft: 5
-                        }}
-                      >
-                        <CountUp
-                          start={0}
-                          end={discussion.view!}
-                          separator={','}
-                        />
-                      </span>
-                    </Text>
-                    <Spacer inline />
-                    <ButtonDropdown type="secondary" scale={0.5} w={'50px'}>
-                      <ButtonDropdown.Item main>
-                        <Translation lang={settings?.language} value="Share" />
-                      </ButtonDropdown.Item>
-                      <ButtonDropdown.Item>
-                        <Link
-                          target="_blank"
-                          href={`https://twitter.com/intent/tweet?url=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}&text=${discussion.title}`}
-                        >
-                          <Image src="/images/x.svg" height={'18px'} />
-                          &nbsp;&nbsp;{' '}
-                          <span style={{ position: 'relative', top: -5 }}>
-                            Tweet
-                          </span>
-                        </Link>
-                      </ButtonDropdown.Item>
-                      <ButtonDropdown.Item>
-                        <Link
-                          target="_blank"
-                          href={`https://www.facebook.com/sharer/sharer.php?u=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-                        >
-                          <Image src="/images/facebook.svg" height={'18px'} />
-                          &nbsp;&nbsp;{' '}
-                          <span style={{ position: 'relative', top: -5 }}>
-                            Share
-                          </span>
-                        </Link>
-                      </ButtonDropdown.Item>
-                      <ButtonDropdown.Item>
-                        <Link
-                          target="_blank"
-                          href={`mailto:?&subject=${discussion.title}&body=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`}
-                        >
-                          <Image src="/images/mail.svg" height={'18px'} />
-                          &nbsp;&nbsp;{' '}
-                          <span style={{ position: 'relative', top: -5 }}>
-                            Email
-                          </span>
-                        </Link>
-                      </ButtonDropdown.Item>
-                      <ButtonDropdown.Item
-                        onClick={() =>
-                          copyLink(
-                            `${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`
-                          )
-                        }
-                      >
-                        <Link href="#">
-                          <Image src="/images/copy.svg" height={'18px'} />
-                          &nbsp;&nbsp;{' '}
-                          <span style={{ position: 'relative', top: -5 }}>
-                            Copy
-                          </span>
-                        </Link>
-                      </ButtonDropdown.Item>
-                    </ButtonDropdown>
-                  </span>
-                </div>
-              </div>
-
-              <div className="discussion">
-                <div className="item first">
-                  <Popover
-                    trigger="hover"
-                    content={
-                      <div style={{ padding: '0 10px' }}>
-                        <NextLink href={`/u/${profile?.username}`}>
-                          <Link color>
-                            <User
-                              src={
-                                profile && profile.photo
-                                  ? `/storage/${profile.photo}`
-                                  : '/images/avatar.png'
-                              }
-                              name={profile?.name}
+                      <Text h2 className="title">
+                        {removeBanWords(discussion.title)}{' '}
+                        {discussion?.premium && (
+                          <Tooltip
+                            text={useTranslation({
+                              lang,
+                              value: 'Premium post'
+                            })}
+                          >
+                            <Badge
+                              scale={0.5}
+                              style={{ backgroundColor: '#8B00F6' }}
                             >
-                              <Text p>
-                                <span>
+                              <CustomIcon name={'crown'} color="#fff" />
+                            </Badge>
+                          </Tooltip>
+                        )}
+                      </Text>
+                      <div className="discuss-grid block">
+                        <div className="item">
+                          <NextLink href={`/category/${category?.slug}`}>
+                            <Link font={'14px'}>
+                              <Translation
+                                lang={settings?.language}
+                                value="Category"
+                              />
+                              :&nbsp;
+                              <span style={{ color: category?.color }}>
+                                {category?.title}
+                              </span>
+                            </Link>
+                          </NextLink>{' '}
+                          {token.id === discussion.userId ? (
+                            <span>
+                              -{' '}
+                              <NextLink href={`/edit/${discussion.slug}`}>
+                                <Link font={'14px'}>
                                   <Translation
                                     lang={settings?.language}
-                                    value={profile?.role}
+                                    value="Edit discussion"
                                   />
-                                </span>
-                              </Text>
-                            </User>
-                          </Link>
-                        </NextLink>
+                                </Link>
+                              </NextLink>
+                            </span>
+                          ) : (
+                            ''
+                          )}
+                          {token.id ? (
+                            <>
+                              &nbsp; - &nbsp;
+                              <Popover
+                                offset={0}
+                                content={
+                                  <div>
+                                    {reports.map((item: string, key) => (
+                                      <Popover.Item key={key}>
+                                        <Link
+                                          href="#"
+                                          onClick={() =>
+                                            report(discussion.id!, item)
+                                          }
+                                        >
+                                          {useTranslation({
+                                            lang: lang,
+                                            value: item
+                                          })}{' '}
+                                        </Link>
+                                      </Popover.Item>
+                                    ))}
+                                  </div>
+                                }
+                              >
+                                <Button
+                                  auto
+                                  scale={0.2}
+                                  type="warning"
+                                  font={'13px'}
+                                  iconRight={<AlertTriangle size={15} />}
+                                >
+                                  <Translation
+                                    lang={settings?.language}
+                                    value="Report"
+                                  />
+                                </Button>
+                              </Popover>
+                            </>
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                        <div className="item">
+                          <div className="action-fix">
+                            <Text span style={{ position: 'relative', top: 7 }}>
+                              <Eye />
+                              <span
+                                style={{
+                                  position: 'relative',
+                                  top: -5,
+                                  width: 50,
+                                  paddingLeft: 5
+                                }}
+                              >
+                                {oneKFormat(discussion.view!)}
+                              </span>
+                            </Text>
+                            {discussion.bestAnswer && (
+                              <>
+                                <Spacer inline />
+                                <Button
+                                  auto
+                                  scale={0.5}
+                                  type="abort"
+                                  style={{
+                                    backgroundColor: '#50BA6F',
+                                    color: '#fff'
+                                  }}
+                                  onClick={() =>
+                                    scrollToDiv(discussion.bestAnswer)
+                                  }
+                                >
+                                  <Translation
+                                    lang={lang}
+                                    value={'Best response'}
+                                  />
+                                </Button>
+                              </>
+                            )}
+                            <Spacer inline />
+                            <ButtonDropdown
+                              type="secondary"
+                              scale={0.5}
+                              w={'50px'}
+                            >
+                              <ButtonDropdown.Item main>
+                                <Translation
+                                  lang={settings?.language}
+                                  value="Share"
+                                />
+                              </ButtonDropdown.Item>
+                              <ButtonDropdown.Item>
+                                <Link
+                                  target="_blank"
+                                  href={`https://twitter.com/intent/tweet?url=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}&text=${discussion.title}`}
+                                >
+                                  <Image src="/images/x.svg" height={'18px'} />
+                                  &nbsp;&nbsp;{' '}
+                                  <span
+                                    style={{ position: 'relative', top: -5 }}
+                                  >
+                                    Tweet
+                                  </span>
+                                </Link>
+                              </ButtonDropdown.Item>
+                              <ButtonDropdown.Item>
+                                <Link
+                                  target="_blank"
+                                  href={`https://www.facebook.com/sharer/sharer.php?u=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+                                >
+                                  <Image
+                                    src="/images/facebook.svg"
+                                    height={'18px'}
+                                  />
+                                  &nbsp;&nbsp;{' '}
+                                  <span
+                                    style={{ position: 'relative', top: -5 }}
+                                  >
+                                    Share
+                                  </span>
+                                </Link>
+                              </ButtonDropdown.Item>
+                              <ButtonDropdown.Item>
+                                <Link
+                                  target="_blank"
+                                  href={`mailto:?&subject=${discussion.title}&body=${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`}
+                                >
+                                  <Image
+                                    src="/images/mail.svg"
+                                    height={'18px'}
+                                  />
+                                  &nbsp;&nbsp;{' '}
+                                  <span
+                                    style={{ position: 'relative', top: -5 }}
+                                  >
+                                    Email
+                                  </span>
+                                </Link>
+                              </ButtonDropdown.Item>
+                              <ButtonDropdown.Item
+                                onClick={() =>
+                                  copyLink(
+                                    `${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}%0A${discussion.title}`
+                                  )
+                                }
+                              >
+                                <Link href="#">
+                                  <Image
+                                    src="/images/copy.svg"
+                                    height={'18px'}
+                                  />
+                                  &nbsp;&nbsp;{' '}
+                                  <span
+                                    style={{ position: 'relative', top: -5 }}
+                                  >
+                                    Copy
+                                  </span>
+                                </Link>
+                              </ButtonDropdown.Item>
+                            </ButtonDropdown>
+                          </div>
+                        </div>
                       </div>
-                    }
-                  >
-                    <NextLink href={`/u/${profile?.username}`}>
-                      <Avatar
-                        src={
-                          profile && profile.photo
-                            ? `/storage/${profile.photo}`
-                            : '/images/avatar.png'
-                        }
-                        w={isXS ? 1.2 : 2.3}
-                        h={isXS ? 1.2 : 2.3}
-                        style={{ marginRight: isXS ? 5 : 0 }}
-                      />
-                    </NextLink>
-                  </Popover>
+
+                      <div className="discussion">
+                        <div className="item first">
+                          <Popover
+                            placement="rightStart"
+                            trigger="hover"
+                            content={
+                              <div className="popover-adjust">
+                                <NextLink href={`/u/${profile?.username}`}>
+                                  <Link color>
+                                    <User
+                                      src={
+                                        profile && profile.photo
+                                          ? `/storage/${profile.photo}`
+                                          : '/images/avatar.png'
+                                      }
+                                      name={profile?.name}
+                                    >
+                                      <Text p>
+                                        <span>
+                                          <Translation
+                                            lang={settings?.language}
+                                            value={profile?.role}
+                                          />
+                                        </span>
+                                      </Text>
+                                    </User>
+                                  </Link>
+                                </NextLink>
+                              </div>
+                            }
+                          >
+                            <NextLink href={`/u/${profile?.username}`}>
+                              <Avatar
+                                src={
+                                  profile && profile.photo
+                                    ? `/storage/${profile.photo}`
+                                    : '/images/avatar.png'
+                                }
+                                w={isXS ? 1.2 : 2.3}
+                                h={isXS ? 1.2 : 2.3}
+                                style={{ marginRight: isXS ? 5 : 0 }}
+                              />
+                            </NextLink>
+                          </Popover>
+                        </div>
+                        <div className="item">
+                          <Text h5>
+                            <NextLink href={`/u/${profile?.username}`}>
+                              <Link>{profile?.username}</Link>
+                            </NextLink>
+                            &nbsp;&nbsp;
+                            {discussion && discussion?.edited === true && (
+                              <Tooltip
+                                text={useTimeTranslation({
+                                  lang: lang,
+                                  date: new Date(discussion?.updatedAt)
+                                })}
+                              >
+                                <Text small style={{ color: '#555' }}>
+                                  [{discussion.edited ? 'edited' : ''}]
+                                  &nbsp;&nbsp;
+                                </Text>
+                              </Tooltip>
+                            )}
+                            <Text small>
+                              {renderDate(discussion.createdAt)}
+                            </Text>
+                          </Text>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: removeBanWords(discussion.content)
+                            }}
+                          ></div>
+                          <Tooltip
+                            placement="right"
+                            text={useTranslation({
+                              lang: settings?.language,
+                              value:
+                                'Click on the number count to who see liked.'
+                            })}
+                          >
+                            {discussion.id ? (
+                              <span
+                                className="pointer"
+                                onClick={() =>
+                                  likeDiscussionAction(discussion.id!)
+                                }
+                              >
+                                {isActiveLiked(discussion.likes!) ? (
+                                  <HeartFill color="#cb0000" size={16} />
+                                ) : (
+                                  <Heart size={16} />
+                                )}
+                              </span>
+                            ) : (
+                              ''
+                            )}
+                            <Popover
+                              placement="rightStart"
+                              content={
+                                <div
+                                  style={{ maxHeight: 100, overflow: 'auto' }}
+                                >
+                                  {discussion.id
+                                    ? discussion.likes!.map((item: any) => (
+                                        <NextLink
+                                          href={`/u/${item.profile.username}`}
+                                          key={item.id}
+                                        >
+                                          <Link style={{ display: 'block' }}>
+                                            <User
+                                              src={
+                                                item.profile &&
+                                                item.profile.photo
+                                                  ? `/storage/${item.profile.photo}`
+                                                  : '/images/avatar.png'
+                                              }
+                                              name={item.profile.name}
+                                            />
+                                          </Link>
+                                        </NextLink>
+                                      ))
+                                    : ''}
+                                </div>
+                              }
+                            >
+                              <Text className="like-btn" span>
+                                {discussion.id
+                                  ? oneKFormat(discussion.likes!.length)
+                                  : 0}
+                              </Text>
+                            </Popover>
+                          </Tooltip>
+                          <Text
+                            small
+                            className="reply-btn"
+                            onClick={() => toggleModal(!modal)}
+                          >
+                            <Translation
+                              lang={settings?.language}
+                              value="Comment"
+                            />
+                          </Text>
+                        </div>
+                      </div>
+                      <Spacer />
+                      {commentLoading ? (
+                        <Loading>
+                          <Translation
+                            lang={settings?.language}
+                            value="Loading replies"
+                          />
+                        </Loading>
+                      ) : (
+                        ''
+                      )}
+                      {comments.map((item: any, key) => (
+                        <Reply
+                          lang={settings?.language}
+                          key={item.slug}
+                          id={item.id}
+                          activeUser={token.id!}
+                          userId={item.userId}
+                          authorId={discussion.userId}
+                          name={item.author.name}
+                          username={item.author.username}
+                          role={item.author.role}
+                          photo={
+                            item.author.photo
+                              ? `/storage/` + item.author.photo
+                              : '/images/avatar.png'
+                          }
+                          replies={item.replies}
+                          likes={item.likes}
+                          content={item.comment}
+                          bestAnswer={discussion.bestAnswer}
+                          showReplies={showReplies}
+                          edited={item.edited}
+                          date={item.createdAt}
+                          lastEdited={item.updatedAt}
+                          replyTrigger={() => {
+                            setContent('');
+                            toggleCommentBox(
+                              item.id,
+                              item.author.username,
+                              key + 1
+                            );
+                          }}
+                          commentDeletion={commentDeletion}
+                          replyDeletion={replyDeletion}
+                          likeTrigger={() => likeCommentAction(item.id!)}
+                          likeTriggerX={(val: string) => likeReplyAction(val)}
+                          commentUpdateTrigger={(id: string, comment: string) =>
+                            editComment(id, comment)
+                          }
+                          bestAnswerTrigger={bestAnswer}
+                          replyUpdateTrigger={(id: string, comment: string) =>
+                            editReply(id, comment)
+                          }
+                        />
+                      ))}
+                    </>
+                  )}
                 </div>
-                <div className="item">
-                  <Text h5>
-                    <NextLink href={`/u/${profile?.username}`}>
-                      <Link>{profile?.name}</Link>
-                    </NextLink>
-                    &nbsp;&nbsp;
-                    <Text small>{renderDate(discussion.createdAt)}</Text>
-                  </Text>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: removeBanWords(discussion.content)
-                    }}
-                  ></div>
-                  <Tooltip
-                    placement="right"
-                    text={useTranslation({
-                      lang: settings?.language,
-                      value: 'Click on the number count to who see liked.'
-                    })}
-                  >
+              )}
+              <div className="item">
+                <aside className="max">
+                  <div className="sidenav max-width">
                     {discussion.id ? (
-                      <span
-                        className="pointer"
-                        onClick={() => likeDiscussionAction(discussion.id!)}
-                      >
-                        {isActiveLiked(discussion.likes!) ? (
-                          <HeartFill color="#cb0000" size={16} />
-                        ) : (
-                          <Heart size={16} />
-                        )}
-                      </span>
+                      <Recommendation
+                        lang={settings?.language}
+                        title={discussion.title!}
+                        category={discussion.categoryId!}
+                      />
                     ) : (
                       ''
                     )}
-                    <Popover
-                      content={
-                        <div style={{ maxHeight: 100, overflow: 'auto' }}>
-                          {discussion.id
-                            ? discussion.likes!.map((item: any) => (
-                                <NextLink
-                                  href={`/u/${item.profile.username}`}
-                                  key={item.id}
-                                >
-                                  <Link style={{ display: 'block' }}>
-                                    <User
-                                      src={
-                                        item.profile && item.profile.photo
-                                          ? `/storage/${item.profile.photo}`
-                                          : '/images/avatar.png'
-                                      }
-                                      name={item.profile.name}
-                                    />
-                                  </Link>
-                                </NextLink>
-                              ))
-                            : ''}
-                        </div>
-                      }
-                    >
-                      <Text className="like-btn" span>
-                        {discussion.id
-                          ? oneKFormat(discussion.likes!.length)
-                          : 0}
-                      </Text>
-                    </Popover>
-                  </Tooltip>
-                  <Text
-                    small
-                    className="reply-btn"
-                    onClick={() => toggleModal(!modal)}
-                  >
-                    <Translation lang={settings?.language} value="Reply" />
-                  </Text>
-                </div>
+
+                    {settings.advert?.right ? (
+                      <Card>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: settings.advert?.right!
+                          }}
+                        ></div>
+                      </Card>
+                    ) : (
+                      ''
+                    )}
+                    <Spacer h={4} />
+                  </div>
+                </aside>
               </div>
-              <Spacer />
-              {commentLoading ? (
-                <Loading>
-                  <Translation
-                    lang={settings?.language}
-                    value="Loading replies"
-                  />
-                </Loading>
-              ) : (
-                ''
-              )}
-              {comments.map((item: any, key) => (
-                <Reply
-                  lang={settings?.language}
-                  key={item.slug}
-                  id={item.id}
-                  activeUser={token.id!}
-                  userId={item.userId}
-                  name={item.author.name}
-                  username={item.author.username}
-                  role={item.author.role}
-                  photo={
-                    item.author.photo
-                      ? `/storage/` + item.author.photo
-                      : '/images/avatar.png'
-                  }
-                  replies={item.replies}
-                  likes={item.likes}
-                  content={item.comment}
-                  edited={item.edited}
-                  date={item.createdAt}
-                  lastEdited={item.updatedAt}
-                  replyTrigger={() => {
-                    setContent('');
-                    toggleCommentBox(item.id, item.author.username, key + 1);
-                  }}
-                  commentDeletion={commentDeletion}
-                  replyDeletion={replyDeletion}
-                  likeTrigger={() => likeCommentAction(item.id!)}
-                  likeTriggerX={(val: string) => likeReplyAction(val)}
-                  commentUpdateTrigger={(id: string, comment: string) =>
-                    editComment(id, comment)
-                  }
-                  replyUpdateTrigger={(id: string, comment: string) =>
-                    editReply(id, comment)
-                  }
-                />
-              ))}
-              <Spacer />
-              {total >= limit ? (
-                <div className="pagination">
-                  <Button type="abort" iconRight={<ChevronDown />}>
-                    <Translation lang={settings?.language} value="Load more" />
-                  </Button>
-                </div>
-              ) : (
-                ''
-              )}
             </div>
-          )}
-          <div className="item">
-            <aside className="max">
-              <div className="sidenav max-width">
-                {discussion.id ? (
-                  <Recommendation
-                    lang={settings?.language}
-                    title={discussion.title!}
-                    category={discussion.categoryId!}
-                  />
-                ) : (
-                  ''
-                )}
 
-                {settings.advert?.right ? (
-                  <Card>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: settings.advert?.right!
-                      }}
-                    ></div>
-                  </Card>
-                ) : (
-                  ''
-                )}
-                <Spacer h={4} />
-              </div>
-            </aside>
+            <Spacer h={5} />
+
+            <CommentModal
+              lang={settings.language}
+              loading={commentLoading}
+              content={content}
+              show={modal}
+              isAuthenticate={token.id ? true : false}
+              toggleModal={() => toggleModal(!modal)}
+              actionTrigger={setContent}
+              save={saveComment}
+            />
+
+            <CommentModal
+              lang={settings.language}
+              loading={commentLoading}
+              content={content}
+              show={editModal}
+              isAuthenticate={token.id ? true : false}
+              toggleModal={() => toggleEditModal(!editModal)}
+              actionTrigger={setContent}
+              save={saveEditComment}
+            />
+
+            <ReplyModal
+              lang={settings.language}
+              loading={commentLoading}
+              content={content}
+              show={replyAction.modal}
+              replyId={replyAction.replyId}
+              replyUsername={replyAction.username}
+              commentNumber={replyAction.comment}
+              isAuthenticate={token.id ? true : false}
+              toggleModal={() =>
+                toggleReplyAction({ ...replyAction, modal: !replyAction.modal })
+              }
+              actionTrigger={setContent}
+              save={saveEditReply}
+            />
+
+            <ReplyModal
+              lang={settings.language}
+              loading={commentLoading}
+              content={content}
+              show={reply.modal}
+              replyId={reply.replyId}
+              replyUsername={reply.username}
+              commentNumber={reply.comment}
+              isAuthenticate={token.id ? true : false}
+              toggleModal={() => toggleReply({ ...reply, modal: !reply.modal })}
+              actionTrigger={setContent}
+              save={saveReply}
+            />
           </div>
-        </div>
-
-        <CommentModal
-          lang={settings.language}
-          loading={commentLoading}
-          content={content}
-          show={modal}
-          isAuthenticate={token.id ? true : false}
-          toggleModal={() => toggleModal(!modal)}
-          actionTrigger={setContent}
-          save={saveComment}
-        />
-
-        <CommentModal
-          lang={settings.language}
-          loading={commentLoading}
-          content={content}
-          show={editModal}
-          isAuthenticate={token.id ? true : false}
-          toggleModal={() => toggleEditModal(!editModal)}
-          actionTrigger={setContent}
-          save={saveEditComment}
-        />
-
-        <ReplyModal
-          lang={settings.language}
-          loading={commentLoading}
-          content={content}
-          show={replyAction.modal}
-          replyId={replyAction.replyId}
-          replyUsername={replyAction.username}
-          commentNumber={replyAction.comment}
-          isAuthenticate={token.id ? true : false}
-          toggleModal={() =>
-            toggleReplyAction({ ...replyAction, modal: !replyAction.modal })
-          }
-          actionTrigger={setContent}
-          save={saveEditReply}
-        />
-
-        <ReplyModal
-          lang={settings.language}
-          loading={commentLoading}
-          content={content}
-          show={reply.modal}
-          replyId={reply.replyId}
-          replyUsername={reply.username}
-          commentNumber={reply.comment}
-          isAuthenticate={token.id ? true : false}
-          toggleModal={() => toggleReply({ ...reply, modal: !reply.modal })}
-          actionTrigger={setContent}
-          save={saveReply}
-        />
-      </div>
+        </Paywall>
+      )}
     </div>
   );
 });

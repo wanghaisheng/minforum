@@ -1,9 +1,11 @@
-import { Text, Spacer } from '@geist-ui/core';
+import { Text, Spacer, Tooltip, Badge } from '@geist-ui/core';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import { oneKFormat } from './api/utils';
 import { Comment01Icon, ViewIcon } from 'hugeicons-react';
+import CustomIcon from './data/icon/icon';
+import { useTranslation } from './intl/Translation';
 
 type postProps = {
   lang: string;
@@ -12,12 +14,14 @@ type postProps = {
   view?: string;
   slug: string;
   category?: string;
+  premium?: boolean;
   color?: string;
   date: Date;
 };
 
 const MinimalPost = (props: postProps) => {
-  const { lang, title, comment, view, color, category, slug, date } = props;
+  const { lang, title, comment, view, color, category, premium, slug, date } =
+    props;
 
   const renderDate = (value: any) => {
     const date: any = value
@@ -50,7 +54,14 @@ const MinimalPost = (props: postProps) => {
       <div className="post minimal pointer without-right">
         <div className="item">
           <Text h1 className="title">
-            {title}
+            {title}{' '}
+            {premium && (
+              <Tooltip text={useTranslation({ lang, value: 'Premium post' })}>
+                <Badge scale={0.5} style={{ backgroundColor: '#8B00F6' }}>
+                  <CustomIcon name="crown" color="#fff" size={14} />
+                </Badge>
+              </Tooltip>
+            )}
           </Text>
           <Text b className="name" style={{ color }}>
             {category}

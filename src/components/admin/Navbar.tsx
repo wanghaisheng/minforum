@@ -58,7 +58,7 @@ const Navbar = observer((props: navbarProps) => {
     <div>
       <Popover.Item>
         <NextLink href={`/u/${token.username}`}>
-          <Link>
+          <Link href={`/u/${token.username}`}>
             <Translation lang={settings?.language} value="Profile" />
           </Link>
         </NextLink>
@@ -68,7 +68,7 @@ const Navbar = observer((props: navbarProps) => {
         <>
           <Popover.Item>
             <NextLink href="/admin">
-              <Link>
+              <Link href="/admin">
                 <Translation lang={settings?.language} value="Admin" />
               </Link>
             </NextLink>
@@ -104,7 +104,7 @@ const Navbar = observer((props: navbarProps) => {
 
       <Text p>
         <NextLink href={`/u/${token.username}`}>
-          <Link>
+          <Link href={`/u/${token.username}`}>
             <Translation lang={settings?.language} value="Profile" />
           </Link>
         </NextLink>
@@ -112,7 +112,7 @@ const Navbar = observer((props: navbarProps) => {
       {token.role === 'admin' ? (
         <Text p>
           <NextLink href="/admin">
-            <Link>
+            <Link href="/admin">
               <Translation lang={settings?.language} value="Admin" />
             </Link>
           </NextLink>
@@ -122,7 +122,7 @@ const Navbar = observer((props: navbarProps) => {
       )}
       <Text p>
         <NextLink href="/settings">
-          <Link>
+          <Link href="/settings">
             <Translation lang={settings?.language} value="Settings" />
           </Link>
         </NextLink>
@@ -140,6 +140,7 @@ const Navbar = observer((props: navbarProps) => {
     <div className="navbar">
       <Head>
         <meta name="description" content={description} />
+        <meta name="robots" content="noindex, nofollow" />
         <title>{title}</title>
         <link rel="icon" href={`/storage/${settings.siteFavicon}`} />
       </Head>
@@ -154,7 +155,7 @@ const Navbar = observer((props: navbarProps) => {
           <Grid.Container gap={0}>
             <Grid xs={18} md={6}>
               <NextLink href="/">
-                <Link>
+                <Link href="/">
                   {settings.siteLogo ? (
                     <Image
                       className="site-logo"
@@ -168,7 +169,7 @@ const Navbar = observer((props: navbarProps) => {
               </NextLink>
               <Spacer inline />
               <NextLink href="/">
-                <Link>
+                <Link href="/">
                   <Translation
                     lang={settings?.language}
                     value="Go to Discussions"
@@ -217,7 +218,7 @@ const Navbar = observer((props: navbarProps) => {
                       ''
                     )}
                     <NextLink href="/notifications">
-                      <Link>
+                      <Link href="/notifications">
                         <Bell />
                       </Link>
                     </NextLink>

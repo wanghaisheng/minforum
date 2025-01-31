@@ -24,7 +24,7 @@ const analytics = async (req: NextApiRequest, res: NextApiResponse) => {
           res.send({ success: true, data });
         })
         .catch((err: any) => {
-          signale.fatal(err, req, res);
+          signale.fatal(err);
           res.send({
             success: false,
             message: 'Error fetching user analytics!'

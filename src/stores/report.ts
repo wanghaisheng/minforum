@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { reportProp } from 'interfaces/report';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -85,7 +85,9 @@ export default class ReportStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.report = res.data;
+          runInAction(() => {
+            this.report = res.data;
+          });
           return res.data.id;
         } else {
           return false;
@@ -95,7 +97,9 @@ export default class ReportStore {
   };
 
   @action getReports = async () => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/report?page=${this.page}&limit=${this.limit}`;
 
     await fetch(url, {
@@ -107,8 +111,10 @@ export default class ReportStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.reports = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.reports = res.data;
+            this.loading = false;
+          });
         } else {
           this.loading = false;
         }
@@ -117,8 +123,10 @@ export default class ReportStore {
   };
 
   @action searchReport = async (query: string) => {
-    this.loading = true;
-    this.reports = [];
+    runInAction(() => {
+      this.reports = [];
+      this.loading = false;
+    });
     let url = `${API_URL}/report/search?page=${this.page}&limit=${this.limit}&query=${query}`;
 
     await fetch(url, {
@@ -131,12 +139,16 @@ export default class ReportStore {
       .then((res: resProp) => {
         if (res.success) {
           setTimeout(() => {
-            this.total = res.count;
-            this.reports = res.data;
-            this.loading = false;
+            runInAction(() => {
+              this.total = res.count;
+              this.reports = res.data;
+              this.loading = false;
+            });
           }, 1000);
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

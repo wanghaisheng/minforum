@@ -90,7 +90,9 @@ export default class NotificationStore {
   };
 
   @action getNotification = async (id?: string) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/notification/${id}`;
 
     await fetch(url, {
@@ -102,10 +104,14 @@ export default class NotificationStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.notification = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.notification = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -132,7 +138,10 @@ export default class NotificationStore {
   };
 
   @action getNotifications = async (id: string, paginate: boolean) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
+
     let url = `${API_URL}/notification?page=${this.page}&limit=${this.limit}&userId=${id}`;
 
     await fetch(url, {

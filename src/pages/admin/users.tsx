@@ -46,25 +46,25 @@ const Admin = observer(() => {
   ] = useState(() => new UserStore());
 
   useEffect(() => {
-    getUsers();
+    getUsers('newest');
   }, [token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
-    getUsers();
+    getUsers('newest');
   };
 
   const handleSearch = (e: any) => {
     setPage(1);
     let value = e.target.value;
-    value.length ? searchUsers(value) : getUsers();
+    value.length ? searchUsers(value) : getUsers('newest');
   };
 
   const handleChange = async (val: userProp) => {
     await updateUser(val).then((res: any) => {
       if (res.success) {
         setUser(val);
-        getUsers();
+        getUsers('newest');
         toast.success(
           useTranslation({
             lang: settings?.language,
@@ -184,9 +184,14 @@ const Admin = observer(() => {
                 value: 'Role'
               })}
             />
-            {/* <Table.Column prop="_" label="Status" render={renderStatus} /> */}
             <Table.Column
-              // width={220}
+              prop="subscriptions"
+              label={useTranslation({
+                lang: settings?.language,
+                value: 'Subscribers'
+              })}
+            />
+            <Table.Column
               prop="createdAt"
               label={useTranslation({
                 lang: settings?.language,
@@ -200,15 +205,9 @@ const Admin = observer(() => {
                 lang: settings?.language,
                 value: 'Action'
               })}
-              // width={100}
               render={renderAction}
             />
-            <Table.Column
-              prop="action2"
-              label=""
-              // width={50}
-              render={renderView}
-            />
+            <Table.Column prop="action2" label="" render={renderView} />
           </Table>
           <Spacer />
           {loading ? (

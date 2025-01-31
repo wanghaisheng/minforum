@@ -9,7 +9,7 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
       let offset = 0;
-      let { page, limit }: any = req.query;
+      let { page, limit, filter }: any = req.query;
       page = Number(page);
       limit = Number(limit);
 
@@ -18,7 +18,18 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         offset = offset - limit;
       }
 
-      await User.orderBy(r.desc('createdAt'))
+      filter = filter?.toLowerCase();
+
+      filter =
+        filter === 'newest'
+          ? 'createdAt'
+          : filter === 'popular'
+            ? 'point'
+            : filter === 'decorated'
+              ? 'badges'
+              : 'createdAt';
+
+      await User.orderBy(r.desc(filter))
         .skip(offset)
         .limit(limit)
         .then(async (data: userProp[]) => {
@@ -30,9 +41,17 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
           await User.orderBy(r.desc('createdAt')).then(async (c: any) => {
             let members: userProp[] = [];
             await asyncForEach(data, async (item: userProp) => {
+              let subscriptions = await r
+                .table('user-subscriptions')
+                .filter({ plan: item.id, active: true })
+                .count();
               await Discussion.filter({ userId: item.id }).then(
                 (discussions: discussionProp[]) => {
-                  item = { ...item, discussion: discussions.length };
+                  item = {
+                    ...item,
+                    discussion: discussions.length,
+                    subscriptions: `${subscriptions}`
+                  };
                   members.push(item);
                 }
               );

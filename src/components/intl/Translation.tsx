@@ -221,6 +221,7 @@ const useTimeTranslation = (props: timeTranslationProps): string => {
 
   // Step 3: Get the unit based on the language
   const unit =
+    lang &&
     durationMap[lang][
       ['min', 'hour', 'day', 'month', 'year'].indexOf(duration)
     ];

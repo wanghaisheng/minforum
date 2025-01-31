@@ -1,4 +1,4 @@
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { pageviewProp } from 'interfaces/pageview';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -33,7 +33,9 @@ export default class PageviewStore {
   };
 
   @action getTopPageview = async (slug: string) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/pageview/top/${slug}`;
 
     await fetch(url, {
@@ -62,13 +64,17 @@ export default class PageviewStore {
             url: 'urls'
           };
 
-          if (categories.includes(slug) || slug === 'page') {
-            this[categoryMap[slug]] = res.data;
-          }
+          runInAction(() => {
+            if (categories.includes(slug) || slug === 'page') {
+              this[categoryMap[slug]] = res.data;
+            }
 
-          this.loading = false;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -87,11 +93,15 @@ export default class PageviewStore {
       .then((res) => res.json())
       .then((res: any) => {
         if (res.success) {
-          this.pageviews = res.data;
-          this.total = res.count;
-          this.loading = false;
+          runInAction(() => {
+            this.pageviews = res.data;
+            this.total = res.count;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

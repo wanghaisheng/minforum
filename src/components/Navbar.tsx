@@ -31,7 +31,6 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import useToken from './Token';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
 import NotificationStore from 'stores/notification';
 import { Translation, useTranslation } from 'components/intl/Translation';
@@ -120,7 +119,7 @@ const Navbar = observer((props: navbarProps) => {
     <div>
       <Popover.Item>
         <NextLink href={`/u/${token.username}`}>
-          <Link>
+          <Link href={`/u/${token.username}`}>
             <Translation lang={settings?.language} value="Profile" />
           </Link>
         </NextLink>
@@ -130,7 +129,7 @@ const Navbar = observer((props: navbarProps) => {
         <>
           <Popover.Item>
             <NextLink href="/admin">
-              <Link>
+              <Link href="/admin">
                 <Translation lang={settings?.language} value="Admin" />
               </Link>
             </NextLink>
@@ -142,7 +141,7 @@ const Navbar = observer((props: navbarProps) => {
       )}
       <Popover.Item>
         <NextLink href="/settings">
-          <Link>
+          <Link href="/settings">
             <Translation lang={settings?.language} value="Settings" />
           </Link>
         </NextLink>
@@ -170,7 +169,7 @@ const Navbar = observer((props: navbarProps) => {
 
           <Text p>
             <NextLink href="/start-discussion">
-              <Link>
+              <Link href="/start-discussion">
                 <Translation
                   lang={settings?.language}
                   value="Start a discussion"
@@ -180,28 +179,28 @@ const Navbar = observer((props: navbarProps) => {
           </Text>
           <Text p>
             <NextLink href="/">
-              <Link>
+              <Link href="/">
                 <Translation lang={settings?.language} value="Discussions" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href="/category">
-              <Link>
+              <Link href="/category">
                 <Translation lang={settings?.language} value="Categories" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href="/members">
-              <Link>
+              <Link href="/members">
                 <Translation lang={settings?.language} value="Members" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href={`/u/${token.username}`}>
-              <Link>
+              <Link href={`/u/${token.username}`}>
                 <Translation lang={settings?.language} value="Profile" />
               </Link>
             </NextLink>
@@ -209,7 +208,7 @@ const Navbar = observer((props: navbarProps) => {
           {roles.includes(token.role) ? (
             <Text p>
               <NextLink href="/admin">
-                <Link>
+                <Link href="/admin">
                   <Translation lang={settings?.language} value="Admin" />
                 </Link>
               </NextLink>
@@ -219,7 +218,7 @@ const Navbar = observer((props: navbarProps) => {
           )}
           <Text p>
             <NextLink href="/settings">
-              <Link>
+              <Link href="/settings">
                 <Translation lang={settings?.language} value="Settings" />
               </Link>
             </NextLink>
@@ -235,35 +234,35 @@ const Navbar = observer((props: navbarProps) => {
         <>
           <Text p>
             <NextLink href="/">
-              <Link>
+              <Link href="/">
                 <Translation lang={settings?.language} value="Discussions" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href="/category">
-              <Link>
+              <Link href="/category">
                 <Translation lang={settings?.language} value="Categories" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href="/members">
-              <Link>
+              <Link href="/members">
                 <Translation lang={settings?.language} value="Members" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href="/signup">
-              <Link>
+              <Link href="/signup">
                 <Translation lang={settings?.language} value="Signup" />
               </Link>
             </NextLink>
           </Text>
           <Text p>
             <NextLink href="/login">
-              <Link>
+              <Link href="/login">
                 <Translation lang={settings?.language} value="Login" />
               </Link>
             </NextLink>
@@ -355,11 +354,9 @@ const Navbar = observer((props: navbarProps) => {
                       {discussions.map((item) => (
                         <div key={item.id}>
                           <NextLink href={`/d/${item.slug}`}>
-                            <Link width="100%">
-                              <Text h5 mb="0">
-                                {item.title}
-                              </Text>
-                            </Link>
+                            <Text h5 mb="0">
+                              {item.title}
+                            </Text>
                           </NextLink>
                         </div>
                       ))}
@@ -375,24 +372,22 @@ const Navbar = observer((props: navbarProps) => {
                       {users.map((item) => (
                         <div key={item.id}>
                           <NextLink href={`/u/${item.username}`}>
-                            <Link width="100%" mb={1}>
-                              <User
-                                scale={2}
-                                src={`${
-                                  item.photo
-                                    ? '/storage/' + item.photo
-                                    : '/images/avatar.png'
-                                }`}
-                                name={
-                                  <h5 style={{ marginTop: 10 }}>
-                                    {item.name} &nbsp;&nbsp;
-                                    <Text small className="username">
-                                      @{item.username}
-                                    </Text>
-                                  </h5>
-                                }
-                              ></User>
-                            </Link>
+                            <User
+                              scale={2}
+                              src={`${
+                                item.photo
+                                  ? '/storage/' + item.photo
+                                  : '/images/avatar.png'
+                              }`}
+                              name={
+                                <h5 style={{ marginTop: 10 }}>
+                                  {item.name} &nbsp;&nbsp;
+                                  <Text small className="username">
+                                    @{item.username}
+                                  </Text>
+                                </h5>
+                              }
+                            ></User>
                           </NextLink>
                         </div>
                       ))}
@@ -418,7 +413,7 @@ const Navbar = observer((props: navbarProps) => {
               <Grid.Container gap={0}>
                 <Grid xs={token?.id ? 12 : 19} md={5}>
                   <NextLink href="/">
-                    <Link>
+                    <Link href="/">
                       {settings.siteLogo ? (
                         <Image
                           className="site-logo"
@@ -434,7 +429,7 @@ const Navbar = observer((props: navbarProps) => {
                 </Grid>
                 <Grid xs={0} md={12}>
                   <NextLink href="/">
-                    <Link>
+                    <Link href="/">
                       <Translation
                         lang={settings?.language}
                         value="Discussions"
@@ -444,7 +439,7 @@ const Navbar = observer((props: navbarProps) => {
 
                   <Spacer inline />
                   <NextLink href="/category">
-                    <Link>
+                    <Link href="/category">
                       <Translation
                         lang={settings?.language}
                         value="Categories"
@@ -453,7 +448,7 @@ const Navbar = observer((props: navbarProps) => {
                   </NextLink>
                   <Spacer inline />
                   <NextLink href="/members">
-                    <Link>
+                    <Link href="/members">
                       <Translation lang={settings?.language} value="Members" />
                     </Link>
                   </NextLink>
@@ -478,7 +473,7 @@ const Navbar = observer((props: navbarProps) => {
                             ''
                           )}
                           <NextLink href="/messages">
-                            <Link>
+                            <Link href="/messages">
                               <Mail />
                             </Link>
                           </NextLink>
@@ -497,7 +492,7 @@ const Navbar = observer((props: navbarProps) => {
                             ''
                           )}
                           <NextLink href="/notifications">
-                            <Link>
+                            <Link href="/notifications">
                               <Bell />
                             </Link>
                           </NextLink>
@@ -528,7 +523,7 @@ const Navbar = observer((props: navbarProps) => {
                       </span>
                       <Spacer w={1.5} inline />
                       <NextLink href="/start-discussion">
-                        <Link>
+                        <Link href="/start-discussion">
                           <Edit />
                         </Link>
                       </NextLink>
@@ -543,7 +538,7 @@ const Navbar = observer((props: navbarProps) => {
                           ''
                         )}
                         <NextLink href="/messages">
-                          <Link>
+                          <Link href="/messages">
                             <Mail />
                           </Link>
                         </NextLink>
@@ -558,7 +553,7 @@ const Navbar = observer((props: navbarProps) => {
                           ''
                         )}
                         <NextLink href="/notifications">
-                          <Link>
+                          <Link href="/notifications">
                             <Bell />
                           </Link>
                         </NextLink>
@@ -588,7 +583,7 @@ const Navbar = observer((props: navbarProps) => {
                       </span>
                       <Spacer w={2} inline />
                       <NextLink href="/signup">
-                        <Link>
+                        <Link href="/signup">
                           <Translation
                             lang={settings?.language}
                             value="Signup"
@@ -597,7 +592,7 @@ const Navbar = observer((props: navbarProps) => {
                       </NextLink>
                       <Spacer w={2} inline />
                       <NextLink href="/login">
-                        <Link>
+                        <Link href="/login">
                           <Translation
                             lang={settings?.language}
                             value="Login"

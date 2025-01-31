@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { messageProp } from 'interfaces/message';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -85,7 +85,9 @@ export default class MessageStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.unread_message = res.total;
+          runInAction(() => {
+            this.unread_message = res.total;
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -103,7 +105,9 @@ export default class MessageStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.messages = res.data;
+          runInAction(() => {
+            this.messages = res.data;
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -114,7 +118,10 @@ export default class MessageStore {
     userId: string,
     paginate: boolean
   ) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
+
     let url = `${API_URL}/chat/thread?channel=${channel}&userId=${userId}&page=${this.page}&limit=${this.limit}`;
 
     await fetch(url, {
@@ -126,23 +133,28 @@ export default class MessageStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          const threads = this.threads;
-          const data = paginate ? [...threads, ...res.data] : res.data;
-          let nomore = res.data.length < this.limit ? true : false;
+          runInAction(() => {
+            const threads = this.threads;
+            const data = paginate ? [...threads, ...res.data] : res.data;
+            let nomore = res.data.length < this.limit ? true : false;
 
-          this.threads = data.sort(
-            (a: any, b: any) => a.timestamp - b.timestamp
-          );
+            this.threads = data.sort(
+              (a: any, b: any) => a.timestamp - b.timestamp
+            );
 
-          this.total = res.total;
-          this.nomore = nomore;
-          this.loading = false;
+            this.total = res.total;
+            this.nomore = nomore;
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
   @action getChannel = async (sender: string, receiver: string) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
+
     let url = `${API_URL}/chat/channel?sender=${sender}&receiver=${receiver}`;
 
     await fetch(url, {
@@ -154,8 +166,10 @@ export default class MessageStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.channel = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.channel = res.data;
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

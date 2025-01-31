@@ -90,8 +90,8 @@ const Setup = observer(() => {
   return (
     <SetupVerify>
       <Navbar
-        title="Welcome - Setup Weiss"
-        description="Welcome - Setup Weiss"
+        title="Welcome - Setup Minforum"
+        description="Welcome - Setup Minforum"
         hide
       />
       <Toaster />
@@ -104,7 +104,7 @@ const Setup = observer(() => {
           <div className="page-container top-100">
             <div className="boxed">
               <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-                Weiss
+                Minforum
               </Text>
 
               <Card shadow width="100%">

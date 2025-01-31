@@ -19,7 +19,7 @@ import { CheckInCircle, CheckInCircleFill, XCircleFill } from '@geist-ui/icons';
 import Turnstile, { useTurnstile } from 'react-turnstile';
 import Navbar from 'components/Navbar';
 import UserStore from 'stores/user';
-import { validateEmail } from 'components/api/utils';
+import { validateEmail, validateUsername } from 'components/api/utils';
 import Router, { useRouter } from 'next/router';
 import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/Translation';
@@ -76,11 +76,12 @@ const Signup = observer(() => {
           value: 'Fullname is too short.'
         })
       );
-    } else if (!username || username?.length < 3) {
+    } else if (!username || validateUsername(username) === false) {
       toast.error(
         useTranslation({
           lang: settings?.language,
-          value: 'Username is too short. Minimum character is three.'
+          value:
+            'Please enter a username with at least 3 characters. Only letters, numbers, and underscores are supported.'
         })
       );
     } else if (validateEmail(email) === false) {

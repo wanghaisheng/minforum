@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { categoryProp } from 'interfaces/category';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -85,7 +85,9 @@ export default class CategoryStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.category = res.data;
+          runInAction(() => {
+            this.category = res.data;
+          });
           return res.data.id;
         } else {
           return false;
@@ -95,7 +97,9 @@ export default class CategoryStore {
   };
 
   @action getCategories = async () => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/category?page=${this.page}&limit=${this.limit}`;
 
     await fetch(url, {
@@ -107,24 +111,31 @@ export default class CategoryStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.categories = res.data.map((item: categoryProp) => ({
-            ...item,
-            ...{
-              discussion: `${item.discussion}`,
-              authRequired: item.authRequired ? 'yes' : 'no'
-            }
-          }));
-          this.loading = false;
+          runInAction(() => {
+            this.categories = res.data.map((item: categoryProp) => ({
+              ...item,
+              ...{
+                discussion: `${item.discussion}`,
+                authRequired: item.authRequired ? 'yes' : 'no'
+              }
+            }));
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action searchCategory = async (query: string) => {
-    this.loading = true;
-    this.categories = [];
+    runInAction(() => {
+      this.loading = true;
+      this.categories = [];
+    });
+
     let url = `${API_URL}/category/search?page=${this.page}&limit=${this.limit}&query=${query}`;
 
     await fetch(url, {
@@ -137,18 +148,22 @@ export default class CategoryStore {
       .then((res: resProp) => {
         if (res.success) {
           setTimeout(() => {
-            this.total = res.count;
-            this.categories = res.data.map((item: categoryProp) => ({
-              ...item,
-              ...{
-                discussion: `${item.discussion}`,
-                authRequired: item.authRequired ? 'yes' : 'no'
-              }
-            }));
-            this.loading = false;
+            runInAction(() => {
+              this.total = res.count;
+              this.categories = res.data.map((item: categoryProp) => ({
+                ...item,
+                ...{
+                  discussion: `${item.discussion}`,
+                  authRequired: item.authRequired ? 'yes' : 'no'
+                }
+              }));
+              this.loading = false;
+            });
           }, 1000);
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

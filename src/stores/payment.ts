@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 // import { paymentProp } from 'interfaces/payment';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -93,7 +93,9 @@ export default class PaymentStore {
 
   @action getPayment = async (slug: string) => {
     let url = `${API_URL}/payment/${slug}`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
 
     return await fetch(url, {
       headers: {
@@ -104,8 +106,10 @@ export default class PaymentStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.payment = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.payment = res.data;
+            this.loading = false;
+          });
           return res.data;
         } else {
           return false;
@@ -115,7 +119,9 @@ export default class PaymentStore {
   };
 
   @action getPayments = async () => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/payment?page=${this.page}&limit=${this.limit}`;
 
     await fetch(url, {
@@ -127,10 +133,14 @@ export default class PaymentStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.payments = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.payments = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

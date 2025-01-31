@@ -11,7 +11,9 @@ const {
   rewardFavorite,
   rewardPeopleChoice,
   rewardProlific,
-  rewardWordsmith
+  rewardWordsmith,
+  rewardGenius,
+  rewardPolymath
 } = require('./src/components/api/reward');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -72,4 +74,6 @@ cron.schedule('0 0-23 * * *', () => {
   rewardPeopleChoice();
   rewardProlific();
   rewardWordsmith();
+  rewardGenius();
+  rewardPolymath();
 });

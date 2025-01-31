@@ -1,22 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Text,
-  Pagination,
   Avatar,
   Spacer,
   Card,
   Loading,
   Button,
-  useMediaQuery
+  useMediaQuery,
+  Tabs
 } from '@geist-ui/core';
 import { format } from 'date-fns';
 import { setCookie } from 'nookies';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
-import {
-  ChevronRightCircle,
-  ChevronLeftCircle,
-  MessageCircle
-} from '@geist-ui/icons';
+import { MessageCircle } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/Navbar';
 import UserStore from 'stores/user';
@@ -30,31 +26,87 @@ import MessageStore from 'stores/message';
 import { LicenseIcon, Medal06Icon } from 'hugeicons-react';
 import useSettings from 'components/settings';
 import { Badges } from 'components/Badges';
+import { doAction } from 'extensions/hooks';
+import toast, { Toaster } from 'react-hot-toast';
+import SubscriptionStore from 'stores/user-subscription';
+import CustomIcon from 'components/data/icon/icon';
 
 const User = observer(() => {
   const settings = useSettings();
   const token = useToken();
   const router = useRouter();
-  const isXS = useMediaQuery('mobile');
   const { username } = router.query;
+
+  const isXS = useMediaQuery('mobile');
   const [id, setId] = useState('');
-  const [{ user, getUsername }] = useState(() => new UserStore());
+  const [modal, toggleModal] = useState(false);
+  const [subscribed, setSubscribed] = useState(null);
+  const [store] = useState(() => new SubscriptionStore());
+  const [{ user, getUsername, profile, getProfile }] = useState(
+    () => new UserStore()
+  );
   const [{ channel, getChannel }] = useState(() => new MessageStore());
   const [
-    { loading, total, page, limit, discussions, setPage, getDiscussionsByUser }
+    { loading, page, nomore, discussions, setPage, getDiscussionsByUser }
   ] = useState(() => new DiscussionStore());
 
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getDiscussionsByUser(id, true);
+      }
+    }
+  }, [discussions, nomore, page]);
+
   useEffect(() => {
+    token?.id && getProfile(token?.id);
+
     router.isReady
-      ? getUsername(username as string).then((id) => {
+      ? getUsername(username as string).then(async (id) => {
           if (id) {
             setId(id);
-            getDiscussionsByUser(id);
+            const sub = await store.getSubscription(user?.id, token?.id);
+            setSubscribed(sub);
+            getDiscussionsByUser(id, false);
             id && getChannel(token?.id, id);
           }
         })
       : null;
   }, [router, token?.id, channel]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  const handlePayment = async (referenceId) => {
+    await store
+      .newSubscription({
+        plan: user?.id,
+        beneficiary: user?.id,
+        amount: user?.subAmount,
+        userId: token?.id,
+        provider: doAction('provider'),
+        narration: `Monthly subscription to @${user?.username} contents.`,
+        referenceId
+      })
+      .then((res) => {
+        if (res.success) {
+          toggleModal(false);
+          toast.success('Subscption successful!');
+          router.reload();
+        } else {
+          toast.error('Subscption failed');
+        }
+      });
+    toggleModal(false);
+  };
 
   const lang = settings.language;
   const renderDate = (value: any) => {
@@ -83,11 +135,6 @@ const User = observer(() => {
     return <span className="locale-time">{date}</span>;
   };
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getDiscussionsByUser(id);
-  };
-
   const handleMessage = () => {
     let data = JSON.stringify({
       id: user?.id,
@@ -104,8 +151,25 @@ const User = observer(() => {
     router.push(`/messages/${channel}${pref}`);
   };
 
+  const modals = doAction('paymentModal', {
+    show: modal,
+    title: `Access premium content`,
+    reason: profile?.subDescription || '',
+    amount: user?.subAmount || 0,
+    currency: settings?.payment?.currency,
+    email: profile?.email,
+    toggleModal: () => toggleModal(!modal),
+    processPayment: handlePayment
+  });
+
+  const PaymentModal = () => {
+    return <div>{modals}</div>;
+  };
+
   return (
     <div>
+      <Toaster />
+      <PaymentModal />
       <Navbar title={`${user.name}`} description={`${user.name}`} />
 
       <div
@@ -171,18 +235,65 @@ const User = observer(() => {
                   </Text>
                   <Spacer />
                   <div className="desktop">
-                    {/* <Button scale={0.8} auto icon={<UserPlus />}>
-                  <b>Subscribe</b>
-                </Button>
-                <Spacer inline /> */}
-                    <Button
-                      scale={0.8}
-                      auto
-                      icon={<MessageCircle />}
-                      onClick={handleMessage}
-                    >
-                      <b>Message</b>
-                    </Button>
+                    {settings?.payment?.currency &&
+                      settings?.payment?.percentage &&
+                      settings?.payment?.subscription &&
+                      user?.subAmount &&
+                      token?.id &&
+                      token?.id !== user?.id && (
+                        <>
+                          <Button
+                            scale={0.8}
+                            auto
+                            icon={
+                              subscribed ? (
+                                <CustomIcon
+                                  name="user-check"
+                                  color="#fff"
+                                  type="solid"
+                                />
+                              ) : (
+                                <CustomIcon
+                                  name="crown"
+                                  color="#fff"
+                                  type="solid"
+                                />
+                              )
+                            }
+                            onClick={() => {
+                              subscribed ? null : toggleModal(true);
+                            }}
+                            style={{
+                              backgroundColor: '#8B00F6',
+                              borderColor: '#8B00F6',
+                              color: '#fff'
+                            }}
+                          >
+                            <b>
+                              <Translation
+                                lang={settings?.language}
+                                value={subscribed ? 'Subscribed' : 'Subscribe'}
+                              />
+                            </b>
+                          </Button>
+                          <Spacer inline />{' '}
+                        </>
+                      )}
+                    {token?.id && token?.id !== user?.id && (
+                      <Button
+                        scale={0.8}
+                        auto
+                        icon={<MessageCircle />}
+                        onClick={handleMessage}
+                      >
+                        <b>
+                          <Translation
+                            lang={settings?.language}
+                            value="Message"
+                          />
+                        </b>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -230,28 +341,74 @@ const User = observer(() => {
                       />
                     </span>
                   </Text>
-                  <Text>
+                  <div>
                     <Badges
                       language={lang}
                       position={isXS ? 'top' : 'bottom'}
                       awards={[user.role, ...user.badges]}
                     />
-                  </Text>
+                  </div>
                 </div>
               </div>
+              <Spacer />
               <div className="mobile">
-                {/* <Button scale={0.8} auto icon={<UserPlus />}>
-                  <b>Subscribe</b>
-                </Button>
-                <Spacer inline /> */}
-                <Button
-                  scale={0.8}
-                  auto
-                  icon={<MessageCircle />}
-                  onClick={handleMessage}
-                >
-                  <b>Message</b>
-                </Button>
+                {settings?.payment?.currency &&
+                  settings?.payment?.percentage &&
+                  settings?.payment?.subscription &&
+                  user?.subAmount &&
+                  token?.id &&
+                  token?.id !== user?.id && (
+                    <>
+                      <Button
+                        scale={0.8}
+                        auto
+                        icon={
+                          subscribed ? (
+                            <CustomIcon
+                              name="user-check"
+                              color="#fff"
+                              type="solid"
+                            />
+                          ) : (
+                            <CustomIcon
+                              name="crown"
+                              color="#fff"
+                              type="solid"
+                            />
+                          )
+                        }
+                        onClick={() => {
+                          subscribed ? null : toggleModal(true);
+                        }}
+                        style={{
+                          backgroundColor: '#8B00F6',
+                          borderColor: '#8B00F6',
+                          color: '#fff'
+                        }}
+                      >
+                        <b>
+                          <Translation
+                            lang={settings?.language}
+                            value={subscribed ? 'Subscribed' : 'Subscribe'}
+                          />
+                        </b>
+                      </Button>
+                      <Spacer inline />{' '}
+                    </>
+                  )}
+
+                {token?.id && token?.id !== user?.id && (
+                  <Button
+                    scale={0.8}
+                    auto
+                    icon={<MessageCircle />}
+                    onClick={handleMessage}
+                  >
+                    <b>
+                      <Translation lang={settings?.language} value="Message" />
+                    </b>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -288,6 +445,7 @@ const User = observer(() => {
                 color={item.category?.color}
                 comment={item.comment}
                 view={item.view}
+                premium={item.premium}
                 date={item.createdAt}
               />
             ))}
@@ -300,26 +458,6 @@ const User = observer(() => {
                     value={`No Discussion`}
                   />
                 </Text>
-              </div>
-            ) : (
-              ''
-            )}
-            <Spacer />
-            {total! >= limit ? (
-              <div className="pagination">
-                <Pagination
-                  count={Math.round(total! / limit)}
-                  initialPage={page}
-                  limit={limit}
-                  onChange={paginate}
-                >
-                  <Pagination.Next>
-                    <ChevronRightCircle />
-                  </Pagination.Next>
-                  <Pagination.Previous>
-                    <ChevronLeftCircle />
-                  </Pagination.Previous>
-                </Pagination>
               </div>
             ) : (
               ''
@@ -343,8 +481,7 @@ const User = observer(() => {
             </aside>
           </div>
         </div>
-
-        {/* <EditorModal show={false} /> */}
+        <Spacer h={5} />
       </div>
     </div>
   );

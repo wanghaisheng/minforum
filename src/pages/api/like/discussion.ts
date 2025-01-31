@@ -23,21 +23,24 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
               });
           } else {
             let like = new LikeDiscussion(req.body);
+
             await like.save().then(async (data: any) => {
               if (data.id) {
                 await User.get(data.userId).then(async (p: any) => {
                   await Discussion.get(req.body.discussionId)
                     .getJoin()
                     .then(async (ds: any) => {
-                      const notify = new Notification({
-                        type: 'post',
-                        sender: data.userId,
-                        receiver: ds.userId,
-                        name: p.name,
-                        filterType: 'like-post',
-                        action: `${ds.slug}`
-                      });
-                      await notify.save().then(() => {});
+                      if (ds.userId !== userId) {
+                        const notify = new Notification({
+                          type: 'post',
+                          sender: data.userId,
+                          receiver: ds.userId,
+                          name: p.name,
+                          filterType: 'like-post',
+                          action: `${ds.slug}`
+                        });
+                        await notify.save().then(() => {});
+                      }
                     });
                   res.send({ success: true, data, like: true });
                 });

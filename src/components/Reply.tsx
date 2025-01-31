@@ -12,7 +12,7 @@ import {
   Button,
   Grid
 } from '@geist-ui/core';
-import { Heart, HeartFill, Trash2 } from '@geist-ui/icons';
+import { CheckInCircleFill, Heart, HeartFill, Trash2 } from '@geist-ui/icons';
 import NextLink from 'next/link';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
@@ -24,18 +24,22 @@ import {
 import { oneKFormat } from './api/utils';
 import { PencilEdit02Icon } from 'hugeicons-react';
 import { useState } from 'react';
+import { CheckmarkIcon } from 'react-hot-toast';
 
 type replyProp = {
   lang: string;
   id: string;
   activeUser: string;
   userId: string;
+  authorId: string;
   name?: string;
   username?: string;
   role?: string;
   point?: number;
   photo?: string;
   content?: string;
+  bestAnswer?: string;
+  showReplies?: boolean;
   edited?: boolean;
   replies?: replyProp[];
   likes?: any;
@@ -48,6 +52,7 @@ type replyProp = {
   replyUpdateTrigger: (id: string, val: string) => void;
   commentDeletion: (id: string) => void;
   replyDeletion: (id: string) => void;
+  bestAnswerTrigger: (val: string) => void;
 };
 
 const Reply = (props: replyProp) => {
@@ -60,13 +65,16 @@ const Reply = (props: replyProp) => {
     lang,
     activeUser,
     userId,
+    authorId,
     name,
     username,
     role,
     point,
     photo,
     content,
+    bestAnswer,
     edited,
+    showReplies,
     replies,
     likes,
     date,
@@ -77,7 +85,8 @@ const Reply = (props: replyProp) => {
     commentUpdateTrigger,
     replyUpdateTrigger,
     commentDeletion,
-    replyDeletion
+    replyDeletion,
+    bestAnswerTrigger
   } = props;
 
   const handleComment = () => {
@@ -199,9 +208,10 @@ const Reply = (props: replyProp) => {
       <div className="discussion" id={id}>
         <div className="item first">
           <Popover
+            placement="rightStart"
             trigger="hover"
             content={
-              <div style={{ padding: '0 10px' }}>
+              <div className="popover-adjust">
                 <Link color href={`/u/${username}`}>
                   <User src={photo} name={name}>
                     <Text p>{role}</Text>
@@ -215,7 +225,7 @@ const Reply = (props: replyProp) => {
         </div>
         <div className="item">
           <Text h5>
-            {name} &nbsp;
+            {username} &nbsp;
             {edited && (
               <Tooltip
                 text={useTimeTranslation({
@@ -231,10 +241,65 @@ const Reply = (props: replyProp) => {
             <Text small>{renderDate(date)}</Text>
           </Text>
           <div
-            style={{ margin: 0, position: 'relative', top: -10 }}
+            className="conversation"
             dangerouslySetInnerHTML={{ __html: content! }}
           ></div>
           <div style={{ margin: 0 }}>
+            {activeUser === authorId && (
+              <>
+                {!bestAnswer ? (
+                  <Popover
+                    placement="topStart"
+                    trigger="hover"
+                    content={
+                      <div className="popover-adjust">
+                        <Translation
+                          lang={lang}
+                          value="Click to mark this comment the best response"
+                        />
+                      </div>
+                    }
+                  >
+                    <span
+                      className="best-button"
+                      onClick={() => bestAnswerTrigger(id)}
+                    >
+                      {id === bestAnswer ? (
+                        <CheckmarkIcon />
+                      ) : (
+                        <CheckInCircleFill size={14} />
+                      )}
+                      &nbsp;{' '}
+                      <Translation lang={lang} value="Mark best response" />
+                    </span>
+                  </Popover>
+                ) : (
+                  bestAnswer === id && (
+                    <Popover
+                      placement="topStart"
+                      trigger="hover"
+                      content={
+                        <div className="popover-adjust">
+                          <Translation
+                            lang={lang}
+                            value="Click to remove this comment as the best response"
+                          />
+                        </div>
+                      }
+                    >
+                      <span
+                        className="best-button"
+                        onClick={() => bestAnswerTrigger('')}
+                      >
+                        <CheckmarkIcon />
+                        &nbsp;&nbsp;{' '}
+                        <Translation lang={lang} value="Best response" />
+                      </span>
+                    </Popover>
+                  )
+                )}
+              </>
+            )}
             <Tooltip
               placement="right"
               text={useTranslation({
@@ -250,7 +315,7 @@ const Reply = (props: replyProp) => {
                 )}
               </span>
               <Popover
-                placement="right"
+                placement="rightStart"
                 content={
                   <div style={{ maxHeight: 100, overflow: 'auto' }}>
                     {likes
@@ -287,7 +352,7 @@ const Reply = (props: replyProp) => {
 
             {activeUser === userId && (
               <>
-                <Spacer inline w={2} />
+                <Spacer inline w={1} />
                 <span className="pointer" onClick={() => triggerComment()}>
                   <PencilEdit02Icon size={18} />
                 </span>
@@ -304,7 +369,7 @@ const Reply = (props: replyProp) => {
 
           {replies?.length ? (
             <Collapse
-              initialVisible
+              initialVisible={showReplies}
               title={
                 replies?.length > 1
                   ? oneKFormat(replies?.length) +
@@ -313,135 +378,146 @@ const Reply = (props: replyProp) => {
                     ` ${useTranslation({ lang: lang, value: 'Reply' })}`
               }
             >
-              {replies?.length
-                ? replies.map((i: any) => (
-                    <div className="discussion" id={i.slug} key={i.id}>
-                      <div className="item first">
-                        <Popover
-                          trigger="hover"
-                          content={
-                            <div style={{ padding: '0 10px' }}>
-                              <Link color href={`/u/${i.author.username}`}>
-                                <User
-                                  src={
-                                    i.author.photo
-                                      ? `/storage/${i.author.photo}`
-                                      : `/images/avatar.png`
-                                  }
-                                  name={i.author.name}
-                                >
-                                  <Text p>{i.author.role}</Text>
-                                </User>
-                              </Link>
-                            </div>
-                          }
-                        >
-                          <Avatar
-                            src={
-                              i.author.photo
-                                ? `/storage/${i.author.photo}`
-                                : `/images/avatar.png`
-                            }
-                            w={isXS ? 1.2 : 2}
-                            h={isXS ? 1.2 : 2}
-                          />
-                        </Popover>
-                      </div>
-                      <div className="item">
-                        <Text h5>
-                          {i.author.name} &nbsp;
-                          {i.edited && (
-                            <Tooltip
-                              text={useTimeTranslation({
-                                lang: lang,
-                                date: new Date(i.updatedAt)
-                              })}
-                            >
-                              <Text small style={{ color: '#555' }}>
-                                [{i.edited ? 'edited' : ''}] &nbsp;&nbsp;
-                              </Text>
-                            </Tooltip>
-                          )}
-                          <Text small>{renderDate(i.createdAt)}</Text>
-                        </Text>
-                        <div
-                          style={{ margin: 0, position: 'relative', top: -10 }}
-                          dangerouslySetInnerHTML={{ __html: i.comment! }}
-                        ></div>
-                        <Tooltip
-                          placement="right"
-                          text={useTranslation({
-                            lang: lang,
-                            value: 'Click on the number count to who see liked.'
-                          })}
-                        >
-                          <span
-                            className="pointer"
-                            onClick={() => likeTriggerX(i.id)}
-                          >
-                            {isActiveLiked(i.likes) ? (
-                              <HeartFill color="#cb0000" size={16} />
-                            ) : (
-                              <Heart size={16} />
-                            )}
-                          </span>
+              <div className="timeline">
+                {replies.length
+                  ? replies.map((i: any) => (
+                      <div
+                        className="timeline-container"
+                        id={i.slug}
+                        key={i.id}
+                      >
+                        <div className="timeline-icon">
                           <Popover
+                            placement="rightStart"
+                            trigger="hover"
                             content={
-                              <div style={{ maxHeight: 100, overflow: 'auto' }}>
-                                {i.likes && i.likes.length
-                                  ? i.likes.map((l: any) => (
-                                      <NextLink
-                                        href={`/u/${l.profile.username}`}
-                                        key={l.id}
-                                      >
-                                        <Link style={{ display: 'block' }}>
-                                          <User
-                                            src={
-                                              l.profile && l.profile.photo
-                                                ? `/storage/${l.profile.photo}`
-                                                : '/images/avatar.png'
-                                            }
-                                            name={l.profile.name}
-                                          />
-                                        </Link>
-                                      </NextLink>
-                                    ))
-                                  : ''}
+                              <div className="popover-adjust">
+                                <Link color href={`/u/${i.author.username}`}>
+                                  <User
+                                    src={
+                                      i.author.photo
+                                        ? `/storage/${i.author.photo}`
+                                        : `/images/avatar.png`
+                                    }
+                                    name={i.author.name}
+                                  >
+                                    <Text p>{i.author.role}</Text>
+                                  </User>
+                                </Link>
                               </div>
                             }
                           >
-                            <Text className="like-btn">
-                              {i.likes ? oneKFormat(i.likes.length) : 0}
-                            </Text>
+                            <Avatar
+                              src={
+                                i.author.photo
+                                  ? `/storage/${i.author.photo}`
+                                  : `/images/avatar.png`
+                              }
+                              w={isXS ? 1.2 : 2}
+                              h={isXS ? 1.2 : 2}
+                            />
                           </Popover>
-                        </Tooltip>
-                        {activeUser === i.userId && (
-                          <>
-                            <Spacer inline w={2} />
+                        </div>
+                        <div className="timeline-body">
+                          <Text h5>
+                            {i.author.name} &nbsp;
+                            {i.edited && (
+                              <Tooltip
+                                text={useTimeTranslation({
+                                  lang: lang,
+                                  date: new Date(i.updatedAt)
+                                })}
+                              >
+                                <Text small style={{ color: '#555' }}>
+                                  [{i.edited ? 'edited' : ''}] &nbsp;&nbsp;
+                                </Text>
+                              </Tooltip>
+                            )}
+                            <Text small>{renderDate(i.createdAt)}</Text>
+                          </Text>
+                          <div
+                            className="conversation"
+                            dangerouslySetInnerHTML={{ __html: i.comment! }}
+                          ></div>
+                          <Tooltip
+                            placement="right"
+                            text={useTranslation({
+                              lang: lang,
+                              value:
+                                'Click on the number count to who see liked.'
+                            })}
+                          >
                             <span
                               className="pointer"
-                              onClick={() =>
-                                replyUpdateTrigger(i.id, i.comment)
+                              onClick={() => likeTriggerX(i.id)}
+                            >
+                              {isActiveLiked(i.likes) ? (
+                                <HeartFill color="#cb0000" size={16} />
+                              ) : (
+                                <Heart size={16} />
+                              )}
+                            </span>
+                            <Popover
+                              placement="rightStart"
+                              content={
+                                <div
+                                  style={{ maxHeight: 100, overflow: 'auto' }}
+                                >
+                                  {i.likes && i.likes.length
+                                    ? i.likes.map((l: any) => (
+                                        <NextLink
+                                          href={`/u/${l.profile.username}`}
+                                          key={l.id}
+                                        >
+                                          <Link style={{ display: 'block' }}>
+                                            <User
+                                              src={
+                                                l.profile && l.profile.photo
+                                                  ? `/storage/${l.profile.photo}`
+                                                  : '/images/avatar.png'
+                                              }
+                                              name={l.profile.name}
+                                            />
+                                          </Link>
+                                        </NextLink>
+                                      ))
+                                    : ''}
+                                </div>
                               }
                             >
-                              <PencilEdit02Icon size={18} />
-                            </span>
-                            <Spacer inline w={1} />
-                            <span
-                              className="pointer"
-                              onClick={() => {
-                                setReplyId(i.id);
-                                toggleReplyModal(true);
-                              }}
-                            >
-                              <Trash2 size={18} />
-                            </span>
-                          </>
-                        )}
+                              <Text className="like-btn">
+                                {i.likes ? oneKFormat(i.likes.length) : 0}
+                              </Text>
+                            </Popover>
+                          </Tooltip>
+                          {activeUser === i.userId && (
+                            <>
+                              <Spacer inline w={2} />
+                              <span
+                                className="pointer"
+                                onClick={() =>
+                                  replyUpdateTrigger(i.id, i.comment)
+                                }
+                              >
+                                <PencilEdit02Icon size={18} />
+                              </span>
+                              <Spacer inline w={1} />
+                              <span
+                                className="pointer"
+                                onClick={() => {
+                                  setReplyId(i.id);
+                                  toggleReplyModal(true);
+                                }}
+                              >
+                                <Trash2 size={18} />
+                              </span>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))
-                : ''}
+                    ))
+                  : ''}
+              </div>
             </Collapse>
           ) : (
             ''

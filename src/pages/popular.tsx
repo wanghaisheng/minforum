@@ -128,6 +128,11 @@ const Home = observer(() => {
                 <Translation lang={settings?.language} value="Recent" />
               </Link>
             </NextLink>
+            <NextLink href="/unanswered">
+              <Link>
+                <Translation lang={settings?.language} value="Unanswered" />
+              </Link>
+            </NextLink>
             <NextLink href="/category">
               <Link>
                 <Translation lang={settings?.language} value="Categories" />
@@ -148,8 +153,11 @@ const Home = observer(() => {
                   : '/images/avatar.png'
               }
               author={item.profile?.name}
+              authorRole={item.profile?.role}
+              authorUsername={item.profile?.username}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              premium={item.premium}
               view={item.view}
               date={item.createdAt}
             />

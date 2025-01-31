@@ -19,13 +19,6 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
       let newFile = `${Date.now()}.${type}`;
       file.filepath = path.resolve('./public/storage/', newFile);
 
-      // s3Upload(modifiedFile, newFile).then((upload) => {
-      //   if (upload) {
-      //     fs.unlinkSync(modifiedFile);
-      //     console.log(upload);
-      //   }
-      // });
-
       let data = {
         file: newFile,
         filetype: 'image',
@@ -55,6 +48,6 @@ export default uploadImage;
 
 export const config = {
   api: {
-    bodyParser: false // Disallow body parsing, consume as stream
+    bodyParser: false
   }
 };

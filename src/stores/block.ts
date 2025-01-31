@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { blockProp, blockStatusProp } from 'interfaces/block';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -28,7 +28,10 @@ export default class BlockStore {
 
   @action blockAction = async (body: blockProp) => {
     let url = `${API_URL}/block/action`;
-    this.blockLoading = true;
+
+    runInAction(() => {
+      this.blockLoading = true;
+    });
 
     return await fetch(url, {
       method: 'POST',
@@ -41,9 +44,14 @@ export default class BlockStore {
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          this.block = res.data;
-          this.blockLoading = false;
+          runInAction(() => {
+            this.block = res.data;
+            this.blockLoading = false;
+          });
         } else {
+          runInAction(() => {
+            this.blockLoading = false;
+          });
           return false;
         }
       })
@@ -62,7 +70,9 @@ export default class BlockStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.block = res.data;
+          runInAction(() => {
+            this.block = res.data;
+          });
         } else {
           return false;
         }

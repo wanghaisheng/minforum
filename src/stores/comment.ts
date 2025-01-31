@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { commentProp } from 'interfaces/comment';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
@@ -165,14 +165,19 @@ export default class CommentStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.comment = res.data;
+          runInAction(() => {
+            this.comment = res.data;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action getComments = async (requestId: any, paginate: boolean) => {
-    this._loading = true;
+    runInAction(() => {
+      this._loading = true;
+    });
+
     let url = `${API_URL}/comments?page=${this.page}&limit=${this.limit}&requestId=${requestId}`;
 
     await fetch(url, {
@@ -184,18 +189,22 @@ export default class CommentStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          if (paginate) {
-            let data = this.comments;
-            this.more = res.data.length === 0 ? true : false;
-            data = [...data, ...res.data];
-            this.comments = data;
-            this._loading = false;
-          } else {
-            this.comments = res.data;
-            this._loading = false;
-          }
+          runInAction(() => {
+            if (paginate) {
+              let data = this.comments;
+              this.more = res.data.length === 0 ? true : false;
+              data = [...data, ...res.data];
+              this.comments = data;
+              this._loading = false;
+            } else {
+              this.comments = res.data;
+              this._loading = false;
+            }
+          });
         } else {
-          this._loading = false;
+          runInAction(() => {
+            this._loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

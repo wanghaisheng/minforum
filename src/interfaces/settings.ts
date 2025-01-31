@@ -1,3 +1,8 @@
+export type extensionVariable = {
+  key?: string;
+  value?: string;
+};
+
 export interface settingsProp {
   theme?: string;
   language?: string | string[] | any;
@@ -37,4 +42,11 @@ export interface settingsProp {
   announcementLink?: string;
   terms?: string;
   privacy?: string;
+  extensionVariables?: extensionVariable;
+  payment?: {
+    currency?: string;
+    monthly?: number;
+    subscription?: number;
+    percentage?: number;
+  };
 }

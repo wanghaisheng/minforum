@@ -1,4 +1,5 @@
 'use strict';
+const CryptoJS = require('crypto-js');
 
 const slug = () => {
   return (
@@ -204,6 +205,59 @@ const parseUsername = (text) => {
   return linkedText;
 };
 
+function validateUsername(username) {
+  // Define validation rules
+  const minLength = 3; // Minimum username length
+  const maxLength = 15; // Maximum username length
+  const allowedChars = /^[a-zA-Z0-9_]+$/; // Only alphanumeric and underscore allowed
+
+  // Check length
+  if (username.length < minLength || username.length > maxLength) {
+    return false; // Username is too short or too long
+  }
+
+  // Check allowed characters
+  if (!allowedChars.test(username)) {
+    return false; // Username contains invalid characters
+  }
+
+  // If all checks pass, the username is valid
+  return true;
+}
+
+const encrypt = (data) => {
+  const ciphertext = CryptoJS.AES.encrypt(
+    data,
+    process.env.APP_SECRET
+  ).toString();
+  return ciphertext;
+};
+
+const decrypt = (data) => {
+  try {
+    const bytes = CryptoJS.AES.decrypt(data, process.env.APP_SECRET);
+    const originalText = bytes.toString(CryptoJS.enc.Utf8);
+    return originalText;
+  } catch (error) {
+    return null;
+  }
+};
+
+const enc = (plainText) => {
+  var b64 = CryptoJS.AES.encrypt(plainText, process.env.APP_SECRET).toString();
+  var e64 = CryptoJS.enc.Base64.parse(b64);
+  var eHex = e64.toString(CryptoJS.enc.Hex);
+  return eHex;
+};
+
+const dec = (cipherText) => {
+  var reb64 = CryptoJS.enc.Hex.parse(cipherText);
+  var bytes = reb64.toString(CryptoJS.enc.Base64);
+  var decrypt = CryptoJS.AES.decrypt(bytes, process.env.NEXT_PUBLIC_APP_SECRET);
+  var plain = decrypt.toString(CryptoJS.enc.Utf8);
+  return plain;
+};
+
 module.exports = {
   slug,
   code,
@@ -222,5 +276,10 @@ module.exports = {
   isImage,
   pluralize,
   getInitials,
-  parseUsername
+  parseUsername,
+  validateUsername,
+  encrypt,
+  decrypt,
+  enc,
+  dec
 };

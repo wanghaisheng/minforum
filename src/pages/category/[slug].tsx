@@ -1,17 +1,8 @@
-import { useEffect, useState } from 'react';
-import {
-  Loading,
-  Spacer,
-  Text,
-  Pagination,
-  Card,
-  Button
-} from '@geist-ui/core';
+import { useEffect, useState, useCallback } from 'react';
+import { Loading, Spacer, Text, Card, Button } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import toast, { Toaster } from 'react-hot-toast';
-import { ChevronRightCircle, ChevronLeftCircle, Lock } from '@geist-ui/icons';
 import Navbar from 'components/Navbar';
 import Post from 'components/Post';
 import Sidebar from 'components/Sidebar';
@@ -21,6 +12,7 @@ import useToken from 'components/Token';
 import Contributors from 'components/Contributors';
 import { Translation } from 'components/intl/Translation';
 import useSettings from 'components/settings';
+import CustomIcon from 'components/data/icon/icon';
 
 const Category = observer(() => {
   const token = useToken();
@@ -30,29 +22,35 @@ const Category = observer(() => {
   const [modal, toggleModal] = useState(false);
   const [{ category, getCategory }] = useState(() => new CategoryStore());
   const [
-    {
-      loading,
-      page,
-      total,
-      limit,
-      discussions,
-      setPage,
-      getDiscussionsByCategory
-    }
+    { loading, page, nomore, discussions, setPage, getDiscussionsByCategory }
   ] = useState(() => new DiscussionStore());
+
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getDiscussionsByCategory(slug, true);
+      }
+    }
+  }, [discussions, nomore, page]);
 
   useEffect(() => {
     router.isReady
       ? getCategory(slug).then(() => {
-          getDiscussionsByCategory(slug);
+          getDiscussionsByCategory(slug, false);
         })
       : null;
   }, [router, token?.id]);
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getDiscussionsByCategory(slug);
-  };
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -72,23 +70,28 @@ const Category = observer(() => {
 
   return (
     <div>
-      <Toaster />
       {!token.id && category && category.authRequired === true ? (
         <div className="custom-modal all">
           <div className="inner">
             <Card shadow>
               <div className="center">
-                <Lock size={30} />
-                <Text>
+                <CustomIcon name="lock-alt" size={50} type="solid" />
+                <Spacer h={2} />
+                <Text h4>
                   <Translation
                     lang={settings?.language}
                     value="You are required to login to access this page"
                   />
                 </Text>
-                <Spacer />
+                <Spacer h={2} />
                 <Link href="/login">
                   <Button type="secondary">
-                    <Translation lang={settings?.language} value={'Sign in'} />
+                    <b>
+                      <Translation
+                        lang={settings?.language}
+                        value={'Sign in'}
+                      />
+                    </b>
                   </Button>
                 </Link>
                 <Spacer />
@@ -163,8 +166,8 @@ const Category = observer(() => {
 
           {discussions.map((item) => (
             <Post
-              lang={settings?.language}
               key={item.id}
+              lang={settings?.language}
               category={item.category?.title}
               color={item.category?.color}
               slug={item.slug}
@@ -174,8 +177,12 @@ const Category = observer(() => {
                   : '/images/avatar.png'
               }
               author={item.profile?.name}
+              authorRole={item.profile?.role}
+              authorUsername={item.profile?.username}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              premium={item.premium}
+              view={item.view}
               date={item.createdAt}
             />
           ))}
@@ -189,26 +196,6 @@ const Category = observer(() => {
                   value={`No Discussion`}
                 />
               </Text>
-            </div>
-          ) : (
-            ''
-          )}
-
-          {total >= limit ? (
-            <div className="pagination">
-              <Pagination
-                count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
-                onChange={paginate}
-              >
-                <Pagination.Next>
-                  <ChevronRightCircle />
-                </Pagination.Next>
-                <Pagination.Previous>
-                  <ChevronLeftCircle />
-                </Pagination.Previous>
-              </Pagination>
             </div>
           ) : (
             ''

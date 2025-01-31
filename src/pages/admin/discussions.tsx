@@ -76,13 +76,15 @@ const Discussions = observer(() => {
   };
 
   const renderStatus = (value: string) => {
-    return value === 'active' ? (
-      <Badge type="success">
-        <Translation lang={settings?.language} value="Active" />
-      </Badge>
-    ) : value === 'banned' ? (
+    let capitalize = value.charAt(0).toUpperCase() + value.slice(1);
+
+    return value === 'banned' ? (
       <Badge type="error">
         <Translation lang={settings?.language} value="Banned" />
+      </Badge>
+    ) : value ? (
+      <Badge type="success">
+        <Translation lang={settings?.language} value={capitalize} />
       </Badge>
     ) : (
       <></>
@@ -112,6 +114,12 @@ const Discussions = observer(() => {
       >
         <Select.Option value="active">
           <Translation lang={settings?.language} value="Active" />
+        </Select.Option>
+        <Select.Option value="unanswered">
+          <Translation lang={settings?.language} value="Unanswered" />
+        </Select.Option>
+        <Select.Option value="answered">
+          <Translation lang={settings?.language} value="Answered" />
         </Select.Option>
         <Select.Option value="banned">
           <Translation lang={settings?.language} value="Banned" />

@@ -29,7 +29,7 @@ const notifyMentionedUser = (discussion, userId, postId) => {
       let username = item.replace('@', '');
       let user = await User.filter({ username });
       user = user[0] || {};
-      if (user.id) {
+      if (user.id !== userId) {
         new Notification({
           receiver: user.id,
           filterType: 'mentioned',
@@ -68,14 +68,16 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
                         data.userId,
                         `${d.slug}#${data.slug}`
                       );
-                      const notify = new Notification({
-                        sender: data.userId,
-                        receiver: d.userId,
-                        name: p.name,
-                        filterType: 'reply-post',
-                        action: `${d.slug}#${data.slug}`
-                      });
-                      await notify.save().then(() => {});
+                      if (d.userId !== data.userId) {
+                        const notify = new Notification({
+                          sender: data.userId,
+                          receiver: d.userId,
+                          name: p.name,
+                          filterType: 'reply-post',
+                          action: `${d.slug}#${data.slug}`
+                        });
+                        await notify.save().then(() => {});
+                      }
                     });
                   res.send({ success: true, data });
                 });

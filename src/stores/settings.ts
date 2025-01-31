@@ -2,6 +2,7 @@ import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { userProp } from 'interfaces/user';
 import { settingsProp } from 'interfaces/settings';
+import { dec } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -21,12 +22,16 @@ export default class SettingsStore {
   };
 
   @action setSettings = (data: settingsProp) => {
-    this.settings = data;
+    runInAction(() => {
+      this.settings = data;
+    });
   };
 
   @action create = async (body: settingsProp) => {
     let url = `${API_URL}/settings/create`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
 
     return await fetch(url, {
       method: 'POST',
@@ -49,7 +54,9 @@ export default class SettingsStore {
 
   @action update = async (body: settingsProp) => {
     let url = `${API_URL}/settings/update`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
 
     return await fetch(url, {
       method: 'POST',
@@ -63,12 +70,16 @@ export default class SettingsStore {
       .then((res: resProp) => {
         if (res.success) {
           setTimeout(() => {
-            this.loading = false;
+            runInAction(() => {
+              this.loading = false;
+            });
           }, 2000);
           return res;
         } else {
           setTimeout(() => {
-            this.loading = false;
+            runInAction(() => {
+              this.loading = false;
+            });
           }, 2000);
           return { success: false, message: res.message };
         }
@@ -78,7 +89,9 @@ export default class SettingsStore {
 
   @action verifyTurnstile = async (body: { token: string }) => {
     let url = `${API_URL}/settings/turnstile`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
 
     return await fetch(url, {
       method: 'POST',
@@ -92,12 +105,16 @@ export default class SettingsStore {
       .then((res: { success: boolean }) => {
         if (res.success) {
           setTimeout(() => {
-            this.loading = false;
+            runInAction(() => {
+              this.loading = false;
+            });
           }, 2000);
           return res;
         } else {
           setTimeout(() => {
-            this.loading = false;
+            runInAction(() => {
+              this.loading = false;
+            });
           }, 2000);
           return { success: res.success };
         }
@@ -117,8 +134,32 @@ export default class SettingsStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
+          let settings = res.data;
+          let variables: any = settings.extensionVariables || [];
+          let emailSettings = settings.email;
+          let social = settings.socialAccount;
+
+          social.facebook = dec(social.facebook);
+          social.github = dec(social.github);
+          social.google = dec(social.google);
+
+          const { email, password, host } = emailSettings;
+          emailSettings.password = dec(password);
+          emailSettings.host = dec(host);
+          emailSettings.email = dec(email);
+
+          settings.email = emailSettings;
+          settings.cloudflarePublicKey = dec(settings.cloudflarePublicKey);
+          settings.cloudflareSecretKey = dec(settings.cloudflareSecretKey);
+
+          variables.forEach((variable: any) => {
+            variable.value = dec(variable.value);
+          });
+
+          settings.extensionVariables = variables;
+          settings.socialAccount = social;
           runInAction(() => {
-            this.settings = res.data;
+            this.settings = settings;
           });
 
           return res;
@@ -180,7 +221,9 @@ export default class SettingsStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.files = res.data;
+          runInAction(() => {
+            this.files = res.data;
+          });
         }
       })
       .catch((err) => console.log(err));

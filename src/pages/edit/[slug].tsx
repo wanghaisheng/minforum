@@ -6,7 +6,9 @@ import {
   Select,
   Button,
   Card,
-  Modal
+  Modal,
+  Grid,
+  useMediaQuery
 } from '@geist-ui/core';
 import { Lock, Trash2 } from '@geist-ui/icons';
 import Link from 'next/link';
@@ -18,18 +20,21 @@ import useToken from 'components/Token';
 import { useRouter } from 'next/router';
 import Editor from 'components/Editor';
 import CategoryStore from 'stores/category';
-import SettingsStore from 'stores/settings';
+import UserStore from 'stores/user';
 import { resProp } from 'interfaces/res';
 import { Translation, useTranslation } from 'components/intl/Translation';
 import useSettings from 'components/settings';
+import Auth from 'components/Auth';
 
 const EditDiscussion = observer(() => {
   const token = useToken();
   const router = useRouter();
   const settings = useSettings();
   const { slug } = router.query;
+  const isXS = useMediaQuery('mobile');
   const [modal, toggleModal] = useState(false);
   const [content, setContent] = useState('');
+  const [{ profile, getProfile }] = useState(() => new UserStore());
   const [{ categories, getCategories }] = useState(() => new CategoryStore());
   const [
     {
@@ -43,7 +48,9 @@ const EditDiscussion = observer(() => {
   ] = useState(() => new DiscussionStore());
 
   useEffect(() => {
-    token.id ? getCategories() : null;
+    token.id ? getProfile(token?.id) : null;
+    getCategories();
+
     router.isReady
       ? getDiscussion(slug).then((data) => {
           setContent(data.content!);
@@ -90,7 +97,9 @@ const EditDiscussion = observer(() => {
         id: discussion.id,
         title,
         content,
-        categoryId
+        categoryId,
+        edited: true,
+        premium: discussion.premium
       };
 
       await updateDiscussion(data).then((res: any) => {
@@ -103,8 +112,12 @@ const EditDiscussion = observer(() => {
     }
   };
 
+  if (discussion.id && discussion.userId !== token?.id) {
+    router.push('/404');
+  }
+
   return (
-    <div>
+    <Auth>
       <Toaster />
       {!token.id ? (
         <div className="custom-modal all">
@@ -171,41 +184,144 @@ const EditDiscussion = observer(() => {
             <Translation lang={settings?.language} value={'Edit discussion'} />
           </Text>
           <Spacer />
-          <div className="discuss-grid">
-            <div className="item">
-              <Input
-                width="100%"
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Discussion Title'
-                })}
-                value={discussion.title}
-                onChange={(e) =>
-                  setDiscussion({ ...discussion, title: e.target.value })
-                }
-              ></Input>
+          {isXS ? (
+            <div>
+              <Grid.Container gap={1}>
+                <Grid xs={profile?.subAmount ? 24 : 16} lg={16}>
+                  <Input
+                    width="100%"
+                    placeholder={useTranslation({
+                      lang: settings?.language,
+                      value: 'Discussion Title'
+                    })}
+                    value={discussion?.title}
+                    onChange={(e) =>
+                      setDiscussion({ ...discussion, title: e.target.value })
+                    }
+                  ></Input>
+                </Grid>
+                <Grid xs={profile?.subAmount ? 12 : 8} lg={16}>
+                  <Select
+                    width={'100%'}
+                    placeholder={useTranslation({
+                      lang: settings?.language,
+                      value: 'Choose a Category'
+                    })}
+                    value={discussion.categoryId}
+                    onChange={(val) =>
+                      setDiscussion({ ...discussion, categoryId: val })
+                    }
+                  >
+                    {categories.map((item: any) => (
+                      <Select.Option key={item.id} value={item.slug}>
+                        {item.title}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Grid>
+                <Grid xs={profile?.subAmount ? 12 : 0} lg={8}>
+                  <Select
+                    width={'100%'}
+                    placeholder={useTranslation({
+                      lang: settings?.language,
+                      value: 'Free or Premium?'
+                    })}
+                    value={`${discussion.premium}`}
+                    onChange={(val) =>
+                      setDiscussion({
+                        ...discussion,
+                        premium: val === 'true' ? true : false
+                      })
+                    }
+                  >
+                    <Select.Option value={'false'}>
+                      <Translation
+                        lang={settings?.language}
+                        value="For everyone"
+                      />
+                    </Select.Option>
+                    <Select.Option value={'true'}>
+                      <Translation
+                        lang={settings?.language}
+                        value="For my subscribers"
+                      />
+                    </Select.Option>
+                  </Select>
+                </Grid>
+              </Grid.Container>
+              <Spacer />
             </div>
-            <div className="item">
-              <Select
-                disableMatchWidth={true}
-                width={'100%'}
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Choose a Category'
-                })}
-                value={discussion.categoryId}
-                onChange={(val) =>
-                  setDiscussion({ ...discussion, categoryId: val })
-                }
-              >
-                {categories.map((item: any) => (
-                  <Select.Option key={item.id} value={item.slug}>
-                    {item.title}
-                  </Select.Option>
-                ))}
-              </Select>
+          ) : (
+            <div
+              className={`discuss-grid ${profile?.subAmount && 'with-premium'}`}
+            >
+              <div className="item">
+                <Input
+                  width="100%"
+                  placeholder={useTranslation({
+                    lang: settings?.language,
+                    value: 'Discussion Title'
+                  })}
+                  value={discussion?.title}
+                  onChange={(e) =>
+                    setDiscussion({ ...discussion, title: e.target.value })
+                  }
+                ></Input>
+              </div>
+              <div className="item">
+                <Select
+                  disableMatchWidth={true}
+                  width={'100%'}
+                  placeholder={useTranslation({
+                    lang: settings?.language,
+                    value: 'Choose a Category'
+                  })}
+                  value={discussion.categoryId}
+                  onChange={(val) =>
+                    setDiscussion({ ...discussion, categoryId: val })
+                  }
+                >
+                  {categories.map((item: any) => (
+                    <Select.Option key={item.id} value={item.slug}>
+                      {item.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
+              {profile?.subAmount && (
+                <div className="item">
+                  <Select
+                    width={'100%'}
+                    placeholder={useTranslation({
+                      lang: settings?.language,
+                      value: 'Free or Premium?'
+                    })}
+                    value={`${discussion?.premium}`}
+                    onChange={(val) =>
+                      setDiscussion({
+                        ...discussion,
+                        premium: val === 'true' ? true : false
+                      })
+                    }
+                  >
+                    <Select.Option value={'false'}>
+                      <Translation
+                        lang={settings?.language}
+                        value="For everyone"
+                      />
+                    </Select.Option>
+                    <Select.Option value={'true'}>
+                      <Translation
+                        lang={settings?.language}
+                        value="For my subscribers"
+                      />
+                    </Select.Option>
+                  </Select>
+                </div>
+              )}
             </div>
-          </div>
+          )}
+
           {discussion.content ? (
             <Editor
               lang={settings?.language}
@@ -220,6 +336,7 @@ const EditDiscussion = observer(() => {
                   {token.id ? (
                     <>
                       <Button
+                        auto
                         loading={loading}
                         type="secondary-light"
                         onClick={save}
@@ -237,7 +354,7 @@ const EditDiscussion = observer(() => {
                     </>
                   ) : (
                     <Link href="/login">
-                      <Button loading={loading} type="secondary-light">
+                      <Button auto loading={loading} type="secondary-light">
                         <Translation
                           lang={settings?.language}
                           value={'Sign in to publish'}
@@ -256,7 +373,7 @@ const EditDiscussion = observer(() => {
           <Spacer h={5} />
         </div>
       </div>
-    </div>
+    </Auth>
   );
 });
 

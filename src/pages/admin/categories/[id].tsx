@@ -7,7 +7,8 @@ import {
   Select,
   Input,
   Textarea,
-  Toggle
+  Toggle,
+  Popover
 } from '@geist-ui/core';
 import toast, { Toaster } from 'react-hot-toast';
 import { ChromePicker } from 'react-color';
@@ -20,6 +21,8 @@ import UserStore from 'stores/user';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
 import useSettings from 'components/settings';
+import CustomIcon from 'components/data/icon/icon';
+import IconWidget from 'components/data/icon/widget';
 
 const EditCategory = observer(() => {
   const token = useToken();
@@ -27,17 +30,22 @@ const EditCategory = observer(() => {
   const settings = useSettings();
   const { id } = router.query;
   const [showColor, toggleColor] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [{ users, getModerators }] = useState(() => new UserStore());
 
   const [{ loading, category, setCategory, getCategory, updateCategory }] =
     useState(() => new CategoryStore());
-  const { title, description, color, authRequired, moderator } = category;
+  const { title, description, color, authRequired, moderator, icon } = category;
 
   useEffect(() => {
     getModerators();
     let _id: any = id;
     router.isReady ? getCategory(_id) : null;
   }, [router, token?.id]);
+
+  const changeHandler = (next) => {
+    setVisible(next);
+  };
 
   const save = async () => {
     if (!title || title.length < 3) {
@@ -142,6 +150,30 @@ const EditCategory = observer(() => {
               ''
             )}
 
+            <Text>
+              <Translation lang={settings?.language} value="Icon" />
+            </Text>
+            <Popover
+              hideArrow
+              visible={visible}
+              onVisibleChange={changeHandler}
+              content={
+                <IconWidget
+                  width={350}
+                  height={300}
+                  lang={settings?.language}
+                  onPick={(val) => {
+                    setCategory({ ...category, ...{ icon: val } });
+                    setVisible(false);
+                  }}
+                />
+              }
+              width={'100%'}
+            >
+              <Button icon={<CustomIcon name={icon?.icon} type={icon?.type} />}>
+                Change icon
+              </Button>
+            </Popover>
             <Text>
               <Translation lang={settings?.language} value="Title" />
             </Text>

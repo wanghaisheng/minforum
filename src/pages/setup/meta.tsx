@@ -86,8 +86,8 @@ const MetaSetup = observer(() => {
   return (
     <SetupVerify>
       <Navbar
-        title="Metadata - Setup Weiss"
-        description="Metadata - Setup Weiss"
+        title="Metadata - Setup Minforum"
+        description="Metadata - Setup Minforum"
         hide
       />
       <Toaster />
@@ -95,7 +95,7 @@ const MetaSetup = observer(() => {
         <div className="page-container top-100">
           <div className="boxed">
             <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-              Weiss
+              Minforum
             </Text>
 
             <Card shadow width="100%">

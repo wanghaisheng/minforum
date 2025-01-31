@@ -46,6 +46,7 @@ const Category = thinky.createModel('categories', {
   title: type.string(),
   description: type.string(),
   color: type.string(),
+  icon: type.object(),
   moderators: type.array().default([]),
   authRequired: type.boolean().default(false),
   status: type.boolean().default(true),
@@ -57,9 +58,14 @@ const Discussion = thinky.createModel('discussions', {
   slug: type.string(),
   title: type.string(),
   content: type.string(),
-  status: type.string().enum(['active', 'banned']).default('active'),
+  status: type
+    .string()
+    .enum(['active', 'banned', 'unanswered', 'answered'])
+    .default('unanswered'),
   view: type.number().default(0),
+  bestAnswer: type.string(),
   userId: type.string(),
+  premium: type.boolean().default(false),
   edited: type.boolean().default(false),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
@@ -190,6 +196,51 @@ const Theme = thinky.createModel('themes', {
   updatedAt: type.date().default(r.now)
 });
 
+const Extension = thinky.createModel('extensions', {
+  title: type.string(),
+  slug: type.string(),
+  version: type.string(),
+  active: type.boolean().default(false),
+  createdAt: type.date().default(r.now),
+  updatedAt: type.date().default(r.now)
+});
+
+const UserSubscription = thinky.createModel('user-subscriptions', {
+  plan: type.string(),
+  amount: type.number(),
+  duration: type.number().default(30),
+  gracePeriod: type.number().default(5),
+  userId: type.string(),
+  active: type.boolean().default(false),
+  renewable: type.boolean().default(true),
+  createdAt: type.date().default(r.now),
+  updatedAt: type.date().default(r.now)
+});
+
+const PlatformSubscription = thinky.createModel('platform-subscriptions', {
+  amount: type.number(),
+  duration: type.number().default(30),
+  gracePeriod: type.number().default(5),
+  userId: type.string(),
+  active: type.boolean().default(false),
+  renewable: type.boolean().default(true),
+  createdAt: type.date().default(r.now),
+  updatedAt: type.date().default(r.now)
+});
+
+const Transaction = thinky.createModel('transactions', {
+  beneficiary: type.string().default('platform'),
+  amount: type.number().default(0),
+  referenceId: type.string(),
+  userId: type.string(),
+  provider: type.string(),
+  narration: type.string(),
+  type: type.string().enum(['subscription', 'user-subscription']),
+  status: type.string().enum(['success', 'failure', 'pending']),
+  createdAt: type.date().default(r.now),
+  updatedAt: type.date().default(r.now)
+});
+
 //Associations
 LikeDiscussion.belongsTo(User, 'profile', 'userId', 'id');
 LikeComment.belongsTo(User, 'profile', 'userId', 'id');
@@ -217,6 +268,8 @@ User.ensureIndex('state');
 User.ensureIndex('city');
 User.ensureIndex('status');
 User.ensureIndex('photo');
+User.ensureIndex('point');
+User.ensureIndex('badges');
 User.ensureIndex('role');
 User.ensureIndex('timestamp');
 User.ensureIndex('createdAt');
@@ -319,6 +372,37 @@ Theme.ensureIndex('slug');
 Theme.ensureIndex('active');
 Theme.ensureIndex('createdAt');
 Theme.ensureIndex('updatedAt');
+
+Extension.ensureIndex('title');
+Extension.ensureIndex('slug');
+Extension.ensureIndex('active');
+Extension.ensureIndex('createdAt');
+Extension.ensureIndex('updatedAt');
+
+UserSubscription.ensureIndex('plan');
+UserSubscription.ensureIndex('amount');
+UserSubscription.ensureIndex('duration');
+UserSubscription.ensureIndex('active');
+UserSubscription.ensureIndex('userId');
+UserSubscription.ensureIndex('createdAt');
+UserSubscription.ensureIndex('updatedAt');
+
+PlatformSubscription.ensureIndex('amount');
+PlatformSubscription.ensureIndex('duration');
+PlatformSubscription.ensureIndex('active');
+PlatformSubscription.ensureIndex('userId');
+PlatformSubscription.ensureIndex('createdAt');
+PlatformSubscription.ensureIndex('updatedAt');
+
+Transaction.ensureIndex('beneficiary');
+Transaction.ensureIndex('amount');
+Transaction.ensureIndex('referenceId');
+Transaction.ensureIndex('userId');
+Transaction.ensureIndex('provider');
+Transaction.ensureIndex('narration');
+Transaction.ensureIndex('status');
+Transaction.ensureIndex('createdAt');
+Transaction.ensureIndex('updatedAt');
 
 const initModel = () => {
   thinky.dbReady().then(async (data) => {
@@ -432,5 +516,9 @@ module.exports = {
   Settings,
   Pageview,
   Theme,
+  Extension,
+  UserSubscription,
+  PlatformSubscription,
+  Transaction,
   ActiveUser
 };

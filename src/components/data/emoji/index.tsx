@@ -1,19 +1,8 @@
 import { Input, Tabs, Text } from '@geist-ui/core';
 import { useMemo, useState } from 'react';
 import { emojis } from './emoji';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCar,
-  faUser,
-  faHashtag,
-  faFlag,
-  faSoccerBall,
-  faSmile,
-  faHorseHead,
-  faAppleWhole,
-  faLightbulb
-} from '@fortawesome/free-solid-svg-icons';
 import { Translation, useTranslation } from 'components/intl/Translation';
+import CustomIcon from '../icon/icon';
 
 type emojiProps = {
   width?: number;
@@ -71,55 +60,58 @@ const Emoji = (props: emojiProps) => {
         onChange={handleChange}
       />
       <Tabs initialValue="1" leftSpace={'0px'}>
-        <Tabs.Item label={<FontAwesomeIcon icon={faSmile} />} value="1">
+        <Tabs.Item label={<CustomIcon name="smile" type="solid" />} value="1">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Smileys & Emotions" />
           </Text>
           <Category name="Smileys & Emotion" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faUser} />} value="2">
+        <Tabs.Item label={<CustomIcon name="user" type="solid" />} value="2">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="People & Body" />
           </Text>
           <Category name="People & Body" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faHorseHead} />} value="3">
+        <Tabs.Item label={<CustomIcon name="dog" type="solid" />} value="3">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Animals & Nature" />
           </Text>
           <Category name="Animals & Nature" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faAppleWhole} />} value="4">
+        <Tabs.Item label={<CustomIcon name="lemon" type="solid" />} value="4">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Food & Drink" />
           </Text>
           <Category name="Food & Drink" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faCar} />} value="5">
+        <Tabs.Item label={<CustomIcon name="car" type="solid" />} value="5">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Travel & Places" />
           </Text>
           <Category name="Travel & Places" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faSoccerBall} />} value="6">
+        <Tabs.Item
+          label={<CustomIcon name="football" type="regular" />}
+          value="6"
+        >
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Activities" />
           </Text>
           <Category name="Activities" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faLightbulb} />} value="7">
+        <Tabs.Item label={<CustomIcon name="bulb" type="solid" />} value="7">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Objects" />
           </Text>
           <Category name="Objects" search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faHashtag} />} value="8">
+        <Tabs.Item label={<CustomIcon name="hash" type="regular" />} value="8">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Symbols" />
           </Text>
           <Category name={'Symbols'} search={search} />
         </Tabs.Item>
-        <Tabs.Item label={<FontAwesomeIcon icon={faFlag} />} value="9">
+        <Tabs.Item label={<CustomIcon name="flag" type="solid" />} value="9">
           <Text font={'13px'} span>
             <Translation lang={props.lang} value="Flags" />
           </Text>

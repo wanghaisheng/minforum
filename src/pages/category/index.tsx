@@ -32,18 +32,14 @@ const Category = observer(() => {
           {categories.slice().map((item) => (
             <div key={item.id}>
               <NextLink href={`/category/${item.slug}`}>
-                <Link width="100%">
+                <Link href={`/category/${item.slug}`} width="100%">
                   <Card
                     type={'default'}
                     width="100%"
                     style={{ background: item.color }}
                     className="text-category"
                   >
-                    <Text
-                      h4
-                      my={0}
-                      // style={{ textTransform: 'uppercase' }}
-                    >
+                    <Text h4 my={0}>
                       {item.title}
                     </Text>
                     <Text p>{item.description}</Text>

@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { r, User, Discussion, Notification } = require('./model');
+const { r, User, Comment, Notification } = require('./model');
 const { asyncForEach } = require('./utils');
 
 const rewardDevotee = async () => {
@@ -127,7 +127,7 @@ const rewardFavorite = async () => {
 
   asyncForEach(users, async (item) => {
     let user = await User.get(item.group);
-    let badges = user.badges;
+    let badges = user.badges || [];
     badges = [...new Set([...badges, 'favorite'])];
 
     await User.get(item.group).update({ badges });
@@ -163,7 +163,7 @@ const rewardPeopleChoice = async () => {
 
   asyncForEach(users, async (item) => {
     let user = await User.get(item.group);
-    let badges = user.badges;
+    let badges = user.badges || [];
     badges = [...new Set([...badges, 'people-choice'])];
 
     await User.get(item.group).update({ badges });
@@ -183,26 +183,22 @@ const rewardPeopleChoice = async () => {
 };
 
 const rewardGenius = async () => {
-  let users = await r
-    .table('notifications')
-    .filter((n) =>
-      n('filterType')
-        .match('like-post')
-        .or(n('filterType').match('like-comment'))
-        .or(n('filterType').match('like-reply'))
-    )
-    .group('receiver')
+  let answers = await r
+    .table('discussions')
+    .group('bestAnswer')
     .count()
-    .ge(1000);
+    .ge(100);
 
-  users = users.filter((item) => item.reduction === true);
+  answers = answers.filter((item) => item.reduction === true && item.group);
 
-  asyncForEach(users, async (item) => {
-    let user = await User.get(item.group);
-    let badges = user.badges;
+  asyncForEach(answers, async (item) => {
+    let comment = await Comment.get(item.group);
+    let user = await User.get(comment.userId);
+
+    let badges = user.badges || [];
     badges = [...new Set([...badges, 'genius'])];
 
-    await User.get(item.group).update({ badges });
+    await User.get(comment.userId).update({ badges });
     await new Notification({
       receiver: item.group,
       filterType: 'reward',
@@ -214,43 +210,39 @@ const rewardGenius = async () => {
       read: false
     }).save();
   }).finally(() => {
-    console.log('Rewarded people choice ', users.length);
+    console.log('Rewarded genius ', answers.length);
   });
 };
 
 const rewardPolymath = async () => {
-  let users = await r
-    .table('notifications')
-    .filter((n) =>
-      n('filterType')
-        .match('like-post')
-        .or(n('filterType').match('like-comment'))
-        .or(n('filterType').match('like-reply'))
-    )
-    .group('receiver')
+  let answers = await r
+    .table('discussions')
+    .group('bestAnswer')
     .count()
     .ge(1000);
 
-  users = users.filter((item) => item.reduction === true);
+  answers = answers.filter((item) => item.reduction === true && item.group);
 
-  asyncForEach(users, async (item) => {
-    let user = await User.get(item.group);
-    let badges = user.badges;
+  asyncForEach(answers, async (item) => {
+    let comment = await Comment.get(item.group);
+    let user = await User.get(comment.userId);
+
+    let badges = user.badges || [];
     badges = [...new Set([...badges, 'polymath'])];
 
-    await User.get(item.group).update({ badges });
+    await User.get(comment.userId).update({ badges });
     await new Notification({
       receiver: item.group,
       filterType: 'reward',
       type: 'admin',
       sender: 'admin',
       message:
-        "You've been awarded the Polymath Badge for providing 1000+ best answers!",
+        "You've been awarded the Polymath Badge for providing 100+ best answers!",
       action: `${user.username}`,
       read: false
     }).save();
   }).finally(() => {
-    console.log('Rewarded people choice ', users.length);
+    console.log('Rewarded polymath ', answers.length);
   });
 };
 

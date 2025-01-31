@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Input,
@@ -10,12 +10,15 @@ import {
   Spacer,
   Image,
   Select,
-  Radio,
   Divider
 } from '@geist-ui/core';
 import { setCookie, parseCookies } from 'nookies';
-import { ChromePicker } from 'react-color';
-import { Image as Picture } from '@geist-ui/icons';
+import {
+  GitBranch,
+  MinusCircle,
+  Image as Picture,
+  Plus
+} from '@geist-ui/icons';
 import AdminNavbar from 'components/admin/Navbar';
 import Sidebar from 'components/admin/Sidebar';
 import SettingsStore from 'stores/settings';
@@ -24,19 +27,44 @@ import toast, { Toaster } from 'react-hot-toast';
 import Editor from 'components/Editor';
 import { useTranslation, Translation } from 'components/intl/Translation';
 import useToken from 'components/Token';
+import { extensionVariable } from 'interfaces/settings';
+import currencies from 'components/api/currency';
 
 const Settings = observer(() => {
   const token = useToken();
   const [store] = useState(() => new SettingsStore());
   const cookie = parseCookies();
-  const [showColor, toggleColor] = useState(false);
   const { loading, settings, setSettings, getSettings, update, uploadImage } =
     store;
-  const { point, email, advert, banWords } = settings;
+  const { point, email, advert, banWords, payment } = settings;
 
   useEffect(() => {
     getSettings();
   }, [token?.id]);
+
+  const addVariable = () => {
+    let variables: any = settings.extensionVariables || [];
+    let variable = [{ key: '', value: '' }];
+    variables = [...variables, ...variable];
+
+    setSettings({ ...settings, extensionVariables: variables });
+  };
+
+  const updateVariable = (index: number, value: extensionVariable) => {
+    let variables: any = settings?.extensionVariables || [];
+    let currentVariable = variables[index];
+    currentVariable = { ...currentVariable, ...value };
+    variables[index] = currentVariable;
+
+    setSettings({ ...settings, extensionVariables: variables });
+  };
+
+  const removeVariable = (index: number) => {
+    let variables: any = settings?.extensionVariables || [];
+    variables = variables.filter((_, key: number) => key !== index);
+
+    setSettings({ ...settings, extensionVariables: variables });
+  };
 
   const handleUpload = async (id: string) => {
     let t = toast.loading(
@@ -106,6 +134,18 @@ const Settings = observer(() => {
       }
     });
   };
+
+  const variables: any = settings?.extensionVariables || [
+    { key: '', value: '' }
+  ];
+
+  const monies = useMemo(
+    () =>
+      currencies
+        .map((item) => ({ title: `${item.name}`, value: item.cc }))
+        .sort((a, b) => a.title.localeCompare(b.title)),
+    [currencies]
+  );
 
   return (
     <Auth roles={['admin']}>
@@ -333,216 +373,6 @@ const Settings = observer(() => {
                 </div>
               </div>
             </Collapse>
-
-            {/* <Collapse
-              title={useTranslation({
-                lang: settings?.language,
-                value: 'Homepage settings'
-              })}
-            >
-              <Radio.Group value={settings?.homepage?.type} useRow>
-                <Radio
-                  value="color"
-                  onChange={() => {
-                    let homepage = settings?.homepage;
-                    homepage.type = 'color';
-                    setSettings({
-                      ...settings,
-                      ...{ homepage }
-                    });
-
-                    console.log(settings);
-                  }}
-                >
-                  <Translation
-                    lang={settings?.language}
-                    value="Background color"
-                  />
-                </Radio>
-                <Spacer inline />
-                <Radio
-                  value="banner"
-                  onChange={() => {
-                    let homepage = settings?.homepage;
-                    homepage.type = 'banner';
-                    setSettings({
-                      ...settings,
-                      homepage
-                    });
-                  }}
-                >
-                  <Translation lang={settings?.language} value="Banner" />
-                </Radio>
-              </Radio.Group>
-              <Spacer />
-              <Divider />
-              {settings?.homepage?.type === 'color' ? (
-                <>
-                  <div className="column">
-                    <div className="item">
-                      <Text h6>
-                        <Translation lang={settings?.language} value="Color" />
-                      </Text>
-                    </div>
-                    <div className="item">
-                      <div
-                        onClick={() => toggleColor(!showColor)}
-                        className="custom-badge with-border large"
-                        style={
-                          { '--category-color': '#fff' } as React.CSSProperties
-                        }
-                      >
-                        <div
-                          className="inner"
-                          style={
-                            {
-                              '--category-inner-color': settings?.homepage
-                                ?.bgColor
-                                ? settings?.homepage?.bgColor
-                                : '#000000'
-                            } as React.CSSProperties
-                          }
-                        >
-                          &nbsp;
-                        </div>
-                      </div>
-                      {showColor ? (
-                        <div
-                          style={{
-                            position: 'absolute',
-                            marginTop: -15,
-                            zIndex: 5
-                          }}
-                        >
-                          <ChromePicker
-                            color={settings?.homepage?.bgColor}
-                            onChange={(val) => {
-                              let homepage = settings?.homepage;
-                              homepage.bgColor = val.hex;
-                              setSettings({
-                                ...settings,
-                                homepage
-                              });
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                  </div>
-                  <div className="column">
-                    <div className="item">
-                      <Text h6>
-                        <Translation lang={settings?.language} value="Title" />
-                      </Text>
-                    </div>
-                    <div className="item">
-                      <Input
-                        width={'100%'}
-                        value={settings?.homepage?.title}
-                        onChange={(e: any) => {
-                          let homepage = settings?.homepage;
-                          homepage.title = e.target.value;
-                          setSettings({
-                            ...settings,
-                            homepage
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="column">
-                    <div className="item">
-                      <Text h6>
-                        <Translation
-                          lang={settings?.language}
-                          value="Description"
-                        />
-                      </Text>
-                    </div>
-                    <div className="item">
-                      <Textarea
-                        width={'100%'}
-                        value={settings?.homepage?.description}
-                        onChange={(e: any) => {
-                          let homepage = settings?.homepage;
-                          homepage.title = e.target.value;
-                          setSettings({
-                            ...settings,
-                            homepage
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="column">
-                    <div className="item">
-                      <Text h6></Text>
-                    </div>
-                    <div className="item">
-                      <Button
-                        shadow
-                        type="secondary"
-                        loading={loading}
-                        onClick={save}
-                      >
-                        <Translation lang={settings?.language} value="Save" />
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="column">
-                    <div className="item">
-                      <Text h6>
-                        <Translation
-                          lang={settings?.language}
-                          value="Site banner"
-                        />
-                      </Text>
-                    </div>
-                    <div className="item">
-                      <div className="discussion-container">
-                        <div>
-                          <Button auto icon={<Picture />}>
-                            <Translation
-                              lang={settings?.language}
-                              value="Upload banner"
-                            />
-                            <input
-                              type="file"
-                              className="file-upload"
-                              id="site-banner"
-                              onChange={() => handleUpload('#site-banner')}
-                            />
-                          </Button>
-                        </div>
-                      </div>
-                      <Spacer />
-                      <div>
-                        {settings?.homepage?.image ? (
-                          <Image
-                            src={`/storage/${settings?.homepage?.image}`}
-                            style={{ width: 'auto', height: 80 }}
-                          />
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                      <Spacer />
-                    </div>
-                  </div>
-                  <div className="column">
-                    <div className="item">
-                      <Text h6></Text>
-                    </div>
-                    <div className="item"></div>
-                  </div>
-                </>
-              )}
-            </Collapse> */}
             <Collapse
               title={useTranslation({
                 lang: settings?.language,
@@ -1102,6 +932,159 @@ const Settings = observer(() => {
             <Collapse
               title={useTranslation({
                 lang: settings?.language,
+                value: 'Payment settings'
+              })}
+            >
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation lang={settings?.language} value="Currency" />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Select
+                    width={'100%'}
+                    value={payment?.currency}
+                    placeholder={useTranslation({
+                      lang: settings?.language,
+                      value: 'Choose one'
+                    })}
+                    onChange={(val: string) =>
+                      setSettings({
+                        ...settings,
+                        payment: {
+                          ...payment,
+                          currency: val
+                        }
+                      })
+                    }
+                  >
+                    {monies.map((item) => (
+                      <Select.Option value={item.value} key={item.value}>
+                        <span className="capitalize">{item.title}</span>
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Premium access fee (monthly)"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Input
+                    htmlType="number"
+                    width={'100%'}
+                    value={`${payment?.monthly}`}
+                    placeholder={useTranslation({
+                      lang: settings.language,
+                      value: 'Leave empty or zero, if not applicable'
+                    })}
+                    onChange={(e: any) =>
+                      setSettings({
+                        ...settings,
+                        payment: {
+                          ...payment,
+                          monthly: Number(e.target.value)
+                        }
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="User subscription fee (monthly)"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Input
+                    htmlType="number"
+                    width={'100%'}
+                    placeholder={useTranslation({
+                      lang: settings.language,
+                      value: 'Leave empty or zero, if not applicable'
+                    })}
+                    value={`${payment?.subscription}`}
+                    onChange={(e: any) =>
+                      setSettings({
+                        ...settings,
+                        payment: {
+                          ...payment,
+                          subscription: Number(e.target.value)
+                        }
+                      })
+                    }
+                  />
+                  <small>
+                    <Translation
+                      lang={settings.language}
+                      value="Note: Payment received by the user when others subscribe to their premium content"
+                    />
+                  </small>
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation lang={settings?.language} value="Percentage" />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Input
+                    htmlType="number"
+                    width={'100%'}
+                    placeholder={useTranslation({
+                      lang: settings.language,
+                      value: 'Leave empty or zero, if not applicable'
+                    })}
+                    value={`${payment?.percentage}`}
+                    onChange={(e: any) =>
+                      setSettings({
+                        ...settings,
+                        payment: {
+                          ...payment,
+                          percentage: Number(e.target.value)
+                        }
+                      })
+                    }
+                  />
+                  <small>
+                    <Translation
+                      lang={settings.language}
+                      value="Percentage charged on user subscription fee"
+                    />
+                  </small>
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6></Text>
+                </div>
+                <div className="item">
+                  <Button
+                    shadow
+                    type="secondary"
+                    loading={loading}
+                    onClick={save}
+                  >
+                    <Translation lang={settings?.language} value="Save" />
+                  </Button>
+                </div>
+              </div>
+            </Collapse>
+            <Collapse
+              title={useTranslation({
+                lang: settings?.language,
                 value: 'Banned words'
               })}
             >
@@ -1187,6 +1170,67 @@ const Settings = observer(() => {
                   </Button>
                 </Tabs.Item>
               </Tabs>
+            </Collapse>
+            <Collapse
+              title={useTranslation({
+                lang: settings?.language,
+                value: 'Extension variables'
+              })}
+            >
+              {variables.map((item: extensionVariable, index: number) => (
+                <div key={index}>
+                  <div className="variable-grid auto">
+                    <div>
+                      <Input
+                        placeholder="VARIABLE_NAME"
+                        width={'100%'}
+                        value={item.key}
+                        onChange={(e: any) =>
+                          updateVariable(index, { key: e.target.value })
+                        }
+                      >
+                        <Translation lang={settings.language} value="Key" />
+                      </Input>
+                    </div>
+                    <div>
+                      <Input.Password
+                        width={'100%'}
+                        value={item.value}
+                        onChange={(e: any) =>
+                          updateVariable(index, { value: e.target.value })
+                        }
+                      >
+                        <Translation lang={settings.language} value="Value" />
+                      </Input.Password>
+                    </div>
+                    <div>
+                      <Spacer h={1.7} />
+                      <Button
+                        auto
+                        type="error-light"
+                        icon={<MinusCircle />}
+                        scale={0.8}
+                        onClick={() => removeVariable(index)}
+                      />
+                    </div>
+                  </div>
+                  <Divider />
+                </div>
+              ))}
+
+              <Spacer />
+              <Button
+                auto
+                loading={loading}
+                icon={<Plus />}
+                onClick={addVariable}
+              >
+                <Translation lang={settings.language} value="Add" />
+              </Button>
+              <Spacer inline />
+              <Button type="secondary-light" loading={loading} onClick={save}>
+                <Translation lang={settings.language} value="Save" />
+              </Button>
             </Collapse>
           </Collapse.Group>
         </main>

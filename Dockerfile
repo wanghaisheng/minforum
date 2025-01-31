@@ -5,8 +5,8 @@ FROM rethinkdb:latest
 WORKDIR /usr/app
 
 # Create a new user and group
-RUN addgroup --system --gid 1001 weiss
-RUN adduser --system --uid 1001 weiss
+RUN addgroup --system --gid 1001 minforum
+RUN adduser --system --uid 1001 minforum
 
 RUN mkdir /usr/local/nvm
 ENV NVM_DIR=/usr/local/nvm
@@ -50,7 +50,7 @@ EXPOSE 2323
 
 # Run container as non-root (unprivileged) user
 # The node user is provided in the Node.js Alpine base image
-USER weiss
+USER minforum
 
 
 # Run the app

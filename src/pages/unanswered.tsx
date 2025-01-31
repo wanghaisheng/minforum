@@ -119,13 +119,18 @@ const Home = observer(() => {
 
           <div className="custom-tab">
             <NextLink href="/popular">
-              <Link className="active">
+              <Link>
                 <Translation lang={settings?.language} value="Popular" />
               </Link>
             </NextLink>
             <NextLink href="/">
               <Link>
                 <Translation lang={settings?.language} value="Recent" />
+              </Link>
+            </NextLink>
+            <NextLink href="/unanswered">
+              <Link className="active">
+                <Translation lang={settings?.language} value="Unanswered" />
               </Link>
             </NextLink>
             <NextLink href="/category">
@@ -140,6 +145,7 @@ const Home = observer(() => {
               key={item.id}
               lang={settings?.language}
               category={item.category?.title}
+              color={item.category?.color}
               slug={item.slug}
               avatar={
                 item.profile && item.profile.photo
@@ -147,8 +153,11 @@ const Home = observer(() => {
                   : '/images/avatar.png'
               }
               author={item.profile?.name}
+              authorRole={item.profile?.role}
+              authorUsername={item.profile?.username}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              premium={item.premium}
               view={item.view}
               date={item.createdAt}
             />

@@ -1,5 +1,5 @@
 import { resProp } from 'interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { userProp } from 'interfaces/user';
 import { discussionProp } from 'interfaces/discussion';
 
@@ -21,8 +21,11 @@ export default class AnalyticsStore {
   };
 
   @action getUsers = async (from: string, to: string) => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
+
     let url = `${API_URL}/analytics/users?from=${from}&to=${to}`;
 
     await fetch(url, {
@@ -34,19 +37,25 @@ export default class AnalyticsStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.users = res.data;
-
-          this.loading = false;
+          runInAction(() => {
+            this.users = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action getDiscussions = async (from: string, to: string) => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
+
     let url = `${API_URL}/analytics/discussions?from=${from}&to=${to}`;
 
     await fetch(url, {
@@ -58,19 +67,25 @@ export default class AnalyticsStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.discussions = res.data;
-
-          this.loading = false;
+          runInAction(() => {
+            this.discussions = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action getPageviews = async (from: string, to: string) => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
+
     let url = `${API_URL}/analytics/pageviews?from=${from}&to=${to}`;
 
     await fetch(url, {
@@ -82,11 +97,14 @@ export default class AnalyticsStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.pageviews = res.data;
-
-          this.loading = false;
+          runInAction(() => {
+            this.pageviews = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

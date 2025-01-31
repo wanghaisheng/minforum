@@ -31,15 +31,17 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
                     await Comment.get(postId)
                       .getJoin()
                       .then(async (d: any) => {
-                        const notify = new Notification({
-                          type: 'post',
-                          sender: data.userId,
-                          receiver: d.userId,
-                          name: p.name,
-                          filterType: 'like-comment',
-                          action: `${ds.slug}#${d.slug}`
-                        });
-                        await notify.save().then(() => {});
+                        if (ds.userId !== userId) {
+                          const notify = new Notification({
+                            type: 'post',
+                            sender: data.userId,
+                            receiver: d.userId,
+                            name: p.name,
+                            filterType: 'like-comment',
+                            action: `${ds.slug}#${d.slug}`
+                          });
+                          await notify.save().then(() => {});
+                        }
                       });
                   });
                   res.send({ success: true, data, like: true });

@@ -54,7 +54,7 @@ const EmailSetup = observer(() => {
         ...{ point },
         banWords: 'motherfucker, bullshit, fuck, shit',
         status: 'completed',
-        theme: 'weiss'
+        theme: 'minforum'
       };
 
       await userStore
@@ -91,8 +91,8 @@ const EmailSetup = observer(() => {
   return (
     <SetupVerify>
       <Navbar
-        title="Email settings - Setup Weiss"
-        description="Email settings - Setup Weiss"
+        title="Email settings - Setup MinForum"
+        description="Email settings - Setup MinForum"
         hide
       />
       <Toaster />
@@ -100,7 +100,7 @@ const EmailSetup = observer(() => {
         <div className="page-container top-100">
           <div className="boxed">
             <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-              Weiss
+              Minforum
             </Text>
 
             <Card shadow width="100%">

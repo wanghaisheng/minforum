@@ -10,8 +10,12 @@ export default class UserStore {
   @observable more: boolean = false;
   @observable page: number = 1;
   @observable limit: number = 30;
-  @observable total?: number = 0;
+  @observable total: number = 0;
   @observable user: userProp = {
+    id: '',
+    name: ''
+  };
+  @observable profile: userProp = {
     id: '',
     name: ''
   };
@@ -36,7 +40,9 @@ export default class UserStore {
 
   @action setup = async (body: userProp) => {
     let url = `${API_URL}/user/setup`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     return await fetch(url, {
       method: 'POST',
       headers: {
@@ -47,7 +53,9 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         return res;
       })
       .catch((err) => console.log(err));
@@ -55,7 +63,9 @@ export default class UserStore {
 
   @action signup = async (body: userProp) => {
     let url = `${API_URL}/user/create`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     return await fetch(url, {
       method: 'POST',
       headers: {
@@ -66,7 +76,9 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         return res;
       })
       .catch((err) => console.log(err));
@@ -74,7 +86,9 @@ export default class UserStore {
 
   @action socialConnect = async (body: userProp) => {
     let url = `${API_URL}/user/social`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     return await fetch(url, {
       method: 'POST',
       headers: {
@@ -85,7 +99,9 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         return res;
       })
       .catch((err) => console.log(err));
@@ -93,7 +109,9 @@ export default class UserStore {
 
   @action forgot = async (body: any) => {
     let url = `${API_URL}/user/forgot`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
 
     return await fetch(url, {
       method: 'POST',
@@ -105,7 +123,9 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         return res;
       })
       .catch((err) => console.log(err));
@@ -135,7 +155,9 @@ export default class UserStore {
 
   @action verifyAccount = async (body: any) => {
     let url = `${API_URL}/user/verify`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
 
     return await fetch(url, {
       method: 'POST',
@@ -147,7 +169,9 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         return res;
       })
       .catch((err) => console.log(err));
@@ -221,7 +245,10 @@ export default class UserStore {
 
   @action login = async (body: userProp) => {
     let url = `${API_URL}/user/login`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
+
     return await fetch(url, {
       method: 'POST',
       headers: {
@@ -232,17 +259,21 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res: resProp) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+        });
         return res;
       })
       .catch((err) => console.log(err));
   };
 
-  @action getUsers = async () => {
-    this.loading = true;
-    this.users = [];
+  @action getUsers = async (filter: string) => {
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
 
-    let url = `${API_URL}/user?page=${this.page}&limit=${this.limit}`;
+    let url = `${API_URL}/user?page=${this.page}&limit=${this.limit}&filter=${filter}`;
 
     await fetch(url, {
       headers: {
@@ -253,19 +284,27 @@ export default class UserStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.users = res.data;
-          this.total = res.count;
-          this.loading = false;
+          setTimeout(() => {
+            runInAction(() => {
+              this.users = res.data;
+              this.total = res.count;
+              this.loading = false;
+            });
+          }, 2000);
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action getModerators = async () => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
 
     let url = `${API_URL}/user/moderators`;
 
@@ -277,20 +316,24 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res: resProp) => {
-        if (res.success) {
-          this.users = res.data;
-          this.total = res.count;
-          this.loading = false;
-        } else {
-          this.loading = false;
-        }
+        runInAction(() => {
+          if (res.success) {
+            this.users = res.data;
+            this.total = res.count;
+            this.loading = false;
+          } else {
+            this.loading = false;
+          }
+        });
       })
       .catch((err) => console.log(err));
   };
 
   @action getContributors = async () => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
 
     let url = `${API_URL}/user/contributors`;
 
@@ -302,19 +345,24 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res: resProp) => {
-        if (res.success) {
-          this.users = res.data;
-          this.loading = false;
-        } else {
-          this.loading = false;
-        }
+        runInAction(() => {
+          if (res.success) {
+            this.users = res.data;
+            this.loading = false;
+          } else {
+            this.loading = false;
+          }
+        });
       })
       .catch((err) => console.log(err));
   };
 
   @action getUser = async (id: string) => {
     let url = `${API_URL}/user/${id}`;
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
+
     return await fetch(url, {
       headers: {
         'content-type': 'application/json',
@@ -323,8 +371,30 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res: resProp) => {
-        this.loading = false;
+        runInAction(() => {
+          this.loading = false;
+          this.user = res.data;
+        });
+
         return res;
+      })
+      .catch((err) => console.log(err));
+  };
+
+  @action getProfile = async (id: string) => {
+    let url = `${API_URL}/user/${id}`;
+
+    await fetch(url, {
+      headers: {
+        'content-type': 'application/json',
+        apikey: API_KEY
+      }
+    })
+      .then((res) => res.json())
+      .then((res: resProp) => {
+        runInAction(() => {
+          this.profile = res.data;
+        });
       })
       .catch((err) => console.log(err));
   };
@@ -341,7 +411,10 @@ export default class UserStore {
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.user = res.data;
+          runInAction(() => {
+            this.loading = false;
+            this.user = res.data;
+          });
           return res.data.id;
         } else {
           return false;
@@ -367,7 +440,9 @@ export default class UserStore {
   };
 
   @action searchUsers = async (query: string) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/user/search?page=${this.page}&limit=${this.limit}&query=${query}`;
 
     await fetch(url, {
@@ -378,14 +453,16 @@ export default class UserStore {
     })
       .then((res) => res.json())
       .then((res: resProp) => {
-        if (res.success) {
-          setTimeout(() => {
-            this.users = res.data;
+        runInAction(() => {
+          if (res.success) {
+            setTimeout(() => {
+              this.users = res.data;
+              this.loading = false;
+            }, 1000);
+          } else {
             this.loading = false;
-          }, 1000);
-        } else {
-          this.loading = false;
-        }
+          }
+        });
       })
       .catch((err) => console.log(err));
   };
