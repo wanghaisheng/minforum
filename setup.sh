@@ -16,6 +16,7 @@ server_setup() {
   # Generate hash for API key
   md5="min-forum-random-hash"
   hash="$(echo -n "$md5" | openssl rand -hex 20)"
+  secret="$(date +%s | sha256sum | base64 | head -c 16)"
 
   # Insert values into .env file
   cat << EOF >> .env
@@ -24,11 +25,13 @@ DB_HOST="localhost"
 DB_NAME="min-forum"
 DB_PORT="28015"
 GEO_URL="https://get.geojs.io/v1/ip/geo"
+APP_SECRET="$secret"
 
 NEXT_PUBLIC_API_URL="/api"
 NEXT_PUBLIC_API_KEY="$hash"
 NEXT_PUBLIC_CLIENT_ORIGINS="$PUBLIC_IP"
 NEXT_PUBLIC_BASE_URL="$PUBLIC_IP"
+NEXT_PUBLIC_APP_SECRET="$secret"
 EOF
 
   # Configure Nginx

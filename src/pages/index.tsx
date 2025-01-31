@@ -13,8 +13,11 @@ import AdminVerify from 'components/admin/AdminVerify';
 import { Translation } from 'components/intl/Translation';
 import isSetup from 'components/Setup';
 import useSettings from 'components/settings';
+const { subtle } = globalThis.crypto;
 
 const Home = observer(() => {
+  console.log(subtle);
+
   const token = useToken();
   const settings = useSettings();
   const [{ loading, page, nomore, discussions, setPage, getDiscussions }] =

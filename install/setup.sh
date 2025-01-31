@@ -13,7 +13,7 @@ check_rethinkdb_installed() {
 # Function to install RethinkDB on macOS using Homebrew
 install_on_macos() {
     echo "Installing RethinkDB on macOS..."
-    # Check if Homebrew is installed
+    # Check if Homebrew is installed 
     if ! command -v brew &> /dev/null; then
         echo "Homebrew not found. Installing Homebrew first..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
