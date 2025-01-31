@@ -322,14 +322,14 @@ const Extensions = observer(() => {
             <Translation lang={settings?.language} value="Upload extension" />
           </Button>
           <Spacer inline />
-          <Link
+          {/* <Link
             target="_blank"
             href="https://discuss.minforum.org/d/how-to-create-an-extension"
             icon
             color
           >
             <Translation lang={settings?.language} value="Help" />
-          </Link>
+          </Link> */}
 
           <Spacer />
           <Table width={'100%'} data={extensions}>

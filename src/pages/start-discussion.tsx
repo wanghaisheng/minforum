@@ -9,7 +9,6 @@ import {
   Grid,
   useMediaQuery
 } from '@geist-ui/core';
-import { Lock } from '@geist-ui/icons';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
 import Navbar from 'components/Navbar';
@@ -22,6 +21,7 @@ import CategoryStore from 'stores/category';
 import { Translation, useTranslation } from 'components/intl/Translation';
 import useSettings from 'components/settings';
 import UserStore from 'stores/user';
+import CustomIcon from 'components/data/icon/icon';
 
 const StartDiscussion = observer(() => {
   const token = useToken();
@@ -97,17 +97,23 @@ const StartDiscussion = observer(() => {
           <div className="inner">
             <Card shadow>
               <div className="center">
-                <Lock size={30} />
-                <Text>
+                <CustomIcon name="lock-alt" type="solid" size={50} />
+                <Spacer h={2} />
+                <Text h4>
                   <Translation
                     lang={settings?.language}
                     value={'You are required to login to access this page'}
                   />
                 </Text>
-                <Spacer />
+                <Spacer h={2} />
                 <Link href="/login">
-                  <Button type="secondary">
-                    <Translation lang={settings?.language} value={'Sign in'} />
+                  <Button type="secondary-light">
+                    <b>
+                      <Translation
+                        lang={settings?.language}
+                        value={'Sign in'}
+                      />
+                    </b>
                   </Button>
                 </Link>
                 <Spacer />
@@ -157,9 +163,8 @@ const StartDiscussion = observer(() => {
                     }
                   ></Input>
                 </Grid>
-                <Grid xs={profile?.subAmount ? 12 : 8} lg={16}>
+                <Grid xs={24} lg={16}>
                   <Select
-                    width={'100%'}
                     placeholder={useTranslation({
                       lang: settings?.language,
                       value: 'Choose a Category'
@@ -176,42 +181,11 @@ const StartDiscussion = observer(() => {
                     ))}
                   </Select>
                 </Grid>
-                <Grid xs={profile?.subAmount ? 12 : 0} lg={8}>
-                  <Select
-                    width={'100%'}
-                    placeholder={useTranslation({
-                      lang: settings?.language,
-                      value: 'Free or Premium?'
-                    })}
-                    value={`${discussion.premium}`}
-                    onChange={(val) =>
-                      setDiscussion({
-                        ...discussion,
-                        premium: val === 'true' ? true : false
-                      })
-                    }
-                  >
-                    <Select.Option value={'false'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For everyone"
-                      />
-                    </Select.Option>
-                    <Select.Option value={'true'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For my subscribers"
-                      />
-                    </Select.Option>
-                  </Select>
-                </Grid>
               </Grid.Container>
               <Spacer />
             </div>
           ) : (
-            <div
-              className={`discuss-grid ${profile?.subAmount && 'with-premium'}`}
-            >
+            <div className={`discuss-grid`}>
               <div className="item">
                 <Input
                   width="100%"
@@ -244,37 +218,6 @@ const StartDiscussion = observer(() => {
                   ))}
                 </Select>
               </div>
-              {profile?.subAmount && (
-                <div className="item">
-                  <Select
-                    width={'100%'}
-                    placeholder={useTranslation({
-                      lang: settings?.language,
-                      value: 'Free or Premium?'
-                    })}
-                    value={`${discussion.premium}`}
-                    onChange={(val) =>
-                      setDiscussion({
-                        ...discussion,
-                        premium: val === 'true' ? true : false
-                      })
-                    }
-                  >
-                    <Select.Option value={'false'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For everyone"
-                      />
-                    </Select.Option>
-                    <Select.Option value={'true'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For my subscribers"
-                      />
-                    </Select.Option>
-                  </Select>
-                </div>
-              )}
             </div>
           )}
           <Editor

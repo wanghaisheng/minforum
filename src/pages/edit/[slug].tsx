@@ -184,6 +184,7 @@ const EditDiscussion = observer(() => {
             <Translation lang={settings?.language} value={'Edit discussion'} />
           </Text>
           <Spacer />
+
           {isXS ? (
             <div>
               <Grid.Container gap={1}>
@@ -200,9 +201,8 @@ const EditDiscussion = observer(() => {
                     }
                   ></Input>
                 </Grid>
-                <Grid xs={profile?.subAmount ? 12 : 8} lg={16}>
+                <Grid xs={24} lg={16}>
                   <Select
-                    width={'100%'}
                     placeholder={useTranslation({
                       lang: settings?.language,
                       value: 'Choose a Category'
@@ -219,50 +219,19 @@ const EditDiscussion = observer(() => {
                     ))}
                   </Select>
                 </Grid>
-                <Grid xs={profile?.subAmount ? 12 : 0} lg={8}>
-                  <Select
-                    width={'100%'}
-                    placeholder={useTranslation({
-                      lang: settings?.language,
-                      value: 'Free or Premium?'
-                    })}
-                    value={`${discussion.premium}`}
-                    onChange={(val) =>
-                      setDiscussion({
-                        ...discussion,
-                        premium: val === 'true' ? true : false
-                      })
-                    }
-                  >
-                    <Select.Option value={'false'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For everyone"
-                      />
-                    </Select.Option>
-                    <Select.Option value={'true'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For my subscribers"
-                      />
-                    </Select.Option>
-                  </Select>
-                </Grid>
               </Grid.Container>
               <Spacer />
             </div>
           ) : (
-            <div
-              className={`discuss-grid ${profile?.subAmount && 'with-premium'}`}
-            >
+            <div className={`discuss-grid`}>
               <div className="item">
                 <Input
                   width="100%"
+                  value={discussion?.title}
                   placeholder={useTranslation({
                     lang: settings?.language,
                     value: 'Discussion Title'
                   })}
-                  value={discussion?.title}
                   onChange={(e) =>
                     setDiscussion({ ...discussion, title: e.target.value })
                   }
@@ -288,37 +257,6 @@ const EditDiscussion = observer(() => {
                   ))}
                 </Select>
               </div>
-              {profile?.subAmount && (
-                <div className="item">
-                  <Select
-                    width={'100%'}
-                    placeholder={useTranslation({
-                      lang: settings?.language,
-                      value: 'Free or Premium?'
-                    })}
-                    value={`${discussion?.premium}`}
-                    onChange={(val) =>
-                      setDiscussion({
-                        ...discussion,
-                        premium: val === 'true' ? true : false
-                      })
-                    }
-                  >
-                    <Select.Option value={'false'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For everyone"
-                      />
-                    </Select.Option>
-                    <Select.Option value={'true'}>
-                      <Translation
-                        lang={settings?.language}
-                        value="For my subscribers"
-                      />
-                    </Select.Option>
-                  </Select>
-                </div>
-              )}
             </div>
           )}
 

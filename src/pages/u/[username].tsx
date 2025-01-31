@@ -236,49 +236,51 @@ const User = observer(() => {
                   <Spacer />
                   <div className="desktop">
                     {settings?.payment?.currency &&
-                      settings?.payment?.percentage &&
-                      settings?.payment?.subscription &&
-                      user?.subAmount &&
-                      token?.id &&
-                      token?.id !== user?.id && (
-                        <>
-                          <Button
-                            scale={0.8}
-                            auto
-                            icon={
-                              subscribed ? (
-                                <CustomIcon
-                                  name="user-check"
-                                  color="#fff"
-                                  type="solid"
-                                />
-                              ) : (
-                                <CustomIcon
-                                  name="crown"
-                                  color="#fff"
-                                  type="solid"
-                                />
-                              )
-                            }
-                            onClick={() => {
-                              subscribed ? null : toggleModal(true);
-                            }}
-                            style={{
-                              backgroundColor: '#8B00F6',
-                              borderColor: '#8B00F6',
-                              color: '#fff'
-                            }}
-                          >
-                            <b>
-                              <Translation
-                                lang={settings?.language}
-                                value={subscribed ? 'Subscribed' : 'Subscribe'}
+                    settings?.payment?.percentage &&
+                    settings?.payment?.subscription &&
+                    user?.subAmount &&
+                    token?.id &&
+                    token?.id !== user?.id ? (
+                      <>
+                        <Button
+                          scale={0.8}
+                          auto
+                          icon={
+                            subscribed ? (
+                              <CustomIcon
+                                name="user-check"
+                                color="#fff"
+                                type="solid"
                               />
-                            </b>
-                          </Button>
-                          <Spacer inline />{' '}
-                        </>
-                      )}
+                            ) : (
+                              <CustomIcon
+                                name="crown"
+                                color="#fff"
+                                type="solid"
+                              />
+                            )
+                          }
+                          onClick={() => {
+                            subscribed ? null : toggleModal(true);
+                          }}
+                          style={{
+                            backgroundColor: '#8B00F6',
+                            borderColor: '#8B00F6',
+                            color: '#fff'
+                          }}
+                        >
+                          <b>
+                            <Translation
+                              lang={settings?.language}
+                              value={subscribed ? 'Subscribed' : 'Subscribe'}
+                            />
+                          </b>
+                        </Button>
+                        <Spacer inline />{' '}
+                      </>
+                    ) : (
+                      ''
+                    )}
                     {token?.id && token?.id !== user?.id && (
                       <Button
                         scale={0.8}
@@ -353,49 +355,47 @@ const User = observer(() => {
               <Spacer />
               <div className="mobile">
                 {settings?.payment?.currency &&
-                  settings?.payment?.percentage &&
-                  settings?.payment?.subscription &&
-                  user?.subAmount &&
-                  token?.id &&
-                  token?.id !== user?.id && (
-                    <>
-                      <Button
-                        scale={0.8}
-                        auto
-                        icon={
-                          subscribed ? (
-                            <CustomIcon
-                              name="user-check"
-                              color="#fff"
-                              type="solid"
-                            />
-                          ) : (
-                            <CustomIcon
-                              name="crown"
-                              color="#fff"
-                              type="solid"
-                            />
-                          )
-                        }
-                        onClick={() => {
-                          subscribed ? null : toggleModal(true);
-                        }}
-                        style={{
-                          backgroundColor: '#8B00F6',
-                          borderColor: '#8B00F6',
-                          color: '#fff'
-                        }}
-                      >
-                        <b>
-                          <Translation
-                            lang={settings?.language}
-                            value={subscribed ? 'Subscribed' : 'Subscribe'}
+                settings?.payment?.percentage &&
+                settings?.payment?.subscription &&
+                user?.subAmount &&
+                token?.id &&
+                token?.id !== user?.id ? (
+                  <>
+                    <Button
+                      scale={0.8}
+                      auto
+                      icon={
+                        subscribed ? (
+                          <CustomIcon
+                            name="user-check"
+                            color="#fff"
+                            type="solid"
                           />
-                        </b>
-                      </Button>
-                      <Spacer inline />{' '}
-                    </>
-                  )}
+                        ) : (
+                          <CustomIcon name="crown" color="#fff" type="solid" />
+                        )
+                      }
+                      onClick={() => {
+                        subscribed ? null : toggleModal(true);
+                      }}
+                      style={{
+                        backgroundColor: '#8B00F6',
+                        borderColor: '#8B00F6',
+                        color: '#fff'
+                      }}
+                    >
+                      <b>
+                        <Translation
+                          lang={settings?.language}
+                          value={subscribed ? 'Subscribed' : 'Subscribe'}
+                        />
+                      </b>
+                    </Button>
+                    <Spacer inline />{' '}
+                  </>
+                ) : (
+                  ''
+                )}
 
                 {token?.id && token?.id !== user?.id && (
                   <Button

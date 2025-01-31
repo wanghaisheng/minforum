@@ -929,7 +929,7 @@ const Settings = observer(() => {
                 </div>
               </div>
             </Collapse>
-            <Collapse
+            {/* <Collapse
               title={useTranslation({
                 lang: settings?.language,
                 value: 'Payment settings'
@@ -1081,7 +1081,7 @@ const Settings = observer(() => {
                   </Button>
                 </div>
               </div>
-            </Collapse>
+            </Collapse> */}
             <Collapse
               title={useTranslation({
                 lang: settings?.language,

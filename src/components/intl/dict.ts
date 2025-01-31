@@ -4137,6 +4137,15 @@ const dict = [
     cn: '6个月前',
     ja: '6ヶ月前',
     ru: '6 месяца назад'
+  },
+  {
+    en: '1 year ago',
+    es: 'hace 1 año',
+    fr: 'il y a 1 an',
+    de: 'vor 1 Jahr',
+    cn: '1年前',
+    ja: '1年前',
+    ru: '1 год назад'
   }
 ];
 

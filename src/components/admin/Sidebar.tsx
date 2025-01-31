@@ -59,40 +59,6 @@ const Sidebar = (props: sidebarProps) => {
         </span>
       </NextLink>
       <NextLink
-        href="/admin/subscriptions"
-        className={`link ${active === 'subscriptions' ? 'active' : ''}`}
-      >
-        <Tooltip
-          text={useTranslation({ lang: lang, value: 'Subscriptions' })}
-          placement="right"
-        >
-          <CreditCardIcon
-            className="icon"
-            color={active === 'subscriptions' ? '#000' : '#999'}
-          />
-        </Tooltip>
-        <span className="sidelink">
-          <Translation lang={lang} value="Subscriptions" />
-        </span>
-      </NextLink>
-      <NextLink
-        href="/admin/transactions"
-        className={`link ${active === 'transactions' ? 'active' : ''}`}
-      >
-        <Tooltip
-          text={useTranslation({ lang: lang, value: 'Transactions' })}
-          placement="right"
-        >
-          <Invoice01Icon
-            className="icon"
-            color={active === 'transactions' ? '#000' : '#999'}
-          />
-        </Tooltip>
-        <span className="sidelink">
-          <Translation lang={lang} value="Transactions" />
-        </span>
-      </NextLink>
-      <NextLink
         href="/admin/users"
         className={`link ${active === 'users' ? 'active' : ''}`}
       >
