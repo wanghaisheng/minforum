@@ -12,7 +12,7 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 import Navbar from 'components/admin/navbar';
 import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
-import DateModal from 'components/modals/DateModal';
+import DateModal from 'components/modals/date-modal';
 import AnalyticsStore from 'stores/analytics';
 import { useTranslation, Translation } from 'components/intl/translation';
 import useSocket from 'components/socket';

@@ -12,7 +12,7 @@ import {
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
 import AdminNavbar from 'components/admin/navbar';
 import SearchHeading from 'components/search-heading';
-import UserModal from 'components/modals/UserModal';
+import UserModal from 'components/modals/user-modal';
 import Sidebar from 'components/admin/sidebar';
 import UserStore from 'stores/user';
 import { userProp } from 'interfaces/user';

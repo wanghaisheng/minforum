@@ -21,7 +21,7 @@ import Auth from 'components/admin/auth';
 import AnalyticsStore from 'stores/analytics';
 import PageviewStore from 'stores/pageview';
 import { useTranslation, Translation } from 'components/intl/translation';
-import DateModal from 'components/modals/DateModal';
+import DateModal from 'components/modals/date-modal';
 import moment from 'moment';
 import { formatNumber, oneKFormat } from 'components/api/utils';
 import { format } from 'date-fns';

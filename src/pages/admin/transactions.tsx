@@ -13,7 +13,7 @@ import {
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
 import AdminNavbar from 'components/admin/navbar';
 import SearchHeading from 'components/search-heading';
-import TransactionModal from 'components/modals/TransactionModal';
+import TransactionModal from 'components/modals/transaction-modal';
 import Sidebar from 'components/admin/sidebar';
 import TransactionStore from 'stores/transaction';
 import { transactionProp } from 'interfaces/transaction';

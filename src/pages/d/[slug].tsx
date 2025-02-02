@@ -32,8 +32,8 @@ import Reply from 'components/reply';
 import Recommendation from 'components/recommendation';
 import ReportStore from 'stores/report';
 import toast, { Toaster } from 'react-hot-toast';
-import CommentModal from 'components/modals/CommentModal';
-import ReplyModal from 'components/modals/ReplyModal';
+import CommentModal from 'components/modals/comment-modal';
+import ReplyModal from 'components/modals/reply-modal';
 import CommentStore from 'stores/comment';
 import LikeStore from 'stores/like';
 import {
