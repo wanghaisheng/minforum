@@ -19,13 +19,13 @@ import {
   Trash2
 } from '@geist-ui/icons';
 import toast, { Toaster } from 'react-hot-toast';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import ExtensionStore from 'stores/extension';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 import { useRouter } from 'next/router';
 

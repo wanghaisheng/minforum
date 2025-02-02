@@ -20,7 +20,7 @@ import {
   Translation,
   useTimeTranslation,
   useTranslation
-} from './intl/Translation';
+} from './intl/translation';
 import { oneKFormat } from './api/utils';
 import { PencilEdit02Icon } from 'hugeicons-react';
 import { useState } from 'react';

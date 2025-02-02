@@ -13,13 +13,13 @@ import {
 import toast, { Toaster } from 'react-hot-toast';
 import { ChromePicker } from 'react-color';
 import { useRouter } from 'next/router';
-import AdminNavbar from 'components/admin/Navbar';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 import CustomIcon from 'components/data/icon/icon';
 import IconWidget from 'components/data/icon/widget';

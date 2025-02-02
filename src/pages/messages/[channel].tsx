@@ -24,7 +24,7 @@ import {
 import Link from 'next/link';
 import { observer } from 'mobx-react-lite';
 import Emoji from 'components/data/emoji';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import UserStore from 'stores/user';
 import { useRouter } from 'next/router';
 import { getInitials, timeAgoShort } from 'components/api/utils';
@@ -32,15 +32,15 @@ import {
   Translation,
   useTimeTranslation,
   useTranslation
-} from 'components/intl/Translation';
+} from 'components/intl/translation';
 import moment from 'moment';
 import TextareaAutosize from 'react-textarea-autosize';
-import useToken from 'components/Token';
-import useSocket from 'components/Socket';
+import useToken from 'components/token';
+import useSocket from 'components/socket';
 import MessageStore from 'stores/message';
 import BlockStore from 'stores/block';
-import ChatBubble from 'components/ChatBubble';
-import Auth from 'components/Auth';
+import ChatBubble from 'components/chat-bubble';
+import Auth from 'components/auth';
 import useSettings from 'components/settings';
 
 const Index = observer(() => {

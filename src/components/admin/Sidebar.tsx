@@ -10,7 +10,7 @@ import {
   BarChart2,
   FileText
 } from '@geist-ui/icons';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { useTranslation, Translation } from 'components/intl/translation';
 import { CreditCardIcon, Invoice01Icon, PlugSocketIcon } from 'hugeicons-react';
 
 type sidebarProps = {

@@ -1,7 +1,7 @@
 import { Spacer, Text, Button } from '@geist-ui/core';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import Link from 'next/link';
-import { Translation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/translation';
 import { ChevronLeft } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import useSettings from 'components/settings';

@@ -20,6 +20,7 @@ export interface discussionProp {
   lastAwarded?: string;
   action?: any;
   view?: number;
+  isPinned?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -12,13 +12,13 @@ import {
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { ChevronRight } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import SettingsStore from 'stores/settings';
 import toast, { Toaster } from 'react-hot-toast';
 import { validateEmail } from 'components/api/utils';
 import { setCookie, parseCookies } from 'nookies';
-import SetupVerify from 'components/admin/SetupVerify';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import SetupVerify from 'components/admin/setup-verify';
+import { Translation, useTranslation } from 'components/intl/translation';
 
 const Setup = observer(() => {
   const cookie = parseCookies();

@@ -4,16 +4,16 @@ import { Badge, Table, Pagination, Link, Select, Text } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import ReportStore from 'stores/report';
 import { reportProp } from 'interfaces/report';
 import toast, { Toaster } from 'react-hot-toast';
 import DiscussionStore from 'stores/discussion';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 
 const Reports = observer(() => {

@@ -9,14 +9,14 @@ import dynamic from 'next/dynamic';
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false
 });
-import Navbar from 'components/admin/Navbar';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import Navbar from 'components/admin/navbar';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import DateModal from 'components/modals/DateModal';
 import AnalyticsStore from 'stores/analytics';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useSocket from 'components/Socket';
-import useToken from 'components/Token';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useSocket from 'components/socket';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 
 const Dashboard = observer(() => {

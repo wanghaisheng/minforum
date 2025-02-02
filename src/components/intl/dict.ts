@@ -1670,6 +1670,46 @@ const dict = [
     ko: '메타데이터'
   },
   {
+    en: 'Sender name',
+    es: 'Nombre del remitente',
+    fr: "Nom de l'expéditeur",
+    de: 'Absendername',
+    cn: '发件人姓名',
+    ja: '送信者名',
+    ru: 'Имя отправителя',
+    ko: '발신자 이름'
+  },
+  {
+    en: 'Sender email',
+    es: 'Correo del remitente',
+    fr: "E-mail de l'expéditeur",
+    de: 'Absender-E-Mail',
+    cn: '发件人电子邮件',
+    ja: '送信者のメール',
+    ru: 'Электронная почта отправителя',
+    ko: '보내는 사람 이메일'
+  },
+  {
+    en: 'Welcome email',
+    es: 'Correo de bienvenida',
+    fr: 'E-mail de bienvenue',
+    de: 'Willkommens-E-Mail',
+    cn: '欢迎邮件',
+    ja: 'ようこそメール',
+    ru: 'Приветственное письмо',
+    ko: '환영 이메일'
+  },
+  {
+    en: 'General settings',
+    es: 'Configuraciones generales',
+    fr: 'Paramètres généraux',
+    de: 'Allgemeine Einstellungen',
+    cn: '常规设置',
+    ja: '一般設定',
+    ru: 'Общие настройки',
+    ko: '일반 설정'
+  },
+  {
     en: 'Site favicon',
     es: 'Sitio Favicon',
     fr: 'Favicon du site',
@@ -4146,6 +4186,26 @@ const dict = [
     cn: '1年前',
     ja: '1年前',
     ru: '1 год назад'
+  },
+  {
+    en: 'Pinned post',
+    es: 'Publicación fijada',
+    fr: 'Post épinglé',
+    de: 'Angehefteter Beitrag',
+    cn: '置顶帖子',
+    ja: '固定された投稿',
+    ru: 'Закрепленный пост',
+    ko: '고정된 게시물'
+  },
+  {
+    en: 'Locked post',
+    es: 'Publicación bloqueada',
+    fr: 'Publication verrouillée',
+    de: 'Gesperrter Beitrag',
+    cn: '锁定的帖子',
+    ja: 'ロックされた投稿',
+    ru: 'Заблокированный пост',
+    ko: '잠긴 게시물'
   }
 ];
 

@@ -189,6 +189,29 @@ body {
     }
   }
 
+  .search-link {
+    padding: 8px 3px;
+    border-radius: 3px;
+
+    a {
+      display: block;
+      span {
+        font-size: 14px;
+        color: #555;
+        font-weight: 600;
+        margin-bottom: 0;
+        display: block;
+      }
+      small {
+        font-size: 11px;
+        color: #666;
+      }
+    }
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+
   .file-upload {
     position: absolute;
     width: 100%;

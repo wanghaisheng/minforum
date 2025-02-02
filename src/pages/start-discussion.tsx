@@ -11,14 +11,14 @@ import {
 } from '@geist-ui/core';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import DiscussionStore from 'stores/discussion';
-import useToken from 'components/Token';
+import useToken from 'components/token';
 import { useRouter } from 'next/router';
-import Editor from 'components/Editor';
+import Editor from 'components/editor';
 import CategoryStore from 'stores/category';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import UserStore from 'stores/user';
 import CustomIcon from 'components/data/icon/icon';

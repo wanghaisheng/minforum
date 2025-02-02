@@ -16,12 +16,12 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         offset = offset - limit;
       }
 
-      await Discussion.orderBy(r.desc('createdAt'))
+      await Discussion.orderBy(r.desc('isPinned'))
         .filter({ userId: id })
         .skip(offset)
         .limit(limit)
         .then(async (data: any) => {
-          await Discussion.orderBy(r.desc('createdAt'))
+          await Discussion.orderBy(r.desc('isPinned'))
             .filter({ userId: id })
             .then(async (c: any) => {
               let discussions: any = [];

@@ -1,7 +1,7 @@
 import { Spacer, Text } from '@geist-ui/core';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'components/intl/Translation';
+import { useTranslation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Terms = observer(() => {

@@ -19,11 +19,6 @@ export default async function loadExtensions(): Promise<Extension[]> {
     return item.active;
   });
 
-  if (activeExtensions.length === 0) {
-    console.warn('No active extensions found in registry.');
-    return [];
-  }
-
   const extensions: Extension[] = [];
 
   for (const extension of activeExtensions) {

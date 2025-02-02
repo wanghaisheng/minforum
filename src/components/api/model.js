@@ -65,6 +65,7 @@ const Discussion = thinky.createModel('discussions', {
   view: type.number().default(0),
   bestAnswer: type.string(),
   userId: type.string(),
+  isPinned: type.boolean().default(false),
   premium: type.boolean().default(false),
   edited: type.boolean().default(false),
   createdAt: type.date().default(r.now),
@@ -290,6 +291,7 @@ Discussion.ensureIndex('content');
 Discussion.ensureIndex('status');
 Discussion.ensureIndex('view');
 Discussion.ensureIndex('userId');
+Discussion.ensureIndex('isPinned');
 Discussion.ensureIndex('createdAt');
 Discussion.ensureIndex('updatedAt');
 

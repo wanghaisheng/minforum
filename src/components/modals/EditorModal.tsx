@@ -4,7 +4,7 @@ import { Spacer, Button, Select, Popover } from '@geist-ui/core';
 import { Maximize, Minimize, XCircleFill } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import CategoryStore from 'stores/category';
-import Editor from 'components/Editor';
+import Editor from 'components/editor';
 
 type editorProps = {
   loading: boolean;

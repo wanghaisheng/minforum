@@ -3,21 +3,20 @@ import NextLink from 'next/link';
 import { Spacer, Button, Card, Link, Loading } from '@geist-ui/core';
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
-import Navbar from 'components/Navbar';
-import Post from 'components/Post';
-import Sidebar from 'components/Sidebar';
-import useToken from 'components/Token';
+import Navbar from 'components/navbar';
+import Post from 'components/post';
+import Sidebar from 'components/sidebar';
+import useToken from 'components/token';
 import DiscussionStore from 'stores/discussion';
-import Contributors from 'components/Contributors';
-import AdminVerify from 'components/admin/AdminVerify';
-import { Translation } from 'components/intl/Translation';
-import isSetup from 'components/Setup';
+import Contributors from 'components/contributors';
+import AdminVerify from 'components/admin/admin-verify';
+import { Translation } from 'components/intl/translation';
+import isSetup from 'components/setup';
 import useSettings from 'components/settings';
-const { subtle } = globalThis.crypto;
 
-const Home = observer(() => {
-  console.log(subtle);
+type pageProps = { domain: string };
 
+const Home = observer((props: pageProps) => {
   const token = useToken();
   const settings = useSettings();
   const [{ loading, page, nomore, discussions, setPage, getDiscussions }] =
@@ -47,6 +46,8 @@ const Home = observer(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
+
+  //Send domain to min-forum once after installation.
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -159,6 +160,7 @@ const Home = observer(() => {
               authorUsername={item.profile?.username}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              pinned={item.isPinned}
               premium={item.premium}
               view={item.view}
               date={item.createdAt}

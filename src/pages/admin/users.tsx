@@ -10,18 +10,18 @@ import {
   Spacer
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
 import UserModal from 'components/modals/UserModal';
-import Sidebar from 'components/admin/Sidebar';
+import Sidebar from 'components/admin/sidebar';
 import UserStore from 'stores/user';
 import { userProp } from 'interfaces/user';
 import toast, { Toaster } from 'react-hot-toast';
-import Auth from 'components/admin/Auth';
+import Auth from 'components/admin/auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 
 const Admin = observer(() => {

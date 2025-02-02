@@ -5,15 +5,27 @@ import { useRouter } from 'next/router';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { ChevronLeft } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import SettingsStore from 'stores/settings';
-import { validateEmail } from 'components/api/utils';
 import UserStore from 'stores/user';
 import CategoryStore from 'stores/category';
-import SetupVerify from 'components/admin/SetupVerify';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import SetupVerify from 'components/admin/setup-verify';
+import { Translation, useTranslation } from 'components/intl/translation';
 
-const EmailSetup = observer(() => {
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const domain = req.headers.host;
+
+  return {
+    props: {
+      domain
+    }
+  };
+}
+
+type pageProps = { domain: string };
+
+const EmailSetup = observer((props: pageProps) => {
   const cookie = parseCookies();
   const router = useRouter();
   const [userStore] = useState(() => new UserStore());
@@ -41,6 +53,8 @@ const EmailSetup = observer(() => {
     } else if (!email.password) {
       toast.error('Please provide SMTP password.');
     } else {
+      let website = router.basePath;
+
       //Default point settings
       const point = {
         login: 1,
@@ -54,7 +68,9 @@ const EmailSetup = observer(() => {
         ...{ point },
         banWords: 'motherfucker, bullshit, fuck, shit',
         status: 'completed',
-        theme: 'minforum'
+        theme: 'minforum',
+        domain: '',
+        welcomeEmail: `Thank you for joining ${settings?.siteName}`
       };
 
       await userStore

@@ -16,12 +16,12 @@ import {
   ChevronDown
 } from '@geist-ui/icons';
 import { LicenseIcon, Medal06Icon } from 'hugeicons-react';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import UserStore from 'stores/user';
-import useToken from 'components/Token';
+import useToken from 'components/token';
 import { pluralize, oneKFormat, formatNumber } from 'components/api/utils';
-import { Translation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Members = observer(() => {

@@ -5,6 +5,7 @@ export type extensionVariable = {
 
 export interface settingsProp {
   theme?: string;
+  domain?: string;
   language?: string | string[] | any;
   siteFavicon?: string;
   siteLogo?: string;
@@ -40,6 +41,9 @@ export interface settingsProp {
   status?: string;
   announcementText?: string;
   announcementLink?: string;
+  senderName?: string;
+  senderEmail?: string;
+  welcomeEmail?: string;
   terms?: string;
   privacy?: string;
   extensionVariables?: extensionVariable;

@@ -17,10 +17,10 @@ import {
 import { Bell, Menu, ChevronDown } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
-import useToken from '../Token';
+import useToken from '../token';
 import SettingsStore from 'stores/settings';
 import NotificationStore from 'stores/notification';
-import { Translation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 type navbarProps = {

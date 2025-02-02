@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Spacer, Button } from '@geist-ui/core';
 import { Maximize, Minimize, XCircleFill } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
-import Editor from 'components/Editor';
-import { Translation } from 'components/intl/Translation';
+import Editor from 'components/editor';
+import { Translation } from 'components/intl/translation';
 
 type editorProps = {
   lang: string;

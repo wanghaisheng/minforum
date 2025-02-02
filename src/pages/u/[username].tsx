@@ -14,18 +14,18 @@ import { setCookie } from 'nookies';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import { MessageCircle } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import UserStore from 'stores/user';
 import { useRouter } from 'next/router';
-import MinimalPost from 'components/MinimalPost';
+import MinimalPost from 'components/minimal-post';
 import { pluralize, oneKFormat } from 'components/api/utils';
 import DiscussionStore from 'stores/discussion';
-import { Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import { Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import MessageStore from 'stores/message';
 import { LicenseIcon, Medal06Icon } from 'hugeicons-react';
 import useSettings from 'components/settings';
-import { Badges } from 'components/Badges';
+import { Badges } from 'components/badges';
 import { doAction } from 'extensions/hooks';
 import toast, { Toaster } from 'react-hot-toast';
 import SubscriptionStore from 'stores/user-subscription';
@@ -446,6 +446,7 @@ const User = observer(() => {
                 comment={item.comment}
                 view={item.view}
                 premium={item.premium}
+                pinned={item.isPinned}
                 date={item.createdAt}
               />
             ))}

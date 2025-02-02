@@ -11,17 +11,17 @@ import {
   Badge
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
 import TransactionModal from 'components/modals/TransactionModal';
-import Sidebar from 'components/admin/Sidebar';
+import Sidebar from 'components/admin/sidebar';
 import TransactionStore from 'stores/transaction';
 import { transactionProp } from 'interfaces/transaction';
-import Auth from 'components/admin/Auth';
+import Auth from 'components/admin/auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 import { formatNumber } from 'components/api/utils';
 

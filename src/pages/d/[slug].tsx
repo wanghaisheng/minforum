@@ -24,12 +24,12 @@ import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import { Eye, Heart, HeartFill, AlertTriangle } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
-import Navbar from 'components/Navbar';
-import useToken from 'components/Token';
+import Navbar from 'components/navbar';
+import useToken from 'components/token';
 import DiscussionStore from 'stores/discussion';
 import { oneKFormat, parseUsername } from 'components/api/utils';
-import Reply from 'components/Reply';
-import Recommendation from 'components/Recommendation';
+import Reply from 'components/reply';
+import Recommendation from 'components/recommendation';
 import ReportStore from 'stores/report';
 import toast, { Toaster } from 'react-hot-toast';
 import CommentModal from 'components/modals/CommentModal';
@@ -40,7 +40,7 @@ import {
   Translation,
   useTranslation,
   useTimeTranslation
-} from 'components/intl/Translation';
+} from 'components/intl/translation';
 import useSettings from 'components/settings';
 import { Paywall } from 'components/subscriber';
 import CustomIcon from 'components/data/icon/icon';
@@ -665,6 +665,24 @@ const Discussion = observer(() => {
                     <>
                       <Text h2 className="title">
                         {removeBanWords(discussion.title)}{' '}
+                        {discussion?.isPinned && (
+                          <Tooltip
+                            text={useTranslation({
+                              lang,
+                              value: 'Premium post'
+                            })}
+                          >
+                            <Badge
+                              scale={0.5}
+                              style={{
+                                backgroundColor: '#228b22',
+                                marginRight: 3
+                              }}
+                            >
+                              <CustomIcon name={'pin'} color="#fff" size={20} />
+                            </Badge>
+                          </Tooltip>
+                        )}
                         {discussion?.premium && (
                           <Tooltip
                             text={useTranslation({
@@ -676,7 +694,11 @@ const Discussion = observer(() => {
                               scale={0.5}
                               style={{ backgroundColor: '#8B00F6' }}
                             >
-                              <CustomIcon name={'crown'} color="#fff" />
+                              <CustomIcon
+                                name={'crown'}
+                                color="#fff"
+                                size={20}
+                              />
                             </Badge>
                           </Tooltip>
                         )}

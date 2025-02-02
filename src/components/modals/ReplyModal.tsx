@@ -3,12 +3,12 @@ import Link from 'next/link';
 import { Spacer, Button, Select, Popover, Text } from '@geist-ui/core';
 import { Maximize, Minimize, XCircleFill } from '@geist-ui/icons';
 import { observer } from 'mobx-react-lite';
-import Editor from 'components/Editor';
+import Editor from 'components/editor';
 import {
   Translation,
   useReplyTranslation,
   useTranslation
-} from 'components/intl/Translation';
+} from 'components/intl/translation';
 
 type editorProps = {
   lang: string;

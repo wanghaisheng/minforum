@@ -3,14 +3,14 @@ import { Loading, Spacer, Text, Card, Button } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Navbar from 'components/Navbar';
-import Post from 'components/Post';
-import Sidebar from 'components/Sidebar';
+import Navbar from 'components/navbar';
+import Post from 'components/post';
+import Sidebar from 'components/sidebar';
 import CategoryStore from 'stores/category';
 import DiscussionStore from 'stores/discussion';
-import useToken from 'components/Token';
-import Contributors from 'components/Contributors';
-import { Translation } from 'components/intl/Translation';
+import useToken from 'components/token';
+import Contributors from 'components/contributors';
+import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import CustomIcon from 'components/data/icon/icon';
 
@@ -182,6 +182,7 @@ const Category = observer(() => {
               title={removeBanWords(item.title)}
               comment={item.comment}
               premium={item.premium}
+              pinned={item.isPinned}
               view={item.view}
               date={item.createdAt}
             />

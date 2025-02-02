@@ -10,12 +10,12 @@ import {
   Divider
 } from '@geist-ui/core';
 import Turnstile, { useTurnstile } from 'react-turnstile';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/translation';
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import UserStore from 'stores/user';

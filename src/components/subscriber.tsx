@@ -2,7 +2,7 @@ import { subscriptionProp } from 'interfaces/subscription';
 import { useState, useEffect } from 'react';
 import SubscriptionStore from 'stores/user-subscription';
 import { Card, Text, Button, Spacer, Link, Grid } from '@geist-ui/core';
-import { Translation } from './intl/Translation';
+import { Translation } from './intl/translation';
 import CustomIcon from './data/icon/icon';
 
 type paywallProps = {
@@ -17,8 +17,6 @@ type paywallProps = {
 const useSubscription = (props: subscriptionProp) => {
   const [sub]: any = useState(() => new SubscriptionStore());
   const [subscription, setSubscription] = useState(null);
-
-  console.log(props.plan, props.userId);
 
   useEffect(() => {
     const getSubscription = async () => {

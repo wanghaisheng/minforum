@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 const SunEditor = dynamic(() => import('suneditor-react'), {
   ssr: false
 });
-import { Translation, useTranslation } from './intl/Translation';
+import { Translation, useTranslation } from './intl/translation';
 import { Button, Popover, Spacer, Input, User, Loading } from '@geist-ui/core';
 import { Emoji as Emoticon } from '@geist-ui/icons';
 import { UserIcon } from 'hugeicons-react';

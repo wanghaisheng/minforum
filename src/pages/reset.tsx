@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Spacer, Text, Button, Input, Card, Image } from '@geist-ui/core';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import { parseCookies, destroyCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Reset = observer(() => {

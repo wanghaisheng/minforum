@@ -2,12 +2,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { Spacer, Text, Card, Loading, Button, Avatar } from '@geist-ui/core';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import NotificationStore from 'stores/notification';
-import useToken from 'components/Token';
+import useToken from 'components/token';
 import { useRouter } from 'next/router';
-import Auth from 'components/Auth';
+import Auth from 'components/auth';
 import {
   Translation,
   useLikedPostTranslation,
@@ -16,7 +16,7 @@ import {
   useRepliedCommentTranslation,
   useRepliedPostTranslation,
   useTranslation
-} from 'components/intl/Translation';
+} from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Notifications = observer(() => {

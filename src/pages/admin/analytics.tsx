@@ -14,13 +14,13 @@ import {
   Input
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle, Plus } from '@geist-ui/icons';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import AnalyticsStore from 'stores/analytics';
 import PageviewStore from 'stores/pageview';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { useTranslation, Translation } from 'components/intl/translation';
 import DateModal from 'components/modals/DateModal';
 import moment from 'moment';
 import { formatNumber, oneKFormat } from 'components/api/utils';
@@ -28,7 +28,7 @@ import { format } from 'date-fns';
 import { emojis } from 'components/data/emoji/emoji';
 import { es, fr, enUS, de, ja, ru, zhCN } from 'date-fns/locale';
 import dynamic from 'next/dynamic';
-import useToken from 'components/Token';
+import useToken from 'components/token';
 import useSettings from 'components/settings';
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false

@@ -14,7 +14,7 @@ const CustomIcon = (props: iconProps) => {
   return (
     <i
       className={`bx ${type === 'solid' ? 'bxs' : type === 'logo' ? 'bxl' : 'bx'}-${name}`}
-      style={{ fontSize: size || 20, color: color || '#000', ...style }}
+      style={{ fontSize: size || 'inherit', color: color || '#000', ...style }}
     ></i>
   );
 };

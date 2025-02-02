@@ -22,12 +22,12 @@ import {
 import { setCookie } from 'nookies';
 import Router from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import UserStore from 'stores/user';
-import useToken from 'components/Token';
+import useToken from 'components/token';
 import { formatNumber, validateEmail } from 'components/api/utils';
-import Auth from 'components/Auth';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import Auth from 'components/auth';
+import { Translation, useTranslation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Settings = observer(() => {

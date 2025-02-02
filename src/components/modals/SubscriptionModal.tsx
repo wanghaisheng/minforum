@@ -1,6 +1,6 @@
 import { Badge, Modal, Text, Spacer } from '@geist-ui/core';
 import moment from 'moment';
-import { Translation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/translation';
 import { subscriptionProp } from 'interfaces/subscription';
 import { formatNumber } from 'components/api/utils';
 

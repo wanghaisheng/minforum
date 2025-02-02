@@ -2,7 +2,7 @@ import { Input, Spacer, Grid } from '@geist-ui/core';
 import { useMemo, useState } from 'react';
 import icons from './icons';
 
-import { useTranslation } from 'components/intl/Translation';
+import { useTranslation } from 'components/intl/translation';
 import CustomIcon from './icon';
 
 type iconData = {

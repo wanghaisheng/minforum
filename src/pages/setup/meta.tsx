@@ -13,10 +13,10 @@ import { useRouter } from 'next/router';
 import { setCookie, parseCookies } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { ChevronLeft, ChevronRight, Image as Picture } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
-import SetupVerify from 'components/admin/SetupVerify';
+import Navbar from 'components/navbar';
+import SetupVerify from 'components/admin/setup-verify';
 import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/translation';
 
 const MetaSetup = observer(() => {
   const cookie = parseCookies();

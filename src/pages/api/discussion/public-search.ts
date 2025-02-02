@@ -1,7 +1,8 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, Discussion } from 'components/api/model';
-import { withAuth } from 'components/api/utils';
+import { r, Discussion, Category } from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
+import { discussionProp } from 'interfaces/discussion';
 
 const search = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
@@ -19,8 +20,18 @@ const search = async (req: NextApiRequest, res: NextApiResponse) => {
             )
         )
         .getJoin()
-        .then((data: any) => {
-          res.status(200).json({ success: true, data, count: data.length });
+        .then(async (data: any) => {
+          let discussions = [];
+
+          asyncForEach(data, async (item: discussionProp) => {
+            let category = await Category.filter({ slug: item.categoryId });
+            item.category = category[0];
+            discussions.push(item);
+          }).finally(() => {
+            res
+              .status(200)
+              .json({ success: true, data: discussions, count: data.length });
+          });
         })
         .catch((err: any) => signale.fatal(err));
     } else {

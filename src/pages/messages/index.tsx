@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { Spacer, Loading } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/router';
-import { Translation } from 'components/intl/Translation';
-import Auth from 'components/Auth';
+import { Translation } from 'components/intl/translation';
+import Auth from 'components/auth';
 import useSettings from 'components/settings';
 
 const Index = observer(() => {

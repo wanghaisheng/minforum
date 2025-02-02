@@ -50,6 +50,10 @@ app.prepare().then(() => {
     socket.on('typing', (user) => {
       io.emit('typing', user);
     });
+
+    socket.on('telemetry', (domain) => {
+      io.emit('telemetry', domain);
+    });
   });
 
   httpServer

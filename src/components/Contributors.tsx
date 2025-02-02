@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import { Text, Link, User, Spacer, Loading } from '@geist-ui/core';
 import UserStore from 'stores/user';
 import { pluralize } from './api/utils';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/translation';
 
 type contributorProps = {
   lang: string;

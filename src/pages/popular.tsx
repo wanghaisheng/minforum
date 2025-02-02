@@ -4,13 +4,13 @@ import { Spacer, Link, Button, Card, Loading } from '@geist-ui/core';
 
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
-import Navbar from 'components/Navbar';
-import Post from 'components/Post';
-import Sidebar from 'components/Sidebar';
-import useToken from 'components/Token';
+import Navbar from 'components/navbar';
+import Post from 'components/post';
+import Sidebar from 'components/sidebar';
+import useToken from 'components/token';
 import DiscussionStore from 'stores/discussion';
-import Contributors from 'components/Contributors';
-import { Translation } from 'components/intl/Translation';
+import Contributors from 'components/contributors';
+import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Home = observer(() => {

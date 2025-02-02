@@ -12,7 +12,7 @@ import {
   UserStar02Icon
 } from 'hugeicons-react';
 import React from 'react';
-import { useTranslation } from './intl/Translation';
+import { useTranslation } from './intl/translation';
 
 type BadgeProps = {
   color: string;

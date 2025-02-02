@@ -1,7 +1,7 @@
 import { Input, Tabs, Text } from '@geist-ui/core';
 import { useMemo, useState } from 'react';
 import { emojis } from './emoji';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, useTranslation } from 'components/intl/translation';
 import CustomIcon from '../icon/icon';
 
 type emojiProps = {

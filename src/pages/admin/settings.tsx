@@ -13,25 +13,22 @@ import {
   Divider
 } from '@geist-ui/core';
 import { setCookie, parseCookies } from 'nookies';
-import {
-  GitBranch,
-  MinusCircle,
-  Image as Picture,
-  Plus
-} from '@geist-ui/icons';
-import AdminNavbar from 'components/admin/Navbar';
-import Sidebar from 'components/admin/Sidebar';
+import { MinusCircle, Image as Picture, Plus } from '@geist-ui/icons';
+import AdminNavbar from 'components/admin/navbar';
+import Sidebar from 'components/admin/sidebar';
 import SettingsStore from 'stores/settings';
-import Auth from 'components/admin/Auth';
+import Auth from 'components/admin/auth';
 import toast, { Toaster } from 'react-hot-toast';
-import Editor from 'components/Editor';
-import { useTranslation, Translation } from 'components/intl/Translation';
-import useToken from 'components/Token';
+import Editor from 'components/editor';
+import { useTranslation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
 import { extensionVariable } from 'interfaces/settings';
 import currencies from 'components/api/currency';
+import { useRouter } from 'next/router';
 
 const Settings = observer(() => {
   const token = useToken();
+  const router = useRouter();
   const [store] = useState(() => new SettingsStore());
   const cookie = parseCookies();
   const { loading, settings, setSettings, getSettings, update, uploadImage } =
@@ -40,7 +37,7 @@ const Settings = observer(() => {
 
   useEffect(() => {
     getSettings();
-  }, [token?.id]);
+  }, [token?.id, router]);
 
   const addVariable = () => {
     let variables: any = settings.extensionVariables || [];
@@ -175,7 +172,7 @@ const Settings = observer(() => {
             <Collapse
               title={useTranslation({
                 lang: settings?.language,
-                value: 'Metadata'
+                value: 'General settings'
               })}
               initialVisible
             >
@@ -286,6 +283,70 @@ const Settings = observer(() => {
                       setSettings({
                         ...settings,
                         siteDescription: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              </div>
+              <Spacer />
+              <Divider />
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Sender name"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Input
+                    width={'100%'}
+                    value={settings.senderName}
+                    placeholder="MinForum"
+                    onChange={(e: any) =>
+                      setSettings({ ...settings, senderName: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Sender email"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Input
+                    width={'100%'}
+                    value={settings.senderEmail}
+                    placeholder="no-reply@domain.com"
+                    onChange={(e: any) =>
+                      setSettings({ ...settings, senderEmail: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Welcome email"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Textarea
+                    width={'100%'}
+                    value={settings.welcomeEmail}
+                    onChange={(e: any) =>
+                      setSettings({
+                        ...settings,
+                        welcomeEmail: e.target.value
                       })
                     }
                   />
@@ -771,6 +832,7 @@ const Settings = observer(() => {
                   />
                 </div>
               </div>
+
               <div className="column">
                 <div className="item">
                   <Text h6>

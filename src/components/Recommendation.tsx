@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import NextLink from 'next/link';
 import { Text, Link, Spacer, Loading } from '@geist-ui/core';
 import DiscussionStore from 'stores/discussion';
-import { Translation } from 'components/intl/Translation';
+import { Translation } from 'components/intl/translation';
 
 type recommendProps = {
   title: string;
