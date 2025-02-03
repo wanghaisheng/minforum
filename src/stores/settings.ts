@@ -135,25 +135,32 @@ export default class SettingsStore {
       .then((res: resProp) => {
         if (res.success) {
           let settings = res.data;
+
           let variables: any = settings.extensionVariables || [];
-          let emailSettings = settings.email;
-          let social = settings.socialAccount;
+          let emailSettings = settings?.email;
+          let social = settings?.socialAccount || {};
 
-          social.facebook = dec(social.facebook);
-          social.github = dec(social.github);
-          social.google = dec(social.google);
+          social.facebook = social?.facebook ? dec(social?.facebook) : '';
+          social.github = social?.github ? dec(social?.github) : '';
+          social.google = social?.google ? dec(social?.google) : '';
 
-          const { email, password, host } = emailSettings;
-          emailSettings.password = dec(password);
-          emailSettings.host = dec(host);
-          emailSettings.email = dec(email);
+          if (
+            emailSettings?.email &&
+            emailSettings?.email &&
+            emailSettings?.password
+          ) {
+            const { email, password, host } = emailSettings;
+            emailSettings.password = dec(password);
+            emailSettings.host = dec(host);
+            emailSettings.email = dec(email);
+            settings.email = emailSettings;
+          }
 
-          settings.email = emailSettings;
           settings.cloudflarePublicKey = dec(settings.cloudflarePublicKey);
           settings.cloudflareSecretKey = dec(settings.cloudflareSecretKey);
 
-          variables.forEach((variable: any) => {
-            variable.value = dec(variable.value);
+          variables?.forEach((variable: any) => {
+            variable.value = dec(variable?.value);
           });
 
           settings.extensionVariables = variables;
