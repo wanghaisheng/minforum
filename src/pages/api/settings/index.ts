@@ -12,22 +12,28 @@ const getSettings = async (req: NextApiRequest, res: NextApiResponse) => {
           let settings: settingsProp = data.length ? data[0] : {};
           let variables: any = settings.extensionVariables || [];
           let emailSettings = settings?.email;
-          let social = settings?.socialAccount;
+          let social = settings?.socialAccount || {};
 
-          social.facebook = enc(social?.facebook);
-          social.github = enc(social?.github);
-          social.google = enc(social?.google);
+          social.facebook = social?.facebook ? enc(social?.facebook) : '';
+          social.github = social?.github ? enc(social?.github) : '';
+          social.google = social?.google ? enc(social?.google) : '';
 
-          const { email, password, host } = emailSettings;
-          emailSettings.password = enc(password);
-          emailSettings.host = enc(host);
-          emailSettings.email = enc(email);
+          if (
+            emailSettings.email &&
+            emailSettings.email &&
+            emailSettings.password
+          ) {
+            const { email, password, host } = emailSettings;
+            emailSettings.password = enc(password);
+            emailSettings.host = enc(host);
+            emailSettings.email = enc(email);
+            settings.email = emailSettings;
+          }
 
-          settings.email = emailSettings;
           settings.cloudflarePublicKey = enc(settings.cloudflarePublicKey);
           settings.cloudflareSecretKey = enc(settings.cloudflareSecretKey);
 
-          variables.forEach((variable: any) => {
+          variables?.forEach((variable: any) => {
             variable.value = enc(variable?.value);
           });
 
