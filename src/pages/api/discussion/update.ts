@@ -51,10 +51,12 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
               .getJoin()
               .then(async (data: any) => {
                 const notify = new Notification({
-                  type: 'admin',
+                  type: 'post',
                   sender: 'admin',
+                  filterType: 'post-violation',
                   receiver: data.userId,
-                  message: `${data.title} was banned by moderator due to privacy violation.`,
+                  message: `Your post has been banned by a moderator due to a privacy violation.`,
+                  tag: data.title,
                   action: `${data.slug}`
                 });
                 await notify.save().then(() => {});

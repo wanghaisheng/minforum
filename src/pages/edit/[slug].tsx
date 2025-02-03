@@ -269,6 +269,8 @@ const EditDiscussion = observer(() => {
                 lang: settings?.language,
                 value: 'Type something memorable...'
               })}
+              mentionButton
+              showEmoji
               button={
                 <>
                   {token.id ? (

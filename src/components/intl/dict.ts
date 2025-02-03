@@ -4206,6 +4206,66 @@ const dict = [
     ja: 'ロックされた投稿',
     ru: 'Заблокированный пост',
     ko: '잠긴 게시물'
+  },
+  {
+    en: 'Background color',
+    es: 'Color de fondo',
+    fr: 'Couleur de fond',
+    de: 'Hintergrundfarbe',
+    cn: '背景颜色',
+    ja: '背景色',
+    ru: 'Цвет фона',
+    ko: '배경 색상'
+  },
+  {
+    en: 'Background image (optional)',
+    es: 'Imagen de fondo (opcional)',
+    fr: 'Image de fond (facultatif)',
+    de: 'Hintergrundbild (optional)',
+    cn: '背景图片（可选）',
+    ja: '背景画像（オプション）',
+    ru: 'Фоновое изображение (необязательно)',
+    ko: '배경 이미지 (선택 사항)'
+  },
+  {
+    en: 'Background image (optional)',
+    es: 'Imagen de fondo (opcional)',
+    fr: 'Image de fond (facultatif)',
+    de: 'Hintergrundbild (optional)',
+    cn: '背景图片（可选）',
+    ja: '背景画像（オプション）',
+    ru: 'Фоновое изображение (необязательно)',
+    ko: '배경 이미지 (선택 사항)'
+  },
+  {
+    en: 'Homepage text',
+    es: 'Texto de la página de inicio',
+    fr: "Texte de la page d'accueil",
+    de: 'Startseitentext',
+    cn: '主页文本',
+    ja: 'ホームページのテキスト',
+    ru: 'Текст главной страницы',
+    ko: '홈페이지 텍스트'
+  },
+  {
+    en: 'Upload',
+    es: 'Subir',
+    fr: 'Télécharger',
+    de: 'Hochladen',
+    cn: '上传',
+    ja: 'アップロード',
+    ru: 'Загрузить',
+    ko: '업로드'
+  },
+  {
+    en: 'Your post has been banned by a moderator due to a privacy violation.',
+    es: 'Tu publicación ha sido prohibida por un moderador debido a una violación de privacidad.',
+    fr: "Votre publication a été interdite par un modérateur en raison d'une violation de la vie privée.",
+    de: 'Ihr Beitrag wurde von einem Moderator wegen eines Datenschutzverstoßes gesperrt.',
+    cn: '由于隐私违规，您的帖子已被版主禁止。',
+    ja: 'プライバシー違反のため、モデレーターによってあなたの投稿が禁止されました。',
+    ru: 'Ваш пост был заблокирован модератором из-за нарушения конфиденциальности.',
+    ko: '개인정보 침해로 인해 귀하의 게시물이 중재자에 의해 금지되었습니다.'
   }
 ];
 

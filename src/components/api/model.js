@@ -423,7 +423,10 @@ const initModel = () => {
           },
           banWords: 'motherfucker, bullshit, fuck, shit',
           status: 'pending',
-          theme: 'weiss'
+          theme: 'weiss',
+          homepage: {
+            bgColor: '#2A222F'
+          }
         };
 
         new Settings(_settings).save();

@@ -12,6 +12,7 @@ import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/contributors';
 import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
+import Footer from 'components/footer';
 
 const Home = observer(() => {
   const token = useToken();
@@ -83,13 +84,15 @@ const Home = observer(() => {
           }
           advert={
             settings.advert?.left ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.left!
-                  }}
-                ></div>
-              </Card>
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingTop: 20,
+                  paddingRight: 20
+                }}
+                dangerouslySetInnerHTML={{ __html: settings.advert?.left! }}
+              ></div>
             ) : (
               ''
             )
@@ -97,7 +100,7 @@ const Home = observer(() => {
         />
         <main className="main with-right">
           <div
-            style={{ marginBottom: 10 }}
+            style={{ marginBottom: 10, width: '100%' }}
             dangerouslySetInnerHTML={{ __html: settings.advert?.top! }}
           ></div>
 
@@ -195,16 +198,20 @@ const Home = observer(() => {
           <div className="sidenav">
             <Contributors lang={settings?.language} />
             {settings.advert?.right ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.right!
-                  }}
-                ></div>
-              </Card>
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingLeft: 10
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: settings.advert?.right!
+                }}
+              ></div>
             ) : (
               ''
             )}
+            <Footer siteName={settings?.siteName} />
           </div>
         </aside>
       </div>

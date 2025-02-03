@@ -104,6 +104,8 @@ const EditorModal = observer((props: editorProps) => {
             <Editor
               height={_height}
               value={content}
+              mentionButton
+              showEmoji
               button={
                 <>
                   {isAuthenticate ? (

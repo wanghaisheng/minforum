@@ -44,6 +44,7 @@ import {
 import useSettings from 'components/settings';
 import { Paywall } from 'components/subscriber';
 import CustomIcon from 'components/data/icon/icon';
+import Footer from 'components/footer';
 
 const Discussion = observer(() => {
   const token = useToken();
@@ -140,6 +141,8 @@ const Discussion = observer(() => {
                 : null;
             });
             updateDiscussion({ id: data.id, view: data.view + 1 });
+          } else {
+            router.push('/404');
           }
         })
       : null;
@@ -562,6 +565,11 @@ const Discussion = observer(() => {
                 </Loading>
               ) : (
                 <div className="item">
+                  <div
+                    style={{ marginBottom: 10, width: '100%' }}
+                    dangerouslySetInnerHTML={{ __html: settings.advert?.top! }}
+                  ></div>
+
                   {!token.id && category && category.authRequired === true ? (
                     <div className="center">
                       <Grid.Container gap={2} justify="center">
@@ -1100,6 +1108,13 @@ const Discussion = observer(() => {
                       ))}
                     </>
                   )}
+                  <div
+                    className="mobile"
+                    style={{ marginBottom: 10 }}
+                    dangerouslySetInnerHTML={{
+                      __html: settings.advert?.right!
+                    }}
+                  ></div>
                 </div>
               )}
               <div className="item">
@@ -1116,16 +1131,16 @@ const Discussion = observer(() => {
                     )}
 
                     {settings.advert?.right ? (
-                      <Card>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: settings.advert?.right!
-                          }}
-                        ></div>
-                      </Card>
+                      <div
+                        style={{ width: '100%' }}
+                        dangerouslySetInnerHTML={{
+                          __html: settings.advert?.right!
+                        }}
+                      ></div>
                     ) : (
                       ''
                     )}
+                    <Footer siteName={settings?.siteName} />
                     <Spacer h={4} />
                   </div>
                 </aside>

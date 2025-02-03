@@ -70,7 +70,11 @@ const EmailSetup = observer((props: pageProps) => {
         status: 'completed',
         theme: 'minforum',
         domain: '',
-        welcomeEmail: `Thank you for joining ${settings?.siteName}`
+        welcomeEmail: `Thank you for joining ${settings?.siteName}`,
+        homepage: {
+          bgColor: '#2A222F',
+          text: `<div style="text-align: center;"><h3>Welcome to the ${settings?.siteName}</h3><div>Please be mindful to respect everyone's contributions and maintain a civil and respectful tone in all your interactions.</div></div>`
+        }
       };
 
       await userStore
@@ -80,7 +84,8 @@ const EmailSetup = observer((props: pageProps) => {
             title: 'General',
             description: 'General category for all discussions',
             color: '#000000',
-            slug: 'general'
+            slug: 'general',
+            icon: { icon: 'home', type: 'solid' }
           });
 
           if (res.success) {

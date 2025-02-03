@@ -97,6 +97,8 @@ const ReplyModal = observer((props: editorProps) => {
               lang={lang}
               height={_height}
               value={content}
+              mentionButton
+              showEmoji
               button={
                 <>
                   {' '}

@@ -23,7 +23,7 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         .then(async (data: any) => {
           let notifications: any = [];
           asyncForEach(data, async (item: any) => {
-            if (item.type !== 'admin') {
+            if (item.sender !== 'admin') {
               await User.get(item.sender).then((user: any) => {
                 notifications.push({
                   ...item,

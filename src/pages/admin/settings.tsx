@@ -18,6 +18,7 @@ import AdminNavbar from 'components/admin/navbar';
 import Sidebar from 'components/admin/sidebar';
 import SettingsStore from 'stores/settings';
 import Auth from 'components/admin/auth';
+import { ChromePicker } from 'react-color';
 import toast, { Toaster } from 'react-hot-toast';
 import Editor from 'components/editor';
 import { useTranslation, Translation } from 'components/intl/translation';
@@ -31,6 +32,8 @@ const Settings = observer(() => {
   const router = useRouter();
   const [store] = useState(() => new SettingsStore());
   const cookie = parseCookies();
+  const [showColor, toggleColor] = useState(false);
+
   const { loading, settings, setSettings, getSettings, update, uploadImage } =
     store;
   const { point, email, advert, banWords, payment } = settings;
@@ -178,7 +181,7 @@ const Settings = observer(() => {
             >
               <div className="column">
                 <div className="item">
-                  <Text h6>
+                  <Text h6 style={{ marginTop: 20 }}>
                     <Translation
                       lang={settings?.language}
                       value="Site favicon"
@@ -188,7 +191,7 @@ const Settings = observer(() => {
                 <div className="item">
                   <div className="discussion-container">
                     <div>
-                      <Button auto icon={<Picture />} width="190px">
+                      <Button icon={<Picture />} width="180px">
                         <Translation
                           lang={settings?.language}
                           value="Upload favicon"
@@ -216,14 +219,14 @@ const Settings = observer(() => {
               </div>
               <div className="column">
                 <div className="item">
-                  <Text h6>
+                  <Text h6 style={{ marginTop: 20 }}>
                     <Translation lang={settings?.language} value="Site logo" />
                   </Text>
                 </div>
                 <div className="item">
                   <div className="discussion-container">
                     <div>
-                      <Button auto icon={<Picture />} width="190px">
+                      <Button icon={<Picture />} width="180px">
                         <Translation
                           lang={settings?.language}
                           value="Upload logo"
@@ -248,6 +251,50 @@ const Settings = observer(() => {
                     </div>
                   </div>
                   <Spacer />
+                </div>
+              </div>
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Site language"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Select
+                    width={'100%'}
+                    value={settings.language}
+                    onChange={(value) =>
+                      setSettings({ ...settings, language: value })
+                    }
+                  >
+                    <Select.Option value="en">
+                      <Translation lang={settings?.language} value="English" />
+                    </Select.Option>
+                    <Select.Option value="fr">
+                      <Translation lang={settings?.language} value="French" />
+                    </Select.Option>
+                    <Select.Option value="es">
+                      <Translation lang={settings?.language} value="Spanish" />
+                    </Select.Option>
+                    <Select.Option value="de">
+                      <Translation lang={settings?.language} value="German" />
+                    </Select.Option>
+                    <Select.Option value="cn">
+                      <Translation lang={settings?.language} value="Chinese" />
+                    </Select.Option>
+                    <Select.Option value="ja">
+                      <Translation lang={settings?.language} value="Japanese" />
+                    </Select.Option>
+                    <Select.Option value="ko">
+                      <Translation lang={settings?.language} value="Korean" />
+                    </Select.Option>
+                    <Select.Option value="ru">
+                      <Translation lang={settings?.language} value="Russian" />
+                    </Select.Option>
+                  </Select>
                 </div>
               </div>
               <div className="column">
@@ -371,66 +418,127 @@ const Settings = observer(() => {
             <Collapse
               title={useTranslation({
                 lang: settings?.language,
-                value: 'Language'
+                value: 'Homepage settings'
               })}
             >
+              <div className="column">
+                <div className="item">
+                  <Text h6 style={{ marginTop: 20 }}>
+                    <Translation
+                      lang={settings?.language}
+                      value="Background image (optional)"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <div className="discussion-container">
+                    <div>
+                      <Button auto icon={<Picture />} width="190px">
+                        <Translation lang={settings?.language} value="Upload" />
+                        <input
+                          type="file"
+                          className="file-upload"
+                          id="site-banner"
+                          onChange={() => handleUpload('#site-banner')}
+                        />
+                      </Button>
+                    </div>
+                    <div>
+                      {settings?.homepage?.image ? (
+                        <img
+                          src={`/storage/${settings?.homepage?.image}`}
+                          style={{ width: 'auto', height: 40, borderRadius: 3 }}
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="column">
                 <div className="item">
                   <Text h6>
                     <Translation
                       lang={settings?.language}
-                      value="Site language"
+                      value="Background color"
                     />
                   </Text>
                 </div>
                 <div className="item">
-                  <Select
-                    width={'100%'}
-                    value={settings.language}
-                    onChange={(value) =>
-                      setSettings({ ...settings, language: value })
+                  <div
+                    onClick={() => toggleColor(!showColor)}
+                    className="custom-badge with-border large"
+                    style={
+                      { '--category-color': '#fff' } as React.CSSProperties
                     }
                   >
-                    <Select.Option value="en">
-                      <Translation lang={settings?.language} value="English" />
-                    </Select.Option>
-                    <Select.Option value="fr">
-                      <Translation lang={settings?.language} value="French" />
-                    </Select.Option>
-                    <Select.Option value="es">
-                      <Translation lang={settings?.language} value="Spanish" />
-                    </Select.Option>
-                    <Select.Option value="de">
-                      <Translation lang={settings?.language} value="German" />
-                    </Select.Option>
-                    <Select.Option value="cn">
-                      <Translation lang={settings?.language} value="Chinese" />
-                    </Select.Option>
-                    <Select.Option value="ja">
-                      <Translation lang={settings?.language} value="Japanese" />
-                    </Select.Option>
-                    <Select.Option value="ko">
-                      <Translation lang={settings?.language} value="Korean" />
-                    </Select.Option>
-                    <Select.Option value="ru">
-                      <Translation lang={settings?.language} value="Russian" />
-                    </Select.Option>
-                  </Select>
+                    <div
+                      className="inner"
+                      style={
+                        {
+                          '--category-inner-color':
+                            settings?.homepage?.bgColor || '#000000'
+                        } as React.CSSProperties
+                      }
+                    >
+                      &nbsp;
+                    </div>
+                  </div>
+                  {showColor && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        marginTop: -15,
+                        zIndex: 1000
+                      }}
+                    >
+                      <ChromePicker
+                        color={settings?.homepage?.bgColor}
+                        onChange={(val) =>
+                          setSettings({
+                            ...settings,
+                            homepage: { ...settings.homepage, bgColor: val.hex }
+                          })
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="column">
                 <div className="item">
-                  <Text h6></Text>
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Homepage text"
+                    />
+                  </Text>
                 </div>
                 <div className="item">
-                  <Button
-                    shadow
-                    type="secondary"
-                    loading={loading}
-                    onClick={save}
-                  >
-                    <Translation lang={settings?.language} value="Save" />
-                  </Button>
+                  {settings?.siteName && (
+                    <Editor
+                      lang={settings?.language}
+                      value={settings?.homepage?.text}
+                      height="200px"
+                      onChange={(val) =>
+                        setSettings({
+                          ...settings,
+                          homepage: { ...settings.homepage, text: val }
+                        })
+                      }
+                      button={
+                        <Button
+                          shadow
+                          type="secondary"
+                          loading={loading}
+                          onClick={save}
+                        >
+                          <Translation lang={settings?.language} value="Save" />
+                        </Button>
+                      }
+                    />
+                  )}
                 </div>
               </div>
             </Collapse>
@@ -1180,7 +1288,7 @@ const Settings = observer(() => {
                   })}
                   value="1"
                 >
-                  {settings?.terms && (
+                  {settings?.siteName && (
                     <Editor
                       lang={settings?.language}
                       value={settings?.terms}
@@ -1191,16 +1299,18 @@ const Settings = observer(() => {
                           terms: val
                         })
                       }
+                      button={
+                        <Button
+                          shadow
+                          type="secondary"
+                          loading={loading}
+                          onClick={save}
+                        >
+                          <Translation lang={settings?.language} value="Save" />
+                        </Button>
+                      }
                     />
                   )}
-                  <Button
-                    shadow
-                    type="secondary"
-                    loading={loading}
-                    onClick={save}
-                  >
-                    <Translation lang={settings?.language} value="Save" />
-                  </Button>
                 </Tabs.Item>
                 <Tabs.Item
                   label={useTranslation({
@@ -1209,7 +1319,7 @@ const Settings = observer(() => {
                   })}
                   value="2"
                 >
-                  {settings?.privacy && (
+                  {settings?.siteName && (
                     <Editor
                       lang={settings?.language}
                       value={settings?.privacy}
@@ -1220,16 +1330,18 @@ const Settings = observer(() => {
                           privacy: val
                         })
                       }
+                      button={
+                        <Button
+                          shadow
+                          type="secondary"
+                          loading={loading}
+                          onClick={save}
+                        >
+                          <Translation lang={settings?.language} value="Save" />
+                        </Button>
+                      }
                     />
                   )}
-                  <Button
-                    shadow
-                    type="secondary"
-                    loading={loading}
-                    onClick={save}
-                  >
-                    <Translation lang={settings?.language} value="Save" />
-                  </Button>
                 </Tabs.Item>
               </Tabs>
             </Collapse>

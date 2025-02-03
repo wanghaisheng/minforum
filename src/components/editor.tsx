@@ -20,6 +20,8 @@ type editorProp = {
   value?: string;
   placeholder?: string;
   button?: JSX.Element;
+  showEmoji?: boolean;
+  mentionButton?: boolean;
   insertValue?: (value: any) => void;
   onChange?: (value: any) => void;
 };
@@ -90,7 +92,7 @@ const Editor = (prop: editorProp) => {
       />
       <Spacer />
       <div>
-        {prop.button && (
+        {prop.showEmoji && (
           <Popover
             placement="left"
             content={
@@ -107,52 +109,65 @@ const Editor = (prop: editorProp) => {
             </span>
           </Popover>
         )}
-        <Popover
-          placement="topStart"
-          visible={modal}
-          content={
-            <div
-              style={{ width: 230, height: 200, padding: 10, overflow: 'auto' }}
-            >
-              <Input
-                width={'100%'}
-                placeholder={useTranslation({
-                  lang: prop.lang,
-                  value: 'Search user....'
-                })}
-                iconRight={store.loading && <Loading />}
-                onKeyUp={(e) => handleSearch(e.target.value)}
-              />
-              <Spacer />
-              <div>
-                {store?.users?.map((item: userProp) => (
-                  <div
-                    className="user-alone"
-                    key={item.id}
-                    onClick={() => handleUser(`@${item.username} &nbsp;`)}
-                  >
-                    <User
-                      src={
-                        item.photo
-                          ? `/storage/${item.photo}`
-                          : `/images/avatar.png`
-                      }
-                      name={item.name}
-                    >
-                      @{item.username}
-                    </User>
+        {prop.mentionButton && (
+          <>
+            <Popover
+              placement="topStart"
+              visible={modal}
+              content={
+                <div
+                  style={{
+                    width: 230,
+                    height: 200,
+                    padding: 10,
+                    overflow: 'auto'
+                  }}
+                >
+                  <Input
+                    width={'100%'}
+                    placeholder={useTranslation({
+                      lang: prop.lang,
+                      value: 'Search user....'
+                    })}
+                    iconRight={store.loading && <Loading />}
+                    onKeyUp={(e) => handleSearch(e.target.value)}
+                  />
+                  <Spacer />
+                  <div>
+                    {store?.users?.map((item: userProp) => (
+                      <div
+                        className="user-alone"
+                        key={item.id}
+                        onClick={() => handleUser(`@${item.username} &nbsp;`)}
+                      >
+                        <User
+                          src={
+                            item.photo
+                              ? `/storage/${item.photo}`
+                              : `/images/avatar.png`
+                          }
+                          name={item.name}
+                        >
+                          @{item.username}
+                        </User>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          }
-        >
-          <Button auto icon={<UserIcon />} onClick={() => toggleModal(!modal)}>
-            <Translation lang={prop.lang} value={'Mention user'} />
-          </Button>
-        </Popover>
+                </div>
+              }
+            >
+              <Button
+                auto
+                icon={<UserIcon />}
+                onClick={() => toggleModal(!modal)}
+              >
+                <Translation lang={prop.lang} value={'Mention user'} />
+              </Button>
+            </Popover>
+            <Spacer inline />
+          </>
+        )}
 
-        <Spacer inline />
         {prop.button}
       </div>
     </div>

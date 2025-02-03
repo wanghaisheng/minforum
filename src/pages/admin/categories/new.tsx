@@ -38,6 +38,8 @@ const CreateCategory = observer(() => {
 
   useEffect(() => {
     getModerators();
+
+    setCategory({ ...category, icon: { icon: 'home-heart', type: 'solid' } });
   }, [token?.id]);
 
   const changeHandler = (next) => {
@@ -195,7 +197,7 @@ const CreateCategory = observer(() => {
               }
             />
             <Spacer />
-            <Text>
+            {/* <Text>
               <Translation lang={settings?.language} value="Moderators" />
             </Text>
             <Select
@@ -212,7 +214,7 @@ const CreateCategory = observer(() => {
                   {item.name}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
             <Text>
               <Toggle
                 type="secondary"

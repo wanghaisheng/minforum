@@ -30,6 +30,7 @@ import { doAction } from 'extensions/hooks';
 import toast, { Toaster } from 'react-hot-toast';
 import SubscriptionStore from 'stores/user-subscription';
 import CustomIcon from 'components/data/icon/icon';
+import Footer from 'components/footer';
 
 const User = observer(() => {
   const settings = useSettings();
@@ -478,6 +479,7 @@ const User = observer(() => {
                 ) : (
                   ''
                 )}
+                <Footer siteName={settings?.siteName} />
               </div>
             </aside>
           </div>

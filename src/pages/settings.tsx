@@ -472,86 +472,85 @@ const Settings = observer(() => {
                     </Tabs.Item>
 
                     {settings?.payment?.currency &&
-                      settings?.payment?.subscription &&
-                      settings?.payment?.percentage && (
-                        <Tabs.Item
-                          label={useTranslation({
-                            lang: settings?.language,
-                            value: 'Subscription'
-                          })}
-                          value="3"
-                        >
-                          <div>
-                            <Spacer h={1.5} />
-                            <div>
-                              <Translation
-                                lang={settings.language}
-                                value="Minimum amount"
-                              />{' '}
-                              ({settings?.payment?.currency}{' '}
-                              {formatNumber(settings?.payment?.subscription)})
-                            </div>
-                            <Input
-                              htmlType="number"
-                              placeholder={useTranslation({
-                                lang: settings?.language,
-                                value: 'Monthly subscription fee'
-                              })}
-                              width="100%"
-                              scale={4 / 3}
-                              value={`${user.subAmount}`}
-                              onChange={(e: any) =>
-                                setUser({
-                                  ...user,
-                                  subAmount: e.target.value
-                                })
-                              }
-                            />
-                          </div>
+                    settings?.payment?.subscription &&
+                    settings?.payment?.percentage ? (
+                      <Tabs.Item
+                        label={useTranslation({
+                          lang: settings?.language,
+                          value: 'Subscription'
+                        })}
+                        value="3"
+                      >
+                        <div>
                           <Spacer h={1.5} />
-                          <Textarea
-                            rows={3}
+                          <div>
+                            <Translation
+                              lang={settings.language}
+                              value="Minimum amount"
+                            />{' '}
+                            ({settings?.payment?.currency}{' '}
+                            {formatNumber(settings?.payment?.subscription)})
+                          </div>
+                          <Input
+                            htmlType="number"
                             placeholder={useTranslation({
                               lang: settings?.language,
-                              value: 'Description'
+                              value: 'Monthly subscription fee'
                             })}
                             width="100%"
                             scale={4 / 3}
-                            value={
-                              user?.subDescription ||
-                              useTranslation({
-                                lang: settings?.language,
-                                value:
-                                  'Subscribe to get access to my exclusive contents via premium posts and priority DM'
-                              })
-                            }
+                            value={`${user.subAmount}`}
                             onChange={(e: any) =>
                               setUser({
                                 ...user,
-                                subDescription: e.target.value
+                                subAmount: e.target.value
                               })
                             }
                           />
-                          <Spacer h={1.5} />
-                          <Button
-                            shadow
-                            type="secondary"
-                            width="100%"
-                            loading={loading}
-                            disabled={
-                              status === 'error' || status === 'loading'
-                                ? true
-                                : false
-                            }
-                            onClick={saveSub}
-                          >
-                            <Translation
-                              lang={settings?.language}
-                              value="Save"
-                            />
-                          </Button>
-                        </Tabs.Item>
-                      )}
+                        </div>
+                        <Spacer h={1.5} />
+                        <Textarea
+                          rows={3}
+                          placeholder={useTranslation({
+                            lang: settings?.language,
+                            value: 'Description'
+                          })}
+                          width="100%"
+                          scale={4 / 3}
+                          value={
+                            user?.subDescription ||
+                            useTranslation({
+                              lang: settings?.language,
+                              value:
+                                'Subscribe to get access to my exclusive contents via premium posts and priority DM'
+                            })
+                          }
+                          onChange={(e: any) =>
+                            setUser({
+                              ...user,
+                              subDescription: e.target.value
+                            })
+                          }
+                        />
+                        <Spacer h={1.5} />
+                        <Button
+                          shadow
+                          type="secondary"
+                          width="100%"
+                          loading={loading}
+                          disabled={
+                            status === 'error' || status === 'loading'
+                              ? true
+                              : false
+                          }
+                          onClick={saveSub}
+                        >
+                          <Translation lang={settings?.language} value="Save" />
+                        </Button>
+                      </Tabs.Item>
+                    ) : (
+                      ''
+                    )}
                   </Tabs>
                 </div>
               ) : (
@@ -707,83 +706,85 @@ const Settings = observer(() => {
                     </Button>
                   </Tabs.Item>
                   {settings?.payment?.currency &&
-                    settings?.payment?.subscription &&
-                    settings?.payment?.percentage && (
-                      <Tabs.Item
-                        label={useTranslation({
-                          lang: settings?.language,
-                          value: 'Subscription'
-                        })}
-                        value="3"
-                      >
-                        <div>
-                          <Spacer h={1.5} />
-                          <div>
-                            <Translation
-                              lang={settings.language}
-                              value="Minimum amount"
-                            />{' '}
-                            ({settings?.payment?.currency}{' '}
-                            {formatNumber(settings?.payment?.subscription)})
-                          </div>
-                          <Input
-                            htmlType="number"
-                            placeholder={useTranslation({
-                              lang: settings?.language,
-                              value: 'Monthly subscription fee'
-                            })}
-                            width="100%"
-                            scale={4 / 3}
-                            value={`${user.subAmount}`}
-                            onChange={(e: any) =>
-                              setUser({
-                                ...user,
-                                subAmount: e.target.value
-                              })
-                            }
-                          />
-                        </div>
+                  settings?.payment?.subscription &&
+                  settings?.payment?.percentage ? (
+                    <Tabs.Item
+                      label={useTranslation({
+                        lang: settings?.language,
+                        value: 'Subscription'
+                      })}
+                      value="3"
+                    >
+                      <div>
                         <Spacer h={1.5} />
-                        <Textarea
-                          rows={3}
+                        <div>
+                          <Translation
+                            lang={settings.language}
+                            value="Minimum amount"
+                          />{' '}
+                          ({settings?.payment?.currency}{' '}
+                          {formatNumber(settings?.payment?.subscription)})
+                        </div>
+                        <Input
+                          htmlType="number"
                           placeholder={useTranslation({
                             lang: settings?.language,
-                            value: 'Description'
+                            value: 'Monthly subscription fee'
                           })}
                           width="100%"
                           scale={4 / 3}
-                          value={
-                            user?.subDescription ||
-                            useTranslation({
-                              lang: settings?.language,
-                              value:
-                                'Subscribe to get access to my exclusive contents via premium posts and priority DM'
-                            })
-                          }
+                          value={`${user.subAmount}`}
                           onChange={(e: any) =>
                             setUser({
                               ...user,
-                              subDescription: e.target.value
+                              subAmount: e.target.value
                             })
                           }
                         />
-                        <Spacer h={1.5} />
-                        <Button
-                          shadow
-                          type="secondary"
-                          width="100%"
-                          loading={loading}
-                          disabled={
-                            status === 'error' || status === 'loading'
-                              ? true
-                              : false
-                          }
-                          onClick={saveSub}
-                        >
-                          <Translation lang={settings?.language} value="Save" />
-                        </Button>
-                      </Tabs.Item>
-                    )}
+                      </div>
+                      <Spacer h={1.5} />
+                      <Textarea
+                        rows={3}
+                        placeholder={useTranslation({
+                          lang: settings?.language,
+                          value: 'Description'
+                        })}
+                        width="100%"
+                        scale={4 / 3}
+                        value={
+                          user?.subDescription ||
+                          useTranslation({
+                            lang: settings?.language,
+                            value:
+                              'Subscribe to get access to my exclusive contents via premium posts and priority DM'
+                          })
+                        }
+                        onChange={(e: any) =>
+                          setUser({
+                            ...user,
+                            subDescription: e.target.value
+                          })
+                        }
+                      />
+                      <Spacer h={1.5} />
+                      <Button
+                        shadow
+                        type="secondary"
+                        width="100%"
+                        loading={loading}
+                        disabled={
+                          status === 'error' || status === 'loading'
+                            ? true
+                            : false
+                        }
+                        onClick={saveSub}
+                      >
+                        <Translation lang={settings?.language} value="Save" />
+                      </Button>
+                    </Tabs.Item>
+                  ) : (
+                    ''
+                  )}
                 </Tabs>
               )}
             </Card>

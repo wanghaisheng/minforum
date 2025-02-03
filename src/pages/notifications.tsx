@@ -1,5 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Spacer, Text, Card, Loading, Button, Avatar } from '@geist-ui/core';
+import {
+  Spacer,
+  Text,
+  Card,
+  Loading,
+  Button,
+  Avatar,
+  Tag
+} from '@geist-ui/core';
 import { formatDistance } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import Navbar from 'components/navbar';
@@ -37,15 +45,13 @@ const Notifications = observer(() => {
   ] = useState(() => new NotificationStore());
 
   const handleScroll = useCallback(() => {
-    const offset = 0;
+    const offset = 50;
 
     if (
       window.innerHeight + document.documentElement.scrollTop >=
       document.documentElement.offsetHeight - offset
     ) {
       if (nomore === false) {
-        console.log('Dont do it');
-
         setPage(page + 1);
         getNotifications(token.id!, true);
       }
@@ -54,15 +60,24 @@ const Notifications = observer(() => {
 
   useEffect(() => {
     token.id ? getNotifications(token.id, false) : null;
+  }, [token?.id]);
+
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [token?.id, handleScroll]);
+  }, [handleScroll]);
 
-  const read = async (id: string, action: string, type: string) => {
+  const read = async (
+    id: string,
+    action: string,
+    type: string,
+    filterType: string
+  ) => {
     await markRead(id).then((res: any) => {
       if (res.success) {
         let t = type === 'user' || type === 'admin' ? '/u' : '/d';
-        router.push(`${t}/${action}`);
+        let link = `${t}/${action}`;
+        router.push(link);
       }
     });
   };
@@ -140,6 +155,11 @@ const Notifications = observer(() => {
         lang: settings?.language,
         value: ''
       });
+    } else {
+      return useTranslation({
+        lang: settings?.language,
+        value: message
+      });
     }
   };
 
@@ -147,7 +167,7 @@ const Notifications = observer(() => {
     <div
       className="pointer"
       key={item.id + index}
-      onClick={() => read(item.id!, item.action!, item.type!)}
+      onClick={() => read(item.id!, item.action!, item.type!, item.filterType!)}
     >
       <Card
         shadow
@@ -157,6 +177,8 @@ const Notifications = observer(() => {
           <div className="one">
             {item?.filterType === 'reward' ? (
               <img src={'/images/badge.png'} />
+            ) : item?.filterType === 'post-violation' ? (
+              <img src={'/images/shield.png'} />
             ) : (
               <Avatar
                 src={
@@ -170,6 +192,13 @@ const Notifications = observer(() => {
             )}
           </div>
           <div className="two">
+            {item.tag && (
+              <Tag>
+                <Translation lang={settings?.language} value={'Title'} />
+                :&nbsp;
+                {item?.tag}
+              </Tag>
+            )}
             <Text p className="text">
               {item?.type === 'admin' ? (
                 <Translation lang={settings?.language} value={item.message} />
@@ -182,6 +211,7 @@ const Notifications = observer(() => {
                 renderNotifications(item?.name, item?.filterType, item.message)
               )}
             </Text>
+
             <Text small className="date">
               {renderDate(item.createdAt)}
             </Text>

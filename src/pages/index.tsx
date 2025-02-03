@@ -13,6 +13,7 @@ import AdminVerify from 'components/admin/admin-verify';
 import { Translation } from 'components/intl/translation';
 import isSetup from 'components/setup';
 import useSettings from 'components/settings';
+import Footer from 'components/footer';
 
 type pageProps = { domain: string };
 
@@ -47,8 +48,6 @@ const Home = observer((props: pageProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  //Send domain to min-forum once after installation.
-
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
     banWords = banWords.replace(/\s/gi, '');
@@ -73,7 +72,16 @@ const Home = observer((props: pageProps) => {
         startConversation={() => toggleModal(!modal)}
       />
       <Toaster />
-      <div className="page-container top-100">
+      <div
+        className="category-box homepage"
+        style={{
+          backgroundColor: settings?.homepage?.bgColor,
+          backgroundImage: `url(/storage/${settings?.homepage?.image})`
+        }}
+      >
+        <div dangerouslySetInnerHTML={{ __html: settings?.homepage?.text }} />
+      </div>
+      <div className="page-container">
         <Sidebar
           active="home"
           button={
@@ -86,13 +94,18 @@ const Home = observer((props: pageProps) => {
               </Button>
             </NextLink>
           }
+          fluid
           advert={
             settings.advert?.left ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{ __html: settings.advert?.left! }}
-                ></div>
-              </Card>
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingTop: 20,
+                  paddingRight: 20
+                }}
+                dangerouslySetInnerHTML={{ __html: settings.advert?.left! }}
+              ></div>
             ) : (
               ''
             )
@@ -100,7 +113,7 @@ const Home = observer((props: pageProps) => {
         />
         <main className="main with-right">
           <div
-            style={{ marginBottom: 10 }}
+            style={{ marginBottom: 10, width: '100%' }}
             dangerouslySetInnerHTML={{ __html: settings.advert?.top! }}
           ></div>
 
@@ -195,19 +208,23 @@ const Home = observer((props: pageProps) => {
         </main>
 
         <aside>
-          <div className="sidenav">
+          <div className="sidenav fluid">
             <Contributors lang={settings.language} />
             {settings.advert?.right ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.right!
-                  }}
-                ></div>
-              </Card>
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingLeft: 10
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: settings.advert?.right!
+                }}
+              ></div>
             ) : (
               ''
             )}
+            <Footer siteName={settings?.siteName} />
           </div>
         </aside>
       </div>

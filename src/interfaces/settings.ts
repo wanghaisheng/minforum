@@ -4,6 +4,7 @@ export type extensionVariable = {
 };
 
 export interface settingsProp {
+  id?: string;
   theme?: string;
   domain?: string;
   language?: string | string[] | any;
@@ -12,10 +13,8 @@ export interface settingsProp {
   siteName?: string;
   siteDescription?: string;
   homepage?: {
-    type?: 'color' | 'banner';
     bgColor?: string;
-    title?: string;
-    description?: string;
+    text?: string;
     image?: string;
   };
   socialAccount?: {

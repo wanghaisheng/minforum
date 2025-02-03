@@ -13,6 +13,7 @@ import Contributors from 'components/contributors';
 import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import CustomIcon from 'components/data/icon/icon';
+import Footer from 'components/footer';
 
 const Category = observer(() => {
   const token = useToken();
@@ -132,6 +133,21 @@ const Category = observer(() => {
             </Link>
           }
           fluid
+          advert={
+            settings.advert?.left ? (
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingTop: 20,
+                  paddingRight: 20
+                }}
+                dangerouslySetInnerHTML={{ __html: settings.advert?.left! }}
+              ></div>
+            ) : (
+              ''
+            )
+          }
         />
 
         <main className="main with-right">
@@ -163,6 +179,11 @@ const Category = observer(() => {
           ) : (
             ''
           )}
+
+          <div
+            style={{ marginBottom: 10 }}
+            dangerouslySetInnerHTML={{ __html: settings.advert?.top! }}
+          ></div>
 
           {discussions.map((item) => (
             <Post
@@ -206,16 +227,15 @@ const Category = observer(() => {
           <div className="sidenav fluid">
             <Contributors lang={settings?.language} />
             {settings.advert?.right ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.right!
-                  }}
-                ></div>
-              </Card>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: settings.advert?.right!
+                }}
+              ></div>
             ) : (
               ''
             )}
+            <Footer siteName={settings?.siteName} />
           </div>
         </aside>
       </div>

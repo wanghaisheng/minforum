@@ -31,6 +31,7 @@ const EditCategory = observer(() => {
   const { id } = router.query;
   const [showColor, toggleColor] = useState(false);
   const [visible, setVisible] = useState(false);
+
   const [{ users, getModerators }] = useState(() => new UserStore());
 
   const [{ loading, category, setCategory, getCategory, updateCategory }] =
@@ -195,7 +196,7 @@ const EditCategory = observer(() => {
               }
             />
             <Spacer />
-            <Text>
+            {/* <Text>
               <Translation lang={settings?.language} value="Moderators" />
             </Text>
             <Select
@@ -213,7 +214,7 @@ const EditCategory = observer(() => {
                   {item.name}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
             <Text>
               <Toggle
                 type="secondary"

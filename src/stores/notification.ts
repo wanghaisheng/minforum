@@ -153,21 +153,24 @@ export default class NotificationStore {
       .then((res) => res.json())
       .then((res: any) => {
         if (res.success) {
-          runInAction(() => {
-            setTimeout(() => {
-              if (paginate) {
+          setTimeout(() => {
+            if (paginate) {
+              runInAction(() => {
                 this.nomore = res.data.length < this.limit;
                 let newNotification = this.notifications;
                 this.notifications = [...newNotification, ...res.data];
                 this.total = res.count;
-              } else {
+                this.loading = false;
+              });
+            } else {
+              runInAction(() => {
                 this.nomore = res.data.length < this.limit;
                 this.notifications = res.data;
                 this.total = res.count;
-              }
-              this.loading = false;
-            }, 2000);
-          });
+                this.loading = false;
+              });
+            }
+          }, 2000);
         } else {
           runInAction(() => {
             this.loading = false;
