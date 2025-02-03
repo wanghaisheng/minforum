@@ -19,9 +19,9 @@ const getSettings = async (req: NextApiRequest, res: NextApiResponse) => {
           social.google = social?.google ? enc(social?.google) : '';
 
           if (
-            emailSettings.email &&
-            emailSettings.email &&
-            emailSettings.password
+            emailSettings?.email &&
+            emailSettings?.email &&
+            emailSettings?.password
           ) {
             const { email, password, host } = emailSettings;
             emailSettings.password = enc(password);
