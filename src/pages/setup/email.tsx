@@ -68,7 +68,7 @@ const EmailSetup = observer((props: pageProps) => {
         ...{ point },
         banWords: 'motherfucker, bullshit, fuck, shit',
         status: 'completed',
-        theme: 'minforum',
+        theme: 'weiss',
         domain: '',
         welcomeEmail: `Thank you for joining ${settings?.siteName}`,
         homepage: {

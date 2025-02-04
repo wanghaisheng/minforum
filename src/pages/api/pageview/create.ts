@@ -27,7 +27,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
             : ua.isMobile
               ? 'Phone'
               : 'Unknown';
-      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      let ip = req.headers['x-real-ip'] || req.socket.remoteAddress;
       let geo = await geoData(ip);
 
       req.body.country = geo.country || 'Unknown';
@@ -35,8 +35,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
       req.body.device = device;
       req.body.os = ua.os === 'OS X' ? 'macOS' : ua.os;
       req.body.browser = ua.browser;
-      req.body.ipAddress =
-        req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      req.body.ipAddress = req.headers['x-real-ip'] || req.socket.remoteAddress;
       req.body.referrer = req.headers.referer.includes(
         process.env.NEXT_PUBLIC_CLIENT_ORIGINS
       )
