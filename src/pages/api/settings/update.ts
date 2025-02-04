@@ -9,7 +9,6 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
     if (auth.success) {
       await Settings.get(req.body.id)
         .then(async (settings: settingsProp) => {
-          let settings: settingsProp = data.length ? data[0] : {};
           let variables: any = settings.extensionVariables || [];
           let emailSettings = settings?.email;
           let social = settings?.socialAccount || {};
