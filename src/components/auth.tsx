@@ -1,14 +1,15 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
+import { userProp } from 'interfaces/user';
 
 const Auth = (props: any) => {
   const router = useRouter();
   const cookie = parseCookies();
-  const [user, setUser] = React.useState<any>({ id: '', role: '' });
+  const [user, setUser] = useState<any>({ id: '', role: '' });
 
-  React.useEffect(() => {
+  useEffect(() => {
     let user: any = cookie;
     user = user && user._w_auth ? JSON.parse(user._w_auth) : null;
     setUser(user);
@@ -35,9 +36,9 @@ const Auth = (props: any) => {
 export const Authorized = (props: any) => {
   const router = useRouter();
   const cookie = parseCookies();
-  const [user, setUser] = React.useState<any>({ id: '', role: '' });
+  const [user, setUser] = useState<userProp>({ id: '', role: '' });
 
-  React.useEffect(() => {
+  useEffect(() => {
     let user: any = cookie;
     user = user && user._w_auth ? JSON.parse(user._w_auth) : null;
     setUser(user);
