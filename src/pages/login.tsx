@@ -20,6 +20,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
+import { Authorized } from 'components/auth';
 
 const Login = observer(() => {
   const router = useRouter();
@@ -125,216 +126,224 @@ const Login = observer(() => {
 
   return (
     <div className="polkadot">
-      <Navbar
-        title={useTranslation({ lang: settings?.language, value: 'Log In' })}
-        description={useTranslation({
-          lang: settings?.language,
-          value: 'Log In'
-        })}
-        hide
-      />
-      <Toaster />
-      <div>
-        <div className="page-container top-50">
-          <div className="boxed mini">
-            <div className="logo-container center">
-              {settings.siteLogo ? (
-                <Image
-                  alt="logo"
-                  src={`/storage/${settings.siteLogo}`}
-                  height={'65px'}
-                />
-              ) : (
-                <Text h2 width={'100%'}>
-                  {settings.siteName}
-                </Text>
-              )}
-            </div>
+      <Authorized>
+        <Navbar
+          title={useTranslation({ lang: settings?.language, value: 'Log In' })}
+          description={useTranslation({
+            lang: settings?.language,
+            value: 'Log In'
+          })}
+          hide
+        />
+        <Toaster />
+        <div>
+          <div className="page-container top-50">
+            <div className="boxed mini">
+              <div className="logo-container center">
+                {settings.siteLogo ? (
+                  <Image
+                    alt="logo"
+                    src={`/static/${settings.siteLogo}`}
+                    height={'65px'}
+                  />
+                ) : (
+                  <Text h2 width={'100%'}>
+                    {settings.siteName}
+                  </Text>
+                )}
+              </div>
 
-            <Card width="100%">
-              <Text h3>
-                <Translation
-                  lang={settings?.language}
-                  value="Sign into your account"
-                />
-              </Text>
-
-              {status === 'inactive' ? (
-                <Text className="error">
+              <Card width="100%">
+                <Text h3>
                   <Translation
                     lang={settings?.language}
-                    value="Account is inactive."
+                    value="Sign into your account"
                   />
-                  <Translation lang={settings?.language} value="Click" />{' '}
+                </Text>
+
+                {status === 'inactive' ? (
+                  <Text className="error">
+                    <Translation
+                      lang={settings?.language}
+                      value="Account is inactive."
+                    />
+                    <Translation lang={settings?.language} value="Click" />{' '}
+                    <Link
+                      href="/account/verify"
+                      color
+                      style={{ textDecoration: 'underline' }}
+                    >
+                      <Translation
+                        lang={settings?.language}
+                        value="Click here to verify your account."
+                      />
+                    </Link>{' '}
+                  </Text>
+                ) : (
+                  ''
+                )}
+                <Spacer h={1} />
+                {settings?.socialAccount?.facebook && (
+                  <>
+                    <FacebookLogin
+                      appId={settings?.socialAccount?.facebook}
+                      onFail={(error) => {
+                        toast.error('Login Failed!');
+                      }}
+                      onProfileSuccess={(response) => {
+                        const body = {
+                          name: response.name,
+                          email: response.email,
+                          platform: 'Facebook'
+                        };
+                        socialAccount(body);
+                      }}
+                      render={({ onClick }) => (
+                        <Button
+                          onClick={onClick}
+                          width="100%"
+                          icon={<img src="/images/facebook.svg" height={20} />}
+                        >
+                          <span style={{ textTransform: 'none' }}>
+                            <Translation
+                              lang={settings?.language}
+                              value="Login using Facebook"
+                            />
+                          </span>
+                        </Button>
+                      )}
+                    />
+                    <Spacer h={1} />
+                  </>
+                )}
+                {settings?.socialAccount?.google && (
+                  <>
+                    <Button
+                      width="100%"
+                      icon={<img src="/images/google.svg" height={20} />}
+                      onClick={() => googleAuth()}
+                    >
+                      <span style={{ textTransform: 'none' }}>
+                        <Translation
+                          lang={settings?.language}
+                          value="Login using Google"
+                        />
+                      </span>
+                    </Button>
+                    <Spacer h={1} />
+                  </>
+                )}
+                {(settings?.socialAccount?.facebook ||
+                  settings?.socialAccount?.google) && <Divider>OR</Divider>}
+                <Spacer h={1} />
+                <Input
+                  placeholder={useTranslation({
+                    lang: settings?.language,
+                    value: 'Email or username'
+                  })}
+                  width="100%"
+                  scale={4 / 3}
+                  onChange={(e) =>
+                    setUser({ ...user, ...{ email: e.target.value } })
+                  }
+                />
+                <Spacer h={1.5} />
+                <Input.Password
+                  placeholder={useTranslation({
+                    lang: settings?.language,
+                    value: 'Password'
+                  })}
+                  width="100%"
+                  scale={4 / 3}
+                  onChange={(e) =>
+                    setUser({ ...user, ...{ password: e.target.value } })
+                  }
+                />
+                <Spacer h={1} />
+
+                {settings?.cloudflarePublicKey ? (
+                  <div className="center">
+                    <Turnstile
+                      sitekey={settings.cloudflarePublicKey}
+                      onVerify={(token) => {
+                        verifyTurnstile({ token }).then((res: any) => {
+                          if (res.success) {
+                            showButton(true);
+                          } else {
+                            turnstile.reset();
+                          }
+                        });
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <Button
+                    shadow
+                    type="secondary"
+                    width="100%"
+                    loading={loading}
+                    onClick={() => {
+                      email && password ? signIn() : null;
+                    }}
+                  >
+                    <Translation lang={settings?.language} value="Log In" />
+                  </Button>
+                )}
+                {show && (
+                  <Button
+                    shadow
+                    type="secondary"
+                    width="100%"
+                    loading={loading}
+                    onClick={() => {
+                      email && password ? signIn() : null;
+                    }}
+                  >
+                    <Translation lang={settings?.language} value="Log In" />
+                  </Button>
+                )}
+                <Spacer h={1.5} />
+                <Text font={'14px'}>
+                  <Translation
+                    lang={settings?.language}
+                    value="Forgotten Password?"
+                  />
+                  &nbsp;
                   <Link
-                    href="/account/verify"
+                    href="/forgot"
                     color
-                    style={{ textDecoration: 'underline' }}
+                    underline
+                    style={{ fontWeight: '500' }}
+                  >
+                    <Translation lang={settings?.language} value="Reset here" />{' '}
+                  </Link>
+                </Text>
+
+                <Text font={'14px'}>
+                  <Translation
+                    lang={settings?.language}
+                    value="Not a member?"
+                  />
+                  &nbsp;
+                  <Link
+                    href="/signup"
+                    color
+                    underline
+                    style={{ fontWeight: '500' }}
                   >
                     <Translation
                       lang={settings?.language}
-                      value="Click here to verify your account."
+                      value="Signup here"
                     />
-                  </Link>{' '}
+                  </Link>
                 </Text>
-              ) : (
-                ''
-              )}
-              <Spacer h={1} />
-              {settings?.socialAccount?.facebook && (
-                <>
-                  <FacebookLogin
-                    appId={settings?.socialAccount?.facebook}
-                    onFail={(error) => {
-                      toast.error('Login Failed!');
-                    }}
-                    onProfileSuccess={(response) => {
-                      const body = {
-                        name: response.name,
-                        email: response.email,
-                        platform: 'Facebook'
-                      };
-                      socialAccount(body);
-                    }}
-                    render={({ onClick }) => (
-                      <Button
-                        onClick={onClick}
-                        width="100%"
-                        icon={<img src="/images/facebook.svg" height={20} />}
-                      >
-                        <span style={{ textTransform: 'none' }}>
-                          <Translation
-                            lang={settings?.language}
-                            value="Login using Facebook"
-                          />
-                        </span>
-                      </Button>
-                    )}
-                  />
-                  <Spacer h={1} />
-                </>
-              )}
-              {settings?.socialAccount?.google && (
-                <>
-                  <Button
-                    width="100%"
-                    icon={<img src="/images/google.svg" height={20} />}
-                    onClick={() => googleAuth()}
-                  >
-                    <span style={{ textTransform: 'none' }}>
-                      <Translation
-                        lang={settings?.language}
-                        value="Login using Google"
-                      />
-                    </span>
-                  </Button>
-                  <Spacer h={1} />
-                </>
-              )}
-              {(settings?.socialAccount?.facebook ||
-                settings?.socialAccount?.google) && <Divider>OR</Divider>}
-              <Spacer h={1} />
-              <Input
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Email or username'
-                })}
-                width="100%"
-                scale={4 / 3}
-                onChange={(e) =>
-                  setUser({ ...user, ...{ email: e.target.value } })
-                }
-              />
-              <Spacer h={1.5} />
-              <Input.Password
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Password'
-                })}
-                width="100%"
-                scale={4 / 3}
-                onChange={(e) =>
-                  setUser({ ...user, ...{ password: e.target.value } })
-                }
-              />
-              <Spacer h={1} />
-
-              {settings?.cloudflarePublicKey ? (
-                <div className="center">
-                  <Turnstile
-                    sitekey={settings.cloudflarePublicKey}
-                    onVerify={(token) => {
-                      verifyTurnstile({ token }).then((res: any) => {
-                        if (res.success) {
-                          showButton(true);
-                        } else {
-                          turnstile.reset();
-                        }
-                      });
-                    }}
-                  />
-                </div>
-              ) : (
-                <Button
-                  shadow
-                  type="secondary"
-                  width="100%"
-                  loading={loading}
-                  onClick={() => {
-                    email && password ? signIn() : null;
-                  }}
-                >
-                  <Translation lang={settings?.language} value="Log In" />
-                </Button>
-              )}
-              {show && (
-                <Button
-                  shadow
-                  type="secondary"
-                  width="100%"
-                  loading={loading}
-                  onClick={() => {
-                    email && password ? signIn() : null;
-                  }}
-                >
-                  <Translation lang={settings?.language} value="Log In" />
-                </Button>
-              )}
-              <Spacer h={1.5} />
-              <Text font={'14px'}>
-                <Translation
-                  lang={settings?.language}
-                  value="Forgotten Password?"
-                />
-                &nbsp;
-                <Link
-                  href="/forgot"
-                  color
-                  underline
-                  style={{ fontWeight: '500' }}
-                >
-                  <Translation lang={settings?.language} value="Reset here" />{' '}
-                </Link>
-              </Text>
-
-              <Text font={'14px'}>
-                <Translation lang={settings?.language} value="Not a member?" />
-                &nbsp;
-                <Link
-                  href="/signup"
-                  color
-                  underline
-                  style={{ fontWeight: '500' }}
-                >
-                  <Translation lang={settings?.language} value="Signup here" />
-                </Link>
-              </Text>
-            </Card>
+              </Card>
+              <Spacer h={4} />
+            </div>
             <Spacer h={4} />
           </div>
-          <Spacer h={4} />
         </div>
-      </div>
+      </Authorized>
     </div>
   );
 });

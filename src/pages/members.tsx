@@ -56,7 +56,7 @@ const Members = observer(() => {
             <div className="one">
               <Avatar
                 src={
-                  item.photo ? `/storage/${item.photo}` : '/images/avatar.png'
+                  item.photo ? `/static/${item.photo}` : '/images/avatar.png'
                 }
                 w={2}
                 h={2}

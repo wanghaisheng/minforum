@@ -328,7 +328,7 @@ const Reply = (props: replyProp) => {
                               <User
                                 src={
                                   item.profile && item.profile.photo
-                                    ? `/storage/${item.profile.photo}`
+                                    ? `/static/${item.profile.photo}`
                                     : '/images/avatar.png'
                                 }
                                 name={item.profile.name}
@@ -396,7 +396,7 @@ const Reply = (props: replyProp) => {
                                   <User
                                     src={
                                       i.author.photo
-                                        ? `/storage/${i.author.photo}`
+                                        ? `/static/${i.author.photo}`
                                         : `/images/avatar.png`
                                     }
                                     name={i.author.name}
@@ -410,7 +410,7 @@ const Reply = (props: replyProp) => {
                             <Avatar
                               src={
                                 i.author.photo
-                                  ? `/storage/${i.author.photo}`
+                                  ? `/static/${i.author.photo}`
                                   : `/images/avatar.png`
                               }
                               w={isXS ? 1.2 : 2}
@@ -473,7 +473,7 @@ const Reply = (props: replyProp) => {
                                             <User
                                               src={
                                                 l.profile && l.profile.photo
-                                                  ? `/storage/${l.profile.photo}`
+                                                  ? `/static/${l.profile.photo}`
                                                   : '/images/avatar.png'
                                               }
                                               name={l.profile.name}

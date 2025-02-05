@@ -117,7 +117,7 @@ const MetaSetup = observer(() => {
                 <div>
                   {settings.siteLogo ? (
                     <Image
-                      src={`/storage/${settings.siteLogo}`}
+                      src={`/static/${settings.siteLogo}`}
                       style={{ width: 'auto', height: 30 }}
                     />
                   ) : (

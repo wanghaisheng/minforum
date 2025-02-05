@@ -27,7 +27,7 @@ const Contributors = observer((props: contributorProps) => {
           <Link>
             <User
               src={`${
-                item.photo ? '/storage/' + item.photo : '/images/avatar.png'
+                item.photo ? '/static/' + item.photo : '/images/avatar.png'
               }`}
               name={item.name}
             >

@@ -917,7 +917,7 @@ const Discussion = observer(() => {
                                     <User
                                       src={
                                         profile && profile.photo
-                                          ? `/storage/${profile.photo}`
+                                          ? `/static/${profile.photo}`
                                           : '/images/avatar.png'
                                       }
                                       name={profile?.name}
@@ -940,7 +940,7 @@ const Discussion = observer(() => {
                               <Avatar
                                 src={
                                   profile && profile.photo
-                                    ? `/storage/${profile.photo}`
+                                    ? `/static/${profile.photo}`
                                     : '/images/avatar.png'
                                 }
                                 w={isXS ? 1.2 : 2.3}
@@ -1019,7 +1019,7 @@ const Discussion = observer(() => {
                                               src={
                                                 item.profile &&
                                                 item.profile.photo
-                                                  ? `/storage/${item.profile.photo}`
+                                                  ? `/static/${item.profile.photo}`
                                                   : '/images/avatar.png'
                                               }
                                               name={item.profile.name}
@@ -1074,7 +1074,7 @@ const Discussion = observer(() => {
                           role={item.author.role}
                           photo={
                             item.author.photo
-                              ? `/storage/` + item.author.photo
+                              ? `/static/` + item.author.photo
                               : '/images/avatar.png'
                           }
                           replies={item.replies}
@@ -1112,7 +1112,7 @@ const Discussion = observer(() => {
                     className="mobile"
                     style={{ marginBottom: 10 }}
                     dangerouslySetInnerHTML={{
-                      __html: settings.advert?.right!
+                      __html: settings.advert?.inner!
                     }}
                   ></div>
                 </div>
@@ -1132,7 +1132,7 @@ const Discussion = observer(() => {
 
                     {settings.advert?.right ? (
                       <div
-                        style={{ width: '100%' }}
+                        style={{ marginTop: 20, width: '100%' }}
                         dangerouslySetInnerHTML={{
                           __html: settings.advert?.right!
                         }}

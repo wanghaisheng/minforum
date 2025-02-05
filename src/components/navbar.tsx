@@ -159,7 +159,7 @@ const Navbar = observer((props: navbarProps) => {
           <Spacer w={1} />
           <User
             className="pointer"
-            src={token.photo ? `/storage/${token.photo}` : '/images/avatar.png'}
+            src={token.photo ? `/static/${token.photo}` : '/images/avatar.png'}
             name={getFirstName(token.name!)}
           />
 
@@ -276,7 +276,7 @@ const Navbar = observer((props: navbarProps) => {
           content={`${description} - ${settings.siteName}`}
         />
         <title>{title}</title>
-        <link rel="icon" href={`/storage/${settings.siteFavicon}`} />
+        <link rel="icon" href={`/static/${settings.siteFavicon}`} />
       </Head>
 
       <Modal
@@ -429,7 +429,7 @@ const Navbar = observer((props: navbarProps) => {
                     <Image
                       className="site-logo"
                       alt={settings?.siteName}
-                      src={`/storage/${settings.siteLogo}`}
+                      src={`/static/${settings.siteLogo}`}
                       style={{ width: 'auto', height: 30 }}
                     />
                   ) : (
@@ -566,7 +566,7 @@ const Navbar = observer((props: navbarProps) => {
                       className="pointer"
                       src={
                         token.photo
-                          ? `/storage/${token.photo}`
+                          ? `/static/${token.photo}`
                           : '/images/avatar.png'
                       }
                       name={getFirstName(token.name!)}

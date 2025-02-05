@@ -322,7 +322,7 @@ const Index = observer(() => {
         >
           <Modal.Content>
             <div className="center">
-              <Image style={{ borderRadius: 0 }} src={`/storage/${image}`} />
+              <Image style={{ borderRadius: 0 }} src={`/static/${image}`} />
             </div>
           </Modal.Content>
           <Modal.Action passive onClick={() => toggleImage(!imageModal)}>
@@ -358,7 +358,7 @@ const Index = observer(() => {
                         <Col xs={2}>
                           <Avatar
                             scale={1.5}
-                            src={`${item.profile?.photo ? `/storage/${item.profile?.photo}` : ''}`}
+                            src={`${item.profile?.photo ? `/static/${item.profile?.photo}` : ''}`}
                             text={getInitials(item.profile?.name)}
                           />
                         </Col>
@@ -453,7 +453,7 @@ const Index = observer(() => {
                       <Link href={`/u/${_msg?.username}`}>
                         <Avatar
                           scale={1.5}
-                          src={`${_msg?.photo ? `/storage/${_msg?.photo}` : ''}`}
+                          src={`${_msg?.photo ? `/static/${_msg?.photo}` : ''}`}
                           text={getInitials(_msg?.name)}
                         />
                       </Link>

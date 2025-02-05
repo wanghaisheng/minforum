@@ -98,7 +98,7 @@ const Navbar = observer((props: navbarProps) => {
       <Spacer w={1} />
       <User
         className="pointer"
-        src={token.photo ? `/storage/${token.photo}` : '/images/avatar.png'}
+        src={token.photo ? `/static/${token.photo}` : '/images/avatar.png'}
         name={token.name}
       />
 
@@ -142,7 +142,7 @@ const Navbar = observer((props: navbarProps) => {
         <meta name="description" content={description} />
         <meta name="robots" content="noindex, nofollow" />
         <title>{title}</title>
-        <link rel="icon" href={`/storage/${settings.siteFavicon}`} />
+        <link rel="icon" href={`/static/${settings.siteFavicon}`} />
       </Head>
 
       <Card
@@ -159,7 +159,7 @@ const Navbar = observer((props: navbarProps) => {
                   {settings.siteLogo ? (
                     <Image
                       className="site-logo"
-                      src={`/storage/${settings.siteLogo}`}
+                      src={`/static/${settings.siteLogo}`}
                       style={{ width: 'auto', height: 32 }}
                     />
                   ) : (
@@ -229,7 +229,7 @@ const Navbar = observer((props: navbarProps) => {
                       className="pointer"
                       src={
                         token.photo
-                          ? `/storage/${token.photo}`
+                          ? `/static/${token.photo}`
                           : '/images/avatar.png'
                       }
                       name={getFirstName(token.name!)}

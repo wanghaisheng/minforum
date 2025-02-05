@@ -7,7 +7,7 @@
     "dev": "node serve-dev.js",
     "build": "next build",
     "live": "yarn build && NODE_ENV=production pm2 start serve.js -n 'min-forum'",
-    "live:restart": "yarn run build && NODE_ENV=production pm2 start serve.js -n 'min-forum' --update-env",
+    "live:restart": "yarn run build && NODE_ENV=production pm2 restart serve.js -n 'min-forum' --update-env",
     "start_db": "rethinkdb --bind all",
     "test:e2e": "playwright test"
   },
@@ -28,6 +28,7 @@
     "crypto-js": "^4.2.0",
     "csvjson": "^5.1.0",
     "dotenv": "^16.0.1",
+    "express": "^4.21.2",
     "express-useragent": "^1.0.15",
     "formidable": "^2.0.1",
     "helmet": "^5.1.0",

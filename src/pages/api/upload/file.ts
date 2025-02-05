@@ -17,7 +17,7 @@ const uploadFile = (req: NextApiRequest, res: NextApiResponse) => {
 
     if (isDoc(type)) {
       let newFile = `${Date.now()}.${type}`;
-      file.filepath = path.resolve('./public/storage/docs/', newFile);
+      file.filepath = path.resolve('./storage/', newFile);
 
       let data = {
         file: newFile,

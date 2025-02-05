@@ -26,6 +26,7 @@ import { Translation, useTranslation } from 'components/intl/translation';
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import useSettings from 'components/settings';
+import { Authorized } from 'components/auth';
 
 const Signup = observer(() => {
   const settings = useSettings();
@@ -194,7 +195,7 @@ const Signup = observer(() => {
   });
 
   return (
-    <div>
+    <Authorized>
       <Navbar
         title={useTranslation({ lang: settings?.language, value: 'Signup' })}
         description={useTranslation({
@@ -209,7 +210,7 @@ const Signup = observer(() => {
           <div className="boxed">
             <div className="logo-container center">
               {settings.siteLogo ? (
-                <Image src={`/storage/${settings.siteLogo}`} height={'65px'} />
+                <Image src={`/static/${settings.siteLogo}`} height={'65px'} />
               ) : (
                 <Text h2 width={'100%'}>
                   {settings.siteName}
@@ -435,7 +436,7 @@ const Signup = observer(() => {
           <Spacer h={3} />
         </div>
       </div>
-    </div>
+    </Authorized>
   );
 });
 

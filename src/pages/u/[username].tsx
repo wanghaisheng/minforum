@@ -189,7 +189,7 @@ const User = observer(() => {
                     h={5}
                     src={
                       user.photo
-                        ? `/storage/${user.photo}`
+                        ? `/static/${user.photo}`
                         : '/images/avatar.png'
                     }
                   />{' '}
@@ -309,7 +309,7 @@ const User = observer(() => {
                     h={3}
                     src={
                       user.photo
-                        ? `/storage/${user.photo}`
+                        ? `/static/${user.photo}`
                         : '/images/avatar.png'
                     }
                   />
@@ -467,15 +467,14 @@ const User = observer(() => {
           </div>
           <div className="item">
             <aside>
-              <div className="sidenav">
+              <div className="sidenav fluid">
                 {settings.advert?.right ? (
-                  <Card>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: settings.advert?.right!
-                      }}
-                    ></div>
-                  </Card>
+                  <div
+                    style={{}}
+                    dangerouslySetInnerHTML={{
+                      __html: settings.advert?.right!
+                    }}
+                  ></div>
                 ) : (
                   ''
                 )}

@@ -17,7 +17,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (isImage(type)) {
       let newFile = `${Date.now()}.${type}`;
-      file.filepath = path.resolve('./public/storage/', newFile);
+      file.filepath = path.resolve('./storage/', newFile);
 
       let data = {
         file: newFile,

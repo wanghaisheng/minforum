@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
 import { Translation, useTranslation } from 'components/intl/translation';
 import useSettings from 'components/settings';
+import { Authorized } from 'components/auth';
 
 const Forgot = observer(() => {
   const settings = useSettings();
@@ -44,76 +45,81 @@ const Forgot = observer(() => {
 
   return (
     <div className="polkadot">
-      <Navbar
-        title={useTranslation({
-          lang: settings?.language,
-          value: 'Account recovery'
-        })}
-        description={useTranslation({
-          lang: settings?.language,
-          value: 'Account recovery'
-        })}
-        hide
-      />
-      <Toaster />
-      <div>
-        <div className="page-container top-100">
-          <div className="boxed">
-            <div className="logo-container center">
-              {settings.siteLogo ? (
-                <Image src={`/storage/${settings.siteLogo}`} height={'65px'} />
-              ) : (
-                <Text h2 width={'100%'}>
-                  {settings.siteName}
-                </Text>
-              )}
-            </div>
+      <Authorized>
+        <Navbar
+          title={useTranslation({
+            lang: settings?.language,
+            value: 'Account recovery'
+          })}
+          description={useTranslation({
+            lang: settings?.language,
+            value: 'Account recovery'
+          })}
+          hide
+        />
+        <Toaster />
+        <div>
+          <div className="page-container top-100">
+            <div className="boxed">
+              <div className="logo-container center">
+                {settings.siteLogo ? (
+                  <Image src={`/static/${settings.siteLogo}`} height={'65px'} />
+                ) : (
+                  <Text h2 width={'100%'}>
+                    {settings.siteName}
+                  </Text>
+                )}
+              </div>
 
-            <Card shadow width="100%">
-              <Text h3>
-                <Translation
-                  lang={settings?.language}
-                  value="Account recovery"
-                />
-              </Text>
-              <Spacer h={2} />
-              <Input
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Email address'
-                })}
-                width="100%"
-                scale={2}
-                onChange={(e) =>
-                  setUser({ ...user, ...{ email: e.target.value } })
-                }
-              />
-              <Spacer h={1.5} />
-              <Button
-                shadow
-                type="secondary"
-                width="100%"
-                loading={loading}
-                onClick={() => {
-                  user.email ? resetPass() : false;
-                }}
-              >
-                <Translation lang={settings?.language} value="Reset password" />
-              </Button>
-
-              <Text font={'14px'}>
-                <Link href="/login" underline>
-                  &larr;
+              <Card shadow width="100%">
+                <Text h3>
                   <Translation
                     lang={settings?.language}
-                    value="Back to login"
+                    value="Account recovery"
                   />
-                </Link>
-              </Text>
-            </Card>
+                </Text>
+                <Spacer h={2} />
+                <Input
+                  placeholder={useTranslation({
+                    lang: settings?.language,
+                    value: 'Email address'
+                  })}
+                  width="100%"
+                  scale={2}
+                  onChange={(e) =>
+                    setUser({ ...user, ...{ email: e.target.value } })
+                  }
+                />
+                <Spacer h={1.5} />
+                <Button
+                  shadow
+                  type="secondary"
+                  width="100%"
+                  loading={loading}
+                  onClick={() => {
+                    user.email ? resetPass() : false;
+                  }}
+                >
+                  <Translation
+                    lang={settings?.language}
+                    value="Reset password"
+                  />
+                </Button>
+
+                <Text font={'14px'}>
+                  <Link href="/login" underline>
+                    &larr;
+                    <Translation
+                      lang={settings?.language}
+                      value="Back to login"
+                    />
+                  </Link>
+                </Text>
+              </Card>
+            </div>
           </div>
         </div>
-      </div>
+      </Authorized>
     </div>
   );
 });

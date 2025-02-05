@@ -143,7 +143,7 @@ const Editor = (prop: editorProp) => {
                         <User
                           src={
                             item.photo
-                              ? `/storage/${item.photo}`
+                              ? `/static/${item.photo}`
                               : `/images/avatar.png`
                           }
                           name={item.name}

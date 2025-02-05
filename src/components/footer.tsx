@@ -7,7 +7,7 @@ export default function Footer({ siteName }) {
       <span>&copy; {new Date().getFullYear()}</span>
       <div>
         <a href="/terms">Terms of Use</a>
-        <a href="/terms">Privacy Policy</a>
+        <a href="/privacy">Privacy Policy</a>
       </div>
     </div>
   );

@@ -367,7 +367,7 @@ const Settings = observer(() => {
                   w={3}
                   h={3}
                   src={
-                    user.photo ? `/storage/${user.photo}` : '/images/avatar.png'
+                    user.photo ? `/static/${user.photo}` : '/images/avatar.png'
                   }
                 />
                 <Spacer h={1.5} />

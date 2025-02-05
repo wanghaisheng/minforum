@@ -4,6 +4,7 @@
 /rethinkdb_data
 /src/public/storage
 /public/storage
+/storage/*
 /node_modules
 /.pnp
 .pnp.js

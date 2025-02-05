@@ -32,4 +32,30 @@ const Auth = (props: any) => {
   }
 };
 
+export const Authorized = (props: any) => {
+  const router = useRouter();
+  const cookie = parseCookies();
+  const [user, setUser] = React.useState<any>({ id: '', role: '' });
+
+  React.useEffect(() => {
+    let user: any = cookie;
+    user = user && user._w_auth ? JSON.parse(user._w_auth) : null;
+    setUser(user);
+    if (user?.id) {
+      router.push('/');
+    }
+  }, [router]);
+
+  if (user) {
+    return <></>;
+  } else {
+    return (
+      <div>
+        <Toaster />
+        {props.children}
+      </div>
+    );
+  }
+};
+
 export default Auth;

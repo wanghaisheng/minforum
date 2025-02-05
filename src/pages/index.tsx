@@ -165,7 +165,7 @@ const Home = observer((props: pageProps) => {
               slug={item.slug}
               avatar={
                 item.profile && item.profile.photo
-                  ? `/storage/${item.profile.photo}`
+                  ? `/static/${item.profile.photo}`
                   : '/images/avatar.png'
               }
               author={item.profile?.name}

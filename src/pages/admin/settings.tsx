@@ -207,7 +207,7 @@ const Settings = observer(() => {
                     <div>
                       {settings.siteFavicon ? (
                         <Image
-                          src={`/storage/${settings.siteFavicon}`}
+                          src={`/static/${settings.siteFavicon}`}
                           style={{ width: 'auto', height: 30 }}
                         />
                       ) : (
@@ -242,7 +242,7 @@ const Settings = observer(() => {
                     <div>
                       {settings.siteLogo ? (
                         <Image
-                          src={`/storage/${settings.siteLogo}`}
+                          src={`/static/${settings.siteLogo}`}
                           style={{ width: 'auto', height: 30 }}
                         />
                       ) : (
@@ -446,7 +446,7 @@ const Settings = observer(() => {
                     <div>
                       {settings?.homepage?.image ? (
                         <img
-                          src={`/storage/${settings?.homepage?.image}`}
+                          src={`/static/${settings?.homepage?.image}`}
                           style={{ width: 'auto', height: 40, borderRadius: 3 }}
                         />
                       ) : (

@@ -183,7 +183,7 @@ const Notifications = observer(() => {
               <Avatar
                 src={
                   item.profile && item.profile.photo
-                    ? `/storage/${item.profile.photo}`
+                    ? `/static/${item.profile.photo}`
                     : '/images/avatar.png'
                 }
                 w={2}

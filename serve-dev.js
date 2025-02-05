@@ -1,7 +1,9 @@
 require('dotenv').config();
 const cron = require('node-cron');
-const { createServer } = require('node:https');
+const express = require('express');
 const next = require('next');
+const http = require('https');
+const path = require('path');
 const fs = require('fs');
 const { Server } = require('socket.io');
 const socketChat = require('./src/components/api/socket');
@@ -20,7 +22,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
 const port = process.env.DEFAULT_PORT;
 
-const app = next({ dev, hostname, port });
+const app = next({ dev });
 const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
@@ -28,28 +30,41 @@ app.prepare().then(() => {
     key: fs.readFileSync('cert.key'),
     cert: fs.readFileSync('cert.crt')
   };
-  const httpServer = createServer(options, handler);
 
-  const io = new Server(httpServer);
+  const expressApp = express();
+  const server = http.createServer(options, expressApp);
+
+  // Serve static files
+  expressApp.use('/static', express.static(path.join(__dirname, 'storage')));
+
+  expressApp.all('*', (req, res) => {
+    return handler(req, res);
+  });
+
+  const io = new Server(server);
 
   let activeUsers = new Set();
 
   io.on('connection', (socket) => {
     activeUsers.add(socket.id);
-    console.log('user connected', activeUsers.size);
+    console.log('User connected:', activeUsers.size);
 
     io.emit('activeUsers', activeUsers.size);
 
     socket.on('disconnect', () => {
       activeUsers.delete(socket.id);
-      console.log('User disconnected');
+      console.log('User disconnected:', activeUsers.size);
 
       io.emit('activeUsers', activeUsers.size);
     });
 
     socket.on('send-message', async (data) => {
-      let response = await socketChat(data);
-      io.emit('message', response);
+      try {
+        const response = await socketChat(data);
+        io.emit('message', response);
+      } catch (error) {
+        console.error('Error processing message:', error);
+      }
     });
 
     socket.on('typing', (user) => {
@@ -57,23 +72,18 @@ app.prepare().then(() => {
     });
 
     socket.on('telemetry', (domain) => {
-      console.log(domain);
-
       io.emit('telemetry', domain);
     });
   });
 
-  httpServer
-    .once('error', (err) => {
-      console.error(err);
-      process.exit(1);
-    })
-    .listen(port, () => {
-      console.log(`> Ready on https://${hostname}:${port}`);
-    });
+  server.listen(port, (err) => {
+    if (err) throw err;
+    console.log(`> Ready on http://${hostname}:${port}`);
+  });
 });
 
-cron.schedule('0 0-23 * * *', () => {
+cron.schedule('0 * * * *', () => {
+  console.log('Running scheduled tasks...');
   rewardDevotee();
   rewardVeteran();
   rewardFavorite();
