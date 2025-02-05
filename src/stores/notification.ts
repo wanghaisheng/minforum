@@ -1,6 +1,7 @@
 import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { notificationProp } from 'interfaces/notification';
+import { encrypt } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -30,7 +31,7 @@ export default class NotificationStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify(body)
     })
@@ -52,7 +53,7 @@ export default class NotificationStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify({ id })
     })
@@ -74,7 +75,7 @@ export default class NotificationStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify({ userId })
     })
@@ -98,7 +99,7 @@ export default class NotificationStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
@@ -123,7 +124,7 @@ export default class NotificationStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
@@ -147,7 +148,7 @@ export default class NotificationStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())

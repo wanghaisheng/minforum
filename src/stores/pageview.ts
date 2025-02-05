@@ -1,5 +1,6 @@
 import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { pageviewProp } from 'interfaces/pageview';
+import { encrypt } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -41,7 +42,7 @@ export default class PageviewStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
@@ -87,7 +88,7 @@ export default class PageviewStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())

@@ -1,6 +1,7 @@
 import { resProp } from 'interfaces/res';
 import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { transactionProp } from 'interfaces/transaction';
+import { encrypt } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -39,7 +40,7 @@ export default class TransactionStore {
     return await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
@@ -67,7 +68,7 @@ export default class TransactionStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
@@ -93,7 +94,7 @@ export default class TransactionStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())

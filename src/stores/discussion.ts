@@ -2,6 +2,7 @@ import { commentProp } from 'interfaces/comment';
 import { resProp } from 'interfaces/res';
 import { observable, action, makeAutoObservable, runInAction } from 'mobx';
 import { discussionProp } from 'interfaces/discussion';
+import { encrypt } from 'components/api/utils';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
@@ -36,7 +37,7 @@ export default class DiscussionStore {
 
   headers: HeadersInit | any = {
     'content-type': 'application/json',
-    apikey: API_KEY
+    Authorization: encrypt(API_KEY)
   };
 
   @action newDiscussion = async (body: discussionProp) => {

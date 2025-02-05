@@ -120,12 +120,31 @@ const validateEmail = (email) => {
   return re.test(email);
 };
 
+const encrypt = (data) => {
+  const ciphertext = CryptoJS.AES.encrypt(
+    data,
+    process.env.NEXT_PUBLIC_APP_SECRET
+  ).toString();
+  return ciphertext;
+};
+
+const decrypt = (data) => {
+  try {
+    const bytes = CryptoJS.AES.decrypt(data, process.env.APP_SECRET);
+    const originalText = bytes.toString(CryptoJS.enc.Utf8);
+    return originalText;
+  } catch (error) {
+    return null;
+  }
+};
+
 const withAuth = async (req) => {
   let allowlist = process.env.NEXT_PUBLIC_CLIENT_ORIGINS;
   allowlist = allowlist.split(',');
 
   if (allowlist.indexOf(req.headers.host) !== -1) {
-    const apikey = req.headers.apikey;
+    const apikey = decrypt(req.headers.authorization);
+
     if (apikey !== process.env.NEXT_PUBLIC_API_KEY) {
       return { success: false, message: 'Invalid API key' };
     } else {
@@ -224,24 +243,6 @@ function validateUsername(username) {
   // If all checks pass, the username is valid
   return true;
 }
-
-const encrypt = (data) => {
-  const ciphertext = CryptoJS.AES.encrypt(
-    data,
-    process.env.APP_SECRET
-  ).toString();
-  return ciphertext;
-};
-
-const decrypt = (data) => {
-  try {
-    const bytes = CryptoJS.AES.decrypt(data, process.env.APP_SECRET);
-    const originalText = bytes.toString(CryptoJS.enc.Utf8);
-    return originalText;
-  } catch (error) {
-    return null;
-  }
-};
 
 const enc = (plainText) => {
   var b64 = CryptoJS.AES.encrypt(plainText, process.env.APP_SECRET).toString();
