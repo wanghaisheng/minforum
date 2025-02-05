@@ -6,7 +6,10 @@ const rewardDevotee = async () => {
   const oneYearAgo = moment().subtract(1, 'year').utc().valueOf();
 
   let users = await User.filter((user) =>
-    user('point').ge(100).and(user('timestamp').le(oneYearAgo))
+    user('point')
+      .ge(100)
+      .and(user('timestamp').le(oneYearAgo))
+      .and(user('badges').contains('prolific-writer').not())
   );
 
   asyncForEach(users, async (item) => {
@@ -31,7 +34,10 @@ const rewardVeteran = async () => {
   const threeYearAgo = moment().subtract(3, 'year').utc().valueOf();
 
   let users = await User.filter((user) =>
-    user('point').ge(100).and(user('timestamp').le(threeYearAgo))
+    user('point')
+      .ge(100)
+      .and(user('timestamp').le(threeYearAgo))
+      .and(user('badges').contains('prolific-writer').not())
   );
 
   asyncForEach(users, async (item) => {
@@ -54,196 +60,245 @@ const rewardVeteran = async () => {
 };
 
 const rewardProlific = async () => {
-  let users = await r.table('users').filter((user) => {
-    return r
-      .table('discussions')
-      .getAll(user('id'), { index: 'userId' })
-      .count()
-      .ge(100);
-  });
+  try {
+    let users = await r
+      .table('users')
+      .filter((user) => user('badges').contains('prolific-writer').not())
+      .filter((user) =>
+        r
+          .table('discussions')
+          .getAll(user('id'), { index: 'userId' })
+          .count()
+          .ge(100)
+      );
 
-  asyncForEach(users, async (item) => {
-    let badges = item.badges || [];
-    badges = [...new Set([...badges, 'prolific-writer'])];
+    await asyncForEach(users, async (item) => {
+      let badges = item.badges || [];
+      badges = [...new Set([...badges, 'prolific-writer'])];
 
-    await User.get(item.id).update({ badges });
+      await User.get(item.id).update({ badges });
 
-    await new Notification({
-      receiver: item.id,
-      filterType: 'reward',
-      type: 'admin',
-      sender: 'admin',
-      message: "You've been awarded the Prolific Writer Badge!",
-      action: `${item.username}`,
-      read: false
-    }).save();
-  }).finally(() => {
+      await new Notification({
+        receiver: item.id,
+        filterType: 'reward',
+        type: 'admin',
+        sender: 'admin',
+        message: "You've been awarded the Prolific Writer Badge!",
+        action: `${item.username}`,
+        read: false
+      }).save();
+    });
+
     console.log('Rewarded prolific writer ', users.length);
-  });
+  } catch (error) {
+    console.error('Error rewarding prolific writers:', error);
+  }
 };
 
 const rewardWordsmith = async () => {
-  let users = await r.table('users').filter((user) => {
-    return r
-      .table('discussions')
-      .getAll(user('id'), { index: 'userId' })
-      .count()
-      .ge(1000);
-  });
+  try {
+    let users = await r
+      .table('users')
+      .filter((user) => user('badges').contains('wordsmith').not())
+      .filter((user) =>
+        r
+          .table('discussions')
+          .getAll(user('id'), { index: 'userId' })
+          .count()
+          .ge(1000)
+      );
 
-  asyncForEach(users, async (item) => {
-    let badges = item.badges || [];
-    badges = [...new Set([...badges, 'wordsmith'])];
+    await asyncForEach(users, async (item) => {
+      let badges = item.badges || [];
+      badges = [...new Set([...badges, 'wordsmith'])];
 
-    await User.get(item.id).update({ badges });
-    await new Notification({
-      receiver: item.id,
-      filterType: 'reward',
-      type: 'admin',
-      sender: 'admin',
-      message: "You've been awarded the Wordsmith Badge!",
-      action: `${item.username}`,
-      read: false
-    }).save();
-  }).finally(() => {
+      await User.get(item.id).update({ badges });
+
+      await new Notification({
+        receiver: item.id,
+        filterType: 'reward',
+        type: 'admin',
+        sender: 'admin',
+        message: "You've been awarded the Wordsmith Badge!",
+        action: `${item.username}`,
+        read: false
+      }).save();
+    });
+
     console.log('Rewarded wordsmith ', users.length);
-  });
+  } catch (error) {
+    console.error('Error rewarding wordsmith:', error);
+  }
 };
 
 const rewardFavorite = async () => {
-  let users = await r
-    .table('notifications')
-    .filter((n) =>
-      n('filterType')
-        .match('like-post')
-        .or(n('filterType').match('like-comment'))
-        .or(n('filterType').match('like-reply'))
-    )
-    .group('receiver')
-    .count()
-    .ge(100);
+  try {
+    let users = await r
+      .table('notifications')
+      .filter((n) =>
+        n('filterType')
+          .match('like-post')
+          .or(n('filterType').match('like-comment'))
+          .or(n('filterType').match('like-reply'))
+      )
+      .group('receiver')
+      .count()
+      .ungroup()
+      .filter((group) => group('reduction').ge(100))
+      .map((group) => group('group'));
 
-  users = users.filter((item) => item.reduction === true);
+    users = await r
+      .table('users')
+      .getAll(r.args(users))
+      .filter((user) => user('badges').contains('favorite').not());
 
-  asyncForEach(users, async (item) => {
-    let user = await User.get(item.group);
-    let badges = user.badges || [];
-    badges = [...new Set([...badges, 'favorite'])];
+    await asyncForEach(users, async (user) => {
+      let badges = user.badges || [];
+      badges = [...new Set([...badges, 'favorite'])];
 
-    await User.get(item.group).update({ badges });
-    await new Notification({
-      receiver: item.group,
-      filterType: 'reward',
-      type: 'admin',
-      sender: 'admin',
-      message:
-        "You've been awarded the Favorite Badge for receiving 100+ likes on your posts!",
-      action: `${user.username}`,
-      read: false
-    }).save();
-  }).finally(() => {
+      await User.get(user.id).update({ badges });
+
+      await new Notification({
+        receiver: user.id,
+        filterType: 'reward',
+        type: 'admin',
+        sender: 'admin',
+        message:
+          "You've been awarded the Favorite Badge for receiving 100+ likes on your posts!",
+        action: `${user.username}`,
+        read: false
+      }).save();
+    });
+
     console.log('Rewarded favorite ', users.length);
-  });
+  } catch (error) {
+    console.error('Error rewarding favorite users:', error);
+  }
 };
 
 const rewardPeopleChoice = async () => {
-  let users = await r
-    .table('notifications')
-    .filter((n) =>
-      n('filterType')
-        .match('like-post')
-        .or(n('filterType').match('like-comment'))
-        .or(n('filterType').match('like-reply'))
-    )
-    .group('receiver')
-    .count()
-    .ge(1000);
+  try {
+    let users = await r
+      .table('notifications')
+      .filter((n) =>
+        n('filterType')
+          .match('like-post')
+          .or(n('filterType').match('like-comment'))
+          .or(n('filterType').match('like-reply'))
+      )
+      .group('receiver')
+      .count()
+      .ungroup()
+      .filter((group) => group('reduction').ge(1000))
+      .map((group) => group('group'));
 
-  users = users.filter((item) => item.reduction === true);
+    users = await r
+      .table('users')
+      .getAll(r.args(users))
+      .filter((user) => user('badges').contains('people-choice').not());
 
-  asyncForEach(users, async (item) => {
-    let user = await User.get(item.group);
-    let badges = user.badges || [];
-    badges = [...new Set([...badges, 'people-choice'])];
+    await asyncForEach(users, async (user) => {
+      let badges = user.badges || [];
+      badges = [...new Set([...badges, 'people-choice'])];
 
-    await User.get(item.group).update({ badges });
-    await new Notification({
-      receiver: item.group,
-      filterType: 'reward',
-      type: 'admin',
-      sender: 'admin',
-      message:
-        "You've been awarded the People's Choice Badge for receiving 100+ likes on your posts!",
-      action: `${user.username}`,
-      read: false
-    }).save();
-  }).finally(() => {
-    console.log('Rewarded people choice ', users.length);
-  });
+      await User.get(user.id).update({ badges });
+
+      await new Notification({
+        receiver: user.id,
+        filterType: 'reward',
+        type: 'admin',
+        sender: 'admin',
+        message:
+          "You've been awarded the People's Choice Badge for receiving 100+ likes on your posts!",
+        action: `${user.username}`,
+        read: false
+      }).save();
+    });
+
+    console.log('Rewarded people-choice ', users.length);
+  } catch (error) {
+    console.error('Error rewarding people-choice users:', error);
+  }
 };
 
 const rewardGenius = async () => {
-  let answers = await r
-    .table('discussions')
-    .group('bestAnswer')
-    .count()
-    .ge(100);
+  try {
+    let answers = await r
+      .table('discussions')
+      .group('bestAnswer')
+      .count()
+      .ungroup()
+      .filter((group) => group('reduction').ge(100))
+      .map((group) => group('group'));
 
-  answers = answers.filter((item) => item.reduction === true && item.group);
+    await asyncForEach(answers, async (bestAnswerId) => {
+      let comment = await Comment.get(bestAnswerId);
+      if (!comment) return; // Skip if comment is not found
 
-  asyncForEach(answers, async (item) => {
-    let comment = await Comment.get(item.group);
-    let user = await User.get(comment.userId);
+      let user = await User.get(comment.userId);
+      if (!user) return; // Skip if user is not found
 
-    let badges = user.badges || [];
-    badges = [...new Set([...badges, 'genius'])];
+      let badges = user.badges || [];
+      badges = [...new Set([...badges, 'genius'])];
 
-    await User.get(comment.userId).update({ badges });
-    await new Notification({
-      receiver: item.group,
-      filterType: 'reward',
-      type: 'admin',
-      sender: 'admin',
-      message:
-        "You've been awarded the Genius Badge for providing 100+ best answers!",
-      action: `${user.username}`,
-      read: false
-    }).save();
-  }).finally(() => {
+      await User.get(comment.userId).update({ badges });
+
+      await new Notification({
+        receiver: comment.userId,
+        filterType: 'reward',
+        type: 'admin',
+        sender: 'admin',
+        message:
+          "You've been awarded the Genius Badge for providing 100+ best answers!",
+        action: `${user.username}`,
+        read: false
+      }).save();
+    });
+
     console.log('Rewarded genius ', answers.length);
-  });
+  } catch (error) {
+    console.error('Error rewarding genius users:', error);
+  }
 };
 
 const rewardPolymath = async () => {
-  let answers = await r
-    .table('discussions')
-    .group('bestAnswer')
-    .count()
-    .ge(1000);
+  try {
+    let answers = await r
+      .table('discussions')
+      .group('bestAnswer')
+      .count()
+      .ungroup()
+      .filter((group) => group('reduction').ge(1000))
+      .map((group) => group('group'));
 
-  answers = answers.filter((item) => item.reduction === true && item.group);
+    await asyncForEach(answers, async (bestAnswerId) => {
+      let comment = await Comment.get(bestAnswerId);
+      if (!comment) return; // Skip if comment is not found
 
-  asyncForEach(answers, async (item) => {
-    let comment = await Comment.get(item.group);
-    let user = await User.get(comment.userId);
+      let user = await User.get(comment.userId);
+      if (!user) return; // Skip if user is not found
 
-    let badges = user.badges || [];
-    badges = [...new Set([...badges, 'polymath'])];
+      let badges = user.badges || [];
+      badges = [...new Set([...badges, 'polymath'])];
 
-    await User.get(comment.userId).update({ badges });
-    await new Notification({
-      receiver: item.group,
-      filterType: 'reward',
-      type: 'admin',
-      sender: 'admin',
-      message:
-        "You've been awarded the Polymath Badge for providing 100+ best answers!",
-      action: `${user.username}`,
-      read: false
-    }).save();
-  }).finally(() => {
+      await User.get(comment.userId).update({ badges });
+
+      await new Notification({
+        receiver: comment.userId,
+        filterType: 'reward',
+        type: 'admin',
+        sender: 'admin',
+        message:
+          "You've been awarded the Polymath Badge for providing 1000+ best answers!",
+        action: `${user.username}`,
+        read: false
+      }).save();
+    });
+
     console.log('Rewarded polymath ', answers.length);
-  });
+  } catch (error) {
+    console.error('Error rewarding polymath users:', error);
+  }
 };
 
 module.exports = {

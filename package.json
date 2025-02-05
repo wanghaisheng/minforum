@@ -1,6 +1,6 @@
 {
   "name": "min-forum",
-  "version": "1.18.1",
+  "version": "1.18.2",
   "private": true,
   "scripts": {
     "setup": "sh setup.sh",

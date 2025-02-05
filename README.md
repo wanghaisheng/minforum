@@ -29,6 +29,8 @@ sh <(curl https://raw.githubusercontent.com/min-forum/min-forum/main/install/set
 ### Development
 
 **Install mkcert and generate certificate for localhost**
+<br />
+Note: Social login with facebook and google required SSL
 
 ```
 npm i -g mkcert
