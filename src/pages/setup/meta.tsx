@@ -89,6 +89,7 @@ const MetaSetup = observer(() => {
         title="Metadata - Setup Minforum"
         description="Metadata - Setup Minforum"
         hide
+        norobot
       />
       <Toaster />
       <div className="polkadot">

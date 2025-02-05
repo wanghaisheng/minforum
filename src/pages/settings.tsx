@@ -349,6 +349,7 @@ const Settings = observer(() => {
           lang: settings?.language,
           value: 'Account settings'
         })}
+        norobot
       />
       <Toaster />
       <div className="page-container top-100">

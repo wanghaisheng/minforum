@@ -314,6 +314,7 @@ const Index = observer(() => {
         <Navbar
           title={`${unread_message ? `(${unread_message})` : ''} Messages`}
           description={`${unread_message ? `(${unread_message})` : ''} Messages`}
+          norobot
         />
         <Modal
           width={'38rem'}

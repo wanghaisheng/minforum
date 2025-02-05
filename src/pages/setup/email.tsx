@@ -69,7 +69,7 @@ const EmailSetup = observer((props: pageProps) => {
         banWords: 'motherfucker, bullshit, fuck, shit',
         status: 'completed',
         theme: 'weiss',
-        domain: '',
+        domain: website,
         welcomeEmail: `Thank you for joining ${settings?.siteName}`,
         homepage: {
           bgColor: '#2A222F',
@@ -78,7 +78,6 @@ const EmailSetup = observer((props: pageProps) => {
       };
 
       let body = { ...admin, ...{ point: 1, status: 'active', role: 'admin' } };
-      console.log(body);
 
       await userStore.setup(body).then(async (res: any) => {
         await categoryStore.newCategory({
@@ -116,6 +115,7 @@ const EmailSetup = observer((props: pageProps) => {
         title="Email settings - Setup MinForum"
         description="Email settings - Setup MinForum"
         hide
+        norobot
       />
       <Toaster />
       <div className="polkadot">

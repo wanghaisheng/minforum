@@ -43,6 +43,7 @@ type navbarProps = {
   title?: string;
   description?: string;
   hide?: boolean;
+  norobot?: boolean;
   startConversation?: () => void;
 };
 
@@ -57,7 +58,7 @@ const Navbar = observer((props: navbarProps) => {
   const [show, setMenu] = useState(false);
   const [announcementModal, toggleAnnouncement] = useState<any>(false);
   const [modal, toggleSearch] = useState<any>(false);
-  const { title, description, hide } = props;
+  const { title, description, hide, norobot } = props;
   const [{ unread, getUnreadNotification }] = useState(
     () => new NotificationStore()
   );
@@ -277,6 +278,7 @@ const Navbar = observer((props: navbarProps) => {
         />
         <title>{title}</title>
         <link rel="icon" href={`/static/${settings.siteFavicon}`} />
+        {norobot && <meta name="robots" content="noindex, nofollow" />}
       </Head>
 
       <Modal

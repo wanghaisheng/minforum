@@ -27,7 +27,7 @@ const Index = observer(() => {
 
   return (
     <Auth>
-      <Navbar title={`Messages`} description={`Messages`} />
+      <Navbar title={`Messages`} description={`Messages`} norobot />
       <div className="page-container top-100">
         <Spacer h={10} />
         <Loading scale={1.2}>

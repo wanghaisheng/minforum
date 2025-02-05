@@ -11,7 +11,7 @@ const PageNotFound = () => {
 
   return (
     <div>
-      <Navbar title="Page not found" description="Page not found" />
+      <Navbar title="Page not found" description="Page not found" norobot />
       <div className="page-container top-100 center">
         <Spacer h={4} />
         <Text h3>

@@ -93,6 +93,7 @@ const Setup = observer(() => {
         title="Welcome - Setup Minforum"
         description="Welcome - Setup Minforum"
         hide
+        norobot
       />
       <Toaster />
       <div className="polkadot">

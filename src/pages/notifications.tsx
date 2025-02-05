@@ -232,6 +232,7 @@ const Notifications = observer(() => {
           lang: settings?.language,
           value: 'Notifications'
         })}
+        norobot
       />
       <div className="page-container top-100">
         <div className="notification-container">
