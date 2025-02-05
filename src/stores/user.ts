@@ -43,6 +43,7 @@ export default class UserStore {
     runInAction(() => {
       this.loading = true;
     });
+
     return await fetch(url, {
       method: 'POST',
       headers: {

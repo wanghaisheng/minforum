@@ -94,9 +94,9 @@ const MetaSetup = observer(() => {
       <div className="polkadot">
         <div className="page-container top-100">
           <div className="boxed">
-            <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-              Minforum
-            </Text>
+            <div className="center">
+              <img src="/images/logo-wordmark.svg" height={80} />
+            </div>
 
             <Card shadow width="100%">
               <Text h3>

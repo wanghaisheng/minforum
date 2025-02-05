@@ -97,15 +97,16 @@ const Setup = observer(() => {
       <Toaster />
       <div className="polkadot">
         {loading ? (
-          <div style={{ width: 500, margin: '20% auto' }}>
-            <Loading scale={4}>Initializing</Loading>
+          <div className="center" style={{ width: 500, margin: '20% auto' }}>
+            <img src="/images/logo-wordmark.svg" height={100} />
+            <Loading scale={2}>Initializing</Loading>
           </div>
         ) : (
           <div className="page-container top-100">
             <div className="boxed">
-              <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-                Minforum
-              </Text>
+              <div className="center">
+                <img src="/images/logo-wordmark.svg" height={80} />
+              </div>
 
               <Card shadow width="100%">
                 <Text h3>

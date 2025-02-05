@@ -1,10 +1,12 @@
 {
   "name": "min-forum",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "private": true,
   "scripts": {
     "setup": "sh setup.sh",
     "dev": "node serve-dev.js",
+    "seed": "node src/components/api/seed.js",
+    "seed:only": "node src/components/api/seed-post.js",
     "build": "next build",
     "live": "yarn build && NODE_ENV=production pm2 start serve.js -n 'min-forum'",
     "live:restart": "yarn run build && NODE_ENV=production pm2 restart serve.js -n 'min-forum' --update-env",

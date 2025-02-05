@@ -77,35 +77,36 @@ const EmailSetup = observer((props: pageProps) => {
         }
       };
 
-      await userStore
-        .setup({ ...admin, ...{ point: 1, status: 'active', role: 'admin' } })
-        .then(async (res: any) => {
-          await categoryStore.newCategory({
-            title: 'General',
-            description: 'General category for all discussions',
-            color: '#000000',
-            slug: 'general',
-            icon: { icon: 'home', type: 'solid' }
-          });
+      let body = { ...admin, ...{ point: 1, status: 'active', role: 'admin' } };
+      console.log(body);
 
-          if (res.success) {
-            const { name, id, role, photo, username } = res.data;
-            setCookie(
-              null,
-              '_w_auth',
-              JSON.stringify({ name, id, role, photo, username }),
-              {
-                maxAge: 30 * 24 * 60 * 60,
-                path: '/'
-              }
-            );
-
-            await update(_settings).then((res) => {
-              destroyCookie(null, '_w_setup');
-              router.push('/');
-            });
-          }
+      await userStore.setup(body).then(async (res: any) => {
+        await categoryStore.newCategory({
+          title: 'General',
+          description: 'General category for all discussions',
+          color: '#000000',
+          slug: 'general',
+          icon: { icon: 'home', type: 'solid' }
         });
+
+        if (res.success) {
+          const { name, id, role, photo, username } = res.data;
+          setCookie(
+            null,
+            '_w_auth',
+            JSON.stringify({ name, id, role, photo, username }),
+            {
+              maxAge: 30 * 24 * 60 * 60,
+              path: '/'
+            }
+          );
+
+          await update(_settings).then((res) => {
+            destroyCookie(null, '_w_setup');
+            router.push('/');
+          });
+        }
+      });
     }
   };
 
@@ -120,9 +121,9 @@ const EmailSetup = observer((props: pageProps) => {
       <div className="polkadot">
         <div className="page-container top-100">
           <div className="boxed">
-            <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-              Minforum
-            </Text>
+            <div className="center">
+              <img src="/images/logo-wordmark.svg" height={80} />
+            </div>
 
             <Card shadow width="100%">
               <Text h3>
