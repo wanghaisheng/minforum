@@ -22,7 +22,7 @@ import AnalyticsStore from 'stores/analytics';
 import PageviewStore from 'stores/pageview';
 import { useTranslation, Translation } from 'components/intl/translation';
 import DateModal from 'components/modals/date-modal';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { formatNumber, oneKFormat } from 'components/api/utils';
 import { format } from 'date-fns';
 import { emojis } from 'components/data/emoji/emoji';
@@ -74,14 +74,14 @@ const Analytics = observer(() => {
     getTopPageview('device');
     getTopPageview('referrer');
     getTopPageview('url');
-    let from = moment(date[0].startDate).format('YYYY-MM-DD');
-    let to = moment(date[0].endDate).format('YYYY-MM-DD');
+    let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
+    let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     store.getPageviews(from, to);
   }, [token?.id]);
 
   const processAnalytics = async () => {
-    let from = moment(date[0].startDate).format('YYYY-MM-DD');
-    let to = moment(date[0].endDate).format('YYYY-MM-DD');
+    let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
+    let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     store.getPageviews(from, to);
     toggleDate(false);
   };
@@ -530,7 +530,7 @@ const Analytics = observer(() => {
                     value: 'Date'
                   })}
                   render={(value: string) =>
-                    moment(value).format('MMM D, YYYY @ h:mm A')
+                    dayjs(value).format('MMM D, YYYY @ h:mm A')
                   }
                 />
               </Table>

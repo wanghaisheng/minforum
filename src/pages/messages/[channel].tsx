@@ -33,7 +33,7 @@ import {
   useTimeTranslation,
   useTranslation
 } from 'components/intl/translation';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import TextareaAutosize from 'react-textarea-autosize';
 import useToken from 'components/token';
 import useSocket from 'components/socket';
@@ -199,7 +199,7 @@ const Index = observer(() => {
             sender: token?.id,
             receiver: _msg?.id,
             type: 'image',
-            timestamp: moment().unix()
+            timestamp: dayjs().unix()
           };
 
           socket?.emit('send-message', message);
@@ -234,7 +234,7 @@ const Index = observer(() => {
       sender: token?.id,
       receiver: _msg?.id,
       type: 'text',
-      timestamp: moment().unix()
+      timestamp: dayjs().unix()
     };
 
     socket?.emit('send-message', message);
@@ -374,7 +374,7 @@ const Index = observer(() => {
                             </Col>
                             <Col xs={4}>
                               <div className="time">
-                                {timeAgoShort(moment(item.createdAt))}
+                                {timeAgoShort(dayjs(item.createdAt))}
                               </div>
                               <div></div>
                             </Col>

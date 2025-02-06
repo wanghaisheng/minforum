@@ -1,5 +1,5 @@
 import { Badge, Modal, Text, Spacer } from '@geist-ui/core';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Translation } from 'components/intl/translation';
 import { subscriptionProp } from 'interfaces/subscription';
 import { formatNumber } from 'components/api/utils';
@@ -35,7 +35,7 @@ const UserModal = (props: userModalProps) => {
           </Text>
           <Text>
             <Translation lang={lang} value="Date" />:{' '}
-            {moment(data.createdAt).format('MMM D, YYYY')}
+            {dayjs(data.createdAt).format('MMM D, YYYY')}
           </Text>
           <Translation lang={lang} value="Status" />:{' '}
           {data.active ? (

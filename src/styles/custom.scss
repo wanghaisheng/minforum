@@ -679,6 +679,11 @@ body {
     &.no-gap {
       grid-gap: 0;
     }
+
+    &.flow {
+      grid-template-columns: auto auto;
+      grid-gap: 10px;
+    }
   }
 
   .dashboard-header {

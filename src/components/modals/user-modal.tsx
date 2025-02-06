@@ -1,6 +1,6 @@
 import { Badge, Modal, Text, Select, Spacer, Divider } from '@geist-ui/core';
 import { userProp } from 'interfaces/user';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Translation } from 'components/intl/translation';
 
 type userModalProps = {
@@ -37,7 +37,7 @@ const UserModal = (props: userModalProps) => {
           </Text>
           <Text>
             <Translation lang={lang} value="Date joined" />:{' '}
-            {moment(data.createdAt).format('MMM D, YYYY')}
+            {dayjs(data.createdAt).format('MMM D, YYYY')}
           </Text>
           <Translation lang={lang} value="Status" />:{' '}
           {data.status === 'active' ? (

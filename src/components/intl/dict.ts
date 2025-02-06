@@ -2781,7 +2781,7 @@ const dict = [
   },
   {
     en: 'Just now',
-    es: 'En este momento',
+    es: 'En este dayjso',
     fr: "Tout à l' heure",
     de: 'Soeben',
     cn: '现在',

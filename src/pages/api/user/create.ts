@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'components/api/model';
 import { withAuth, code, guid } from 'components/api/utils';
 import { signupTemplate } from 'components/api/mail-template';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   /*
@@ -35,7 +35,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
           const password = bcrypt.hashSync(req.body.password, salt);
           req.body.password = password;
           req.body.id = guid();
-          req.body.timestamp = moment().utc().valueOf();
+          req.body.timestamp = dayjs().valueOf();
 
           let user = new User(req.body);
           await user

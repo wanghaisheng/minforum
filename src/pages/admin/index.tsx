@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { format } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN } from 'date-fns/locale';
 import { Card, Text, Grid, Input } from '@geist-ui/core';
@@ -38,8 +38,8 @@ const Dashboard = observer(() => {
   ]);
 
   useEffect(() => {
-    let from = moment(date[0].startDate).format('YYYY-MM-DD');
-    let to = moment(date[0].endDate).format('YYYY-MM-DD');
+    let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
+    let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);
     getDiscussions(from, to);
     getPageviews(from, to);
@@ -54,8 +54,8 @@ const Dashboard = observer(() => {
   });
 
   const processAnalytics = async () => {
-    let from = moment(date[0].startDate).format('YYYY-MM-DD');
-    let to = moment(date[0].endDate).format('YYYY-MM-DD');
+    let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
+    let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);
     getDiscussions(from, to);
     getPageviews(from, to);

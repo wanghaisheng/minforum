@@ -7,7 +7,8 @@ import {
   Link,
   Select,
   Loading,
-  Text
+  Text,
+  Button
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
 import AdminNavbar from 'components/admin/navbar';
@@ -20,6 +21,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
+import CustomIcon from 'components/data/icon/icon';
 
 const Discussions = observer(() => {
   const token = useToken();
@@ -75,6 +77,27 @@ const Discussions = observer(() => {
     });
   };
 
+  const handlePin = async (isPinned: boolean, id: string) => {
+    await updateDiscussion({ isPinned, id }).then((res: any) => {
+      if (res.success) {
+        toast.success(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Discussion status updated'
+          })
+        );
+        getAdminDiscussions(false);
+      } else {
+        toast.error(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Unable to update status! Please try again later.'
+          })
+        );
+      }
+    });
+  };
+
   const renderStatus = (value: string) => {
     let capitalize = value.charAt(0).toUpperCase() + value.slice(1);
 
@@ -104,27 +127,49 @@ const Discussions = observer(() => {
 
   const renderAction = (value: string, rowData: discussionProp) => {
     return (
-      <Select
-        placeholder={useTranslation({
-          lang: settings?.language,
-          value: 'Change status'
-        })}
-        value={value}
-        onChange={(value: any) => handleChange(value, rowData.id!)}
-      >
-        <Select.Option value="active">
-          <Translation lang={settings?.language} value="Active" />
-        </Select.Option>
-        <Select.Option value="unanswered">
-          <Translation lang={settings?.language} value="Unanswered" />
-        </Select.Option>
-        <Select.Option value="answered">
-          <Translation lang={settings?.language} value="Answered" />
-        </Select.Option>
-        <Select.Option value="banned">
-          <Translation lang={settings?.language} value="Banned" />
-        </Select.Option>
-      </Select>
+      <div className="column flow" style={{ marginBottom: 10 }}>
+        <div>
+          <Button
+            auto
+            scale={0.8}
+            type={rowData.isPinned ? 'secondary-light' : 'default'}
+            icon={
+              <CustomIcon
+                name="pin"
+                size={25}
+                color={rowData.isPinned ? '#fff' : '#000'}
+                type="solid"
+              />
+            }
+            onClick={() =>
+              handlePin(rowData.isPinned ? false : true, rowData.id)
+            }
+          />
+        </div>
+        <div>
+          <Select
+            placeholder={useTranslation({
+              lang: settings?.language,
+              value: 'Change status'
+            })}
+            value={value}
+            onChange={(value: any) => handleChange(value, rowData.id!)}
+          >
+            <Select.Option value="active">
+              <Translation lang={settings?.language} value="Active" />
+            </Select.Option>
+            <Select.Option value="unanswered">
+              <Translation lang={settings?.language} value="Unanswered" />
+            </Select.Option>
+            <Select.Option value="answered">
+              <Translation lang={settings?.language} value="Answered" />
+            </Select.Option>
+            <Select.Option value="banned">
+              <Translation lang={settings?.language} value="Banned" />
+            </Select.Option>
+          </Select>
+        </div>
+      </div>
     );
   };
 

@@ -677,7 +677,7 @@ const Discussion = observer(() => {
                           <Tooltip
                             text={useTranslation({
                               lang,
-                              value: 'Premium post'
+                              value: 'Pinned post'
                             })}
                           >
                             <Badge

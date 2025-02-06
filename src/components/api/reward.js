@@ -1,9 +1,9 @@
-const moment = require('moment');
+const dayjs = require('dayjs');
 const { r, User, Comment, Notification } = require('./model');
 const { asyncForEach } = require('./utils');
 
 const rewardDevotee = async () => {
-  const oneYearAgo = moment().subtract(1, 'year').utc().valueOf();
+  const oneYearAgo = dayjs().subtract(1, 'year').valueOf();
 
   let users = await User.filter((user) =>
     user('point')
@@ -31,7 +31,7 @@ const rewardDevotee = async () => {
 };
 
 const rewardVeteran = async () => {
-  const threeYearAgo = moment().subtract(3, 'year').utc().valueOf();
+  const threeYearAgo = dayjs().subtract(3, 'year').valueOf();
 
   let users = await User.filter((user) =>
     user('point')

@@ -1,6 +1,6 @@
 {
   "name": "min-forum",
-  "version": "1.18.3",
+  "version": "1.18.4",
   "private": true,
   "scripts": {
     "setup": "sh setup.sh",
@@ -29,6 +29,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "csvjson": "^5.1.0",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.0.1",
     "express": "^4.21.2",
     "express-useragent": "^1.0.15",
@@ -36,8 +37,7 @@
     "helmet": "^5.1.0",
     "hugeicons-react": "^0.3.0",
     "mobx": "^6.6.1",
-    "mobx-react-lite": "^3.4.0",
-    "moment": "^2.29.3",
+    "mobx-react-lite": "^4.1.0",
     "next": "14.2.21",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.9",
