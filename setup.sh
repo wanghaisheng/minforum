@@ -14,7 +14,7 @@ server_setup() {
   echo "" > .env
 
   # Generate hash for API key
-  md5="min-forum-random-hash"
+  md5="minforum-random-hash"
   hash="$(echo -n "$md5" | openssl rand -hex 20)"
   secret="$(date +%s | sha256sum | base64 | head -c 16)"
 
@@ -22,7 +22,7 @@ server_setup() {
   cat << EOF >> .env
 DEFAULT_PORT="2323"
 DB_HOST="localhost"
-DB_NAME="min-forum"
+DB_NAME="minforum"
 DB_PORT="28015"
 GEO_URL="https://get.geojs.io/v1/ip/geo"
 APP_SECRET="$secret"
@@ -36,7 +36,7 @@ EOF
 
   # Configure Nginx
   echo "Configuring Nginx..."
-  cat << EOF | sudo tee /etc/nginx/sites-available/min-forum.conf > /dev/null
+  cat << EOF | sudo tee /etc/nginx/sites-available/minforum.conf > /dev/null
 server {
     listen 80;
     server_name $PUBLIC_IP;
@@ -57,7 +57,7 @@ server {
     }
 
     location ^~ /storage/ {
-        alias /var/www/html/min-forum/public/storage/;
+        alias /var/www/html/minforum/public/storage/;
         sendfile           on;
         sendfile_max_chunk 5m;
     }
@@ -65,7 +65,7 @@ server {
 EOF
 
   # Create symbolic link for Nginx configuration
-  sudo ln -sf /etc/nginx/sites-available/min-forum.conf /etc/nginx/sites-enabled/min-forum.conf
+  sudo ln -sf /etc/nginx/sites-available/minforum.conf /etc/nginx/sites-enabled/minforum.conf
 
   # Test Nginx configuration
   echo "Testing Nginx configuration..."
@@ -98,7 +98,7 @@ server_setup
 # Success message with folder path and instructions
 echo "===================================================="
 echo "Setup completed!"
-echo "min-forum has been set up successfully!"
+echo "minforum has been set up successfully!"
 echo "Project folder: $(pwd)"
 echo "To access your application, go to: http://$PUBLIC_IP"
 echo "===================================================="

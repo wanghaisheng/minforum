@@ -146,26 +146,26 @@ setup_project() {
     #
     cd /var/www/html
 
-    echo "Downloading min-forum project..."
-    curl -L -o min-forum.zip https://github.com/min-forum/min-forum/archive/refs/tags/v1.18.5.zip
+    echo "Downloading minforum project..."
+    curl -L -o minforum.zip https://github.com/minforum/minforum/archive/refs/tags/v1.18.6.zip
 
     # Step 2: Unzip into a temporary directory
-    echo "Unzipping min-forum project..."
-    unzip min-forum.zip -d minforum_temp
+    echo "Unzipping minforum project..."
+    unzip minforum.zip -d minforum_temp
 
-    # Step 3: Create the 'min-forum' folder and move the contents into it
-    echo "Setting up min-forum directory..."
-    mkdir -p min-forum
-    mv minforum_temp/min-forum-1.18.5/* min-forum/
+    # Step 3: Create the 'minforum' folder and move the contents into it
+    echo "Setting up minforum directory..."
+    mkdir -p minforum
+    mv minforum_temp/minforum-1.18.6/* minforum/
 
     # Step 4: Clean up the temporary folder and zip file
     echo "Cleaning up temporary files..."
     rm -rf minforum_temp
-    rm min-forum.zip
+    rm minforum.zip
 
-    # Step 5: Navigate into the min-forum directory and run yarn setup and yarn live
+    # Step 5: Navigate into the minforum directory and run yarn setup and yarn live
     echo "Setting up the project..."
-    cd min-forum
+    cd minforum
     yarn setup
     yarn live
 }

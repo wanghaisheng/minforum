@@ -1,5 +1,5 @@
 {
-  "name": "min-forum",
+  "name": "minforum",
   "version": "1.18.5",
   "private": true,
   "scripts": {
@@ -8,8 +8,8 @@
     "seed": "node src/components/api/seed.js",
     "seed:only": "node src/components/api/seed-post.js",
     "build": "next build",
-    "live": "yarn build && NODE_ENV=production pm2 start serve.js -n 'min-forum'",
-    "live:restart": "yarn run build && NODE_ENV=production pm2 restart serve.js -n 'min-forum' --update-env",
+    "live": "yarn build && NODE_ENV=production pm2 start serve.js -n 'minforum'",
+    "live:restart": "yarn run build && NODE_ENV=production pm2 restart serve.js -n 'minforum' --update-env",
     "start_db": "rethinkdb --bind all",
     "test:e2e": "playwright test"
   },

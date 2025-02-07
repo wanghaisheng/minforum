@@ -75,7 +75,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     return (
       <GeistProvider
         themes={[customTheme, defaultTheme]}
-        themeType={customTheme ? themeSlug : 'min-forum'}
+        themeType={customTheme ? themeSlug : 'minforum'}
       >
         <CssBaseline />
         {useAnalytics()}

@@ -1,7 +1,7 @@
 import { Themes } from '@geist-ui/core';
 
 export const defaultTheme = Themes.createFromLight({
-  type: 'min-forum',
+  type: 'minforum',
   palette: {
     accents_1: '#fafafa',
     accents_2: '#eaeaea',
