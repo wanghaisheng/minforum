@@ -32,7 +32,7 @@ const User = thinky.createModel('users', {
     .enum(['pending', 'active', 'banned', 'suspended'])
     .default('pending'),
   suspendDuration: type.date(),
-  timestamp: type.number(),
+  timestamp: type.number().default(Date.now),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -50,6 +50,7 @@ const Category = thinky.createModel('categories', {
   moderators: type.array().default([]),
   authRequired: type.boolean().default(false),
   status: type.boolean().default(true),
+  timestamp: type.number().default(Date.now),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -68,6 +69,7 @@ const Discussion = thinky.createModel('discussions', {
   isPinned: type.boolean().default(false),
   premium: type.boolean().default(false),
   edited: type.boolean().default(false),
+  timestamp: type.number().default(Date.now),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -79,6 +81,7 @@ const Comment = thinky.createModel('comments', {
   userId: type.string(),
   discussionId: type.string(),
   edited: type.boolean().default(false),
+  timestamp: type.number().default(Date.now),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -91,6 +94,7 @@ const Reply = thinky.createModel('replies', {
   userId: type.string(),
   discussionId: type.string(),
   edited: type.boolean().default(false),
+  timestamp: type.number().default(Date.now),
   createdAt: type.date().default(r.now),
   updatedAt: type.date().default(r.now)
 });
@@ -282,6 +286,7 @@ Category.ensureIndex('description');
 Category.ensureIndex('authRequired');
 Category.ensureIndex('moderatorId');
 Category.ensureIndex('status');
+Category.ensureIndex('timestamp');
 Category.ensureIndex('createdAt');
 Category.ensureIndex('updatedAt');
 
@@ -292,6 +297,7 @@ Discussion.ensureIndex('status');
 Discussion.ensureIndex('view');
 Discussion.ensureIndex('userId');
 Discussion.ensureIndex('isPinned');
+Discussion.ensureIndex('timestamp');
 Discussion.ensureIndex('createdAt');
 Discussion.ensureIndex('updatedAt');
 

@@ -76,7 +76,7 @@ const Home = observer((props: pageProps) => {
         className="category-box homepage"
         style={{
           backgroundColor: settings?.homepage?.bgColor,
-          backgroundImage: `url(/storage/${settings?.homepage?.image})`
+          backgroundImage: `url(/static/${settings?.homepage?.image})`
         }}
       >
         <div dangerouslySetInnerHTML={{ __html: settings?.homepage?.text }} />
