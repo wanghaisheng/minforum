@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
 import { Translation, useTranslation } from 'components/intl/translation';
 import useSettings from 'components/settings';
+import { dec } from 'components/api/utils';
 
 const Reset = observer(() => {
   const cookie = parseCookies();
@@ -22,22 +23,35 @@ const Reset = observer(() => {
   );
 
   useEffect(() => {
-    let _code: any =
-      cookie && cookie._w_code ? JSON.parse(cookie._w_code) : null;
+    let _code: any = cookie && cookie._w_code ? cookie._w_code : null;
 
     _setCode(_code);
-  }, [router]);
+  }, [router, code]);
 
   const verifyAccount = () => {
-    if (Number(code) !== _code.code) {
+    let token: any = _code;
+
+    try {
+      token = dec(token);
+      token = JSON.parse(token);
+
+      if (Number(code) !== Number(token?.code)) {
+        toast.error(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Code is incorrect or expired.'
+          })
+        );
+      } else {
+        setVerify(true);
+      }
+    } catch (error) {
       toast.error(
         useTranslation({
           lang: settings?.language,
           value: 'Code is incorrect or expired.'
         })
       );
-    } else {
-      setVerify(true);
     }
   };
 
@@ -50,27 +64,39 @@ const Reset = observer(() => {
         })
       );
     } else {
-      await getUser(_code.data!).then(async (res: any) => {
-        if (res.success) {
-          await updateUser({ id: res.data.id, password: user.password });
-          destroyCookie(null, '_w_code');
+      try {
+        let token = dec(_code);
+        token = JSON.parse(token);
 
-          toast.success(
-            useTranslation({
-              lang: settings?.language,
-              value: 'Password reset successfully!'
-            })
-          );
-          router.push('/login');
-        } else {
-          toast.error(
-            useTranslation({
-              lang: settings?.language,
-              value: 'Unable to update user. Please try again later.'
-            })
-          );
-        }
-      });
+        await getUser(token?.id).then(async (res: any) => {
+          if (res.success) {
+            await updateUser({ id: res.data.id, password: user.password });
+            destroyCookie({}, '_w_code');
+
+            toast.success(
+              useTranslation({
+                lang: settings?.language,
+                value: 'Password reset successfully!'
+              })
+            );
+            router.push('/login');
+          } else {
+            toast.error(
+              useTranslation({
+                lang: settings?.language,
+                value: 'Unable to update user. Please try again later.'
+              })
+            );
+          }
+        });
+      } catch (error) {
+        toast.error(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Unable to update user. Please try again later.'
+          })
+        );
+      }
     }
   };
 

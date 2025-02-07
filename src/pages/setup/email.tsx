@@ -101,7 +101,7 @@ const EmailSetup = observer((props: pageProps) => {
           );
 
           await update(_settings).then((res) => {
-            destroyCookie(null, '_w_setup');
+            destroyCookie({}, '_w_setup');
             router.push('/');
           });
         }

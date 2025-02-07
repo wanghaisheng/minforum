@@ -10,7 +10,8 @@ import {
   Spacer,
   Image,
   Select,
-  Divider
+  Divider,
+  Toggle
 } from '@geist-ui/core';
 import { setCookie, parseCookies } from 'nookies';
 import { MinusCircle, Image as Picture, Plus } from '@geist-ui/icons';
@@ -696,6 +697,25 @@ const Settings = observer(() => {
                 value: 'Security settings'
               })}
             >
+              <div className="column">
+                <div className="item">
+                  <Text h6 style={{ marginTop: 10 }}>
+                    <Translation lang={settings?.language} value="2FA Login" />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Toggle
+                    scale={3}
+                    checked={settings?.twoFactor}
+                    onChange={() =>
+                      setSettings({
+                        ...settings,
+                        twoFactor: settings?.twoFactor ? false : true
+                      })
+                    }
+                  />
+                </div>
+              </div>
               <div className="column">
                 <div className="item">
                   <Text h6>

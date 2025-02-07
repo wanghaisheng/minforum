@@ -45,7 +45,7 @@ const Confirm = observer(() => {
       await getUser(_code?.data!).then(async (res: any) => {
         if (res.success) {
           await updateUser({ id: _code?.data, status: 'active' });
-          destroyCookie(null, '_w_code');
+          destroyCookie({}, '_w_code');
 
           toast.success(
             useTranslation({

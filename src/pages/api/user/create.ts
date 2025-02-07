@@ -2,32 +2,15 @@ import signale from 'signale';
 import bcrypt from 'bcryptjs';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'components/api/model';
-import { withAuth, code, guid } from 'components/api/utils';
+import { withAuth, code, guid, enc } from 'components/api/utils';
 import { signupTemplate } from 'components/api/mail-template';
 import dayjs from 'dayjs';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
-  /*
-    #swagger.tags = ["users"]
-    #swagger.description = 'New user'
-     #swagger.security = [{
-               "apikey": []
-        }]
-        #swagger.parameters['obj'] = {
-                in: 'body',
-                schema: {
-                      $name: "string",
-                      $email: "string",
-                      $password: "string",
-                      $role: "string",
-                      $active: "boolean",
-                      $photo: "string",
-                }
-          }
-  */
-
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
+      req.body.email = req?.body?.email?.toLowerCase();
+
       await User.filter({ email: req.body.email }).then(async (email: any) => {
         if (email.length === 0) {
           const salt = bcrypt.genSaltSync(10);
@@ -43,8 +26,14 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
             .then(async (data: any) => {
               if (data.id) {
                 const _code = code();
+                let token = JSON.stringify({
+                  id: data.id,
+                  code: _code
+                });
+                token = enc(token);
+
                 await signupTemplate(data.email, data.name, _code);
-                res.send({ success: true, data: data.id, code: _code });
+                res.send({ success: true, data: token });
               } else {
                 res.send({
                   success: false,

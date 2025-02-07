@@ -24,9 +24,7 @@ const Verify = observer(() => {
   const [email, setEmail] = useState('');
   const [_code, _setCode] = useState<{ data?: string; code?: number }>({});
 
-  const [{ loading, getUser, updateUser, verifyAccount }] = useState(
-    () => new UserStore()
-  );
+  const [{ loading, getUser, verifyAccount }] = useState(() => new UserStore());
 
   useEffect(() => {
     let _code: any = cookie && cookie._w_code ? cookie._w_code : null;
@@ -75,7 +73,6 @@ const Verify = observer(() => {
       } else {
         await getUser(token?.id).then(async (res: any) => {
           if (res.success) {
-            await updateUser({ id: token?.id, status: 'active' });
             destroyCookie({}, '_w_code');
             const { name, id, role, photo, username } = res.data;
             setCookie(

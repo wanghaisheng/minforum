@@ -432,7 +432,8 @@ const initModel = () => {
           theme: 'weiss',
           homepage: {
             bgColor: '#2A222F'
-          }
+          },
+          twoFactor: false
         };
 
         new Settings(_settings).save();

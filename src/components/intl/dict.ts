@@ -4266,6 +4266,46 @@ const dict = [
     ja: 'プライバシー違反のため、モデレーターによってあなたの投稿が禁止されました。',
     ru: 'Ваш пост был заблокирован модератором из-за нарушения конфиденциальности.',
     ko: '개인정보 침해로 인해 귀하의 게시물이 중재자에 의해 금지되었습니다.'
+  },
+  {
+    en: '2FA Login',
+    es: 'Inicio de sesión 2FA',
+    fr: 'Connexion 2FA',
+    de: '2FA-Anmeldung',
+    cn: '2FA登录',
+    ja: '2FAログイン',
+    ru: '2FA Вход',
+    ko: '2FA 로그인'
+  },
+  {
+    en: 'Expired code',
+    es: 'Código caducado',
+    fr: 'Code expiré',
+    de: 'Abgelaufener Code',
+    cn: '过期代码',
+    ja: '期限切れのコード',
+    ru: 'Просроченный код',
+    ko: '만료된 코드'
+  },
+  {
+    en: 'Get a new code',
+    es: 'Obtener un nuevo código',
+    fr: 'Obtenir un nouveau code',
+    de: 'Einen neuen Code erhalten',
+    cn: '获取新代码',
+    ja: '新しいコードを取得',
+    ru: 'Получить новый код',
+    ko: '새 코드 받기'
+  },
+  {
+    en: 'Verification code sent to your email!',
+    es: '¡Código de verificación enviado a tu correo electrónico!',
+    fr: 'Code de vérification envoyé à votre e-mail !',
+    de: 'Bestätigungscode an Ihre E-Mail gesendet!',
+    cn: '验证码已发送到您的电子邮件！',
+    ja: '確認コードがあなたのメールに送信されました！',
+    ru: 'Код подтверждения отправлен на вашу электронную почту!',
+    ko: '인증 코드가 이메일로 전송되었습니다!'
   }
 ];
 

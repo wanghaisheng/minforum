@@ -15,7 +15,7 @@ const ChatBubble = (props: chatProps) => {
         ) : (
           <div
             className="chat-image pointer"
-            style={{ backgroundImage: `url("/storage/${props.content}")` }}
+            style={{ backgroundImage: `url("/static/${props.content}")` }}
             onClick={() => props.toggleImage(props.content)}
           >
             &nbsp;

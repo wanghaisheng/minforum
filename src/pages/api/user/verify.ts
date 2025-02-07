@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from 'components/api/model';
-import { withAuth, code } from 'components/api/utils';
+import { withAuth, code, enc } from 'components/api/utils';
 import { verifyTemplate } from 'components/api/mail-template';
 
 const verify = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,8 +12,14 @@ const verify = async (req: NextApiRequest, res: NextApiResponse) => {
           if (data.length === 1) {
             data = data[0];
             const _code = code();
+            let token = JSON.stringify({
+              id: data.id,
+              code: _code
+            });
+            token = enc(token);
+
             await verifyTemplate(data.email, data.name, _code);
-            res.send({ success: true, data: data.id, code: _code });
+            res.send({ success: true, token: token });
           } else {
             res.send({
               success: false,

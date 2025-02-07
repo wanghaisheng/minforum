@@ -7,7 +7,12 @@ import bcrypt from 'bcryptjs';
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
+      if (req.body.email) {
+        req.body.email = req?.body?.email?.toLowerCase();
+      }
+
       const { id, name, email, username, password } = req.body;
+
       await User.get(id)
         .then(async (data: any) => {
           data = data.id ? data : { password: '' };

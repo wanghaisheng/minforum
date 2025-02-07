@@ -50,7 +50,7 @@ const Navbar = observer((props: navbarProps) => {
   };
 
   const logout = () => {
-    destroyCookie(null, '_w_auth');
+    destroyCookie({}, '_w_auth');
     router.push('/');
   };
 

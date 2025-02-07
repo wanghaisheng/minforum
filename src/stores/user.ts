@@ -269,6 +269,30 @@ export default class UserStore {
       .catch((err) => console.log(err));
   };
 
+  @action loginOtp = async (body: userProp) => {
+    let url = `${API_URL}/user/login-otp`;
+    runInAction(() => {
+      this.loading = true;
+    });
+
+    return await fetch(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: encrypt(API_KEY)
+      },
+      body: JSON.stringify(body)
+    })
+      .then((res) => res.json())
+      .then((res: resProp) => {
+        runInAction(() => {
+          this.loading = false;
+        });
+        return res;
+      })
+      .catch((err) => console.log(err));
+  };
+
   @action getUsers = async (filter: string) => {
     runInAction(() => {
       this.loading = true;

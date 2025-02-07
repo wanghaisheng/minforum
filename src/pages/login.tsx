@@ -30,7 +30,7 @@ const Login = observer(() => {
   const [{ settings, getSettings, verifyTurnstile }] = useState(
     () => new SettingsStore()
   );
-  const [{ loading, user, setUser, login, socialConnect }] = useState(
+  const [{ loading, user, setUser, login, loginOtp, socialConnect }] = useState(
     () => new UserStore()
   );
   const { email, password } = user;
@@ -59,6 +59,29 @@ const Login = observer(() => {
           })
         );
         router.push('/');
+      } else {
+        setStatus(res.status);
+        toast.error(
+          useTranslation({ lang: settings?.language, value: res.message })
+        );
+      }
+    });
+  };
+
+  const signInOtp = async () => {
+    await loginOtp({ email, password }).then((res: any) => {
+      if (res.success) {
+        setCookie(null, '_w_code', res.token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/'
+        });
+        toast.success(
+          useTranslation({
+            lang: settings?.language,
+            value: 'Verification code sent to your email!'
+          })
+        );
+        router.push('/verify');
       } else {
         setStatus(res.status);
         toast.error(
@@ -296,7 +319,10 @@ const Login = observer(() => {
                     width="100%"
                     loading={loading}
                     onClick={() => {
-                      email && password ? signIn() : null;
+                      const initlogin = () =>
+                        settings?.twoFactor ? signInOtp() : signIn();
+
+                      email && password ? initlogin() : null;
                     }}
                   >
                     <Translation lang={settings?.language} value="Log In" />

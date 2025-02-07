@@ -19,9 +19,7 @@ const Forgot = observer(() => {
     const { email } = user;
     await forgot({ email }).then((res: any) => {
       if (res.success) {
-        let reset = { type: 'forgot', code: res.code, data: res.data };
-
-        setCookie(null, '_w_code', JSON.stringify(reset), {
+        setCookie(null, '_w_code', res.token, {
           maxAge: 2 * 60 * 60,
           path: '/'
         });

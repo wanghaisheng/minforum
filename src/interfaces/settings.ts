@@ -52,4 +52,5 @@ export interface settingsProp {
     subscription?: number;
     percentage?: number;
   };
+  twoFactor?: boolean;
 }

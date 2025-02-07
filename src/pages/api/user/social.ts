@@ -26,6 +26,10 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
+      if (req.body.email) {
+        req.body.email = req?.body?.email?.toLowerCase();
+      }
+
       await User.filter({ email: email }).then(async (user: any) => {
         if (user.length === 0) {
           let username =

@@ -20,7 +20,7 @@ import Turnstile, { useTurnstile } from 'react-turnstile';
 import Navbar from 'components/navbar';
 import UserStore from 'stores/user';
 import { validateEmail, validateUsername } from 'components/api/utils';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import SettingsStore from 'stores/settings';
 import { Translation, useTranslation } from 'components/intl/translation';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -36,18 +36,8 @@ const Signup = observer(() => {
   const [checked, toggleCheck] = useState(false);
   const turnstile = useTurnstile();
   const [{ verifyTurnstile }] = useState(() => new SettingsStore());
-  const [
-    {
-      loading,
-      user,
-      setUser,
-      getUser,
-      signup,
-      checkUsername,
-      updateUser,
-      socialConnect
-    }
-  ] = useState(() => new UserStore());
+  const [{ loading, user, setUser, signup, checkUsername, socialConnect }] =
+    useState(() => new UserStore());
 
   const processUsername = (val: string) => {
     if (val.length) {
@@ -109,15 +99,10 @@ const Signup = observer(() => {
     } else {
       await signup(user).then((res: any) => {
         if (res.success) {
-          setCookie(
-            null,
-            '_w_code',
-            JSON.stringify({ type: 'signup', code: res.code, data: res.data }),
-            {
-              maxAge: 2 * 60 * 60,
-              path: '/'
-            }
-          );
+          setCookie(null, '_w_code', res.token, {
+            maxAge: 2 * 60 * 60,
+            path: '/'
+          });
           toast.success(
             useTranslation({
               lang: settings?.language,
@@ -125,7 +110,7 @@ const Signup = observer(() => {
                 'Account created successfully! Please verify account to continue.'
             })
           );
-          Router.push('/signup/verify');
+          router.push('/signup/verify');
         } else {
           toast.error(
             useTranslation({

@@ -10,6 +10,10 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
       req.body.updatedAt = undefined;
       req.body.createdAt = undefined;
 
+      if (req.body.email) {
+        req.body.email = req?.body?.email?.toLowerCase();
+      }
+
       if (req.body.password) {
         const salt = bcrypt.genSaltSync(10);
         const password = bcrypt.hashSync(req.body.password, salt);

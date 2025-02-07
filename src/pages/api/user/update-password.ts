@@ -8,6 +8,7 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
       const { id, password, newPassword } = req.body;
+
       await User.get(id)
         .then(async (data: any) => {
           data = data.id ? data : { password: '' };

@@ -108,7 +108,7 @@ const Navbar = observer((props: navbarProps) => {
   };
 
   const logout = () => {
-    destroyCookie(null, '_w_auth');
+    destroyCookie({}, '_w_auth');
     router.push('/login');
   };
 
@@ -145,10 +145,15 @@ const Navbar = observer((props: navbarProps) => {
       </Popover.Item>
       <Popover.Item line />
       <Popover.Item>
-        <Link href="#" icon onClick={logout}>
+        <span className="pointer" onClick={logout}>
           <Translation lang={settings?.language} value="Log out" />{' '}
           <Spacer w={0.5} inline />
-        </Link>
+          <CustomIcon
+            name="log-out"
+            rotate
+            style={{ position: 'relative', top: 1 }}
+          />
+        </span>
       </Popover.Item>
     </div>
   );
@@ -221,10 +226,15 @@ const Navbar = observer((props: navbarProps) => {
             </NextLink>
           </Text>
           <Text p>
-            <Link href="#" icon onClick={logout}>
+            <span className="pointer" onClick={logout}>
               <Translation lang={settings?.language} value="Log out" />{' '}
               <Spacer w={0.5} inline />
-            </Link>
+              <CustomIcon
+                name="log-out"
+                rotate
+                style={{ position: 'relative', top: 1 }}
+              />
+            </span>
           </Text>
         </div>
       ) : (
@@ -377,7 +387,7 @@ const Navbar = observer((props: navbarProps) => {
                           scale={2}
                           src={`${
                             item.photo
-                              ? '/storage/' + item.photo
+                              ? '/static/' + item.photo
                               : '/images/avatar.png'
                           }`}
                           name={

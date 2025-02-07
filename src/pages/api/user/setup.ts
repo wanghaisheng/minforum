@@ -26,6 +26,10 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
+      if (req.body.email) {
+        req.body.email = req?.body?.email?.toLowerCase();
+      }
+
       await User.filter({ email: req.body.email }).then(async (email: any) => {
         if (email.length === 0) {
           const salt = bcrypt.genSaltSync(10);
