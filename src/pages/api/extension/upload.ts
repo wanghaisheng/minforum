@@ -7,6 +7,8 @@ import signale from 'signale';
 import unzipper from 'unzipper';
 import slugify from 'slugify';
 import { exec } from 'child_process';
+const { promisify } = require('util');
+const execPromise = promisify(exec);
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Extension } from 'components/api/model';
 import { getEXT } from 'components/api/utils';
@@ -91,14 +93,20 @@ const uploadFile = (req: NextApiRequest, res: NextApiResponse) => {
 
       let requiredPackages = _package.requiredPackages.join(' ');
 
-      exec(`yarn add ${requiredPackages}`, (error) => {
-        if (error) {
-          data.error = `${error}`;
-          console.error(`${error}`);
+      try {
+        // Use a safe way to construct the command
+        const command = `yarn add ${requiredPackages}`;
+        const { stdout, stderr } = execPromise(command);
 
-          return;
+        if (stderr) {
+          throw new Error(stderr);
         }
-      });
+
+        console.log(stdout);
+      } catch (error) {
+        data.error = error.message;
+        console.error(`Error installing packages: ${error.message}`);
+      }
 
       let upload = new Extension(data);
 
