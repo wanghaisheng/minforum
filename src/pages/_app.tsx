@@ -3,7 +3,7 @@ import 'styles/custom.scss';
 import { useEffect, useState, useMemo, Suspense } from 'react';
 import type { AppProps } from 'next/app';
 import { GeistProvider, CssBaseline, Loading, Themes } from '@geist-ui/core';
-import useAnalytics from 'components/analytics';
+import trackPageview from 'components/analytics';
 import { defaultTheme } from 'themes';
 import { useRouter } from 'next/router';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -78,7 +78,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         themeType={customTheme ? themeSlug : 'minforum'}
       >
         <CssBaseline />
-        {useAnalytics()}
+        {trackPageview()}
         <GoogleOAuthProvider
           clientId={
             settingsStore?.settings?.socialAccount?.google || 'no-client-id'

@@ -18,6 +18,6 @@ const Analytics = observer(() => {
   return <></>;
 });
 
-export default function useAnalytics() {
+export default function trackPageview() {
   return <Analytics />;
 }

@@ -47,7 +47,7 @@ const formatNumber = (value) => {
 };
 
 const oneKFormat = (val) => {
-  let val = Number(val);
+  val = Number(val);
   if (val >= 1000000000) {
     let text = val / 1000000000;
     text = text.toFixed(1);
