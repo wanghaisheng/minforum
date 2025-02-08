@@ -14,7 +14,7 @@ import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import DateModal from 'components/modals/date-modal';
 import AnalyticsStore from 'stores/analytics';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useSocket from 'components/socket';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
@@ -64,21 +64,21 @@ const Dashboard = observer(() => {
 
   const series = [
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Users'
       }),
       data: users.map((item: any) => item.count)
     },
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Discussions'
       }),
       data: discussions.map((item: any) => item.count)
     },
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Pageviews'
       }),
@@ -129,11 +129,11 @@ const Dashboard = observer(() => {
   return (
     <Auth roles={['admin', 'moderator']}>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Dashboard'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Dashboard'
         })}

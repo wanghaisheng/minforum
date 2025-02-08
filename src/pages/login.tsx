@@ -15,7 +15,7 @@ import { observer } from 'mobx-react-lite';
 import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import UserStore from 'stores/user';
@@ -53,7 +53,7 @@ const Login = observer(() => {
           }
         );
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Successfully signed in!'
           })
@@ -62,7 +62,7 @@ const Login = observer(() => {
       } else {
         setStatus(res.status);
         toast.error(
-          useTranslation({ lang: settings?.language, value: res.message })
+          translation({ lang: settings?.language, value: res.message })
         );
       }
     });
@@ -76,7 +76,7 @@ const Login = observer(() => {
           path: '/'
         });
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Verification code sent to your email!'
           })
@@ -85,7 +85,7 @@ const Login = observer(() => {
       } else {
         setStatus(res.status);
         toast.error(
-          useTranslation({ lang: settings?.language, value: res.message })
+          translation({ lang: settings?.language, value: res.message })
         );
       }
     });
@@ -105,7 +105,7 @@ const Login = observer(() => {
           }
         );
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Successfully signed in!'
           })
@@ -151,8 +151,8 @@ const Login = observer(() => {
     <div className="polkadot">
       <Authorized>
         <Navbar
-          title={useTranslation({ lang: settings?.language, value: 'Log In' })}
-          description={useTranslation({
+          title={translation({ lang: settings?.language, value: 'Log In' })}
+          description={translation({
             lang: settings?.language,
             value: 'Log In'
           })}
@@ -260,7 +260,7 @@ const Login = observer(() => {
                   settings?.socialAccount?.google) && <Divider>OR</Divider>}
                 <Spacer h={1} />
                 <Input
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Email or username'
                   })}
@@ -272,7 +272,7 @@ const Login = observer(() => {
                 />
                 <Spacer h={1.5} />
                 <Input.Password
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Password'
                   })}

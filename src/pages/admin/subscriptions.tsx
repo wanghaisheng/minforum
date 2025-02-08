@@ -19,7 +19,7 @@ import { subscriptionProp } from 'interfaces/subscription';
 import Auth from 'components/admin/auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 import { formatNumber } from 'components/api/utils';
@@ -119,11 +119,11 @@ const Subscription = observer(() => {
   return (
     <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Subscriptions'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Subscriptions'
         })}
@@ -146,11 +146,11 @@ const Subscription = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Subscriptions'
             })} (${subscriptions.length})`}
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Search....'
             })}
@@ -160,7 +160,7 @@ const Subscription = observer(() => {
           <Table width={'100%'} data={subscriptions}>
             <Table.Column
               prop="amount"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Amount'
               })}
@@ -168,7 +168,7 @@ const Subscription = observer(() => {
             />
             <Table.Column
               prop="active"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -176,7 +176,7 @@ const Subscription = observer(() => {
             />
             <Table.Column
               prop="createdAt"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Date'
               })}
@@ -184,7 +184,7 @@ const Subscription = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

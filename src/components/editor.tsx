@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 const SunEditor = dynamic(() => import('suneditor-react'), {
   ssr: false
 });
-import { Translation, useTranslation } from './intl/translation';
+import { Translation, translation } from './intl/translation';
 import { Button, Popover, Spacer, Input, User, Loading } from '@geist-ui/core';
 import { Emoji as Emoticon } from '@geist-ui/icons';
 import { UserIcon } from 'hugeicons-react';
@@ -62,7 +62,7 @@ const Editor = (prop: editorProp) => {
         placeholder={
           prop.placeholder
             ? prop.placeholder
-            : useTranslation({ lang: prop.lang, value: 'Type here...' })
+            : translation({ lang: prop.lang, value: 'Type here...' })
         }
         setOptions={{
           resizingBar: false,
@@ -125,7 +125,7 @@ const Editor = (prop: editorProp) => {
                 >
                   <Input
                     width={'100%'}
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: prop.lang,
                       value: 'Search user....'
                     })}

@@ -18,7 +18,7 @@ import Auth from 'components/admin/auth';
 import DiscussionStore from 'stores/discussion';
 import { discussionProp } from 'interfaces/discussion';
 import toast, { Toaster } from 'react-hot-toast';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 import CustomIcon from 'components/data/icon/icon';
@@ -60,7 +60,7 @@ const Discussions = observer(() => {
     await updateDiscussion({ status, id }).then((res: any) => {
       if (res.success) {
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Discussion status updated'
           })
@@ -68,7 +68,7 @@ const Discussions = observer(() => {
         getAdminDiscussions(false);
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update status! Please try again later.'
           })
@@ -81,7 +81,7 @@ const Discussions = observer(() => {
     await updateDiscussion({ isPinned, id }).then((res: any) => {
       if (res.success) {
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Discussion status updated'
           })
@@ -89,7 +89,7 @@ const Discussions = observer(() => {
         getAdminDiscussions(false);
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update status! Please try again later.'
           })
@@ -117,7 +117,7 @@ const Discussions = observer(() => {
   const renderView = (value: string, rowData: discussionProp) => {
     return (
       <Link target={'_blank'} icon href={`/d/${rowData.slug}`}>
-        {useTranslation({
+        {translation({
           lang: settings?.language,
           value: 'View'
         })}
@@ -148,7 +148,7 @@ const Discussions = observer(() => {
         </div>
         <div>
           <Select
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Change status'
             })}
@@ -176,11 +176,11 @@ const Discussions = observer(() => {
   return (
     <Auth roles={['admin', 'moderator']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Discussions'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Discussions'
         })}
@@ -195,11 +195,11 @@ const Discussions = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            placeholder={`${useTranslation({
+            placeholder={`${translation({
               lang: settings?.language,
               value: 'Search....'
             })}`}
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Discussions'
             })} (${discussions.length})`}
@@ -215,21 +215,21 @@ const Discussions = observer(() => {
           >
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="view"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'View'
               })}
             />
             <Table.Column
               prop="status"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -237,7 +237,7 @@ const Discussions = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

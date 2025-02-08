@@ -2,7 +2,7 @@
 
 Minimalistic and Modern Discussion Software
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b434e4594827418681e9fbe21566b45e)](https://www.codacy.com/gh/minforum/minforum/dashboard?utm_source=github.com&utm_medium=referral&utm_content=minforum/minforum&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f1eea1b57fb84f7e815a0fdb563d1efe)](https://app.codacy.com/gh/minforum/minforum/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![git workflow](https://github.com/minforum/minforum/actions/workflows/main.yml/badge.svg?branch=main)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 

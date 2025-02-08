@@ -20,7 +20,7 @@ import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import AnalyticsStore from 'stores/analytics';
 import PageviewStore from 'stores/pageview';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import DateModal from 'components/modals/date-modal';
 import dayjs from 'dayjs';
 import { formatNumber, oneKFormat } from 'components/api/utils';
@@ -107,7 +107,7 @@ const Analytics = observer(() => {
 
   const series = [
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Pageviews'
       }),
@@ -211,11 +211,11 @@ const Analytics = observer(() => {
         actionTrigger={processAnalytics}
       />
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Analytics'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Analytics'
         })}
@@ -496,28 +496,28 @@ const Analytics = observer(() => {
               <Table width={'100%'} data={pageviews}>
                 <Table.Column
                   prop="url"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'URL'
                   })}
                 />
                 <Table.Column
                   prop="device"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Device'
                   })}
                 />
                 <Table.Column
                   prop="browser"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Browser'
                   })}
                 />
                 <Table.Column
                   prop="location"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Location'
                   })}
@@ -525,7 +525,7 @@ const Analytics = observer(() => {
                 />
                 <Table.Column
                   prop="createdAt"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Date'
                   })}

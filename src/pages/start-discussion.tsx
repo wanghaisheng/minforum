@@ -18,7 +18,7 @@ import useToken from 'components/token';
 import { useRouter } from 'next/router';
 import Editor from 'components/editor';
 import CategoryStore from 'stores/category';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import UserStore from 'stores/user';
 import CustomIcon from 'components/data/icon/icon';
@@ -48,21 +48,21 @@ const StartDiscussion = observer(() => {
     const { title, categoryId } = discussion;
     if (!title) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Title is too short!'
         })
       );
     } else if (!categoryId) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Please choose a category!'
         })
       );
     } else if (!content) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Content is blank.'
         })
@@ -79,7 +79,7 @@ const StartDiscussion = observer(() => {
           router.push(`/d/${res.data.slug}`);
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Error creating post! Please try again.'
             })
@@ -126,11 +126,11 @@ const StartDiscussion = observer(() => {
       )}
 
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Start a discussion'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Start a discussion'
         })}
@@ -140,7 +140,7 @@ const StartDiscussion = observer(() => {
           <Text h3>
             <Translation
               lang={settings?.language}
-              value={useTranslation({
+              value={translation({
                 lang: settings?.language,
                 value: 'Start a discussion'
               })}
@@ -153,7 +153,7 @@ const StartDiscussion = observer(() => {
                 <Grid xs={profile?.subAmount ? 24 : 16} lg={16}>
                   <Input
                     width="100%"
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Discussion Title'
                     })}
@@ -165,7 +165,7 @@ const StartDiscussion = observer(() => {
                 </Grid>
                 <Grid xs={24} lg={16}>
                   <Select
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Choose a Category'
                     })}
@@ -189,7 +189,7 @@ const StartDiscussion = observer(() => {
               <div className="item">
                 <Input
                   width="100%"
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Discussion Title'
                   })}
@@ -202,7 +202,7 @@ const StartDiscussion = observer(() => {
                 <Select
                   disableMatchWidth={true}
                   width={'100%'}
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Choose a Category'
                   })}
@@ -224,7 +224,7 @@ const StartDiscussion = observer(() => {
             lang={settings.language}
             value={content}
             height="200px"
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Type something memorable...'
             })}

@@ -7,7 +7,7 @@ import AdminNavbar from 'components/admin/navbar';
 import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import ThemeStore from 'stores/theme';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -82,14 +82,14 @@ const CreateTheme = observer(() => {
   const save = async () => {
     if (!title || title.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Title is too short. Minimum of 3 characters.'
         })
       );
     } else if (!code) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Theme code cannot be empty!'
         })
@@ -98,7 +98,7 @@ const CreateTheme = observer(() => {
       await newTheme({ ...theme, code }).then((res: any) => {
         if (res.success) {
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Theme created successfully!'
             })
@@ -106,7 +106,7 @@ const CreateTheme = observer(() => {
           router.push(`/admin/themes/${res.data.slug}`);
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to create theme. Please try again!'
             })
@@ -120,11 +120,11 @@ const CreateTheme = observer(() => {
     <Auth roles={['admin']}>
       <Toaster />
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Create theme'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Create theme'
         })}

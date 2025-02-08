@@ -10,7 +10,7 @@ import SettingsStore from 'stores/settings';
 import UserStore from 'stores/user';
 import CategoryStore from 'stores/category';
 import SetupVerify from 'components/admin/setup-verify';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 
 export async function getServerSideProps(context) {
   const { req } = context;
@@ -133,7 +133,7 @@ const EmailSetup = observer((props: pageProps) => {
 
               <Input
                 htmlType="url"
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'SMTP host'
                 })}
@@ -151,7 +151,7 @@ const EmailSetup = observer((props: pageProps) => {
               />
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'SMTP user/email'
                 })}
@@ -169,7 +169,7 @@ const EmailSetup = observer((props: pageProps) => {
               />
               <Spacer h={1.5} />
               <Input.Password
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'SMTP password'
                 })}

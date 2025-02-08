@@ -19,7 +19,7 @@ import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import {
   Translation,
   useTimeTranslation,
-  useTranslation
+  translation
 } from './intl/translation';
 import { oneKFormat } from './api/utils';
 import { PencilEdit02Icon } from 'hugeicons-react';
@@ -302,7 +302,7 @@ const Reply = (props: replyProp) => {
             )}
             <Tooltip
               placement="right"
-              text={useTranslation({
+              text={translation({
                 lang: lang,
                 value: 'Click on the number count to who see liked.'
               })}
@@ -373,9 +373,9 @@ const Reply = (props: replyProp) => {
               title={
                 replies?.length > 1
                   ? oneKFormat(replies?.length) +
-                    ` ${useTranslation({ lang: lang, value: 'Replies' })}`
+                    ` ${translation({ lang: lang, value: 'Replies' })}`
                   : replies?.length +
-                    ` ${useTranslation({ lang: lang, value: 'Reply' })}`
+                    ` ${translation({ lang: lang, value: 'Reply' })}`
               }
             >
               <div className="timeline">
@@ -441,7 +441,7 @@ const Reply = (props: replyProp) => {
                           ></div>
                           <Tooltip
                             placement="right"
-                            text={useTranslation({
+                            text={translation({
                               lang: lang,
                               value:
                                 'Click on the number count to who see liked.'

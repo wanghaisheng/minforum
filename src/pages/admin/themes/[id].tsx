@@ -8,7 +8,7 @@ import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import ThemeStore from 'stores/theme';
 import SettingsStore from 'stores/settings';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -49,7 +49,7 @@ const EditTheme = observer(() => {
       if (res.success) {
         setTheme({ ...theme, active: value });
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Theme updated successfully!'
           })
@@ -57,7 +57,7 @@ const EditTheme = observer(() => {
         router.reload();
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update theme. Please try again!'
           })
@@ -69,14 +69,14 @@ const EditTheme = observer(() => {
   const save = async () => {
     if (!title || title.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Title is too short. Minimum of 3 characters.'
         })
       );
     } else if (!code) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Theme code cannot be empty!'
         })
@@ -85,7 +85,7 @@ const EditTheme = observer(() => {
       await updateTheme({ ...theme, code }).then((res: any) => {
         if (res.success) {
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Theme updated successfully!'
             })
@@ -93,7 +93,7 @@ const EditTheme = observer(() => {
           // router.push(`/admin/themes/${res.data.slug}`);
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to update theme. Please try again!'
             })
@@ -107,11 +107,11 @@ const EditTheme = observer(() => {
     <Auth roles={['admin']}>
       <Toaster />
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Edit theme'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Edit theme'
         })}

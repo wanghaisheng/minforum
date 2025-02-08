@@ -22,7 +22,7 @@ import UserStore from 'stores/user';
 import { validateEmail, validateUsername } from 'components/api/utils';
 import { useRouter } from 'next/router';
 import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import useSettings from 'components/settings';
@@ -62,14 +62,14 @@ const Signup = observer(() => {
     const { name, email, username, password } = user;
     if (!name || name?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Fullname is too short.'
         })
       );
     } else if (!username || validateUsername(username) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value:
             'Please enter a username with at least 3 characters. Only letters, numbers, and underscores are supported.'
@@ -77,21 +77,21 @@ const Signup = observer(() => {
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Invalid email address'
         })
       );
     } else if (!password || password?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Password is too short. Minimum character is six.'
         })
       );
     } else if (!checked) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Please accept the terms of use and privacy policy'
         })
@@ -104,7 +104,7 @@ const Signup = observer(() => {
             path: '/'
           });
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value:
                 'Account created successfully! Please verify account to continue.'
@@ -113,7 +113,7 @@ const Signup = observer(() => {
           router.push('/signup/verify');
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: res.message
             })
@@ -137,7 +137,7 @@ const Signup = observer(() => {
           }
         );
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Successfully signed in!'
           })
@@ -182,8 +182,8 @@ const Signup = observer(() => {
   return (
     <Authorized>
       <Navbar
-        title={useTranslation({ lang: settings?.language, value: 'Signup' })}
-        description={useTranslation({
+        title={translation({ lang: settings?.language, value: 'Signup' })}
+        description={translation({
           lang: settings?.language,
           value: 'Signup'
         })}
@@ -265,7 +265,7 @@ const Signup = observer(() => {
                 settings?.socialAccount?.google) && <Divider>OR</Divider>}
               <Spacer h={1} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Fullname'
                 })}
@@ -277,7 +277,7 @@ const Signup = observer(() => {
               />
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Username'
                 })}
@@ -290,7 +290,7 @@ const Signup = observer(() => {
                   status === 'success' ? (
                     <Tooltip
                       placement="topEnd"
-                      text={useTranslation({
+                      text={translation({
                         lang: settings?.language,
                         value: 'Username is available.'
                       })}
@@ -301,7 +301,7 @@ const Signup = observer(() => {
                   ) : status === 'error' ? (
                     <Tooltip
                       placement="topEnd"
-                      text={useTranslation({
+                      text={translation({
                         lang: settings?.language,
                         value: 'Username is not available. Try another name.'
                       })}
@@ -319,7 +319,7 @@ const Signup = observer(() => {
               />
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Email'
                 })}
@@ -331,7 +331,7 @@ const Signup = observer(() => {
               />
               <Spacer h={1.5} />
               <Input.Password
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Password'
                 })}

@@ -1,7 +1,7 @@
 import { Spacer, Text } from '@geist-ui/core';
 import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'components/intl/translation';
+import { translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Privacy = observer(() => {
@@ -10,11 +10,11 @@ const Privacy = observer(() => {
   return (
     <div>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Privacy policy'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Privacy policy'
         })}
@@ -22,7 +22,7 @@ const Privacy = observer(() => {
       <div className="page-container top-100">
         <div className="notification-container">
           <Text h3 className="capitalize">
-            {useTranslation({
+            {translation({
               lang: settings?.language,
               value: 'Privacy policy'
             })}

@@ -31,7 +31,7 @@ import { getInitials, timeAgoShort } from 'components/api/utils';
 import {
   Translation,
   useTimeTranslation,
-  useTranslation
+  translation
 } from 'components/intl/translation';
 import dayjs from 'dayjs';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -175,7 +175,7 @@ const Index = observer(() => {
 
   const handleUpload = async (id: string) => {
     let t = toast.loading(
-      useTranslation({
+      translation({
         lang: settings?.language,
         value: 'Uploading image....'
       })
@@ -343,7 +343,7 @@ const Index = observer(() => {
                       width={'100%'}
                       icon={<Search />}
                       onKeyUp={(e) => setSearch(e.target.value)}
-                      placeholder={useTranslation({
+                      placeholder={translation({
                         lang,
                         value: 'Search....'
                       })}

@@ -15,7 +15,7 @@ import SearchHeading from 'components/search-heading';
 import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import ThemeStore from 'stores/theme';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 
@@ -56,11 +56,11 @@ const Themes = observer(() => {
   return (
     <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Themes'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Themes'
         })}
@@ -71,7 +71,7 @@ const Themes = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Themes'
             })} (${themes.length})`}
@@ -86,14 +86,14 @@ const Themes = observer(() => {
           <Table width={'100%'} data={themes}>
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="active"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -101,7 +101,7 @@ const Themes = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

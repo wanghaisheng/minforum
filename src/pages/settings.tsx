@@ -27,7 +27,7 @@ import UserStore from 'stores/user';
 import useToken from 'components/token';
 import { formatNumber, validateEmail } from 'components/api/utils';
 import Auth from 'components/auth';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Settings = observer(() => {
@@ -84,7 +84,7 @@ const Settings = observer(() => {
 
   const handleUpload = async (id: string) => {
     let t = toast.loading(
-      useTranslation({ lang: settings?.language, value: 'Uploading image....' })
+      translation({ lang: settings?.language, value: 'Uploading image....' })
     );
 
     let upload: any = document.querySelector(id);
@@ -116,7 +116,7 @@ const Settings = observer(() => {
             );
             toast.dismiss(t);
             toast.success(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Image uploaded successfully!'
               })
@@ -140,28 +140,28 @@ const Settings = observer(() => {
     const { name, email, username, password } = user;
     if (!name || name?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Fullname is too short.'
         })
       );
     } else if (!username || username?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Username is too short. Minimum character is three.'
         })
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Invalid email address'
         })
       );
     } else if (!password || password?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Current password is required to make changes.'
         })
@@ -183,7 +183,7 @@ const Settings = observer(() => {
           setUser({ ...user, password: '' });
 
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Account updated successfully!'
             })
@@ -199,21 +199,21 @@ const Settings = observer(() => {
     const { name, email, username } = user;
     if (!name || name?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Fullname is too short.'
         })
       );
     } else if (!username || username?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Username is too short. Minimum character is three.'
         })
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Invalid email address'
         })
@@ -235,7 +235,7 @@ const Settings = observer(() => {
           setUser({ ...user, password: '' });
 
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Account updated successfully!'
             })
@@ -251,14 +251,14 @@ const Settings = observer(() => {
     const { password, newPassword } = _password;
     if (!newPassword || newPassword?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Password is too short! Minimum character is six.'
         })
       );
     } else if (!password) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Current password is required to make changes.'
         })
@@ -270,14 +270,14 @@ const Settings = observer(() => {
         if (res.success) {
           setPassword({ password: '', newPassword: '' });
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Password updated successfully!'
             })
           );
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to change password. Please try again.'
             })
@@ -291,14 +291,14 @@ const Settings = observer(() => {
     const { id, subAmount, subDescription } = user;
     if (!subAmount) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Subscription amount cannot be empty or zero.'
         })
       );
     } else if (subAmount < settings.payment.subscription) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Subscription amount is lesser than minimum amount.'
         })
@@ -325,7 +325,7 @@ const Settings = observer(() => {
             setUser({ ...user, password: '' });
 
             toast.success(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Account updated successfully!'
               })
@@ -341,11 +341,11 @@ const Settings = observer(() => {
   return (
     <Auth>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account settings'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account settings'
         })}
@@ -388,7 +388,7 @@ const Settings = observer(() => {
                   <Spacer h={1.5} />
                   <Tabs initialValue="1">
                     <Tabs.Item
-                      label={useTranslation({
+                      label={translation({
                         lang: settings?.language,
                         value: 'Change details'
                       })}
@@ -476,7 +476,7 @@ const Settings = observer(() => {
                     settings?.payment?.subscription &&
                     settings?.payment?.percentage ? (
                       <Tabs.Item
-                        label={useTranslation({
+                        label={translation({
                           lang: settings?.language,
                           value: 'Subscription'
                         })}
@@ -494,7 +494,7 @@ const Settings = observer(() => {
                           </div>
                           <Input
                             htmlType="number"
-                            placeholder={useTranslation({
+                            placeholder={translation({
                               lang: settings?.language,
                               value: 'Monthly subscription fee'
                             })}
@@ -512,7 +512,7 @@ const Settings = observer(() => {
                         <Spacer h={1.5} />
                         <Textarea
                           rows={3}
-                          placeholder={useTranslation({
+                          placeholder={translation({
                             lang: settings?.language,
                             value: 'Description'
                           })}
@@ -520,7 +520,7 @@ const Settings = observer(() => {
                           scale={4 / 3}
                           value={
                             user?.subDescription ||
-                            useTranslation({
+                            translation({
                               lang: settings?.language,
                               value:
                                 'Subscribe to get access to my exclusive contents via premium posts and priority DM'
@@ -557,7 +557,7 @@ const Settings = observer(() => {
               ) : (
                 <Tabs initialValue="1">
                   <Tabs.Item
-                    label={useTranslation({
+                    label={translation({
                       lang: settings?.language,
                       value: 'Change details'
                     })}
@@ -620,7 +620,7 @@ const Settings = observer(() => {
                     </Input>
                     <Spacer h={1.5} />
                     <Input.Password
-                      placeholder={useTranslation({
+                      placeholder={translation({
                         lang: settings?.language,
                         value: 'Type current password to update changes'
                       })}
@@ -650,7 +650,7 @@ const Settings = observer(() => {
                     </Button>
                   </Tabs.Item>
                   <Tabs.Item
-                    label={useTranslation({
+                    label={translation({
                       lang: settings?.language,
                       value: 'Change password'
                     })}
@@ -659,7 +659,7 @@ const Settings = observer(() => {
                     <div>
                       <Spacer h={1.5} />
                       <Input.Password
-                        placeholder={useTranslation({
+                        placeholder={translation({
                           lang: settings?.language,
                           value: 'Type new password'
                         })}
@@ -676,7 +676,7 @@ const Settings = observer(() => {
                     </div>
                     <Spacer h={1.5} />
                     <Input.Password
-                      placeholder={useTranslation({
+                      placeholder={translation({
                         lang: settings?.language,
                         value: 'Type current password to update changes'
                       })}
@@ -710,7 +710,7 @@ const Settings = observer(() => {
                   settings?.payment?.subscription &&
                   settings?.payment?.percentage ? (
                     <Tabs.Item
-                      label={useTranslation({
+                      label={translation({
                         lang: settings?.language,
                         value: 'Subscription'
                       })}
@@ -728,7 +728,7 @@ const Settings = observer(() => {
                         </div>
                         <Input
                           htmlType="number"
-                          placeholder={useTranslation({
+                          placeholder={translation({
                             lang: settings?.language,
                             value: 'Monthly subscription fee'
                           })}
@@ -746,7 +746,7 @@ const Settings = observer(() => {
                       <Spacer h={1.5} />
                       <Textarea
                         rows={3}
-                        placeholder={useTranslation({
+                        placeholder={translation({
                           lang: settings?.language,
                           value: 'Description'
                         })}
@@ -754,7 +754,7 @@ const Settings = observer(() => {
                         scale={4 / 3}
                         value={
                           user?.subDescription ||
-                          useTranslation({
+                          translation({
                             lang: settings?.language,
                             value:
                               'Subscribe to get access to my exclusive contents via premium posts and priority DM'

@@ -6,7 +6,7 @@ import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import { Authorized } from 'components/auth';
 
@@ -24,7 +24,7 @@ const Forgot = observer(() => {
           path: '/'
         });
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Please verify account to continue.'
           })
@@ -32,7 +32,7 @@ const Forgot = observer(() => {
         router.push('/reset');
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: res.message
           })
@@ -45,11 +45,11 @@ const Forgot = observer(() => {
     <div className="polkadot">
       <Authorized>
         <Navbar
-          title={useTranslation({
+          title={translation({
             lang: settings?.language,
             value: 'Account recovery'
           })}
-          description={useTranslation({
+          description={translation({
             lang: settings?.language,
             value: 'Account recovery'
           })}
@@ -78,7 +78,7 @@ const Forgot = observer(() => {
                 </Text>
                 <Spacer h={2} />
                 <Input
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Email address'
                   })}

@@ -16,7 +16,7 @@ import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 
@@ -80,11 +80,11 @@ const Categories = observer(() => {
   return (
     <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Categories'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Categories'
         })}
@@ -99,11 +99,11 @@ const Categories = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Categories'
             })} (${categories.length})`}
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Search....'
             })}
@@ -118,14 +118,14 @@ const Categories = observer(() => {
           <Table width={'100%'} data={categories}>
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="color"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Color'
               })}
@@ -133,14 +133,14 @@ const Categories = observer(() => {
             />
             <Table.Column
               prop="discussion"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Discussions'
               })}
             />
             <Table.Column
               prop="authRequired"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Authentication'
               })}
@@ -148,7 +148,7 @@ const Categories = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

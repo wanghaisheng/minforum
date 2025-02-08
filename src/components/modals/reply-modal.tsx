@@ -7,7 +7,7 @@ import Editor from 'components/editor';
 import {
   Translation,
   useReplyTranslation,
-  useTranslation
+  translation
 } from 'components/intl/translation';
 
 type editorProps = {

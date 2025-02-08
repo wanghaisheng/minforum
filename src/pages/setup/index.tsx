@@ -18,7 +18,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { validateEmail } from 'components/api/utils';
 import { setCookie, parseCookies } from 'nookies';
 import SetupVerify from 'components/admin/setup-verify';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 
 const Setup = observer(() => {
   const cookie = parseCookies();
@@ -48,28 +48,28 @@ const Setup = observer(() => {
 
     if (!settings.language) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Please select a language'
         })
       );
     } else if (!name || name.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Username is too short. Minimum character is three.'
         })
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Invalid email address'
         })
       );
     } else if (!password || password.length < 6) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Password is too short. Minimum character is six.'
         })
@@ -119,7 +119,7 @@ const Setup = observer(() => {
                 <Spacer h={2} />
                 <Select
                   scale={4 / 3}
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: lang,
                     value: 'Select language'
                   })}
@@ -154,10 +154,10 @@ const Setup = observer(() => {
                 </Select>
                 <Spacer h={1.5} />
                 <Input
-                  placeholder={`${useTranslation({
+                  placeholder={`${translation({
                     lang: lang,
                     value: 'Admin'
-                  })} ${useTranslation({
+                  })} ${translation({
                     lang: lang,
                     value: 'Username'
                   })}`}
@@ -175,10 +175,10 @@ const Setup = observer(() => {
                 <Spacer h={1.5} />
                 <Input
                   htmlType={'email'}
-                  placeholder={`${useTranslation({
+                  placeholder={`${translation({
                     lang: lang,
                     value: 'Admin'
-                  })} ${useTranslation({
+                  })} ${translation({
                     lang: lang,
                     value: 'Email'
                   })}`}
@@ -191,10 +191,10 @@ const Setup = observer(() => {
                 />
                 <Spacer h={1.5} />
                 <Input.Password
-                  placeholder={`${useTranslation({
+                  placeholder={`${translation({
                     lang: lang,
                     value: 'Admin'
-                  })} ${useTranslation({
+                  })} ${translation({
                     lang: lang,
                     value: 'Password'
                   })}`}

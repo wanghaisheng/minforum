@@ -1,7 +1,7 @@
 import { Input, Tabs, Text } from '@geist-ui/core';
 import { useMemo, useState } from 'react';
 import { emojis } from './emoji';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import CustomIcon from '../icon/icon';
 
 type emojiProps = {
@@ -53,7 +53,7 @@ const Emoji = (props: emojiProps) => {
     >
       <Input
         width="100%"
-        placeholder={useTranslation({
+        placeholder={translation({
           lang: props.lang,
           value: 'Search emoji...'
         })}

@@ -20,7 +20,7 @@ import { transactionProp } from 'interfaces/transaction';
 import Auth from 'components/admin/auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 import { formatNumber } from 'components/api/utils';
@@ -124,11 +124,11 @@ const Transaction = observer(() => {
   return (
     <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Transactions'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Transactions'
         })}
@@ -151,11 +151,11 @@ const Transaction = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Transactions'
             })} (${transactions.length})`}
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Search....'
             })}
@@ -165,7 +165,7 @@ const Transaction = observer(() => {
           <Table width={'100%'} data={transactions}>
             <Table.Column
               prop="amount"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Amount'
               })}
@@ -173,14 +173,14 @@ const Transaction = observer(() => {
             />
             <Table.Column
               prop="narration"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Narration'
               })}
             />
             <Table.Column
               prop="status"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -188,7 +188,7 @@ const Transaction = observer(() => {
             />
             <Table.Column
               prop="createdAt"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Date'
               })}
@@ -196,7 +196,7 @@ const Transaction = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

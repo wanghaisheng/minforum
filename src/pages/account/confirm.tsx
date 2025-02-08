@@ -16,7 +16,7 @@ import { destroyCookie, parseCookies } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
 const Confirm = observer(() => {
@@ -36,7 +36,7 @@ const Confirm = observer(() => {
   const verify = async () => {
     if (Number(code) !== _code?.code) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Code is incorrect or expired.'
         })
@@ -48,7 +48,7 @@ const Confirm = observer(() => {
           destroyCookie({}, '_w_code');
 
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value:
                 'Account verified successfully! Please sign in to continue.'
@@ -57,7 +57,7 @@ const Confirm = observer(() => {
           router.push('/login');
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to verify user. Please try again later'
             })
@@ -70,11 +70,11 @@ const Confirm = observer(() => {
   return (
     <div className="polkadot">
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account verification'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account verification'
         })}

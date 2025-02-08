@@ -22,7 +22,7 @@ import Auth from 'components/admin/auth';
 import { ChromePicker } from 'react-color';
 import toast, { Toaster } from 'react-hot-toast';
 import Editor from 'components/editor';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import { extensionVariable } from 'interfaces/settings';
 import currencies from 'components/api/currency';
@@ -69,7 +69,7 @@ const Settings = observer(() => {
 
   const handleUpload = async (id: string) => {
     let t = toast.loading(
-      useTranslation({
+      translation({
         lang: settings?.language,
         value: 'Uploading image....'
       })
@@ -98,7 +98,7 @@ const Settings = observer(() => {
 
           toast.dismiss(t);
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Image uploaded successfully!'
             })
@@ -120,14 +120,14 @@ const Settings = observer(() => {
     await update(settings).then((res: any) => {
       if (res.success) {
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Settings updated successfully'
           })
         );
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Error updating settings! Please try again.'
           })
@@ -151,11 +151,11 @@ const Settings = observer(() => {
   return (
     <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Settings'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Settings'
         })}
@@ -174,7 +174,7 @@ const Settings = observer(() => {
               <Translation lang={settings?.language} value="Settings" />
             </Text>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'General settings'
               })}
@@ -417,7 +417,7 @@ const Settings = observer(() => {
               </div>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Homepage settings'
               })}
@@ -544,14 +544,14 @@ const Settings = observer(() => {
               </div>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Social settings'
               })}
             >
               <Tabs initialValue="1">
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Facebook appId'
                   })}
@@ -582,7 +582,7 @@ const Settings = observer(() => {
                   </Button>
                 </Tabs.Item>
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Google clientId'
                   })}
@@ -615,7 +615,7 @@ const Settings = observer(() => {
               </Tabs>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Announcement'
               })}
@@ -692,7 +692,7 @@ const Settings = observer(() => {
               </div>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Security settings'
               })}
@@ -777,21 +777,21 @@ const Settings = observer(() => {
               </div>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Advert settings'
               })}
             >
               <Tabs initialValue="1">
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Top'
                   })}
                   value="1"
                 >
                   <Textarea
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Advert code'
                     })}
@@ -816,14 +816,14 @@ const Settings = observer(() => {
                   </Button>
                 </Tabs.Item>
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Left side'
                   })}
                   value="2"
                 >
                   <Textarea
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Advert code'
                     })}
@@ -848,14 +848,14 @@ const Settings = observer(() => {
                   </Button>
                 </Tabs.Item>
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Right side'
                   })}
                   value="3"
                 >
                   <Textarea
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Advert code'
                     })}
@@ -880,14 +880,14 @@ const Settings = observer(() => {
                   </Button>
                 </Tabs.Item>
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Inner'
                   })}
                   value="4"
                 >
                   <Textarea
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Advert code'
                     })}
@@ -914,7 +914,7 @@ const Settings = observer(() => {
               </Tabs>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Email settings'
               })}
@@ -1000,7 +1000,7 @@ const Settings = observer(() => {
               </div>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Reward settings'
               })}
@@ -1120,7 +1120,7 @@ const Settings = observer(() => {
               </div>
             </Collapse>
             {/* <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Payment settings'
               })}
@@ -1135,7 +1135,7 @@ const Settings = observer(() => {
                   <Select
                     width={'100%'}
                     value={payment?.currency}
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Choose one'
                     })}
@@ -1171,7 +1171,7 @@ const Settings = observer(() => {
                     htmlType="number"
                     width={'100%'}
                     value={`${payment?.monthly}`}
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings.language,
                       value: 'Leave empty or zero, if not applicable'
                     })}
@@ -1200,7 +1200,7 @@ const Settings = observer(() => {
                   <Input
                     htmlType="number"
                     width={'100%'}
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings.language,
                       value: 'Leave empty or zero, if not applicable'
                     })}
@@ -1233,7 +1233,7 @@ const Settings = observer(() => {
                   <Input
                     htmlType="number"
                     width={'100%'}
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings.language,
                       value: 'Leave empty or zero, if not applicable'
                     })}
@@ -1273,7 +1273,7 @@ const Settings = observer(() => {
               </div>
             </Collapse> */}
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Banned words'
               })}
@@ -1295,14 +1295,14 @@ const Settings = observer(() => {
               </Button>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Legal settings'
               })}
             >
               <Tabs initialValue="1">
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Terms & conditions'
                   })}
@@ -1333,7 +1333,7 @@ const Settings = observer(() => {
                   )}
                 </Tabs.Item>
                 <Tabs.Item
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Privacy policy'
                   })}
@@ -1366,7 +1366,7 @@ const Settings = observer(() => {
               </Tabs>
             </Collapse>
             <Collapse
-              title={useTranslation({
+              title={translation({
                 lang: settings?.language,
                 value: 'Extension variables'
               })}

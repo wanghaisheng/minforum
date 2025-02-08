@@ -9,9 +9,10 @@ const slug = () => {
 };
 
 const code = () => {
-  let code = Math.random() * (1000000000 - 10000) + 10000;
-  code = Math.round(code);
-  return code;
+  const min = 10000;
+  const max = 1e9;
+  const randomCode = Math.floor(Math.random() * (max - min + 1)) + min;
+  return randomCode;
 };
 
 const guid = () => {
@@ -46,6 +47,7 @@ const formatNumber = (value) => {
 };
 
 const oneKFormat = (val) => {
+  let val = Number(val);
   if (val >= 1000000000) {
     let text = val / 1000000000;
     text = text.toFixed(1);

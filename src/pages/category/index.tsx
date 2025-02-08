@@ -4,7 +4,7 @@ import { Card, Text, Grid, Link, Spacer } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/navbar';
 import CategoryStore from 'stores/category';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import CustomIcon from 'components/data/icon/icon';
 
@@ -19,7 +19,7 @@ const Category = observer(() => {
   return (
     <div>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Categories'
         })}

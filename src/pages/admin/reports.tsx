@@ -12,7 +12,7 @@ import ReportStore from 'stores/report';
 import { reportProp } from 'interfaces/report';
 import toast, { Toaster } from 'react-hot-toast';
 import DiscussionStore from 'stores/discussion';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 
@@ -36,7 +36,7 @@ const Reports = observer(() => {
     await updateDiscussion({ status, id }).then((res: any) => {
       if (res.success) {
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Discussion status updated'
           })
@@ -44,7 +44,7 @@ const Reports = observer(() => {
         getReports();
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update status! Please try again later.'
           })
@@ -92,7 +92,7 @@ const Reports = observer(() => {
   const renderView = (value: string, rowData: reportProp) => {
     return (
       <Link target={'_blank'} icon href={`/d/${rowData.slug}`}>
-        {useTranslation({
+        {translation({
           lang: settings?.language,
           value: 'View'
         })}
@@ -103,7 +103,7 @@ const Reports = observer(() => {
   const renderAction = (value: string, rowData: reportProp) => {
     return (
       <Select
-        placeholder={useTranslation({
+        placeholder={translation({
           lang: settings?.language,
           value: 'Change status'
         })}
@@ -129,11 +129,11 @@ const Reports = observer(() => {
   return (
     <Auth roles={['admin', 'moderator']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Reports'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Reports'
         })}
@@ -148,7 +148,7 @@ const Reports = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Reports'
             })} (${reports.length})`}
@@ -158,14 +158,14 @@ const Reports = observer(() => {
           <Table width={'100%'} data={reports}>
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="type"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Type'
               })}
@@ -173,7 +173,7 @@ const Reports = observer(() => {
             />
             <Table.Column
               prop="status"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -181,7 +181,7 @@ const Reports = observer(() => {
             />
             <Table.Column
               prop="createdAt"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Date'
               })}
@@ -189,7 +189,7 @@ const Reports = observer(() => {
             />
             <Table.Column
               prop="slug"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

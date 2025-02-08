@@ -12,7 +12,7 @@ import {
 import { format } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import { oneKFormat } from './api/utils';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import { Comment01Icon, ViewIcon } from 'hugeicons-react';
 import CustomIcon from './data/icon/icon';
 
@@ -106,7 +106,7 @@ const Post = (props: postProps) => {
             <div>
               <span>{title} &nbsp;</span>
               {pinned && (
-                <Tooltip text={useTranslation({ lang, value: 'Pinned post' })}>
+                <Tooltip text={translation({ lang, value: 'Pinned post' })}>
                   <Badge
                     scale={0.5}
                     style={{
@@ -120,7 +120,7 @@ const Post = (props: postProps) => {
               )}
 
               {premium && (
-                <Tooltip text={useTranslation({ lang, value: 'Premium post' })}>
+                <Tooltip text={translation({ lang, value: 'Premium post' })}>
                   <Badge scale={0.5} style={{ backgroundColor: '#8B00F6' }}>
                     <CustomIcon name="crown" color="#fff" size={14} />
                   </Badge>

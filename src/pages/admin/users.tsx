@@ -20,7 +20,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Auth from 'components/admin/auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 
@@ -66,14 +66,14 @@ const Admin = observer(() => {
         setUser(val);
         getUsers('newest');
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Profile updated successfully'
           })
         );
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update profile. Please try again.'
           })
@@ -134,11 +134,11 @@ const Admin = observer(() => {
   return (
     <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Users'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Users'
         })}
@@ -157,11 +157,11 @@ const Admin = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Users'
             })} (${users.length})`}
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Search....'
             })}
@@ -171,7 +171,7 @@ const Admin = observer(() => {
           <Table width={'100%'} data={users}>
             <Table.Column
               prop="name"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Name'
               })}
@@ -179,21 +179,21 @@ const Admin = observer(() => {
             />
             <Table.Column
               prop="role"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Role'
               })}
             />
             <Table.Column
               prop="subscriptions"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Subscribers'
               })}
             />
             <Table.Column
               prop="createdAt"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Date'
               })}
@@ -201,7 +201,7 @@ const Admin = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

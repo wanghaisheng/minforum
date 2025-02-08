@@ -38,7 +38,7 @@ import CommentStore from 'stores/comment';
 import LikeStore from 'stores/like';
 import {
   Translation,
-  useTranslation,
+  translation,
   useTimeTranslation
 } from 'components/intl/translation';
 import useSettings from 'components/settings';
@@ -196,14 +196,14 @@ const Discussion = observer(() => {
         toast.dismiss(t);
         if (res.success) {
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Discussion reported!'
             })
           );
         } else {
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Error occured. Please try again!'
             })
@@ -262,7 +262,7 @@ const Discussion = observer(() => {
 
   const saveComment = async () => {
     if (!content) {
-      toast.error(useTranslation({ lang: lang, value: 'Comment is blank!' }));
+      toast.error(translation({ lang: lang, value: 'Comment is blank!' }));
     } else {
       await newComment({
         comment: content,
@@ -280,7 +280,7 @@ const Discussion = observer(() => {
             });
           } else {
             toast.error(
-              useTranslation({ lang: lang, value: 'Unable to save comment.' })
+              translation({ lang: lang, value: 'Unable to save comment.' })
             );
           }
         })
@@ -290,7 +290,7 @@ const Discussion = observer(() => {
 
   const saveEditComment = async () => {
     if (!content) {
-      toast.error(useTranslation({ lang: lang, value: 'Comment is blank!' }));
+      toast.error(translation({ lang: lang, value: 'Comment is blank!' }));
     } else {
       await updateComment({
         comment: content,
@@ -309,7 +309,7 @@ const Discussion = observer(() => {
             });
           } else {
             toast.error(
-              useTranslation({ lang: lang, value: 'Unable to save comment.' })
+              translation({ lang: lang, value: 'Unable to save comment.' })
             );
           }
         })
@@ -319,7 +319,7 @@ const Discussion = observer(() => {
 
   const saveEditReply = async () => {
     if (!content) {
-      toast.error(useTranslation({ lang: lang, value: 'Comment is blank!' }));
+      toast.error(translation({ lang: lang, value: 'Comment is blank!' }));
     } else {
       await updateReply({
         comment: content,
@@ -339,7 +339,7 @@ const Discussion = observer(() => {
             });
           } else {
             toast.error(
-              useTranslation({ lang: lang, value: 'Unable to save comment.' })
+              translation({ lang: lang, value: 'Unable to save comment.' })
             );
           }
         })
@@ -360,7 +360,7 @@ const Discussion = observer(() => {
 
   const saveReply = async () => {
     if (!content) {
-      toast.error(useTranslation({ lang: lang, value: 'Comment is blank!' }));
+      toast.error(translation({ lang: lang, value: 'Comment is blank!' }));
     } else {
       await newReply({
         comment: content,
@@ -386,7 +386,7 @@ const Discussion = observer(() => {
             });
           } else {
             toast.error(
-              useTranslation({ lang: lang, value: 'Unable to save reply.' })
+              translation({ lang: lang, value: 'Unable to save reply.' })
             );
           }
         })
@@ -675,7 +675,7 @@ const Discussion = observer(() => {
                         {removeBanWords(discussion.title)}{' '}
                         {discussion?.isPinned && (
                           <Tooltip
-                            text={useTranslation({
+                            text={translation({
                               lang,
                               value: 'Pinned post'
                             })}
@@ -693,7 +693,7 @@ const Discussion = observer(() => {
                         )}
                         {discussion?.premium && (
                           <Tooltip
-                            text={useTranslation({
+                            text={translation({
                               lang,
                               value: 'Premium post'
                             })}
@@ -755,7 +755,7 @@ const Discussion = observer(() => {
                                             report(discussion.id!, item)
                                           }
                                         >
-                                          {useTranslation({
+                                          {translation({
                                             lang: lang,
                                             value: item
                                           })}{' '}
@@ -980,7 +980,7 @@ const Discussion = observer(() => {
                           ></div>
                           <Tooltip
                             placement="right"
-                            text={useTranslation({
+                            text={translation({
                               lang: settings?.language,
                               value:
                                 'Click on the number count to who see liked.'

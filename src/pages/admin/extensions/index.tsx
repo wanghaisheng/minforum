@@ -24,7 +24,7 @@ import SearchHeading from 'components/search-heading';
 import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import ExtensionStore from 'stores/extension';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 import { useRouter } from 'next/router';
@@ -84,7 +84,7 @@ const Extensions = observer(() => {
 
   const handleUpload = async (id: string) => {
     let t = toast.loading(
-      useTranslation({
+      translation({
         lang: settings?.language,
         value: 'Uploading extension....'
       })
@@ -103,7 +103,7 @@ const Extensions = observer(() => {
 
           toast.dismiss(t);
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Extension uploaded successfully!'
             })
@@ -268,7 +268,7 @@ const Extensions = observer(() => {
                   loading={loading}
                   onClick={() =>
                     toast.error(
-                      useTranslation({
+                      translation({
                         lang: settings?.language,
                         value: 'Extension name is required'
                       })
@@ -286,11 +286,11 @@ const Extensions = observer(() => {
         </Modal.Content>
       </Modal>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Extensions'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Extensions'
         })}
@@ -305,7 +305,7 @@ const Extensions = observer(() => {
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Extensions'
             })} (${extensions.length})`}
@@ -335,14 +335,14 @@ const Extensions = observer(() => {
           <Table width={'100%'} data={extensions}>
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="active"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -350,7 +350,7 @@ const Extensions = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}

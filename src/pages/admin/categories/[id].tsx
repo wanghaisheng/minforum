@@ -18,7 +18,7 @@ import Sidebar from 'components/admin/sidebar';
 import Auth from 'components/admin/auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import useToken from 'components/token';
 import useSettings from 'components/settings';
 import CustomIcon from 'components/data/icon/icon';
@@ -51,14 +51,14 @@ const EditCategory = observer(() => {
   const save = async () => {
     if (!title || title.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Title is too short. Minimum of 3 characters.'
         })
       );
     } else if (!description) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Description is required'
         })
@@ -74,14 +74,14 @@ const EditCategory = observer(() => {
       await updateCategory(category).then((res: any) => {
         if (res.success) {
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Category updated successfully'
             })
           );
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to update category. Please try again!'
             })
@@ -95,11 +95,11 @@ const EditCategory = observer(() => {
     <Auth roles={['admin']}>
       <Toaster />
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Edit category'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Edit category'
         })}
@@ -200,7 +200,7 @@ const EditCategory = observer(() => {
               <Translation lang={settings?.language} value="Moderators" />
             </Text>
             <Select
-              placeholder={useTranslation({
+              placeholder={translation({
                 lang: settings?.language,
                 value: 'Choose one or more'
               })}

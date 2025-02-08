@@ -16,7 +16,7 @@ import { ChevronLeft, ChevronRight, Image as Picture } from '@geist-ui/icons';
 import Navbar from 'components/navbar';
 import SetupVerify from 'components/admin/setup-verify';
 import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 
 const MetaSetup = observer(() => {
   const cookie = parseCookies();
@@ -130,7 +130,7 @@ const MetaSetup = observer(() => {
 
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'Site name'
                 })}
@@ -146,7 +146,7 @@ const MetaSetup = observer(() => {
               />
               <Spacer h={1.5} />
               <Textarea
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'Site description'
                 })}

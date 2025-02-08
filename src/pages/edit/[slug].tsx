@@ -22,7 +22,7 @@ import Editor from 'components/editor';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
 import { resProp } from 'interfaces/res';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import Auth from 'components/auth';
 
@@ -73,21 +73,21 @@ const EditDiscussion = observer(() => {
     const { title, categoryId } = discussion;
     if (!title) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Title is too short!'
         })
       );
     } else if (!categoryId) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Please choose a category!'
         })
       );
     } else if (!content) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Content is blank.'
         })
@@ -146,11 +146,11 @@ const EditDiscussion = observer(() => {
         ''
       )}
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Edit discussion'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Edit discussion'
         })}
@@ -191,7 +191,7 @@ const EditDiscussion = observer(() => {
                 <Grid xs={profile?.subAmount ? 24 : 16} lg={16}>
                   <Input
                     width="100%"
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Discussion Title'
                     })}
@@ -203,7 +203,7 @@ const EditDiscussion = observer(() => {
                 </Grid>
                 <Grid xs={24} lg={16}>
                   <Select
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Choose a Category'
                     })}
@@ -228,7 +228,7 @@ const EditDiscussion = observer(() => {
                 <Input
                   width="100%"
                   value={discussion?.title}
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Discussion Title'
                   })}
@@ -241,7 +241,7 @@ const EditDiscussion = observer(() => {
                 <Select
                   disableMatchWidth={true}
                   width={'100%'}
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: settings?.language,
                     value: 'Choose a Category'
                   })}
@@ -265,7 +265,7 @@ const EditDiscussion = observer(() => {
               lang={settings?.language}
               value={content}
               height="280px"
-              placeholder={useTranslation({
+              placeholder={translation({
                 lang: settings?.language,
                 value: 'Type something memorable...'
               })}

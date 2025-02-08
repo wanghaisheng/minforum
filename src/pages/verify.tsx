@@ -8,7 +8,7 @@ import Turnstile, { useTurnstile } from 'react-turnstile';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
 import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import { dec, validateEmail } from 'components/api/utils';
 
@@ -42,7 +42,7 @@ const Verify = observer(() => {
             path: '/'
           });
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Verification code sent to your email!'
             })
@@ -51,7 +51,7 @@ const Verify = observer(() => {
           setAsk(false);
         } else {
           toast.error(
-            useTranslation({ lang: settings?.language, value: res.message })
+            translation({ lang: settings?.language, value: res.message })
           );
         }
       });
@@ -65,7 +65,7 @@ const Verify = observer(() => {
       token = JSON.parse(token);
       if (Number(code) !== Number(token?.code)) {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Code is incorrect or expired.'
           })
@@ -86,7 +86,7 @@ const Verify = observer(() => {
             );
 
             toast.success(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Account verified successfully!'
               })
@@ -94,7 +94,7 @@ const Verify = observer(() => {
             router.push('/');
           } else {
             toast.error(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Unable to verify user. Please try again later.'
               })
@@ -104,7 +104,7 @@ const Verify = observer(() => {
       }
     } catch (error) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Unable to verify user. Please try again later.'
         })
@@ -115,11 +115,11 @@ const Verify = observer(() => {
   return (
     <div className="polkadot">
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account verification'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account verification'
         })}

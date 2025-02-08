@@ -23,7 +23,7 @@ import {
   useLikedReplyTranslation,
   useRepliedCommentTranslation,
   useRepliedPostTranslation,
-  useTranslation
+  translation
 } from 'components/intl/translation';
 import useSettings from 'components/settings';
 
@@ -156,7 +156,7 @@ const Notifications = observer(() => {
         value: ''
       });
     } else {
-      return useTranslation({
+      return translation({
         lang: settings?.language,
         value: message
       });
@@ -224,11 +224,11 @@ const Notifications = observer(() => {
   return (
     <Auth>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Notifications'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Notifications'
         })}

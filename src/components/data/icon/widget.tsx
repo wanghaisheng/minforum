@@ -2,7 +2,7 @@ import { Input, Spacer, Grid } from '@geist-ui/core';
 import { useMemo, useState } from 'react';
 import icons from './icons';
 
-import { useTranslation } from 'components/intl/translation';
+import { translation } from 'components/intl/translation';
 import CustomIcon from './icon';
 
 type iconData = {
@@ -62,7 +62,7 @@ const IconWidget = (props: iconProps) => {
     >
       <Input
         width="100%"
-        placeholder={useTranslation({
+        placeholder={translation({
           lang: props.lang,
           value: 'Search....'
         })}

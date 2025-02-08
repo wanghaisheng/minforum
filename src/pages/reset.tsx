@@ -6,7 +6,7 @@ import { parseCookies, destroyCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import { dec } from 'components/api/utils';
 
@@ -37,7 +37,7 @@ const Reset = observer(() => {
 
       if (Number(code) !== Number(token?.code)) {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Code is incorrect or expired.'
           })
@@ -47,7 +47,7 @@ const Reset = observer(() => {
       }
     } catch (error) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Code is incorrect or expired.'
         })
@@ -58,7 +58,7 @@ const Reset = observer(() => {
   const updatePass = async () => {
     if (user.password !== _password) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Passwords does not matched!'
         })
@@ -74,7 +74,7 @@ const Reset = observer(() => {
             destroyCookie({}, '_w_code');
 
             toast.success(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Password reset successfully!'
               })
@@ -82,7 +82,7 @@ const Reset = observer(() => {
             router.push('/login');
           } else {
             toast.error(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Unable to update user. Please try again later.'
               })
@@ -91,7 +91,7 @@ const Reset = observer(() => {
         });
       } catch (error) {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update user. Please try again later.'
           })
@@ -103,11 +103,11 @@ const Reset = observer(() => {
   return (
     <div className="polkadot">
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account recovery'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account recovery'
         })}
@@ -163,7 +163,7 @@ const Reset = observer(() => {
               ) : (
                 <>
                   <Input.Password
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'New Password'
                     })}
@@ -175,7 +175,7 @@ const Reset = observer(() => {
                   />
                   <Spacer h={1.5} />
                   <Input.Password
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Retype Password'
                     })}

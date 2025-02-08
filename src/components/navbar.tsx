@@ -33,7 +33,7 @@ import useToken from './token';
 import UserStore from 'stores/user';
 import DiscussionStore from 'stores/discussion';
 import NotificationStore from 'stores/notification';
-import { Translation, useTranslation } from 'components/intl/translation';
+import { Translation, translation } from 'components/intl/translation';
 import MessageStore from 'stores/message';
 import { oneKFormat } from './api/utils';
 import useSettings from './settings';
@@ -332,7 +332,7 @@ const Navbar = observer((props: navbarProps) => {
               scale={4 / 3}
               width="100%"
               iconRight={<Search />}
-              placeholder={useTranslation({
+              placeholder={translation({
                 lang: settings.language ? settings.language : '',
                 value: 'Search discussion, user, email.....'
               })}
@@ -345,7 +345,7 @@ const Navbar = observer((props: navbarProps) => {
               <Tabs initialValue="1" leftSpace="0">
                 <Tabs.Item
                   value="1"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'Discussion'
                   })}
@@ -374,7 +374,7 @@ const Navbar = observer((props: navbarProps) => {
                 </Tabs.Item>
                 <Tabs.Item
                   value="2"
-                  label={useTranslation({
+                  label={translation({
                     lang: settings?.language,
                     value: 'User'
                   })}

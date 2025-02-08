@@ -248,7 +248,7 @@ const useTimeTranslation = (props: timeTranslationProps): string => {
   return '';
 };
 
-const useTranslation = (props: translationProps) => {
+const translation = (props: translationProps) => {
   let translation: any = dict
     .filter((item) => item.en === props.value)
     .map((item) => item);
@@ -258,13 +258,13 @@ const useTranslation = (props: translationProps) => {
 };
 
 const Translation = (props: translationProps) => {
-  const translation = useTranslation(props);
+  const _translation = translation(props);
 
-  return <span>{translation}</span>;
+  return <span>{_translation}</span>;
 };
 
 export {
-  useTranslation,
+  translation,
   useLikedPostTranslation,
   useLikedCommentTranslation,
   useRepliedCommentTranslation,

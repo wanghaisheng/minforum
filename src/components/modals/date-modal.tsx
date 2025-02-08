@@ -3,7 +3,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Modal, Text, useMediaQuery } from '@geist-ui/core';
 import { DateRange } from 'react-date-range';
 import * as locales from 'react-date-range/dist/locale';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 
 type dateModalProps = {
   show: boolean;

@@ -10,7 +10,7 @@ import {
   BarChart2,
   FileText
 } from '@geist-ui/icons';
-import { useTranslation, Translation } from 'components/intl/translation';
+import { translation, Translation } from 'components/intl/translation';
 import { CreditCardIcon, Invoice01Icon, PlugSocketIcon } from 'hugeicons-react';
 
 type sidebarProps = {
@@ -29,7 +29,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'dashboard' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Dashboard' })}
+          text={translation({ lang: lang, value: 'Dashboard' })}
           placement="right"
         >
           <Activity
@@ -46,7 +46,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'analytics' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Analytics' })}
+          text={translation({ lang: lang, value: 'Analytics' })}
           placement="right"
         >
           <BarChart2
@@ -63,7 +63,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'users' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Users' })}
+          text={translation({ lang: lang, value: 'Users' })}
           placement="right"
         >
           <Users
@@ -81,7 +81,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'discussions' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Discussions' })}
+          text={translation({ lang: lang, value: 'Discussions' })}
           placement="right"
         >
           <Archive
@@ -100,7 +100,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'reports' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Reports' })}
+          text={translation({ lang: lang, value: 'Reports' })}
           placement="right"
         >
           <AlertTriangle
@@ -119,7 +119,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'categories' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Categories' })}
+          text={translation({ lang: lang, value: 'Categories' })}
           placement="right"
         >
           <Layers
@@ -138,7 +138,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'themes' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Themes' })}
+          text={translation({ lang: lang, value: 'Themes' })}
           placement="right"
         >
           <FileText
@@ -156,7 +156,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'extensions' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Extensions' })}
+          text={translation({ lang: lang, value: 'Extensions' })}
           placement="right"
         >
           <PlugSocketIcon
@@ -174,7 +174,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'settings' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Settings' })}
+          text={translation({ lang: lang, value: 'Settings' })}
           placement="right"
         >
           <Settings
@@ -197,7 +197,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'dashboard' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Dashboard' })}
+          text={translation({ lang: lang, value: 'Dashboard' })}
           placement="right"
         >
           <Activity
@@ -215,7 +215,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'discussions' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Discussions' })}
+          text={translation({ lang: lang, value: 'Discussions' })}
           placement="right"
         >
           <Archive
@@ -234,7 +234,7 @@ const Sidebar = (props: sidebarProps) => {
         className={`link ${active === 'reports' ? 'active' : ''}`}
       >
         <Tooltip
-          text={useTranslation({ lang: lang, value: 'Reports' })}
+          text={translation({ lang: lang, value: 'Reports' })}
           placement="right"
         >
           <AlertTriangle

@@ -12,7 +12,7 @@ import {
   UserStar02Icon
 } from 'hugeicons-react';
 import React from 'react';
-import { useTranslation } from 'components/intl/translation';
+import { translation } from 'components/intl/translation';
 
 type BadgeProps = {
   color: string;
@@ -113,7 +113,7 @@ export const Badge = ({
   >
     <Tooltip
       placement={position}
-      text={useTranslation({ lang: language, value: text })}
+      text={translation({ lang: language, value: text })}
     >
       {icon}
     </Tooltip>
