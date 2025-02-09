@@ -173,7 +173,7 @@ const Members = observer(() => {
             <div className="pagination">
               <Pagination
                 count={Math.round(total / limit)}
-                initialPage={page}
+                page={page}
                 onChange={paginate}
               >
                 <Pagination.Next>

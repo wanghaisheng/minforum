@@ -170,7 +170,7 @@ const Categories = observer(() => {
             <div className="pagination">
               <Pagination
                 count={Math.round(total / limit)}
-                initialPage={page}
+                page={page}
                 limit={limit}
                 onChange={paginate}
               >
