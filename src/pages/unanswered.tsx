@@ -161,6 +161,7 @@ const Home = observer(() => {
               title={removeBanWords(item.title)}
               comment={item.comment}
               premium={item.premium}
+              pinned={item.isPinned}
               view={item.view}
               date={item.createdAt}
             />

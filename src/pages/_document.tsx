@@ -34,15 +34,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-        <link
-          rel="preconnect"
-          href="https://cdn.jsdelivr.net"
-          crossOrigin="true"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
-        />
         <body>
           <Main />
           <NextScript />

@@ -659,10 +659,6 @@ const Settings = observer(() => {
                     <div>
                       <Spacer h={1.5} />
                       <Input.Password
-                        placeholder={translation({
-                          lang: settings?.language,
-                          value: 'Type new password'
-                        })}
                         width="100%"
                         scale={4 / 3}
                         value={_password.newPassword}
@@ -672,14 +668,15 @@ const Settings = observer(() => {
                             newPassword: e.target.value
                           })
                         }
-                      />
+                      >
+                        {translation({
+                          lang: settings?.language,
+                          value: 'Type new password'
+                        })}
+                      </Input.Password>
                     </div>
                     <Spacer h={1.5} />
                     <Input.Password
-                      placeholder={translation({
-                        lang: settings?.language,
-                        value: 'Type current password to update changes'
-                      })}
                       width="100%"
                       scale={4 / 3}
                       value={_password.password}
@@ -689,7 +686,12 @@ const Settings = observer(() => {
                           password: e.target.value
                         })
                       }
-                    />
+                    >
+                      {translation({
+                        lang: settings?.language,
+                        value: 'Type current password to update changes'
+                      })}
+                    </Input.Password>
                     <Spacer h={1.5} />
                     <Button
                       shadow

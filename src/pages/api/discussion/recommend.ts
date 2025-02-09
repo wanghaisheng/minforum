@@ -8,7 +8,7 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
     if (auth.success) {
       let { title, category }: any = req.query;
 
-      await Discussion.orderBy(r.desc('createdAt'))
+      await Discussion.orderBy(r.desc('timestamp'))
         .filter((post: any) =>
           post('status')
             .ne('banned')

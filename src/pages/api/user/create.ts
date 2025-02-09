@@ -32,8 +32,10 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
                 });
                 token = enc(token);
 
+                console.log(_code);
+
                 await signupTemplate(data.email, data.name, _code);
-                res.send({ success: true, data: token });
+                res.send({ success: true, token: token });
               } else {
                 res.send({
                   success: false,

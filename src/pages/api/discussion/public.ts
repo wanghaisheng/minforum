@@ -16,33 +16,68 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         offset = offset - limit;
       }
 
-      await Discussion.orderBy(r.desc('isPinned'))
-        .filter((post: any) => post('status').ne('banned'))
+      let posts = [];
+      const pinnedPosts = await Discussion.orderBy(r.asc('timestamp'))
+        .filter((post: any) =>
+          post('status').ne('banned').and(post('isPinned').eq(true))
+        )
+        .getJoin();
+
+      await asyncForEach(pinnedPosts, async (item) => {
+        await Comment.filter({ discussionId: item.id }).then(
+          async (comment: any) => {
+            await Category.filter({ slug: item.categoryId }).then(
+              (category: any) => {
+                item = {
+                  ...item,
+                  comment: comment.length,
+                  category: category[0]
+                };
+
+                posts.push(item);
+              }
+            );
+          }
+        );
+      });
+
+      await Discussion.orderBy(r.desc('timestamp'))
+        .filter((post: any) =>
+          post('isPinned').eq(false).and(post('isPinned').eq(false))
+        )
         .getJoin()
         .skip(offset)
         .limit(limit)
         .then(async (data: any) => {
-          await Discussion.orderBy(r.desc('isPinned')).then(async (c: any) => {
-            let discussions: any = [];
-            await asyncForEach(data, async (item: any) => {
-              await Comment.filter({ discussionId: item.id }).then(
-                async (comment: any) => {
-                  await Category.filter({ slug: item.categoryId }).then(
-                    (category: any) => {
-                      item = {
-                        ...item,
-                        comment: comment.length,
-                        category: category[0]
-                      };
-                      discussions.push(item);
-                    }
-                  );
-                }
-              );
-            }).finally(() => {
-              res
-                .status(200)
-                .json({ success: true, data: discussions, count: c.length });
+          let total = await r
+            .table('discussions')
+            .filter((post: any) =>
+              post('status').ne('banned').and(post('isPinned').eq(false))
+            )
+            .count();
+
+          let discussions: any = [];
+          await asyncForEach(data, async (item: any) => {
+            await Comment.filter({ discussionId: item.id }).then(
+              async (comment: any) => {
+                await Category.filter({ slug: item.categoryId }).then(
+                  (category: any) => {
+                    item = {
+                      ...item,
+                      comment: comment.length,
+                      category: category[0]
+                    };
+                    discussions.push(item);
+                  }
+                );
+              }
+            );
+          }).finally(() => {
+            const data = page === 1 ? [...posts, ...discussions] : discussions;
+            res.status(200).json({
+              success: true,
+              data: data,
+              count: total
             });
           });
         })

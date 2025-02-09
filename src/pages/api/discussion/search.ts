@@ -8,7 +8,7 @@ const search = async (req: NextApiRequest, res: NextApiResponse) => {
     if (auth.success) {
       let { search } = req.query;
 
-      await Discussion.orderBy(r.desc('createdAt'))
+      await Discussion.orderBy(r.desc('timestamp'))
         .filter((profile: any) =>
           profile('title')
             .match('(?i)' + search)
