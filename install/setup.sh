@@ -147,7 +147,7 @@ setup_project() {
     cd /var/www/html
 
     echo "Downloading minforum project..."
-    curl -L -o minforum.zip https://github.com/minforum/minforum/archive/refs/tags/v1.18.9.zip
+    curl -L -o minforum.zip https://github.com/minforum/minforum/archive/refs/tags/v1.19.0.zip
 
     # Step 2: Unzip into a temporary directory
     echo "Unzipping minforum project..."
@@ -156,7 +156,7 @@ setup_project() {
     # Step 3: Create the 'minforum' folder and move the contents into it
     echo "Setting up minforum directory..."
     mkdir -p minforum
-    mv minforum_temp/minforum-1.18.9/* minforum/
+    mv minforum_temp/minforum-1.19.0/* minforum/
 
     # Step 4: Clean up the temporary folder and zip file
     echo "Cleaning up temporary files..."

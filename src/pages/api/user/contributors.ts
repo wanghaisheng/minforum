@@ -8,7 +8,7 @@ import { discussionProp } from 'interfaces/discussion';
 const contributors = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
-      await User.orderBy(r.desc('createdAt'))
+      await User.orderBy(r.desc('point'))
         .limit(10)
         .then(async (data: any) => {
           data = data.map((item: userProp) => ({
