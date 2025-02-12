@@ -1020,7 +1020,7 @@ body {
             .chat-content {
               font-size: 14px;
               padding: 10px;
-              width: 360px;
+              max-width: 360px;
               border-radius: 15px;
               margin-bottom: 10px;
               color: #333;
@@ -1030,6 +1030,7 @@ body {
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center center;
+                width: 320px;
                 height: 300px;
               }
 
@@ -1481,6 +1482,10 @@ body {
             .chat-message {
               .chat-content {
                 max-width: 280px;
+                .chat-image {
+                  width: 260px;
+                  height: 240px;
+                }
               }
             }
           }
