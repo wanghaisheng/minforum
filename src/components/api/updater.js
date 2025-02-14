@@ -16,5 +16,5 @@ const updater = async () => {
 updater().then(() => {
   console.log('Successfully updated!');
 
-  exit(1);
+  exit(0);
 });

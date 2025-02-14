@@ -176,7 +176,7 @@ const seedPost = async () => {
     })
     .catch((error) => {
       console.error('Error generating posts:', error);
-      exit(1);
+      exit(0);
     });
 };
 

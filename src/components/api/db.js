@@ -1,4 +1,6 @@
 require('dotenv').config();
+
+const { exit } = require('process');
 const config = {
   api: {
     host: process.env.DB_HOST,
@@ -413,100 +415,98 @@ Transaction.ensureIndex('status');
 Transaction.ensureIndex('createdAt');
 Transaction.ensureIndex('updatedAt');
 
-const initModel = () => {
-  thinky.dbReady().then(async (data) => {
-    if (data?.dbs_created !== 1) {
-      r.dbCreate(config.api.db);
+const initModel = async () => {
+  r.dbCreate(config.api.db);
 
-      let settings = await Settings.orderBy(r.desc('createdAt'));
-      if (settings.length === 0) {
-        const _settings = {
-          language: 'en',
-          point: {
-            login: 1,
-            discussion: 2,
-            comment: 1,
-            bestAnswer: 5
-          },
-          banWords: 'motherfucker, bullshit, fuck, shit',
-          status: 'pending',
-          theme: 'weiss',
-          homepage: {
-            bgColor: '#2A222F'
-          },
-          twoFactor: false
-        };
+  let settings = await Settings.orderBy(r.desc('createdAt'));
+  if (settings.length === 0) {
+    const _settings = {
+      language: 'en',
+      point: {
+        login: 1,
+        discussion: 2,
+        comment: 1,
+        bestAnswer: 5
+      },
+      banWords: 'motherfucker, bullshit, fuck, shit',
+      status: 'pending',
+      theme: 'weiss',
+      homepage: {
+        bgColor: '#2A222F'
+      },
+      twoFactor: false
+    };
 
-        new Settings(_settings).save();
-      }
+    new Settings(_settings).save();
+  }
 
-      //Check if default theme exist. If no, create it.
-      let theme = await Theme.filter({ slug: 'weiss' });
+  //Check if default theme exist. If no, create it.
+  let theme = await Theme.filter({ slug: 'weiss' });
 
-      let themeCode = JSON.stringify({
-        palette: {
-          accents_1: '#fafafa',
-          accents_2: '#eaeaea',
-          accents_3: '#999',
-          accents_4: '#888',
-          accents_5: '#666',
-          accents_6: '#444',
-          accents_7: '#333',
-          accents_8: '#111',
-          background: '#fff',
-          foreground: '#000',
-          selection: '#79ffe1',
-          secondary: '#666',
-          code: '#f81ce5',
-          border: '#eaeaea',
-          error: '#e00',
-          errorLight: '#ff1a1a',
-          errorLighter: '#f7d4d6',
-          errorDark: '#c50000',
-          success: '#0070f3',
-          successLight: '#3291ff',
-          successLighter: '#d3e5ff',
-          successDark: '#0761d1',
-          warning: '#f5a623',
-          warningLight: '#f7b955',
-          warningLighter: '#ffefcf',
-          warningDark: '#ab570a',
-          cyan: '#50e3c2',
-          cyanLighter: '#aaffec',
-          cyanLight: '#79ffe1',
-          cyanDark: '#29bc9b',
-          violet: '#7928ca',
-          violetLighter: '#e3d7fc',
-          violetLight: '#8a63d2',
-          violetDark: '#4c2889',
-          purple: '#f81ce5',
-          alert: '#ff0080',
-          magenta: '#eb367f',
-          link: '#000'
-        },
-        expressiveness: {
-          linkStyle: 'none',
-          linkHoverStyle: 'none',
-          dropdownBoxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.02)',
-          scrollerStart: 'rgba(255, 255, 255, 1)',
-          scrollerEnd: 'rgba(255, 255, 255, 0)',
-          shadowSmall: '0 5px 10px rgba(0, 0, 0, 0.12)',
-          shadowMedium: '0 8px 30px rgba(0, 0, 0, 0.12)',
-          shadowLarge: '0 30px 60px rgba(0, 0, 0, 0.12)',
-          portalOpacity: 0.25
-        },
-        font: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"
-      });
-
-      theme.length === 0 &&
-        new Theme({
-          title: 'Weiss',
-          slug: 'weiss',
-          active: true,
-          code: themeCode
-        }).save();
-    }
+  let themeCode = JSON.stringify({
+    palette: {
+      accents_1: '#fafafa',
+      accents_2: '#eaeaea',
+      accents_3: '#999',
+      accents_4: '#888',
+      accents_5: '#666',
+      accents_6: '#444',
+      accents_7: '#333',
+      accents_8: '#111',
+      background: '#fff',
+      foreground: '#000',
+      selection: '#79ffe1',
+      secondary: '#666',
+      code: '#f81ce5',
+      border: '#eaeaea',
+      error: '#e00',
+      errorLight: '#ff1a1a',
+      errorLighter: '#f7d4d6',
+      errorDark: '#c50000',
+      success: '#0070f3',
+      successLight: '#3291ff',
+      successLighter: '#d3e5ff',
+      successDark: '#0761d1',
+      warning: '#f5a623',
+      warningLight: '#f7b955',
+      warningLighter: '#ffefcf',
+      warningDark: '#ab570a',
+      cyan: '#50e3c2',
+      cyanLighter: '#aaffec',
+      cyanLight: '#79ffe1',
+      cyanDark: '#29bc9b',
+      violet: '#7928ca',
+      violetLighter: '#e3d7fc',
+      violetLight: '#8a63d2',
+      violetDark: '#4c2889',
+      purple: '#f81ce5',
+      alert: '#ff0080',
+      magenta: '#eb367f',
+      link: '#000'
+    },
+    expressiveness: {
+      linkStyle: 'none',
+      linkHoverStyle: 'none',
+      dropdownBoxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.02)',
+      scrollerStart: 'rgba(255, 255, 255, 1)',
+      scrollerEnd: 'rgba(255, 255, 255, 0)',
+      shadowSmall: '0 5px 10px rgba(0, 0, 0, 0.12)',
+      shadowMedium: '0 8px 30px rgba(0, 0, 0, 0.12)',
+      shadowLarge: '0 30px 60px rgba(0, 0, 0, 0.12)',
+      portalOpacity: 0.25
+    },
+    font: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"
   });
+
+  theme.length === 0 &&
+    new Theme({
+      title: 'Weiss',
+      slug: 'weiss',
+      active: true,
+      code: themeCode
+    }).save();
+
+  exit(0);
 };
 
 initModel();

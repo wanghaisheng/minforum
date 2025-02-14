@@ -142,6 +142,8 @@ detect_os_and_install() {
 
 # Function to set up the project
 setup_project() {
+
+    sudo apt install unzip -y
     # Step 1: Download the zip file using curl
     #
     cd /var/www/html

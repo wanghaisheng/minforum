@@ -75,6 +75,8 @@ EOF
   echo "Restarting Nginx..."
   sudo systemctl restart nginx || { echo "Failed to restart Nginx. Exiting..."; exit 1; }
 
+  yarn live
+
   echo "Server setup completed successfully!"
 }
 

@@ -65,7 +65,6 @@ yarn production
 - &#x2611; Analytics, pageviews and post views
 - &#x2611; Ban words
 - &#x2610; Monetization: Offer premium features via paywalls, subscription plans, and secure payment integration
-- &#x2610; Docker image
 - &#x2610; Digital ocean marketplace
 - &#x2610; AWS marketplace
 
