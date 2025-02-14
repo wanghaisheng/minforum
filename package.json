@@ -9,8 +9,8 @@
     "seed": "node src/components/api/seed.js",
     "seed:only": "node src/components/api/seed-post.js",
     "build": "next build",
-    "live": "yarn init-db && yarn build && NODE_ENV=production pm2 start serve.js -n 'minforum'",
-    "live:restart": "yarn run build && NODE_ENV=production pm2 restart serve.js -n 'minforum' --update-env",
+    "live": "yarn init-db && yarn build && NODE_ENV=production pm2 start serve.js --name ${PM2_APP_NAME:-'minforum'}",
+    "live:restart": "yarn init-db && yarn build && NODE_ENV=production pm2 restart serve.js --name ${PM2_APP_NAME:-'minforum'}",
     "start_db": "rethinkdb --bind all",
     "test:e2e": "playwright test"
   },
