@@ -98,15 +98,10 @@ const newCategories = [
 ];
 
 const generateCategories = async () => {
-  asyncForEach(newCategories, async (item) => {})
-    .finally(() => {
-      exit(0);
-    })
-    .catch((err) => {
-      console.log(err);
-
-      exit(0);
-    });
+  newCategories.forEach(async (item) => {
+    await new Category(item).save();
+  });
+  exit(0);
 };
 
 generateCategories();
