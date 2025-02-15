@@ -18,7 +18,9 @@ Minimalistic and Modern Discussion Software
 ![image1-2](./public/screenshots/1-2.png)
 ![image2](./public//screenshots/2.png)
 ![image3](./public//screenshots/3.png)
+![image4](./public//screenshots/4.png)
 ![image6](./public//screenshots/6.png)
+![image7](./public//screenshots/7.png)
 
 ### Installation
 
