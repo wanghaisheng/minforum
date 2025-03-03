@@ -14,6 +14,7 @@ import { Translation } from 'components/intl/translation';
 import isSetup from 'components/setup';
 import useSettings from 'components/settings';
 import Footer from 'components/footer';
+import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
 
 type pageProps = { domain: string };
 
@@ -63,6 +64,13 @@ const Home = observer((props: pageProps) => {
 
     return data;
   };
+
+  const UI =
+    settings.ui === 'social'
+      ? SocialUI
+      : settings.ui === 'classic'
+        ? ClassicUI
+        : DefaultUI;
 
   return (
     <AdminVerify>
@@ -157,7 +165,7 @@ const Home = observer((props: pageProps) => {
           </div>
 
           {discussions?.map((item) => (
-            <Post
+            <UI
               key={item.id}
               lang={settings?.language}
               category={item.category?.title}
@@ -168,9 +176,11 @@ const Home = observer((props: pageProps) => {
                   ? `/static/${item.profile.photo}`
                   : '/images/avatar.png'
               }
+              active={item.activeUsers}
               author={item.profile?.name}
               authorRole={item.profile?.role}
               authorUsername={item.profile?.username}
+              data={item.content}
               title={removeBanWords(item.title)}
               comment={item.comment}
               pinned={item.isPinned}

@@ -50,6 +50,7 @@ yarn production
 
 ### Roadmap
 
+- &#x2611; Discussion UI: default, classic and social style.
 - &#x2611; User system (member, moderator and admin)
 - &#x2611; Communities or categories
 - &#x2611; Discussions, comments and replies with revision note and date.

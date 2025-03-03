@@ -68,6 +68,31 @@ const oneKFormat = (val) => {
   }
 };
 
+const socialDateFormat = (date) => {
+  const now = new Date();
+  const diff = now - new Date(date);
+  const seconds = Math.floor(diff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (seconds < 60) {
+    return `${seconds}s`;
+  } else if (minutes < 60) {
+    return `${minutes}m`;
+  } else if (hours < 24) {
+    return `${hours}h`;
+  } else if (days < 30) {
+    return `${days}d`;
+  } else if (months < 12) {
+    return `${months}mo`;
+  } else {
+    return `${years}y`;
+  }
+};
+
 const timeAgo = (date) => {
   let now = new Date();
   const seconds = Math.floor((now - date) / 1000);
@@ -261,6 +286,60 @@ const dec = (cipherText) => {
   return plain;
 };
 
+const abbreviateText = (text, maxLength) => {
+  if (text.length <= maxLength) {
+    return text;
+  } else {
+    return text.slice(0, maxLength - 3) + '...';
+  }
+};
+
+const abbreviateHTML = (html, maxLength) => {
+  const parser = new DOMParser();
+  // Parse the HTML string
+  const doc = parser.parseFromString(html, 'text/html');
+
+  // Function to truncate text nodes
+  function truncateTextNodes(node, remainingLength) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (remainingLength <= 0) {
+        node.textContent = '';
+      } else {
+        node.textContent = node.textContent.slice(0, remainingLength);
+      }
+      return remainingLength - node.textContent.length;
+    } else {
+      let remaining = remainingLength;
+      for (let i = 0; i < node.childNodes.length; i++) {
+        remaining = truncateTextNodes(node.childNodes[i], remaining);
+        if (remaining <= 0) {
+          break;
+        }
+      }
+      return remaining;
+    }
+  }
+
+  // Truncate the text nodes in the document
+  truncateTextNodes(doc.body, maxLength);
+
+  // Serialize the modified HTML content
+  return doc.body.innerHTML;
+};
+
+const makeUnique = (arr, key) => {
+  const unique = new Set();
+  return arr.filter((item) => {
+    const value = item[key];
+    if (unique.has(value)) {
+      return false;
+    } else {
+      unique.add(value);
+      return true;
+    }
+  });
+};
+
 module.exports = {
   slug,
   code,
@@ -270,6 +349,7 @@ module.exports = {
   parseCurrency,
   formatNumber,
   oneKFormat,
+  socialDateFormat,
   timeAgo,
   timeAgoShort,
   validateEmail,
@@ -284,5 +364,8 @@ module.exports = {
   encrypt,
   decrypt,
   enc,
-  dec
+  dec,
+  abbreviateText,
+  abbreviateHTML,
+  makeUnique
 };

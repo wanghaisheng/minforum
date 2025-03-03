@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, Discussion, Comment, Category } from 'components/api/model';
-import { asyncForEach, withAuth } from 'components/api/utils';
+import { r, Discussion, Comment, Category, User } from 'components/api/model';
+import { asyncForEach, withAuth, makeUnique } from 'components/api/utils';
 
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
@@ -68,15 +68,35 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
 
           let discussions: any = [];
           await asyncForEach(data, async (item: any) => {
+            let user = await User.get(item.userId);
+            user.password = undefined;
+
             await Comment.filter({ discussionId: item.id }).then(
               async (comment: any) => {
                 await Category.filter({ slug: item.categoryId }).then(
                   (category: any) => {
+                    comment = comment.length ? comment : [];
+
+                    comment = comment
+                      .map((item: any) => item.author)
+                      .map((item: any) => ({
+                        name: item.name,
+                        username: item.username,
+                        photo: item.photo,
+                        role: item.role,
+                        id: item.id
+                      }));
+
+                    let activeUsers = [...[user], ...comment];
+                    activeUsers = makeUnique(activeUsers, 'id');
+
                     item = {
                       ...item,
+                      activeUsers: activeUsers,
                       comment: comment.length,
                       category: category[0]
                     };
+
                     discussions.push(item);
                   }
                 );

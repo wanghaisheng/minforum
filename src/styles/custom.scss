@@ -409,7 +409,7 @@ body {
     width: 320px !important;
   }
 
-  .post {
+  .defaultui {
     width: 100%;
     display: grid;
     grid-template-columns: 50px auto 140px;
@@ -424,6 +424,138 @@ body {
 
     &:hover {
       background-color: #f1f1f1;
+    }
+
+    &.without-right {
+      grid-template-columns: 6vh auto;
+      a {
+        display: block;
+      }
+      .mobile-inner {
+        display: grid;
+        grid-template-columns: auto auto;
+        font-weight: 700;
+
+        .mobile {
+          display: none !important;
+        }
+      }
+    }
+
+    &.minimal {
+      grid-template-columns: auto 140px;
+    }
+
+    .item {
+      margin-bottom: 10px;
+
+      .title {
+        font-size: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: normal;
+        margin-bottom: 5px;
+      }
+
+      .name,
+      .date,
+      .comment {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .classicui {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 5px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+
+    .initial {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      grid-gap: 20px;
+
+      .title {
+        font-size: 16px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: normal;
+        margin-bottom: 5px;
+      }
+
+      .name,
+      .date,
+      .comment {
+        font-size: 12px;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: 0.6fr 1fr;
+        grid-gap: 10px;
+
+        .comment {
+          position: relative;
+          top: 10px;
+        }
+      }
+    }
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+
+  .socialui {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0px 10px 15px 5px rgb(204 204 204 / 30%);
+    transition: 0.3s;
+    width: 100%;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    padding: 10px;
+    padding-bottom: 5px;
+    display: block;
+    cursor: pointer;
+
+    h4 {
+      font-size: 16px;
+    }
+
+    &:hover {
+      background-color: #f1f1f1;
+      box-shadow: 0px 10px 15px 5px rgb(204 204 204 / 100%);
+    }
+
+    .social-header {
+      display: grid;
+      grid-template-columns: 50px auto;
+      gap: 10px;
+
+      .author {
+        font-size: 14px;
+        font-weight: 600;
+        // margin-bottom: 5px;
+
+        .username {
+          font-size: 14px;
+          font-weight: 400;
+          color: #555;
+        }
+      }
+      .date {
+        font-size: 12px;
+        color: #555;
+      }
     }
 
     &.without-right {
@@ -1412,7 +1544,7 @@ body {
       }
     }
 
-    .post {
+    .defaultui {
       display: grid;
       grid-template-columns: 50px auto !important;
 
@@ -1438,6 +1570,49 @@ body {
         &.last {
           display: none;
         }
+      }
+    }
+
+    .classicui {
+      width: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 5px;
+      padding-right: 5px;
+      border-radius: 5px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+
+      .initial {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1.5r 1fr;
+        grid-gap: 10px;
+
+        .date,
+        .name {
+          font-size: 10px;
+        }
+
+        .title {
+          font-size: 13px;
+          // margin-bottom: 5px;
+        }
+
+        .meta {
+          display: grid;
+          grid-template-columns: 30px auto;
+          grid-gap: 10px;
+
+          .comment {
+            position: relative;
+            top: 10px;
+          }
+        }
+      }
+
+      &:hover {
+        background-color: #f1f1f1;
       }
     }
 

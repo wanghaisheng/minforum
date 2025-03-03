@@ -4306,6 +4306,76 @@ const dict = [
     ja: '確認コードがあなたのメールに送信されました！',
     ru: 'Код подтверждения отправлен на вашу электронную почту!',
     ko: '인증 코드가 이메일로 전송되었습니다!'
+  },
+  {
+    en: 'Discussion UI',
+    es: 'Interfaz de discusión',
+    fr: 'Interface de discussion',
+    de: 'Diskussions-Benutzeroberfläche',
+    cn: '讨论界面',
+    ja: 'ディスカッションUI',
+    ru: 'Интерфейс обсуждения',
+    ko: '토론 인터페이스'
+  },
+  {
+    en: 'Social',
+    es: 'Social',
+    fr: 'Social',
+    de: 'Sozial',
+    cn: '社交',
+    ja: 'ソーシャル',
+    ru: 'Социальный',
+    ko: '사회적인'
+  },
+  {
+    en: 'Twitter / Facebook style',
+    es: 'Estilo de Twitter / Facebook',
+    fr: 'Style Twitter / Facebook',
+    de: 'Twitter / Facebook-Stil',
+    cn: '推特/脸书风格',
+    ja: 'Twitter / Facebookスタイル',
+    ru: 'Стиль Twitter / Facebook',
+    ko: '트위터 / 페이스북 스타일'
+  },
+  {
+    en: 'Minforum style',
+    es: 'Estilo Minforum',
+    fr: 'Style Minforum',
+    de: 'Minforum-Stil',
+    cn: 'Minforum 风格',
+    ja: 'Minforumスタイル',
+    ru: 'Стиль Minforum',
+    ko: 'Minforum 스타일'
+  },
+  {
+    en: 'Classic Forum UI',
+    es: 'Interfaz de Foro Clásico',
+    fr: 'Interface de Forum Classique',
+    de: 'Klassische Forum-Benutzeroberfläche',
+    cn: '经典论坛界面',
+    ja: 'クラシックフォーラムUI',
+    ru: 'Классический интерфейс форума',
+    ko: '클래식 포럼 UI'
+  },
+  {
+    en: 'Classic',
+    es: 'Clásico',
+    fr: 'Classique',
+    de: 'Klassisch',
+    cn: '经典',
+    ja: 'クラシック',
+    ru: 'Классический',
+    ko: '클래식'
+  },
+  {
+    en: 'Default',
+    es: 'Predeterminado',
+    fr: 'Par défaut',
+    de: 'Standard',
+    cn: '默认',
+    ja: 'デフォルト',
+    ru: 'По умолчанию',
+    ko: '기본값'
   }
 ];
 

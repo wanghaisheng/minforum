@@ -14,6 +14,7 @@ export interface discussionProp {
   authRequired?: boolean;
   edited?: boolean;
   premium?: boolean;
+  activeUsers?: userProp[];
   likes?: any[];
   status?: string;
   bestAnswer?: string;

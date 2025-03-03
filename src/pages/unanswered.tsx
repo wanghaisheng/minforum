@@ -13,6 +13,7 @@ import Contributors from 'components/contributors';
 import { Translation } from 'components/intl/translation';
 import useSettings from 'components/settings';
 import Footer from 'components/footer';
+import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
 
 const Home = observer(() => {
   const token = useToken();
@@ -60,6 +61,13 @@ const Home = observer(() => {
 
     return data;
   };
+
+  const UI =
+    settings.ui === 'social'
+      ? SocialUI
+      : settings.ui === 'classic'
+        ? ClassicUI
+        : DefaultUI;
 
   return (
     <div>
@@ -144,17 +152,19 @@ const Home = observer(() => {
           </div>
 
           {discussions.map((item) => (
-            <Post
+            <UI
               key={item.id}
               lang={settings?.language}
               category={item.category?.title}
               color={item.category?.color}
               slug={item.slug}
+              data={item.content}
               avatar={
                 item.profile && item.profile.photo
                   ? `/static/${item.profile.photo}`
                   : '/images/avatar.png'
               }
+              active={item.activeUsers}
               author={item.profile?.name}
               authorRole={item.profile?.role}
               authorUsername={item.profile?.username}

@@ -31,6 +31,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import SubscriptionStore from 'stores/user-subscription';
 import CustomIcon from 'components/data/icon/icon';
 import Footer from 'components/footer';
+import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
 
 const User = observer(() => {
   const settings = useSettings();
@@ -166,6 +167,29 @@ const User = observer(() => {
   const PaymentModal = () => {
     return <div>{modals}</div>;
   };
+
+  const removeBanWords = (data: string) => {
+    let banWords: any = settings && settings.banWords ? settings.banWords : '';
+    banWords = banWords.replace(/\s/gi, '');
+    banWords = banWords.split(',');
+
+    data
+      ? banWords.forEach((item: string) => {
+          let regEx: any = `${item}`;
+          regEx = new RegExp(regEx, 'gi');
+          data = data.replace(regEx, '*****');
+        })
+      : '';
+
+    return data;
+  };
+
+  const UI =
+    settings.ui === 'social'
+      ? SocialUI
+      : settings.ui === 'classic'
+        ? ClassicUI
+        : DefaultUI;
 
   return (
     <div>
@@ -437,17 +461,27 @@ const User = observer(() => {
             )}
 
             {discussions.map((item: any) => (
-              <MinimalPost
-                lang={settings?.language}
+              <UI
                 key={item.id}
-                title={item.title}
-                slug={item.slug}
+                lang={settings?.language}
                 category={item.category?.title}
                 color={item.category?.color}
+                slug={item.slug}
+                data={item.content}
+                avatar={
+                  user && user.photo
+                    ? `/static/${user.photo}`
+                    : '/images/avatar.png'
+                }
+                active={item.activeUsers}
+                author={user?.name}
+                authorRole={user?.role}
+                authorUsername={user?.username}
+                title={removeBanWords(item.title)}
                 comment={item.comment}
-                view={item.view}
                 premium={item.premium}
                 pinned={item.isPinned}
+                view={item.view}
                 date={item.createdAt}
               />
             ))}

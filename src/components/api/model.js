@@ -422,6 +422,7 @@ const initModel = () => {
       if (settings.length === 0) {
         const _settings = {
           language: 'en',
+          ui: 'default',
           point: {
             login: 1,
             discussion: 2,

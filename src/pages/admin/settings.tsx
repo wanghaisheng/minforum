@@ -11,7 +11,8 @@ import {
   Image,
   Select,
   Divider,
-  Toggle
+  Toggle,
+  Radio
 } from '@geist-ui/core';
 import { setCookie, parseCookies } from 'nookies';
 import { MinusCircle, Image as Picture, Plus } from '@geist-ui/icons';
@@ -334,6 +335,63 @@ const Settings = observer(() => {
                       })
                     }
                   />
+                </div>
+              </div>
+              <Spacer />
+              <div className="column">
+                <div className="item">
+                  <Text h6>
+                    <Translation
+                      lang={settings?.language}
+                      value="Discussion UI"
+                    />
+                  </Text>
+                </div>
+                <div className="item">
+                  <Radio.Group value={settings?.ui} useRow>
+                    <Radio
+                      value="default"
+                      onChange={() =>
+                        setSettings({ ...settings, ui: 'default' })
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Default" />
+                      <Radio.Desc>
+                        <Translation
+                          lang={settings?.language}
+                          value="Minforum style"
+                        />
+                      </Radio.Desc>
+                    </Radio>
+                    <Radio
+                      value="classic"
+                      onChange={() =>
+                        setSettings({ ...settings, ui: 'classic' })
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Classic" />
+                      <Radio.Desc>
+                        <Translation
+                          lang={settings?.language}
+                          value="Classic Forum UI"
+                        />
+                      </Radio.Desc>
+                    </Radio>
+                    <Radio
+                      value="social"
+                      onChange={() =>
+                        setSettings({ ...settings, ui: 'social' })
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Social" />
+                      <Radio.Desc>
+                        <Translation
+                          lang={settings?.language}
+                          value="Twitter / Facebook style"
+                        />
+                      </Radio.Desc>
+                    </Radio>
+                  </Radio.Group>
                 </div>
               </div>
               <Spacer />
