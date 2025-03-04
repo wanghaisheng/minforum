@@ -34,7 +34,6 @@ const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false
 });
 
-
 const Analytics = observer(() => {
   const token = useToken();
   const settings = useSettings();
@@ -142,7 +141,9 @@ const Analytics = observer(() => {
     }
   };
 
- const total_graph = store?.pageviews.map((item: any) => item.count).reduce((a,b) => b+a, 0);
+  const total_graph = store?.pageviews
+    .map((item: any) => item.count)
+    .reduce((a, b) => b + a, 0);
 
   const browserIcon = (browser: string) => {
     const icons = {
@@ -489,7 +490,7 @@ const Analytics = observer(() => {
               <Spacer />
               <Chart series={series} options={options} type="area" />
             </Tabs.Item>
-         <Tabs.Item
+            <Tabs.Item
               label={<Translation lang={settings?.language} value="Table" />}
               value="3"
             >
@@ -503,7 +504,11 @@ const Analytics = observer(() => {
                     lang: settings?.language,
                     value: 'URL'
                   })}
-                  render={(value) => <Link color underline target="_blank" href={value}>{value}</Link>}
+                  render={(value) => (
+                    <Link color underline target="_blank" href={value}>
+                      {value}
+                    </Link>
+                  )}
                 />
                 <Table.Column
                   prop="device"
@@ -525,7 +530,11 @@ const Analytics = observer(() => {
                     lang: settings?.language,
                     value: 'Location'
                   })}
-                  render={renderLocation}
+                  render={(_, row: any) => (
+                    <>
+                      {row?.city}, ${row?.country}
+                    </>
+                  )}
                 />
                 <Table.Column
                   prop="createdAt"
@@ -533,9 +542,9 @@ const Analytics = observer(() => {
                     lang: settings?.language,
                     value: 'Date'
                   })}
-                  render={(value: string) =>
-                    dayjs(value).format('MMM D, YYYY @ h:mm A')
-                  }
+                  render={(value: any) => (
+                    <>{dayjs(value).format('MMM D, YYYY @ h:mm A')}</>
+                  )}
                 />
               </Table>
 

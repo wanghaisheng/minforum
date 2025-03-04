@@ -252,6 +252,7 @@ const Home = observer((props: pageProps) => {
               date={item.createdAt}
             />
           ))}
+
           {loading ? (
             <div>
               <Spacer h={3} />
