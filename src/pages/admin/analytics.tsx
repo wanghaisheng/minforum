@@ -99,8 +99,12 @@ const Analytics = observer(() => {
     return val;
   };
 
-  const renderLocation = (value: string, rowData: any) => {
-    return `${rowData.city}, ${rowData.country}`;
+  const renderLocation = (_: string, rowData: any) => {
+    return (
+      <>
+        {rowData.city}, {rowData.country}
+      </>
+    );
   };
 
   const lang = settings?.language;
@@ -530,11 +534,7 @@ const Analytics = observer(() => {
                     lang: settings?.language,
                     value: 'Location'
                   })}
-                  render={(_, row: any) => (
-                    <>
-                      {row?.city}, ${row?.country}
-                    </>
-                  )}
+                  render={renderLocation}
                 />
                 <Table.Column
                   prop="createdAt"
