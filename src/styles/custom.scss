@@ -818,6 +818,11 @@ body {
       grid-template-columns: auto auto;
       grid-gap: 10px;
     }
+
+    &.ui {
+      grid-template-columns: auto 20px;
+      grid-gap: 10px;
+    }
   }
 
   .dashboard-header {
@@ -1541,6 +1546,12 @@ body {
           left: -38px;
           padding: 0px;
         }
+      }
+    }
+
+    .column {
+      &.ui {
+        grid-template-columns: 1fr 20px;
       }
     }
 

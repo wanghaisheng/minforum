@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
-import { Spacer, Button, Card, Link, Loading } from '@geist-ui/core';
+import { Spacer, Button, Card, Link, Loading, Popover } from '@geist-ui/core';
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/navbar';
@@ -12,23 +12,28 @@ import Contributors from 'components/contributors';
 import AdminVerify from 'components/admin/admin-verify';
 import { Translation } from 'components/intl/translation';
 import isSetup from 'components/setup';
-import useSettings from 'components/settings';
 import Footer from 'components/footer';
 import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
+import { Sliders } from '@geist-ui/icons';
+import SettingsStore from 'stores/settings';
 
 type pageProps = { domain: string };
 
 const Home = observer((props: pageProps) => {
   const token = useToken();
-  const settings = useSettings();
+
+  const [{ settings, update, setSettings, getSettings }] = useState(
+    () => new SettingsStore()
+  );
   const [{ loading, page, nomore, discussions, setPage, getDiscussions }] =
     useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
 
   useEffect(() => {
     isSetup();
+    getSettings();
     getDiscussions(false);
-  }, [token]);
+  }, [token, settings?.ui]);
 
   const handleScroll = useCallback(() => {
     const offset = 50;
@@ -48,6 +53,12 @@ const Home = observer((props: pageProps) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
+
+  const changeUI = async (value: any) => {
+    await update({ ...settings, ui: value }).then(() => {
+      setSettings({ ...settings, ui: value });
+    });
+  };
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -141,27 +152,79 @@ const Home = observer((props: pageProps) => {
             ''
           )}
 
-          <div className="custom-tab">
-            <NextLink href="/popular">
-              <Link>
-                <Translation lang={settings?.language} value="Popular" />
-              </Link>
-            </NextLink>
-            <NextLink href="/">
-              <Link className="active">
-                <Translation lang={settings?.language} value="Recent" />
-              </Link>
-            </NextLink>
-            <NextLink href="/unanswered">
-              <Link>
-                <Translation lang={settings?.language} value="Unanswered" />
-              </Link>
-            </NextLink>
-            <NextLink href="/category">
-              <Link>
-                <Translation lang={settings?.language} value="Categories" />
-              </Link>
-            </NextLink>
+          <div className="column ui">
+            <div>
+              <div className="custom-tab">
+                <NextLink href="/popular">
+                  <Link>
+                    <Translation lang={settings?.language} value="Popular" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/">
+                  <Link className="active">
+                    <Translation lang={settings?.language} value="Recent" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/unanswered">
+                  <Link>
+                    <Translation lang={settings?.language} value="Unanswered" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/category">
+                  <Link>
+                    <Translation lang={settings?.language} value="Categories" />
+                  </Link>
+                </NextLink>
+              </div>
+            </div>
+            <div className="">
+              <div>
+                <Popover
+                  placement="leftStart"
+                  content={
+                    <div style={{ width: 130 }}>
+                      <Popover.Item title>
+                        <Translation
+                          lang={settings?.language}
+                          value="Discussion UI"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('default')}
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Default"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('classic')}
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Classic"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('social')}
+                      >
+                        <Translation lang={settings?.language} value="Social" />
+                      </Popover.Item>
+                    </div>
+                  }
+                >
+                  <span
+                    className="pointer"
+                    style={{ position: 'relative', top: 5 }}
+                  >
+                    <Sliders size={20} />
+                  </span>
+                </Popover>
+              </div>
+            </div>
           </div>
 
           {discussions?.map((item) => (

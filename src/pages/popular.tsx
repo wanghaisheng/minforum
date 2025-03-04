@@ -1,31 +1,39 @@
 import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
-import { Spacer, Link, Button, Card, Loading } from '@geist-ui/core';
-
+import { Spacer, Link, Button, Popover, Loading } from '@geist-ui/core';
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
 import Navbar from 'components/navbar';
-import Post from 'components/post';
 import Sidebar from 'components/sidebar';
 import useToken from 'components/token';
 import DiscussionStore from 'stores/discussion';
 import Contributors from 'components/contributors';
 import { Translation } from 'components/intl/translation';
-import useSettings from 'components/settings';
 import Footer from 'components/footer';
 import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
+import SettingsStore from 'stores/settings';
+import { Sliders } from '@geist-ui/icons';
 
 const Home = observer(() => {
   const token = useToken();
-  const settings = useSettings();
   const [
     { loading, page, nomore, discussions, setPage, getPopularDiscussions }
   ] = useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
+  const [{ settings, update, setSettings, getSettings }] = useState(
+    () => new SettingsStore()
+  );
 
   useEffect(() => {
+    getSettings();
     getPopularDiscussions(false);
-  }, [token?.id]);
+  }, [token?.id, settings?.ui]);
+
+  const changeUI = async (value: any) => {
+    await update({ ...settings, ui: value }).then(() => {
+      setSettings({ ...settings, ui: value });
+    });
+  };
 
   const handleScroll = useCallback(() => {
     const offset = 50;
@@ -128,27 +136,79 @@ const Home = observer(() => {
             ''
           )}
 
-          <div className="custom-tab">
-            <NextLink href="/popular">
-              <Link className="active">
-                <Translation lang={settings?.language} value="Popular" />
-              </Link>
-            </NextLink>
-            <NextLink href="/">
-              <Link>
-                <Translation lang={settings?.language} value="Recent" />
-              </Link>
-            </NextLink>
-            <NextLink href="/unanswered">
-              <Link>
-                <Translation lang={settings?.language} value="Unanswered" />
-              </Link>
-            </NextLink>
-            <NextLink href="/category">
-              <Link>
-                <Translation lang={settings?.language} value="Categories" />
-              </Link>
-            </NextLink>
+          <div className="column ui">
+            <div>
+              <div className="custom-tab">
+                <NextLink href="/popular">
+                  <Link className="active">
+                    <Translation lang={settings?.language} value="Popular" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/">
+                  <Link>
+                    <Translation lang={settings?.language} value="Recent" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/unanswered">
+                  <Link>
+                    <Translation lang={settings?.language} value="Unanswered" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/category">
+                  <Link>
+                    <Translation lang={settings?.language} value="Categories" />
+                  </Link>
+                </NextLink>
+              </div>
+            </div>
+            <div className="">
+              <div>
+                <Popover
+                  placement="leftStart"
+                  content={
+                    <div style={{ width: 130 }}>
+                      <Popover.Item title>
+                        <Translation
+                          lang={settings?.language}
+                          value="Discussion UI"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('default')}
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Default"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('classic')}
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Classic"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('social')}
+                      >
+                        <Translation lang={settings?.language} value="Social" />
+                      </Popover.Item>
+                    </div>
+                  }
+                >
+                  <span
+                    className="pointer"
+                    style={{ position: 'relative', top: 5 }}
+                  >
+                    <Sliders size={20} />
+                  </span>
+                </Popover>
+              </div>
+            </div>
           </div>
 
           {discussions.map((item) => (

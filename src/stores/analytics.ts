@@ -81,7 +81,7 @@ export default class AnalyticsStore {
       .catch((err) => console.log(err));
   };
 
-  @action getPageviews = async (from: string, to: string) => {
+  @action getPageAnalytics = async (from: string, to: string) => {
     runInAction(() => {
       this.loading = true;
       this.users = [];

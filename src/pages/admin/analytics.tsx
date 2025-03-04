@@ -34,6 +34,7 @@ const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false
 });
 
+
 const Analytics = observer(() => {
   const token = useToken();
   const settings = useSettings();
@@ -76,13 +77,13 @@ const Analytics = observer(() => {
     getTopPageview('url');
     let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
     let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
-    store.getPageviews(from, to);
+    store.getPageAnalytics(from, to);
   }, [token?.id]);
 
   const processAnalytics = async () => {
     let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
     let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
-    store.getPageviews(from, to);
+    store.getPageAnalytics(from, to);
     toggleDate(false);
   };
 
@@ -140,6 +141,8 @@ const Analytics = observer(() => {
       }
     }
   };
+
+ const total_graph = store?.pageviews.map((item: any) => item.count).reduce((a,b) => b+a, 0);
 
   const browserIcon = (browser: string) => {
     const icons = {
@@ -439,7 +442,7 @@ const Analytics = observer(() => {
               <Spacer />
               <Grid.Container>
                 <Grid xs={12} md={16}>
-                  <Text h5>Pageviews ({formatNumber(total)})</Text>
+                  <Text h5>Pageviews ({formatNumber(total_graph)})</Text>
                 </Grid>
                 <Grid xs={12} md={8}>
                   <Input
@@ -486,7 +489,7 @@ const Analytics = observer(() => {
               <Spacer />
               <Chart series={series} options={options} type="area" />
             </Tabs.Item>
-            {/* <Tabs.Item
+         <Tabs.Item
               label={<Translation lang={settings?.language} value="Table" />}
               value="3"
             >
@@ -500,6 +503,7 @@ const Analytics = observer(() => {
                     lang: settings?.language,
                     value: 'URL'
                   })}
+                  render={(value) => <Link color underline target="_blank" href={value}>{value}</Link>}
                 />
                 <Table.Column
                   prop="device"
@@ -550,7 +554,7 @@ const Analytics = observer(() => {
                   <Pagination
                     count={Math.round(total / limit)}
                     page={page}
-                    limit={limit}
+                    limit={7}
                     onChange={paginate}
                   >
                     <Pagination.Next>
@@ -564,7 +568,7 @@ const Analytics = observer(() => {
               ) : (
                 ''
               )}
-            </Tabs.Item> */}
+            </Tabs.Item>
           </Tabs>
         </main>
       </div>

@@ -4376,7 +4376,17 @@ const dict = [
     ja: 'デフォルト',
     ru: 'По умолчанию',
     ko: '기본값'
-  }
+  },{
+  en: 'Table',
+  es: 'Tabla',
+  fr: 'Tableau',
+  de: 'Tabelle',
+  cn: '表格',
+  ja: '表',
+  ru: 'Таблица',
+  ko: '표'
+}
+
 ];
 
 export default dict;

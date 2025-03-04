@@ -19,8 +19,6 @@ const Auth = (prop: authProps) => {
     user = user && user._w_auth ? JSON.parse(user._w_auth) : null;
     setUser(user);
 
-    console.log(user?.role, prop.roles);
-
     if (!user && prop.roles.includes(user?.role) === false) {
       toast.error('You are not authorized to access this page', {
         duration: 3000

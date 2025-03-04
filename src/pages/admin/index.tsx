@@ -26,7 +26,14 @@ const Dashboard = observer(() => {
   const [modal, toggleDate] = useState(false);
   const [active, setActive] = useState(0);
   const [
-    { users, discussions, pageviews, getUsers, getDiscussions, getPageviews }
+    {
+      users,
+      discussions,
+      pageviews,
+      getUsers,
+      getDiscussions,
+      getPageAnalytics
+    }
   ] = useState(() => new AnalyticsStore());
 
   const [date, setDate] = useState([
@@ -42,7 +49,7 @@ const Dashboard = observer(() => {
     let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);
     getDiscussions(from, to);
-    getPageviews(from, to);
+    getPageAnalytics(from, to);
 
     return () => {
       socket ? socket.close() : null;
@@ -58,7 +65,7 @@ const Dashboard = observer(() => {
     let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);
     getDiscussions(from, to);
-    getPageviews(from, to);
+    getPageAnalytics(from, to);
     toggleDate(false);
   };
 

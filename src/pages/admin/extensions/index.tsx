@@ -373,7 +373,7 @@ const Extensions = observer(() => {
               <Pagination
                 count={Math.round(total / limit)}
                 page={page}
-                limit={limit}
+                limit={7}
                 onChange={paginate}
               >
                 <Pagination.Next>
