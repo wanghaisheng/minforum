@@ -64,6 +64,7 @@ const Index = observer(() => {
   const [{ blockLoading, block, getBlock, blockAction }] = useState(
     () => new BlockStore()
   );
+
   const [{ uploadImage }] = useState(() => new UserStore());
   const [
     {
@@ -489,7 +490,7 @@ const Index = observer(() => {
                     ref={containerRef}
                     className="chat-inner"
                     style={{
-                      height: chatHeight
+                      height: isXS ? '75vh' : chatHeight
                     }}
                     onScroll={() => status === '' && handleScroll()}
                   >
@@ -572,10 +573,11 @@ const Index = observer(() => {
                               socket.emit('typing', JSON.stringify(token?.id));
                             }}
                             onHeightChange={(height) =>
+                              isXS === false &&
                               resizeHeight(`calc(100vh - ${148 + height}px)`)
                             }
                             minRows={1}
-                            maxRows={5}
+                            maxRows={isXS ? 1 : 5}
                           />
                         </div>
                         <div>

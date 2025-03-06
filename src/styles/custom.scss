@@ -50,8 +50,15 @@ body {
     }
 
     .menu {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: calc(100% - 50px);
       padding: 10px;
-      border-bottom: 1px solid #ededed;
+      background: #fff;
+      border-top: 1px solid #ededed;
     }
   }
 
@@ -1662,7 +1669,8 @@ body {
           }
 
           .chat-inner {
-            height: calc(100% - 170px);
+            height: calc(100vh - 500px);
+            padding-bottom: 100px;
             z-index: 1;
 
             .chat-message {
@@ -1677,6 +1685,11 @@ body {
           }
 
           .chat-bottom {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
             margin-top: 0;
           }
 

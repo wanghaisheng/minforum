@@ -161,7 +161,7 @@ const Home = observer(() => {
                 </NextLink>
               </div>
             </div>
-            <div className="">
+            <div className="desktop">
               <div>
                 <Popover
                   placement="leftStart"
