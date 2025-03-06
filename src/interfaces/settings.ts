@@ -1,9 +1,28 @@
+export type extensionVariable = {
+  key?: string;
+  value?: string;
+};
+
 export interface settingsProp {
+  id?: string;
+  theme?: string;
+  ui?: 'default' | 'social' | 'classic';
+  domain?: string;
   language?: string | string[] | any;
   siteFavicon?: string;
   siteLogo?: string;
   siteName?: string;
   siteDescription?: string;
+  homepage?: {
+    bgColor?: string;
+    text?: string;
+    image?: string;
+  };
+  socialAccount?: {
+    facebook?: string;
+    google?: string;
+    github?: string;
+  };
   cloudflarePublicKey?: string;
   cloudflareSecretKey?: string;
   advert?: { top: string; left: string; right: string; inner: string };
@@ -12,7 +31,7 @@ export interface settingsProp {
     email: string;
     password: string;
   };
-  coin?: {
+  point?: {
     login?: number;
     discussion?: number;
     comment?: number;
@@ -22,4 +41,17 @@ export interface settingsProp {
   status?: string;
   announcementText?: string;
   announcementLink?: string;
+  senderName?: string;
+  senderEmail?: string;
+  welcomeEmail?: string;
+  terms?: string;
+  privacy?: string;
+  extensionVariables?: extensionVariable;
+  payment?: {
+    currency?: string;
+    monthly?: number;
+    subscription?: number;
+    percentage?: number;
+  };
+  twoFactor?: boolean;
 }

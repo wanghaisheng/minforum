@@ -4,10 +4,14 @@
 /rethinkdb_data
 /src/public/storage
 /public/storage
+/storage/*
 /node_modules
 /.pnp
 .pnp.js
-
+ca.crt
+cert.crt
+ca.key
+cert.key
 # testing
 /coverage
 /test-results
@@ -18,6 +22,10 @@
 
 # production
 /build
+
+**/__MACOSX/
+.DS_Store
+
 
 # misc
 .DS_Store
@@ -30,6 +38,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env*.local
 
 # vercel

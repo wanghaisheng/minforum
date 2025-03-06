@@ -1,51 +1,31 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import {
-  Badge,
-  Table,
-  Pagination,
-  Link,
-  Select,
-  Loading,
-  Text
-} from '@geist-ui/core';
+import { Badge, Table, Pagination, Link, Select, Text } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import ReportStore from 'stores/report';
 import { reportProp } from 'interfaces/report';
 import toast, { Toaster } from 'react-hot-toast';
-import moment from 'moment';
 import DiscussionStore from 'stores/discussion';
-import SettingsStore from 'stores/settings';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { translation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
+import useSettings from 'components/settings';
 
 const Reports = observer(() => {
+  const token = useToken();
+  const settings = useSettings();
   const [{ updateDiscussion }] = useState(() => new DiscussionStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
-  const [
-    {
-      loading,
-      page,
-      limit,
-      total,
-      reports,
-      setPage,
-      getReports,
-      updateReport,
-      searchReport
-    }
-  ] = useState(() => new ReportStore());
+  const [{ loading, page, limit, total, reports, setPage, getReports }] =
+    useState(() => new ReportStore());
 
   useEffect(() => {
-    getSettings();
     getReports();
-  }, []);
+  }, [token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
@@ -56,7 +36,7 @@ const Reports = observer(() => {
     await updateDiscussion({ status, id }).then((res: any) => {
       if (res.success) {
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Discussion status updated'
           })
@@ -64,7 +44,7 @@ const Reports = observer(() => {
         getReports();
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update status! Please try again later.'
           })
@@ -74,17 +54,15 @@ const Reports = observer(() => {
   };
 
   const renderStatus = (value: string) => {
-    return value === 'answered' ? (
-      <Badge type="success">
-        <Translation lang={settings?.language} value="Answered" />
-      </Badge>
-    ) : value === 'unanswered' ? (
-      <Badge type="warning">
-        <Translation lang={settings?.language} value="Unanswered" />
-      </Badge>
-    ) : value === 'banned' ? (
+    let capitalize = value.charAt(0).toUpperCase() + value.slice(1);
+
+    return value === 'banned' ? (
       <Badge type="error">
         <Translation lang={settings?.language} value="Banned" />
+      </Badge>
+    ) : value ? (
+      <Badge type="success">
+        <Translation lang={settings?.language} value={capitalize} />
       </Badge>
     ) : (
       <></>
@@ -98,10 +76,10 @@ const Reports = observer(() => {
             settings?.language === 'es'
               ? es
               : settings?.language === 'fr'
-              ? fr
-              : settings?.language === 'en'
-              ? enUS
-              : null
+                ? fr
+                : settings?.language === 'en'
+                  ? enUS
+                  : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -114,7 +92,7 @@ const Reports = observer(() => {
   const renderView = (value: string, rowData: reportProp) => {
     return (
       <Link target={'_blank'} icon href={`/d/${rowData.slug}`}>
-        {useTranslation({
+        {translation({
           lang: settings?.language,
           value: 'View'
         })}
@@ -125,18 +103,21 @@ const Reports = observer(() => {
   const renderAction = (value: string, rowData: reportProp) => {
     return (
       <Select
-        placeholder={useTranslation({
+        placeholder={translation({
           lang: settings?.language,
           value: 'Change status'
         })}
         // value={rowData.status}
         onChange={(value: any) => handleChange(value, rowData.post.id!)}
       >
-        <Select.Option value="answered">
-          <Translation lang={settings?.language} value="Answered" />
+        <Select.Option value="active">
+          <Translation lang={settings?.language} value="Active" />
         </Select.Option>
         <Select.Option value="unanswered">
           <Translation lang={settings?.language} value="Unanswered" />
+        </Select.Option>
+        <Select.Option value="answered">
+          <Translation lang={settings?.language} value="Answered" />
         </Select.Option>
         <Select.Option value="banned">
           <Translation lang={settings?.language} value="Banned" />
@@ -146,24 +127,28 @@ const Reports = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin', 'moderator']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Reports'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Reports'
         })}
       />
       <Toaster />
       <div className="page-container top-100">
-        <Sidebar active="reports" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="reports"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Reports'
             })} (${reports.length})`}
@@ -173,14 +158,14 @@ const Reports = observer(() => {
           <Table width={'100%'} data={reports}>
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="type"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Type'
               })}
@@ -188,7 +173,7 @@ const Reports = observer(() => {
             />
             <Table.Column
               prop="status"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Status'
               })}
@@ -196,7 +181,7 @@ const Reports = observer(() => {
             />
             <Table.Column
               prop="createdAt"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Date'
               })}
@@ -204,7 +189,7 @@ const Reports = observer(() => {
             />
             <Table.Column
               prop="slug"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}
@@ -225,8 +210,8 @@ const Reports = observer(() => {
             <div className="pagination">
               <Pagination
                 count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
+                page={page}
+                limit={7}
                 onChange={paginate}
               >
                 <Pagination.Next>

@@ -4,8 +4,8 @@ import formidable from 'formidable';
 import path from 'path';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Upload } from '../../../components/api/model';
-import { slug, isImage, getEXT } from '../../../components/api/utils';
+import { Upload } from 'components/api/model';
+import { slug, isImage, getEXT } from 'components/api/utils';
 
 const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
   const id = req.query.id;
@@ -17,14 +17,7 @@ const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (isImage(type)) {
       let newFile = `${Date.now()}.${type}`;
-      file.filepath = path.resolve('./public/storage/', newFile);
-
-      // s3Upload(modifiedFile, newFile).then((upload) => {
-      //   if (upload) {
-      //     fs.unlinkSync(modifiedFile);
-      //     console.log(upload);
-      //   }
-      // });
+      file.filepath = path.resolve('./storage/', newFile);
 
       let data = {
         file: newFile,
@@ -55,6 +48,6 @@ export default uploadImage;
 
 export const config = {
   api: {
-    bodyParser: false // Disallow body parsing, consume as stream
+    bodyParser: false
   }
 };

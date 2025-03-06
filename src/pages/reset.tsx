@@ -1,88 +1,113 @@
 import { useEffect, useState } from 'react';
 import { Spacer, Text, Button, Input, Card, Image } from '@geist-ui/core';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import { parseCookies, destroyCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, translation } from 'components/intl/translation';
+import useSettings from 'components/settings';
+import { dec } from 'components/api/utils';
 
 const Reset = observer(() => {
   const cookie = parseCookies();
   const router = useRouter();
+  const settings = useSettings();
   const [verify, setVerify] = useState(false);
   const [code, setCode] = useState('');
   const [_password, setPassword] = useState('');
   const [_code, _setCode] = useState<{ data?: string; code?: number }>({});
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ loading, user, setUser, getUser, updateUser }] = useState(
     () => new UserStore()
   );
 
   useEffect(() => {
-    getSettings();
-    let _code: any =
-      cookie && cookie._w_code ? JSON.parse(cookie._w_code) : null;
+    let _code: any = cookie && cookie._w_code ? cookie._w_code : null;
 
     _setCode(_code);
-  }, [router]);
+  }, [router, code]);
 
   const verifyAccount = () => {
-    if (Number(code) !== _code.code) {
+    let token: any = _code;
+
+    try {
+      token = dec(token);
+      token = JSON.parse(token);
+
+      if (Number(code) !== Number(token?.code)) {
+        toast.error(
+          translation({
+            lang: settings?.language,
+            value: 'Code is incorrect or expired.'
+          })
+        );
+      } else {
+        setVerify(true);
+      }
+    } catch (error) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Code is incorrect or expired.'
         })
       );
-    } else {
-      setVerify(true);
     }
   };
 
   const updatePass = async () => {
     if (user.password !== _password) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Passwords does not matched!'
         })
       );
     } else {
-      await getUser(_code.data!).then(async (res: any) => {
-        if (res.success) {
-          await updateUser({ id: res.data.id, password: user.password });
-          destroyCookie(null, '_w_code');
+      try {
+        let token = dec(_code);
+        token = JSON.parse(token);
 
-          toast.success(
-            useTranslation({
-              lang: settings?.language,
-              value: 'Password reset successfully!'
-            })
-          );
-          router.push('/login');
-        } else {
-          toast.error(
-            useTranslation({
-              lang: settings?.language,
-              value: 'Unable to update user. Please try again later.'
-            })
-          );
-        }
-      });
+        await getUser(token?.id).then(async (res: any) => {
+          if (res.success) {
+            await updateUser({ id: res.data.id, password: user.password });
+            destroyCookie({}, '_w_code');
+
+            toast.success(
+              translation({
+                lang: settings?.language,
+                value: 'Password reset successfully!'
+              })
+            );
+            router.push('/login');
+          } else {
+            toast.error(
+              translation({
+                lang: settings?.language,
+                value: 'Unable to update user. Please try again later.'
+              })
+            );
+          }
+        });
+      } catch (error) {
+        toast.error(
+          translation({
+            lang: settings?.language,
+            value: 'Unable to update user. Please try again later.'
+          })
+        );
+      }
     }
   };
 
   return (
     <div className="polkadot">
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account recovery'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account recovery'
         })}
@@ -94,7 +119,7 @@ const Reset = observer(() => {
           <div className="boxed">
             <div className="logo-container center">
               {settings.siteLogo ? (
-                <Image src={`/storage/${settings.siteLogo}`} height={'65px'} />
+                <Image src={`/static/${settings.siteLogo}`} height={'65px'} />
               ) : (
                 <Text h2 width={'100%'}>
                   {settings.siteName}
@@ -138,7 +163,7 @@ const Reset = observer(() => {
               ) : (
                 <>
                   <Input.Password
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'New Password'
                     })}
@@ -150,7 +175,7 @@ const Reset = observer(() => {
                   />
                   <Spacer h={1.5} />
                   <Input.Password
-                    placeholder={useTranslation({
+                    placeholder={translation({
                       lang: settings?.language,
                       value: 'Retype Password'
                     })}

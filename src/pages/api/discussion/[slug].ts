@@ -1,11 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  Discussion,
-  Category,
-  LikeDiscussion
-} from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { Discussion, Category, LikeDiscussion } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const discussion = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

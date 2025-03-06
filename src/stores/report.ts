@@ -1,6 +1,7 @@
-import { resProp } from './../interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
-import { reportProp } from '../interfaces/report';
+import { resProp } from 'interfaces/res';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
+import { reportProp } from 'interfaces/report';
+import { encrypt } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -9,7 +10,7 @@ export default class ReportStore {
   @observable loading: boolean = false;
   @observable total: number = 0;
   @observable page: number = 1;
-  @observable limit: number = 20;
+  @observable limit: number = 50;
   @observable report: reportProp = {};
   @observable reports: reportProp[] = [];
 
@@ -36,7 +37,7 @@ export default class ReportStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify(body)
     })
@@ -58,7 +59,7 @@ export default class ReportStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify(body)
     })
@@ -79,13 +80,15 @@ export default class ReportStore {
     return await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.report = res.data;
+          runInAction(() => {
+            this.report = res.data;
+          });
           return res.data.id;
         } else {
           return false;
@@ -95,20 +98,24 @@ export default class ReportStore {
   };
 
   @action getReports = async () => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/report?page=${this.page}&limit=${this.limit}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.reports = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.reports = res.data;
+            this.loading = false;
+          });
         } else {
           this.loading = false;
         }
@@ -117,26 +124,32 @@ export default class ReportStore {
   };
 
   @action searchReport = async (query: string) => {
-    this.loading = true;
-    this.reports = [];
+    runInAction(() => {
+      this.reports = [];
+      this.loading = false;
+    });
     let url = `${API_URL}/report/search?page=${this.page}&limit=${this.limit}&query=${query}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
           setTimeout(() => {
-            this.total = res.count;
-            this.reports = res.data;
-            this.loading = false;
+            runInAction(() => {
+              this.total = res.count;
+              this.reports = res.data;
+              this.loading = false;
+            });
           }, 1000);
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

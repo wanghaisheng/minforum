@@ -1,13 +1,18 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { User } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 import bcrypt from 'bcryptjs';
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
+      if (req.body.email) {
+        req.body.email = req?.body?.email?.toLowerCase();
+      }
+
       const { id, name, email, username, password } = req.body;
+
       await User.get(id)
         .then(async (data: any) => {
           data = data.id ? data : { password: '' };
@@ -17,12 +22,10 @@ const update = async (req: NextApiRequest, res: NextApiResponse) => {
             await User.get(id)
               .update({ id, name, email, username })
               .then(() => {
-                res
-                  .status(200)
-                  .json({
-                    success: true,
-                    data: 'Account updated successfully!'
-                  });
+                res.status(200).json({
+                  success: true,
+                  data: 'Account updated successfully!'
+                });
               });
           } else {
             res.send({

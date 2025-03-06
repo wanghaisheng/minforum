@@ -1,24 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Spacer, Text, Link, Button, Input, Card, Image } from '@geist-ui/core';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, translation } from 'components/intl/translation';
+import useSettings from 'components/settings';
 
 const Verify = observer(() => {
   const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
   const [{ loading, user, setUser, verifyAccount }] = useState(
     () => new UserStore()
   );
-
-  useEffect(() => {
-    getSettings();
-  }, []);
 
   const verifyEmail = async () => {
     const { email } = user;
@@ -31,7 +27,7 @@ const Verify = observer(() => {
           path: '/'
         });
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Please verify account to continue.'
           })
@@ -39,7 +35,7 @@ const Verify = observer(() => {
         router.push('/account/confirm');
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to verify user. Please try again later'
           })
@@ -51,11 +47,11 @@ const Verify = observer(() => {
   return (
     <div className="polkadot">
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account verification'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account verification'
         })}
@@ -67,7 +63,7 @@ const Verify = observer(() => {
           <div className="boxed">
             <div className="logo-container center">
               {settings.siteLogo ? (
-                <Image src={`/storage/${settings.siteLogo}`} />
+                <Image src={`/static/${settings.siteLogo}`} height={'65px'} />
               ) : (
                 <Text h2 width={'100%'}>
                   {settings.siteName}
@@ -84,7 +80,7 @@ const Verify = observer(() => {
               </Text>
               <Spacer h={2} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Email address'
                 })}

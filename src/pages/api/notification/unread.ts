@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Notification } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { Notification } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const notification = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

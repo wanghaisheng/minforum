@@ -540,24 +540,24 @@ const dict = [
     ko: '아동 학대'
   },
   {
-    en: 'Coin',
-    es: 'Moneda',
-    fr: 'Pièce de monnaie',
-    de: 'Münze',
-    cn: '硬币',
-    ja: 'コイン',
-    ru: 'Монета',
-    ko: '코인'
+    en: 'point',
+    es: 'punto',
+    fr: 'point',
+    de: 'Punkt',
+    cn: '积分',
+    ja: 'ポイント',
+    ru: 'балл',
+    ko: '포인트'
   },
   {
-    en: 'Coins',
-    es: 'Monedas',
-    fr: 'Pièces de monnaie',
-    de: 'Münzen',
-    cn: '硬币',
-    ja: 'コイン',
-    ru: 'Монеты',
-    ko: '코인들'
+    en: 'points',
+    es: 'puntos',
+    fr: 'points',
+    de: 'Punkte',
+    cn: '积分',
+    ja: 'ポイント',
+    ru: 'баллы',
+    ko: '포인트'
   },
   {
     en: 'Discussion Title',
@@ -1210,16 +1210,6 @@ const dict = [
     ko: '추가'
   },
   {
-    en: 'Title is too short.',
-    es: 'El título es demasiado corto.',
-    fr: 'Le titre est trop court.',
-    de: 'Titel ist zu kurz.',
-    cn: '标题太短。',
-    ja: 'タイトルが短すぎます。',
-    ru: 'Заголовок слишком короткий.',
-    ko: '제목이 너무 짧습니다.'
-  },
-  {
     en: 'Description is required',
     es: 'Se requiere descripción',
     fr: 'La description est obligatoire',
@@ -1680,6 +1670,46 @@ const dict = [
     ko: '메타데이터'
   },
   {
+    en: 'Sender name',
+    es: 'Nombre del remitente',
+    fr: "Nom de l'expéditeur",
+    de: 'Absendername',
+    cn: '发件人姓名',
+    ja: '送信者名',
+    ru: 'Имя отправителя',
+    ko: '발신자 이름'
+  },
+  {
+    en: 'Sender email',
+    es: 'Correo del remitente',
+    fr: "E-mail de l'expéditeur",
+    de: 'Absender-E-Mail',
+    cn: '发件人电子邮件',
+    ja: '送信者のメール',
+    ru: 'Электронная почта отправителя',
+    ko: '보내는 사람 이메일'
+  },
+  {
+    en: 'Welcome email',
+    es: 'Correo de bienvenida',
+    fr: 'E-mail de bienvenue',
+    de: 'Willkommens-E-Mail',
+    cn: '欢迎邮件',
+    ja: 'ようこそメール',
+    ru: 'Приветственное письмо',
+    ko: '환영 이메일'
+  },
+  {
+    en: 'General settings',
+    es: 'Configuraciones generales',
+    fr: 'Paramètres généraux',
+    de: 'Allgemeine Einstellungen',
+    cn: '常规设置',
+    ja: '一般設定',
+    ru: 'Общие настройки',
+    ko: '일반 설정'
+  },
+  {
     en: 'Site favicon',
     es: 'Sitio Favicon',
     fr: 'Favicon du site',
@@ -1940,14 +1970,14 @@ const dict = [
     ko: '광고 설정'
   },
   {
-    en: "Note: Changing coin values will affect users' current value.",
-    es: 'Nota: Cambiar los valores de las monedas afectará el valor actual de los usuarios.',
-    fr: 'Remarque : La modification des valeurs des pièces affectera la valeur actuelle des utilisateurs.',
-    de: 'Hinweis: Die Änderung der Münzwerte wirkt sich auf den aktuellen Wert der Benutzer aus.',
-    cn: '注意：更改硬币值将影响用户的当前值。',
-    ja: '注：コインの値を変更すると、ユーザーの現在の値に影響します。',
-    ru: 'Примечание: Изменение значения монеты повлияет на текущее значение пользователей.',
-    ko: '참고: 코인 값 변경은 사용자의 현재 값을 영향을 미칩니다.'
+    en: "Note: Changing the point value will affect users' current points.",
+    es: 'Nota: Cambiar el valor de los puntos afectará los puntos actuales de los usuarios.',
+    fr: 'Remarque : Modifier la valeur des points affectera les points actuels des utilisateurs.',
+    de: 'Hinweis: Das Ändern des Punktwerts wirkt sich auf die aktuellen Punkte der Benutzer aus.',
+    cn: '注意：更改积分值将影响用户的当前积分。',
+    ja: '注意：ポイントの値を変更すると、ユーザーの現在のポイントに影響します。',
+    ru: 'Примечание: Изменение значения баллов повлияет на текущие баллы пользователей.',
+    ko: '참고: 포인트 값을 변경하면 사용자의 현재 포인트에 영향을 미칩니다.'
   },
   {
     en: 'Top',
@@ -2060,7 +2090,7 @@ const dict = [
     ko: '보상 설정'
   },
   {
-    en: 'Note: Changing coin values will affect users current value',
+    en: 'Note: Changing point values will affect users current value',
     es: 'Nota: El cambio de los valores de las monedas afectará el valor actual de los usuarios',
     fr: 'Remarque: la modification des valeurs des pièces affectera la valeur actuelle des utilisateurs',
     de: 'Hinweis: Die Änderung der Münzwerte wirkt sich auf den aktuellen Wert der Benutzer aus',
@@ -2351,7 +2381,7 @@ const dict = [
   },
   {
     en: 'Passwords does not matched!',
-    es: '¡Las contraseñas no coinciden!',
+    es: '¡Las contraseñas no pointciden!',
     fr: 'Les mots de passe ne correspondent pas!',
     de: 'Passwörter stimmen nicht überein!',
     cn: '密码不匹配！',
@@ -2470,14 +2500,34 @@ const dict = [
     ko: '성명이 너무 짧습니다.'
   },
   {
-    en: 'Username is too short. Minimum character is three.',
-    es: 'El nombre de usuario es demasiado corto. El carácter mínimo es tres.',
-    fr: "Le nom d'utilisateur est trop court. Le caractère minimum est de trois.",
-    de: 'Benutzername ist zu kurz. Mindestens drei Zeichen erforderlich.',
-    cn: '用户名太短。最少三个字符。',
-    ja: 'ユーザー名が短すぎます。最小3文字以上を入力してください。',
-    ru: 'Имя пользователя слишком короткое. Минимальное количество символов - три.',
-    ko: '사용자 이름이 너무 짧습니다. 최소 3자 이상이어야 합니다.'
+    en: 'Please enter a username with at least 3 characters. Only letters, numbers, and underscores are supported.',
+    es: 'Por favor, ingrese un nombre de usuario con al menos 3 caracteres. Solo se permiten letras, números y guiones bajos.',
+    fr: "Veuillez entrer un nom d'utilisateur d'au moins 3 caractères. Seules les lettres, les chiffres et les traits de soulignement sont autorisés.",
+    de: 'Bitte geben Sie einen Benutzernamen mit mindestens 3 Zeichen ein. Es werden nur Buchstaben, Zahlen und Unterstriche unterstützt.',
+    cn: '请输入至少 3 个字符的用户名。仅支持字母、数字和下划线。',
+    ja: 'ユーザー名は3文字以上で入力してください。使用できるのは文字、数字、アンダースコアのみです。',
+    ru: 'Пожалуйста, введите имя пользователя длиной не менее 3 символов. Поддерживаются только буквы, цифры и символы подчеркивания.',
+    ko: '사용자 이름은 최소 3자 이상 입력해 주세요. 문자, 숫자 및 밑줄만 지원됩니다.'
+  },
+  {
+    en: 'Site name is too short. Minimum character is three.',
+    es: 'El nombre del sitio es demasiado corto. El mínimo de caracteres es tres.',
+    fr: 'Le nom du site est trop court. Le nombre minimum de caractères est de trois.',
+    de: 'Der Seitenname ist zu kurz. Die Mindestanzahl der Zeichen ist drei.',
+    cn: '站点名称太短。最少需要三个字符。',
+    ja: 'サイト名が短すぎます。最低3文字必要です。',
+    ru: 'Название сайта слишком короткое. Минимальное количество символов — три.',
+    ko: '사이트 이름이 너무 짧습니다. 최소 세 글자 이상이어야 합니다.'
+  },
+  {
+    en: 'Site description is too short. Minimum character is ten.',
+    es: 'La descripción del sitio es demasiado corta. El mínimo de caracteres es diez.',
+    fr: 'La description du site est trop courte. Le nombre minimum de caractères est de dix.',
+    de: 'Die Seitenbeschreibung ist zu kurz. Die Mindestanzahl der Zeichen ist zehn.',
+    cn: '站点描述太短。最少需要十个字符。',
+    ja: 'サイトの説明が短すぎます。最低10文字必要です。',
+    ru: 'Описание сайта слишком короткое. Минимальное количество символов — десять.',
+    ko: '사이트 설명이 너무 짧습니다. 최소 열 글자 이상이어야 합니다.'
   },
   {
     en: 'Invalid email address',
@@ -2728,7 +2778,1615 @@ const dict = [
     ja: 'お知らせリンク',
     ru: 'Ссылка на объявление',
     ko: '공지 링크'
-  }
+  },
+  {
+    en: 'Just now',
+    es: 'En este dayjso',
+    fr: "Tout à l' heure",
+    de: 'Soeben',
+    cn: '现在',
+    ja: 'ちょうど今',
+    ru: 'Прямо сейчас',
+    ko: '방금'
+  },
+  {
+    en: 'Unblock user to send messages',
+    es: 'Desbloquear usuario para enviar mensajes',
+    fr: "Débloquer l'utilisateur pour envoyer des messages",
+    de: 'Benutzer freischalten, um Nachrichten zu senden',
+    cn: '解除屏蔽用户以发送消息',
+    ja: 'メッセージを送信するためにユーザーのブロックを解除する',
+    ru: 'Разблокировать пользователя, чтобы отправить сообщение',
+    ko: '메시지를 보내려면 사용자 차단을 해제하세요'
+  },
+  {
+    en: 'You can no longer send messages in this chat',
+    es: 'Ya no puedes enviar mensajes en este chat',
+    fr: 'Vous ne pouvez plus envoyer de messages dans ce chat',
+    de: 'Sie können in diesem Chat keine Nachrichten mehr senden',
+    cn: '您无法再在此聊天中发送消息',
+    ja: 'このチャットでメッセージを送信できなくなりました',
+    ru: 'Вы больше не можете отправлять сообщения в этом чате',
+    ko: '이 채팅에서 더 이상 메시지를 보낼 수 없습니다'
+  },
+  {
+    en: 'Block',
+    es: 'Bloquear',
+    fr: 'Bloquer',
+    de: 'Blockieren',
+    cn: '屏蔽',
+    ja: 'ブロック',
+    ru: 'Заблокировать',
+    ko: '차단'
+  },
+  {
+    en: 'Unblock',
+    es: 'Desbloquear',
+    fr: 'Débloquer',
+    de: 'Entblockieren',
+    cn: '解除屏蔽',
+    ja: 'ブロック解除',
+    ru: 'Разблокировать',
+    ko: '차단 해제'
+  },
+  {
+    en: 'Search emoji...',
+    es: 'Buscar emoji...',
+    fr: 'Rechercher un emoji...',
+    de: 'Emoji suchen...',
+    cn: '搜索表情...',
+    ja: '絵文字を検索...',
+    ru: 'Поиск эмодзи...',
+    ko: '이모지 검색...'
+  },
+  {
+    en: 'Smileys & Emotions',
+    es: 'Emoticonos y Emociones',
+    fr: 'Smileys et Émotions',
+    de: 'Smileys und Emotionen',
+    cn: '表情与情感',
+    ja: '笑顔と感情',
+    ru: 'Смайлики и Эмоции',
+    ko: '스마일리와 감정'
+  },
+  {
+    en: 'People & Body',
+    es: 'Personas y Cuerpo',
+    fr: 'Personnes et Corps',
+    de: 'Menschen und Körper',
+    cn: '人与身体',
+    ja: '人と体',
+    ru: 'Люди и Тело',
+    ko: '사람과 몸'
+  },
+  {
+    en: 'Animals & Nature',
+    es: 'Animales y Naturaleza',
+    fr: 'Animaux et Nature',
+    de: 'Tiere und Natur',
+    cn: '动物与自然',
+    ja: '動物と自然',
+    ru: 'Животные и Природа',
+    ko: '동물과 자연'
+  },
+  {
+    en: 'Food & Drink',
+    es: 'Comida y Bebida',
+    fr: 'Nourriture et Boissons',
+    de: 'Essen und Trinken',
+    cn: '食物与饮品',
+    ja: '食べ物と飲み物',
+    ru: 'Еда и Напитки',
+    ko: '음식과 음료'
+  },
+  {
+    en: 'Travel & Places',
+    es: 'Viajes y Lugares',
+    fr: 'Voyage et Lieux',
+    de: 'Reisen und Orte',
+    cn: '旅行与地点',
+    ja: '旅行と場所',
+    ru: 'Путешествия и Места',
+    ko: '여행과 장소'
+  },
+  {
+    en: 'Activities',
+    es: 'Actividades',
+    fr: 'Activités',
+    de: 'Aktivitäten',
+    cn: '活动',
+    ja: 'アクティビティ',
+    ru: 'Мероприятия',
+    ko: '활동'
+  },
+  {
+    en: 'Objects',
+    es: 'Objetos',
+    fr: 'Objets',
+    de: 'Objekte',
+    cn: '物品',
+    ja: '物',
+    ru: 'Объекты',
+    ko: '물건'
+  },
+  {
+    en: 'Symbols',
+    es: 'Símbolos',
+    fr: 'Symboles',
+    de: 'Symbole',
+    cn: '符号',
+    ja: '記号',
+    ru: 'Символы',
+    ko: '기호'
+  },
+  {
+    en: 'Flags',
+    es: 'Banderas',
+    fr: 'Drapeaux',
+    de: 'Flaggen',
+    cn: '旗帜',
+    ja: '旗',
+    ru: 'Флаги',
+    ko: '깃발'
+  },
+  {
+    en: 'Homepage settings',
+    es: 'Configuración de la página de inicio',
+    fr: "Paramètres de la page d'accueil",
+    de: 'Startseiteneinstellungen',
+    cn: '主页设置',
+    ja: 'ホームページ設定',
+    ru: 'Настройки главной страницы',
+    ko: '홈페이지 설정'
+  },
+  {
+    en: 'Background color',
+    es: 'Color de fondo',
+    fr: 'Couleur de fond',
+    de: 'Hintergrundfarbe',
+    cn: '背景颜色',
+    ja: '背景色',
+    ru: 'Цвет фона',
+    ko: '배경색'
+  },
+  {
+    en: 'Banner',
+    es: 'Banner',
+    fr: 'Bannière',
+    de: 'Banner',
+    cn: '横幅',
+    ja: 'バナー',
+    ru: 'Баннер',
+    ko: '배너'
+  },
+  {
+    en: 'Upload banner',
+    es: 'Subir banner',
+    fr: 'Télécharger la bannière',
+    de: 'Banner hochladen',
+    cn: '上传横幅',
+    ja: 'バナーをアップロード',
+    ru: 'Загрузить баннер',
+    ko: '배너 업로드'
+  },
+  {
+    en: 'Site banner',
+    es: 'Banner del sitio',
+    fr: 'Bannière du site',
+    de: 'Website-Banner',
+    cn: '网站横幅',
+    ja: 'サイトバナー',
+    ru: 'Баннер сайта',
+    ko: '사이트 배너'
+  },
+  {
+    en: 'Facebook appId',
+    es: 'Facebook appId',
+    fr: 'Facebook appId',
+    de: 'Facebook appId',
+    cn: 'Facebook 应用ID',
+    ja: 'FacebookアプリID',
+    ru: 'Facebook appId',
+    ko: 'Facebook 앱 ID'
+  },
+  {
+    en: 'Github clientId',
+    es: 'Github clientId',
+    fr: 'Github clientId',
+    de: 'Github clientId',
+    cn: 'Github 客户端ID',
+    ja: 'GithubクライアントID',
+    ru: 'Github clientId',
+    ko: 'Github 클라이언트 ID'
+  },
+  {
+    en: 'Google clientId',
+    es: 'Google clientId',
+    fr: 'Google clientId',
+    de: 'Google clientId',
+    cn: 'Google 客户端ID',
+    ja: 'GoogleクライアントID',
+    ru: 'Google clientId',
+    ko: 'Google 클라이언트 ID'
+  },
+  {
+    en: 'Legal settings',
+    es: 'Configuración legal',
+    fr: 'Paramètres juridiques',
+    de: 'Rechtliche Einstellungen',
+    cn: '法律设置',
+    ja: '法的設定',
+    ru: 'Юридические настройки',
+    ko: '법적 설정'
+  },
+  {
+    en: 'Terms & conditions',
+    es: 'Términos y condiciones',
+    fr: 'Conditions générales',
+    de: 'Geschäftsbedingungen',
+    cn: '条款和条件',
+    ja: '利用規約',
+    ru: 'Пользовательское соглашение',
+    ko: '이용 약관'
+  },
+  {
+    en: 'Privacy policy',
+    es: 'Política de privacidad',
+    fr: 'Politique de confidentialité',
+    de: 'Datenschutzrichtlinie',
+    cn: '隐私政策',
+    ja: 'プライバシーポリシー',
+    ru: 'Политика конфиденциальности',
+    ko: '개인정보 처리방침'
+  },
+  {
+    en: 'Monetization settings',
+    es: 'Configuración de monetización',
+    fr: 'Paramètres de monétisation',
+    de: 'Monetarisierungseinstellungen',
+    cn: '盈利设置',
+    ja: '収益化設定',
+    ru: 'Настройки монетизации',
+    ko: '수익화 설정'
+  },
+  {
+    en: 'Analytics',
+    es: 'Analíticas',
+    fr: 'Analytique',
+    de: 'Analysen',
+    cn: '分析',
+    ja: '分析',
+    ru: 'Аналитика',
+    ko: '분석'
+  },
+  {
+    en: 'Location',
+    es: 'Ubicación',
+    fr: 'Localisation',
+    de: 'Standort',
+    cn: '位置',
+    ja: '位置',
+    ru: 'Местоположение',
+    ko: '위치'
+  },
+  {
+    en: 'URL',
+    es: 'URL',
+    fr: 'URL',
+    de: 'URL',
+    cn: '网址',
+    ja: 'URL',
+    ru: 'URL',
+    ko: 'URL'
+  },
+  {
+    en: 'Browser',
+    es: 'Navegador',
+    fr: 'Navigateur',
+    de: 'Browser',
+    cn: '浏览器',
+    ja: 'ブラウザ',
+    ru: 'Браузер',
+    ko: '브라우저'
+  },
+  {
+    en: 'Device',
+    es: 'Dispositivo',
+    fr: 'Appareil',
+    de: 'Gerät',
+    cn: '设备',
+    ja: 'デバイス',
+    ru: 'Устройство',
+    ko: '기기'
+  },
+  {
+    en: 'Top Devices',
+    es: 'Dispositivos principales',
+    fr: 'Appareils les plus utilisés',
+    de: 'Top-Geräte',
+    cn: '热门设备',
+    ja: 'トップデバイス',
+    ru: 'Топ устройств',
+    ko: '인기 기기'
+  },
+  {
+    en: 'Top Browsers',
+    es: 'Navegadores principales',
+    fr: 'Navigateurs les plus utilisés',
+    de: 'Top-Browser',
+    cn: '热门浏览器',
+    ja: 'トップブラウザ',
+    ru: 'Топ браузеров',
+    ko: '인기 브라우저'
+  },
+  {
+    en: 'Top Pages',
+    es: 'Páginas principales',
+    fr: 'Pages les plus visitées',
+    de: 'Top-Seiten',
+    cn: '热门页面',
+    ja: 'トップページ',
+    ru: 'Топ страниц',
+    ko: '인기 페이지'
+  },
+  {
+    en: 'Top Cities',
+    es: 'Ciudades principales',
+    fr: 'Villes les plus actives',
+    de: 'Top-Städte',
+    cn: '热门城市',
+    ja: 'トップ都市',
+    ru: 'Топ городов',
+    ko: '인기 도시'
+  },
+  {
+    en: 'Top Countries',
+    es: 'Países principales',
+    fr: 'Pays les plus actifs',
+    de: 'Top-Länder',
+    cn: '热门国家',
+    ja: 'トップ国',
+    ru: 'Топ стран',
+    ko: '인기 국가'
+  },
+  {
+    en: 'Top Sources',
+    es: 'Fuentes principales',
+    fr: 'Sources les plus utilisées',
+    de: 'Top-Quellen',
+    cn: '热门来源',
+    ja: 'トップソース',
+    ru: 'Топ источников',
+    ko: '인기 소스'
+  },
+  {
+    en: 'Graph',
+    es: 'Gráfico',
+    fr: 'Graphique',
+    de: 'Diagramm',
+    cn: '图表',
+    ja: 'グラフ',
+    ru: 'График',
+    ko: '그래프'
+  },
+  {
+    en: 'Top Activities',
+    es: 'Actividades principales',
+    fr: 'Activités les plus populaires',
+    de: 'Top-Aktivitäten',
+    cn: '热门活动',
+    ja: 'トップアクティビティ',
+    ru: 'Топ активностей',
+    ko: '인기 활동'
+  },
+  {
+    en: 'Online users',
+    es: 'Usuarios en línea',
+    fr: 'Utilisateurs en ligne',
+    de: 'Benutzer online',
+    cn: '在线用户',
+    ja: 'オンラインユーザー',
+    ru: 'Пользователи онлайн',
+    ko: '온라인 사용자'
+  },
+  {
+    en: 'Themes',
+    es: 'Temas',
+    fr: 'Thèmes',
+    de: 'Themen',
+    cn: '主题',
+    ja: 'テーマ',
+    ru: 'Темы',
+    ko: '테마'
+  },
+  {
+    en: 'Create theme',
+    es: 'Crear tema',
+    fr: 'Créer un thème',
+    de: 'Thema erstellen',
+    cn: '创建主题',
+    ja: 'テーマを作成',
+    ru: 'Создать тему',
+    ko: '테마 만들기'
+  },
+  {
+    en: 'Update theme',
+    es: 'Actualizar tema',
+    fr: 'Mettre à jour le thème',
+    de: 'Design aktualisieren',
+    cn: '更新主题',
+    ja: 'テーマを更新',
+    ru: 'Обновить тему',
+    ko: '테마 업데이트'
+  },
+  {
+    en: 'Theme created successfully!',
+    es: '¡Tema creado con éxito!',
+    fr: 'Thème créé avec succès !',
+    de: 'Design erfolgreich erstellt!',
+    cn: '主题创建成功！',
+    ja: 'テーマが正常に作成されました！',
+    ru: 'Тема успешно создана!',
+    ko: '테마가 성공적으로 생성되었습니다!'
+  },
+  {
+    en: 'Theme updated successfully!',
+    es: '¡Tema actualizado con éxito!',
+    fr: 'Thème mis à jour avec succès !',
+    de: 'Design erfolgreich aktualisiert!',
+    cn: '主题更新成功！',
+    ja: 'テーマが正常に更新されました！',
+    ru: 'Тема успешно обновлена!',
+    ko: '테마가 성공적으로 업데이트되었습니다!'
+  },
+  {
+    en: 'Unable to create theme. Please try again!',
+    es: 'No se pudo crear el tema. ¡Por favor, inténtelo de nuevo!',
+    fr: 'Impossible de créer le thème. Veuillez réessayer !',
+    de: 'Design konnte nicht erstellt werden. Bitte versuchen Sie es erneut!',
+    cn: '无法创建主题。请再试一次！',
+    ja: 'テーマを作成できませんでした。もう一度お試しください！',
+    ru: 'Не удалось создать тему. Пожалуйста, попробуйте еще раз!',
+    ko: '테마를 생성할 수 없습니다. 다시 시도해 주세요!'
+  },
+  {
+    en: 'Unable to update theme. Please try again!',
+    es: 'No se pudo actualizar el tema. ¡Por favor, inténtelo de nuevo!',
+    fr: 'Impossible de mettre à jour le thème. Veuillez réessayer !',
+    de: 'Design konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut!',
+    cn: '无法更新主题。请再试一次！',
+    ja: 'テーマを更新できませんでした。もう一度お試しください！',
+    ru: 'Не удалось обновить тему. Пожалуйста, попробуйте еще раз!',
+    ko: '테마를 업데이트할 수 없습니다. 다시 시도해 주세요!'
+  },
+  {
+    en: 'Title is too short. Minimum of 3 characters.',
+    es: 'El título es demasiado corto. Mínimo 3 caracteres.',
+    fr: 'Le titre est trop court. Minimum de 3 caractères.',
+    de: 'Der Titel ist zu kurz. Mindestens 3 Zeichen.',
+    cn: '标题太短。至少需要3个字符。',
+    ja: 'タイトルが短すぎます。最低3文字必要です。',
+    ru: 'Название слишком короткое. Минимум 3 символа.',
+    ko: '제목이 너무 짧습니다. 최소 3자 이상이어야 합니다.'
+  },
+  {
+    en: 'Theme code cannot be empty!',
+    es: '¡El código del tema no puede estar vacío!',
+    fr: 'Le code du thème ne peut pas être vide !',
+    de: 'Der Themen-Code darf nicht leer sein!',
+    cn: '主题代码不能为空！',
+    ja: 'テーマコードは空にできません！',
+    ru: 'Код темы не может быть пустым!',
+    ko: '테마 코드는 비워둘 수 없습니다!'
+  },
+  {
+    en: 'Edit theme',
+    es: 'Editar tema',
+    fr: 'Modifier le thème',
+    de: 'Thema bearbeiten',
+    cn: '编辑主题',
+    ja: 'テーマを編集',
+    ru: 'Редактировать тему',
+    ko: '테마 편집'
+  },
+  {
+    en: 'Inactive',
+    es: 'Inactivo',
+    fr: 'Inactif',
+    de: 'Inaktiv',
+    cn: '未激活',
+    ja: '非アクティブ',
+    ru: 'Неактивно',
+    ko: '비활성'
+  },
+  {
+    en: 'You cannot disable the currently active theme. Please enable another theme first to disable this one',
+    es: 'No puedes desactivar el tema actualmente activo. Por favor, activa otro tema primero para desactivar este.',
+    fr: "Vous ne pouvez pas désactiver le thème actuellement actif. Veuillez d'abord activer un autre thème pour désactiver celui-ci.",
+    de: 'Sie können das aktuell aktive Theme nicht deaktivieren. Bitte aktivieren Sie zuerst ein anderes Theme, um dieses zu deaktivieren.',
+    cn: '您无法禁用当前启用的主题。请先启用其他主题以禁用此主题。',
+    ja: '現在有効なテーマを無効にすることはできません。別のテーマを有効にしてから、このテーマを無効にしてください。',
+    ru: 'Вы не можете отключить текущую активную тему. Пожалуйста, сначала включите другую тему, чтобы отключить эту.',
+    ko: '현재 활성화된 테마를 비활성화할 수 없습니다. 다른 테마를 먼저 활성화한 후 이 테마를 비활성화하세요.'
+  },
+  {
+    en: 'Signup using Facebook',
+    es: 'Regístrate usando Facebook',
+    fr: 'Inscription via Facebook',
+    de: 'Registrierung mit Facebook',
+    cn: '使用 Facebook 注册',
+    ja: 'Facebookでサインアップ',
+    ru: 'Регистрация через Facebook',
+    ko: 'Facebook으로 가입하기'
+  },
+  {
+    en: 'Login using Facebook',
+    es: 'Inicia sesión con Facebook',
+    fr: 'Connexion via Facebook',
+    de: 'Anmelden mit Facebook',
+    cn: '使用 Facebook 登录',
+    ja: 'Facebookでログイン',
+    ru: 'Войти через Facebook',
+    ko: 'Facebook으로 로그인'
+  },
+  {
+    en: 'Login using Google',
+    es: 'Inicia sesión con Google',
+    fr: 'Connexion via Google',
+    de: 'Anmelden mit Google',
+    cn: '使用 Google 登录',
+    ja: 'Googleでログイン',
+    ru: 'Войти через Google',
+    ko: 'Google로 로그인'
+  },
+  {
+    en: 'Signup using Google',
+    es: 'Regístrate con Google',
+    fr: 'Inscription via Google',
+    de: 'Registrierung mit Google',
+    cn: '使用 Google 注册',
+    ja: 'Googleでサインアップ',
+    ru: 'Регистрация через Google',
+    ko: 'Google로 가입하기'
+  },
+  {
+    en: 'Please accept the terms of use and privacy policy',
+    es: 'Por favor, acepta los términos de uso y la política de privacidad',
+    fr: "Veuillez accepter les conditions d'utilisation et la politique de confidentialité",
+    de: 'Bitte akzeptieren Sie die Nutzungsbedingungen und die Datenschutzrichtlinie',
+    cn: '请接受使用条款和隐私政策',
+    ja: '利用規約とプライバシーポリシーに同意してください',
+    ru: 'Пожалуйста, примите условия использования и политику конфиденциальности',
+    ko: '이용 약관과 개인정보 처리방침에 동의해 주세요'
+  },
+  {
+    en: "You've been awarded the Favorite Badge for receiving 100+ likes on your posts!",
+    es: '¡Has recibido la Insignia Favorita por obtener más de 100 me gusta en tus publicaciones!',
+    fr: "Vous avez reçu le Badge Favori pour avoir obtenu plus de 100 j'aime sur vos publications !",
+    de: 'Du hast das Favorite-Badge erhalten, weil du mehr als 100 Likes auf deine Beiträge bekommen hast!',
+    cn: '您因帖子获得100多个赞而被授予最喜爱徽章！',
+    ja: '投稿が100以上いいねを獲得し、お気に入りバッジを授与されました！',
+    ru: 'Вы получили значок «Любимчик» за 100+ лайков на ваших постах!',
+    ko: '게시물에 100개 이상의 좋아요를 받아 팔로워 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Devotee Badge!",
+    es: '¡Has recibido la Insignia Devoto!',
+    fr: 'Vous avez reçu le Badge Dévoué !',
+    de: 'Du hast das Devotee-Badge erhalten!',
+    cn: '您已被授予忠实粉丝徽章！',
+    ja: '献身者バッジを授与されました！',
+    ru: 'Вы получили значок «Преданный»!',
+    ko: '헌신자 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Veteran Badge!",
+    es: '¡Has recibido la Insignia Veterano!',
+    fr: 'Vous avez reçu le Badge Vétéran !',
+    de: 'Du hast das Veteran-Badge erhalten!',
+    cn: '您已被授予资深用户徽章！',
+    ja: 'ベテランバッジを授与されました！',
+    ru: 'Вы получили значок «Ветеран»!',
+    ko: '베테랑 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Prolific Writer Badge!",
+    es: '¡Has recibido la Insignia de Escritor Prolífico!',
+    fr: 'Vous avez reçu le Badge Écrivain Prolifique !',
+    de: 'Du hast das Prolific Writer-Badge erhalten!',
+    cn: '您已被授予多产作者徽章！',
+    ja: '執筆者バッジを授与されました！',
+    ru: 'Вы получили значок «Активный автор»!',
+    ko: '다작 작가 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Wordsmith Badge!",
+    es: '¡Has recibido la Insignia de Maestro de las Palabras!',
+    fr: 'Vous avez reçu le Badge Maître des Mots !',
+    de: 'Du hast das Wordsmith-Badge erhalten!',
+    cn: '您已被授予文字大师徽章！',
+    ja: '言葉の匠バッジを授与されました！',
+    ru: 'Вы получили значок «Мастер слова»!',
+    ko: '워드스미스 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the People's Choice Badge for receiving 100+ likes on your posts!",
+    es: '¡Has recibido la Insignia Elección del Público por obtener más de 100 me gusta en tus publicaciones!',
+    fr: "Vous avez reçu le Badge Choix du Public pour avoir obtenu plus de 100 j'aime sur vos publications !",
+    de: "Du hast das People's Choice-Badge erhalten, weil du mehr als 100 Likes auf deine Beiträge bekommen hast!",
+    cn: '您因帖子获得100多个赞而被授予大众选择徽章！',
+    ja: '投稿が100以上いいねを獲得し、ピープルズチョイスバッジを授与されました！',
+    ru: 'Вы получили значок «Выбор народа» за 100+ лайков на ваших постах!',
+    ko: '게시물에 100개 이상의 좋아요를 받아 피플스 초이스 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Polymath Badge for providing 1000+ best answers!",
+    es: '¡Has recibido la Insignia Polímata por proporcionar más de 1000 mejores respuestas!',
+    fr: 'Vous avez reçu le Badge Polymathe pour avoir fourni plus de 1000 meilleures réponses !',
+    de: 'Du hast das Polymath-Badge erhalten, weil du mehr als 1000 beste Antworten gegeben hast!',
+    cn: '您因提供了1000多个最佳答案而被授予博学徽章！',
+    ja: '1000以上のベストアンサーを提供し、ポリマスバッジを授与されました！',
+    ru: 'Вы получили значок «Эрудит» за 1000+ лучших ответов!',
+    ko: '1000개 이상의 베스트 답변을 제공하여 폴리매스 배지를 획득하셨습니다!'
+  },
+  {
+    en: "You've been awarded the Genius Badge for providing 100+ best answers!",
+    es: '¡Has recibido la Insignia Genio por proporcionar más de 100 mejores respuestas!',
+    fr: 'Vous avez reçu le Badge Génie pour avoir fourni plus de 100 meilleures réponses !',
+    de: 'Du hast das Genius-Badge erhalten, weil du mehr als 100 beste Antworten gegeben hast!',
+    cn: '您因提供了100多个最佳答案而被授予天才徽章！',
+    ja: '100以上のベストアンサーを提供し、天才バッジを授与されました！',
+    ru: 'Вы получили значок «Гений» за 100+ лучших ответов!',
+    ko: '100개 이상의 베스트 답변을 제공하여 천재 배지를 획득하셨습니다!'
+  },
+  {
+    en: 'Polymath: Best Answers for 1000+ posts',
+    es: 'Polímata: Mejores respuestas en 1000+ publicaciones',
+    fr: 'Polymathe : Meilleures réponses pour 1000+ publications',
+    de: 'Universalgelehrter: Beste Antworten für 1000+ Beiträge',
+    cn: '博学者：1000多个帖子的最佳答案',
+    ja: 'ポリマス：1000以上の投稿へのベストアンサー',
+    ru: 'Эрудит: Лучшие ответы на 1000+ постов',
+    ko: '박식가: 1000개 이상 게시물의 베스트 답변'
+  },
+  {
+    en: 'Genius: Best Answers for 100+ posts',
+    es: 'Genio: Mejores respuestas en 100+ publicaciones',
+    fr: 'Génie : Meilleures réponses pour 100+ publications',
+    de: 'Genie: Beste Antworten für 100+ Beiträge',
+    cn: '天才：100多个帖子的最佳答案',
+    ja: '天才：100以上の投稿へのベストアンサー',
+    ru: 'Гений: Лучшие ответы на 100+ постов',
+    ko: '천재: 100개 이상 게시물의 베스트 답변'
+  },
+  {
+    en: 'Favorite: Answered 100+ likes',
+    es: 'Favorito: Respuestas con 100+ me gusta',
+    fr: "Favori : Réponses avec 100+ j'aime",
+    de: 'Favorit: Antworten mit 100+ Likes',
+    cn: '最喜爱：回答获得100多个赞',
+    ja: 'お気に入り：100以上いいねの回答',
+    ru: 'Любимчик: Ответы с 100+ лайков',
+    ko: '팔로워: 100개 이상 좋아요를 받은 답변'
+  },
+  {
+    en: "People's choice: 1000+ likes",
+    es: 'Elección del público: 1000+ me gusta',
+    fr: "Choix du public : 1000+ j'aime",
+    de: 'Publikumsliebling: 1000+ Likes',
+    cn: '大众选择：1000多个赞',
+    ja: 'ピープルズチョイス：1000以上いいね',
+    ru: 'Выбор народа: 1000+ лайков',
+    ko: '피플스 초이스: 1000개 이상 좋아요'
+  },
+  {
+    en: 'Prolific writer: Wrote 100+ discussions',
+    es: 'Escritor prolífico: Escribió 100+ discusiones',
+    fr: 'Écrivain prolifique : A écrit 100+ discussions',
+    de: 'Prolifischer Autor: Verfasste 100+ Diskussionen',
+    cn: '多产作者：撰写了100多个讨论',
+    ja: '執筆者：100以上のディスカッションを投稿',
+    ru: 'Активный автор: Написал 100+ обсуждений',
+    ko: '다작 작가: 100개 이상의 토론 작성'
+  },
+  {
+    en: 'Wordsmith: Wrote 1000+ discussions',
+    es: 'Maestro de las palabras: Escribió 1000+ discusiones',
+    fr: 'Maître des mots : A écrit 1000+ discussions',
+    de: 'Wortkünstler: Verfasste 1000+ Diskussionen',
+    cn: '文字大师：撰写了1000多个讨论',
+    ja: '言葉の匠：1000以上のディスカッションを投稿',
+    ru: 'Мастер слова: Написал 1000+ обсуждений',
+    ko: '워드스미스: 1000개 이상의 토론 작성'
+  },
+  {
+    en: 'Veteran: Actively engaged and contributing for 3+ years',
+    es: 'Veterano: Participación activa y contribuciones durante 3+ años',
+    fr: 'Vétéran : Engagement actif et contributions depuis 3+ ans',
+    de: 'Veteran: Seit 3+ Jahren aktiv engagiert und Beitragend',
+    cn: '资深用户：积极参与并贡献3年以上',
+    ja: 'ベテラン：3年以上の積極的な参加と貢献',
+    ru: 'Ветеран: Активное участие и вклад в течение 3+ лет',
+    ko: '베테랑: 3년 이상 적극적으로 참여 및 기여'
+  },
+  {
+    en: 'Devotee: Actively engaged and contributing for 1+ years',
+    es: 'Devoto: Participación activa y contribuciones durante 1+ años',
+    fr: 'Dévoué : Engagement actif et contributions depuis 1+ an',
+    de: 'Engagierter Nutzer: Seit 1+ Jahren aktiv engagiert und Beitragend',
+    cn: '忠实粉丝：积极参与并贡献1年以上',
+    ja: '献身者：1年以上の積極的な参加と貢献',
+    ru: 'Преданный: Активное участие и вклад в течение 1+ года',
+    ko: '헌신자: 1년 이상 적극적으로 참여 및 기여'
+  },
+  {
+    en: 'mentioned you in their post',
+    es: 'te mencionó en su publicación',
+    fr: 'vous a mentionné dans son post',
+    de: 'hat dich in ihrem Beitrag erwähnt',
+    cn: '在他们的帖子中提到了你',
+    ja: 'が投稿であなたに言及しました',
+    ru: 'упомянул вас в своем посте',
+    ko: '게시물에서 당신을 언급했습니다'
+  },
+  {
+    en: 'mentioned you in their comment',
+    es: 'te mencionó en su comentario',
+    fr: 'vous a mentionné dans son commentaire',
+    de: 'hat dich in ihrem Kommentar erwähnt',
+    cn: '在他们的评论中提到了你',
+    ja: 'がコメントであなたに言及しました',
+    ru: 'упомянул вас в своем комментарии',
+    ko: '댓글에서 당신을 언급했습니다'
+  },
+  {
+    en: 'mentioned you in their reply',
+    es: 'te mencionó en su respuesta',
+    fr: 'vous a mentionné dans sa réponse',
+    de: 'hat dich in ihrer Antwort erwähnt',
+    cn: '在他们的回复中提到了你',
+    ja: 'が返信であなたに言及しました',
+    ru: 'упомянул вас в своем ответе',
+    ko: '답글에서 당신을 언급했습니다'
+  },
+  {
+    en: 'Mention user',
+    es: 'Mencionar usuario',
+    fr: "Mentionner l'utilisateur",
+    de: 'Benutzer erwähnen',
+    cn: '提及用户',
+    ja: 'ユーザーをメンション',
+    ru: 'Упомянуть пользователя',
+    ko: '사용자 언급'
+  },
+  {
+    en: 'Search user....',
+    es: 'Buscar usuario....',
+    fr: 'Rechercher un utilisateur....',
+    de: 'Benutzer suchen....',
+    cn: '搜索用户....',
+    ja: 'ユーザーを検索....',
+    ru: 'Поиск пользователя....',
+    ko: '사용자 검색....'
+  },
+  {
+    en: '⚠️ Warning: Deleting this comment will also delete all its replies. This action cannot be undone. Are you sure you want to proceed?',
+    es: '⚠️ Advertencia: Eliminar este comentario también eliminará todas sus respuestas. Esta acción no se puede deshacer. ¿Estás seguro de que deseas continuar?',
+    fr: '⚠️ Avertissement : Supprimer ce commentaire supprimera également toutes ses réponses. Cette action est irréversible. Êtes-vous sûr de vouloir continuer ?',
+    de: '⚠️ Warnung: Das Löschen dieses Kommentars löscht auch alle Antworten darauf. Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie wirklich fortfahren?',
+    cn: '⚠️ 警告：删除此评论也将删除其所有回复。此操作无法撤消。您确定要继续吗？',
+    ja: '⚠️ 警告：このコメントを削除すると、すべての返信も削除されます。この操作は元に戻せません。本当に続行しますか？',
+    ru: '⚠️ Предупреждение: Удаление этого комментария также удалит все ответы на него. Это действие нельзя отменить. Вы уверены, что хотите продолжить?',
+    ko: '⚠️ 경고: 이 댓글을 삭제하면 모든 답글도 삭제됩니다. 이 작업은 취소할 수 없습니다. 계속 진행하시겠습니까?'
+  },
+  {
+    en: '⚠️ Warning: This action cannot be undone. Are you sure you want to delete this reply?',
+    es: '⚠️ Advertencia: Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta respuesta?',
+    fr: '⚠️ Avertissement : Cette action est irréversible. Êtes-vous sûr de vouloir supprimer cette réponse ?',
+    de: '⚠️ Warnung: Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie diese Antwort wirklich löschen?',
+    cn: '⚠️ 警告：此操作无法撤消。您确定要删除此回复吗？',
+    ja: '⚠️ 警告：この操作は元に戻せません。この返信を削除してもよろしいですか？',
+    ru: '⚠️ Предупреждение: Это действие нельзя отменить. Вы уверены, что хотите удалить этот ответ?',
+    ko: '⚠️ 경고: 이 작업은 취소할 수 없습니다. 이 답글을 삭제하시겠습니까?'
+  },
+  {
+    en: 'Click to mark this comment the best response',
+    es: 'Haz clic para marcar este comentario como la mejor respuesta',
+    fr: 'Cliquez pour marquer ce commentaire comme la meilleure réponse',
+    de: 'Klicken Sie, um diesen Kommentar als die beste Antwort zu markieren',
+    cn: '点击将此评论标记为最佳回复',
+    ja: 'このコメントをベストレスポンスとしてマークするにはクリックしてください',
+    ru: 'Нажмите, чтобы отметить этот комментарий как лучший ответ',
+    ko: '이 댓글을 최고의 응답으로 표시하려면 클릭하세요'
+  },
+  {
+    en: 'Click to remove this comment as the best response',
+    es: 'Haz clic para eliminar este comentario como la mejor respuesta',
+    fr: 'Cliquez pour supprimer ce commentaire comme meilleure réponse',
+    de: 'Klicken Sie, um diesen Kommentar als beste Antwort zu entfernen',
+    cn: '点击移除此评论的最佳回复标记',
+    ja: 'このコメントのベストレスポンスを解除するにはクリックしてください',
+    ru: 'Нажмите, чтобы убрать этот комментарий как лучший ответ',
+    ko: '이 댓글의 최고의 응답 표시를 해제하려면 클릭하세요'
+  },
+  {
+    en: 'Best response',
+    es: 'Mejor respuesta',
+    fr: 'Meilleure réponse',
+    de: 'Beste Antwort',
+    cn: '最佳回复',
+    ja: 'ベストレスポンス',
+    ru: 'Лучший ответ',
+    ko: '최고의 응답'
+  },
+  {
+    en: 'Mark best response',
+    es: 'Marcar como mejor respuesta',
+    fr: 'Marquer comme meilleure réponse',
+    de: 'Als beste Antwort markieren',
+    cn: '标记为最佳回复',
+    ja: 'ベストレスポンスとしてマーク',
+    ru: 'Отметить как лучший ответ',
+    ko: '최고의 응답으로 표시'
+  },
+  {
+    en: 'Newest',
+    es: 'Más nuevo',
+    fr: 'Le plus récent',
+    de: 'Neueste',
+    cn: '最新',
+    ja: '最新',
+    ru: 'Самый новый'
+  },
+  {
+    en: 'Most Active',
+    es: 'Más activo',
+    fr: 'Le plus actif',
+    de: 'Am aktivsten',
+    cn: '最活跃',
+    ja: '最も活発',
+    ru: 'Самый активный'
+  },
+  {
+    en: 'Extensions',
+    es: 'Extensiones',
+    fr: 'Extensions',
+    de: 'Erweiterungen',
+    cn: '扩展',
+    ja: '拡張機能',
+    ru: 'Расширения'
+  },
+  {
+    en: 'Upload extension',
+    es: 'Subir extensión',
+    fr: 'Téléverser une extension',
+    de: 'Erweiterung hochladen',
+    cn: '上传扩展',
+    ja: '拡張機能をアップロード',
+    ru: 'Загрузить расширение'
+  },
+  {
+    en: 'Please upload valid zip file',
+    es: 'Por favor, suba un archivo zip válido',
+    fr: 'Veuillez téléverser un fichier zip valide',
+    de: 'Bitte laden Sie eine gültige Zip-Datei hoch',
+    cn: '请上传有效的zip文件',
+    ja: '有効なzipファイルをアップロードしてください',
+    ru: 'Пожалуйста, загрузите действительный zip-файл'
+  },
+  {
+    en: 'Error uploading extensions. Please check the extension documentation for support',
+    es: 'Error al subir extensiones. Consulte la documentación de la extensión para obtener soporte',
+    fr: "Erreur lors du téléversement des extensions. Consultez la documentation de l'extension pour obtenir de l'aide",
+    de: 'Fehler beim Hochladen der Erweiterungen. Überprüfen Sie die Dokumentation der Erweiterung für Unterstützung',
+    cn: '上传扩展时出错。请查看扩展文档以获取支持',
+    ja: '拡張機能のアップロード中にエラーが発生しました。サポートについては拡張機能のドキュメントを確認してください',
+    ru: 'Ошибка при загрузке расширений. Проверьте документацию расширения для получения поддержки'
+  },
+  {
+    en: 'Uploading extension....',
+    es: 'Subiendo extensión....',
+    fr: "Téléversement de l'extension....",
+    de: 'Erweiterung wird hochgeladen....',
+    cn: '正在上传扩展....',
+    ja: '拡張機能をアップロード中....',
+    ru: 'Загрузка расширения....'
+  },
+  {
+    en: 'Extension uploaded successfully!',
+    es: '¡Extensión subida correctamente!',
+    fr: 'Extension téléversée avec succès !',
+    de: 'Erweiterung erfolgreich hochgeladen!',
+    cn: '扩展上传成功！',
+    ja: '拡張機能が正常にアップロードされました！',
+    ru: 'Расширение успешно загружено!'
+  },
+  {
+    en: 'Extension variables',
+    es: 'Variables de extensión',
+    fr: "Variables d'extension",
+    de: 'Erweiterungsvariablen',
+    cn: '扩展变量',
+    ja: '拡張機能の変数',
+    ru: 'Переменные расширения'
+  },
+  {
+    en: 'Extension name is required',
+    es: 'El nombre de la extensión es obligatorio',
+    fr: "Le nom de l'extension est requis",
+    de: 'Der Name der Erweiterung ist erforderlich',
+    cn: '扩展名称是必填项',
+    ja: '拡張機能の名前は必須です',
+    ru: 'Название расширения обязательно'
+  },
+  {
+    en: 'Help',
+    es: 'Ayuda',
+    fr: 'Aide',
+    de: 'Hilfe',
+    cn: '帮助',
+    ja: 'ヘルプ',
+    ru: 'Помощь'
+  },
+  {
+    en: 'Note: The name for the extension should be unique, written in lowercase, with no spaces—only hyphens are allowed.',
+    es: 'Nota: El nombre de la extensión debe ser único, escrito en minúsculas, sin espacios; solo se permiten guiones.',
+    fr: "Remarque : Le nom de l'extension doit être unique, écrit en minuscules, sans espaces—seuls les traits d'union sont autorisés.",
+    de: 'Hinweis: Der Name der Erweiterung sollte eindeutig sein, in Kleinbuchstaben geschrieben und ohne Leerzeichen—nur Bindestriche sind erlaubt.',
+    cn: '注意：扩展的名称应唯一，使用小写字母书写，不能有空格，只允许使用连字符。',
+    ja: '注意：拡張機能の名前は一意である必要があり、小文字で記述し、スペースを入れず、ハイフンのみが許可されます。',
+    ru: 'Примечание: Название расширения должно быть уникальным, написано строчными буквами, без пробелов—допускаются только дефисы.'
+  },
+  {
+    en: 'Extension slug name',
+    es: 'Nombre del slug de la extensión',
+    fr: "Nom du slug de l'extension",
+    de: 'Slug-Name der Erweiterung',
+    cn: '扩展 slug 名称',
+    ja: '拡張機能スラッグ名',
+    ru: 'Слаг имени расширения'
+  },
+  {
+    en: 'Add extension',
+    es: 'Agregar extensión',
+    fr: 'Ajouter une extension',
+    de: 'Erweiterung hinzufügen',
+    cn: '添加扩展',
+    ja: '拡張機能を追加',
+    ru: 'Добавить расширение'
+  },
+  {
+    en: 'Are you sure you want to delete this extension?',
+    es: '¿Estás seguro de que deseas eliminar esta extensión?',
+    fr: 'Êtes-vous sûr de vouloir supprimer cette extension ?',
+    de: 'Sind Sie sicher, dass Sie diese Erweiterung löschen möchten?',
+    cn: '你确定要删除这个扩展吗？',
+    ja: 'この拡張機能を削除してもよろしいですか？',
+    ru: 'Вы уверены, что хотите удалить это расширение?'
+  },
+  {
+    en: 'Extension slug name exists. Please use another name.',
+    es: 'El nombre del slug de la extensión ya existe. Por favor, use otro nombre.',
+    fr: "Le nom du slug de l'extension existe déjà. Veuillez utiliser un autre nom.",
+    de: 'Der Slug-Name der Erweiterung existiert bereits. Bitte verwenden Sie einen anderen Namen.',
+    cn: '扩展 slug 名称已存在。请使用其他名称。',
+    ja: '拡張機能のスラッグ名は既に存在します。別の名前を使用してください。',
+    ru: 'Слаг имени расширения уже существует. Пожалуйста, используйте другое имя.'
+  },
+  {
+    en: 'Key',
+    es: 'Clave',
+    fr: 'Clé',
+    de: 'Schlüssel',
+    cn: '键',
+    ja: 'キー',
+    ru: 'Ключ'
+  },
+  {
+    en: 'Value',
+    es: 'Valor',
+    fr: 'Valeur',
+    de: 'Wert',
+    cn: '值',
+    ja: '値',
+    ru: 'Значение'
+  },
+  {
+    en: 'Extension variables',
+    es: 'Variables de extensión',
+    fr: "Variables d'extension",
+    de: 'Erweiterungsvariablen',
+    cn: '扩展变量',
+    ja: '拡張変数',
+    ru: 'Переменные расширения'
+  },
+  {
+    en: 'Subscription',
+    es: 'Suscripción',
+    fr: 'Abonnement',
+    de: 'Abonnement',
+    cn: '订阅',
+    ja: 'サブスクリプション',
+    ru: 'Подписка'
+  },
+  {
+    en: 'Monthly subscription fee',
+    es: 'Cuota de suscripción mensual',
+    fr: "Frais d'abonnement mensuel",
+    de: 'Monatliche Abonnementgebühr',
+    cn: '每月订阅费',
+    ja: '月額サブスクリプション料金',
+    ru: 'Ежемесячная абонентская плата'
+  },
+  {
+    en: 'Subscribe to get access to my exclusive contents via premium posts and priority DM',
+    es: 'Suscríbete para acceder a mis contenidos exclusivos a través de publicaciones premium y mensajes directos prioritarios',
+    fr: 'Abonnez-vous pour accéder à mes contenus exclusifs via des publications premium et des messages prioritaires',
+    de: 'Abonniere, um Zugang zu meinen exklusiven Inhalten über Premium-Posts und priorisierte Nachrichten zu erhalten',
+    cn: '订阅以通过高级帖子和优先私信访问我的独家内容',
+    ja: 'プレミアム投稿と優先DMを通じて私の独占コンテンツにアクセスするために購読する',
+    ru: 'Подпишитесь, чтобы получить доступ к моим эксклюзивным материалам через премиум-посты и приоритетные сообщения'
+  },
+  {
+    en: 'Subscription amount cannot be empty or zero.',
+    es: 'El monto de la suscripción no puede estar vacío o ser cero.',
+    fr: "Le montant de l'abonnement ne peut pas être vide ou nul.",
+    de: 'Der Abonnementbetrag darf nicht leer oder null sein.',
+    cn: '订阅金额不能为空或为零。',
+    ja: 'サブスクリプションの金額は空またはゼロにすることはできません。',
+    ru: 'Сумма подписки не может быть пустой или равной нулю.'
+  },
+  {
+    en: 'Subscription amount is lesser than minimum amount.',
+    es: 'El monto de la suscripción es menor que el monto mínimo.',
+    fr: "Le montant de l'abonnement est inférieur au montant minimum.",
+    de: 'Der Abonnementbetrag ist geringer als der Mindestbetrag.',
+    cn: '订阅金额低于最低金额。',
+    ja: 'サブスクリプションの金額が最低金額より少ないです。',
+    ru: 'Сумма подписки меньше минимальной суммы.'
+  },
+  {
+    en: 'Description is too short. Minimum character is ten.',
+    es: 'La descripción es demasiado corta. El mínimo de caracteres es diez.',
+    fr: 'La description est trop courte. Le nombre minimum de caractères est de dix.',
+    de: 'Die Beschreibung ist zu kurz. Die Mindestanzahl an Zeichen beträgt zehn.',
+    cn: '描述太短。最少字符数为十。',
+    ja: '説明が短すぎます。最小文字数は10文字です。',
+    ru: 'Описание слишком короткое. Минимальное количество символов - десять.'
+  },
+  {
+    en: 'Leave empty or zero, if not applicable',
+    es: 'Dejar vacío o cero, si no aplica',
+    fr: 'Laisser vide ou zéro, si non applicable',
+    de: 'Leer lassen oder null, falls nicht zutreffend',
+    cn: '如不适用，请留空或为零',
+    ja: '該当しない場合は空またはゼロのままにしてください',
+    ru: 'Оставьте пустым или нулем, если не применимо'
+  },
+  {
+    en: 'Payment settings',
+    es: 'Configuración de pagos',
+    fr: 'Paramètres de paiement',
+    de: 'Zahlungseinstellungen',
+    cn: '支付设置',
+    ja: '支払い設定',
+    ru: 'Настройки оплаты'
+  },
+  {
+    en: 'Currency',
+    es: 'Moneda',
+    fr: 'Devise',
+    de: 'Währung',
+    cn: '货币',
+    ja: '通貨',
+    ru: 'Валюта'
+  },
+  {
+    en: 'Choose one',
+    es: 'Elige uno',
+    fr: 'Choisissez-en un',
+    de: 'Wähle eins',
+    cn: '选择一个',
+    ja: '1つ選んでください',
+    ru: 'Выберите один'
+  },
+  {
+    en: 'Premium access fee (monthly)',
+    es: 'Cuota de acceso premium (mensual)',
+    fr: "Frais d'accès premium (mensuel)",
+    de: 'Premium-Zugangsgebühr (monatlich)',
+    cn: '高级访问费（月度）',
+    ja: 'プレミアムアクセス料金（月額）',
+    ru: 'Плата за премиум-доступ (ежемесячно)'
+  },
+  {
+    en: 'User subscription fee (monthly)',
+    es: 'Cuota de suscripción del usuario (mensual)',
+    fr: "Frais d'abonnement utilisateur (mensuel)",
+    de: 'Benutzerabonnementgebühr (monatlich)',
+    cn: '用户订阅费（月度）',
+    ja: 'ユーザーのサブスクリプション料金（月額）',
+    ru: 'Абонентская плата пользователя (ежемесячно)'
+  },
+  {
+    en: 'Percentage',
+    es: 'Porcentaje',
+    fr: 'Pourcentage',
+    de: 'Prozentsatz',
+    cn: '百分比',
+    ja: '割合',
+    ru: 'Процент'
+  },
+  {
+    en: 'Note: Payment received by the user when others subscribe to their premium content',
+    es: 'Nota: Pago recibido por el usuario cuando otros se suscriben a su contenido premium',
+    fr: "Remarque : Paiement reçu par l'utilisateur lorsque d'autres s'abonnent à leur contenu premium",
+    de: 'Hinweis: Zahlung, die der Benutzer erhält, wenn andere ihr Premium-Inhalt abonnieren',
+    cn: '注意：用户在其他人订阅其高级内容时收到的付款',
+    ja: '注：他のユーザーがプレミアムコンテンツを購読すると、ユーザーが受け取る支払い',
+    ru: 'Примечание: Платеж, полученный пользователем, когда другие подписываются на их премиум-контент'
+  },
+  {
+    en: 'Minimum amount',
+    es: 'Cantidad mínima',
+    fr: 'Montant minimum',
+    de: 'Mindestbetrag',
+    cn: '最低金额',
+    ja: '最低金額',
+    ru: 'Минимальная сумма'
+  },
+  {
+    en: 'Message',
+    es: 'Mensaje',
+    fr: 'Message',
+    de: 'Nachricht',
+    cn: '信息',
+    ja: 'メッセージ',
+    ru: 'Сообщение'
+  },
+  {
+    en: 'Subscribe',
+    es: 'Suscribirse',
+    fr: "S'abonner",
+    de: 'Abonnieren',
+    cn: '订阅',
+    ja: '購読する',
+    ru: 'Подписаться'
+  },
+  {
+    en: 'Free or Premium?',
+    es: '¿Gratis o Premium?',
+    fr: 'Gratuit ou Premium?',
+    de: 'Kostenlos oder Premium?',
+    cn: '免费还是高级？',
+    ja: '無料またはプレミアム？',
+    ru: 'Бесплатно или Премиум?'
+  },
+  {
+    en: 'For everyone',
+    es: 'Para todos',
+    fr: 'Pour tout le monde',
+    de: 'Für alle',
+    cn: '为所有人',
+    ja: 'みんなのために',
+    ru: 'Для всех'
+  },
+  {
+    en: 'For my subscribers',
+    es: 'Para mis suscriptores',
+    fr: 'Pour mes abonnés',
+    de: 'Für meine Abonnenten',
+    cn: '给我的订阅者',
+    ja: '私の購読者のために',
+    ru: 'Для моих подписчиков'
+  },
+  {
+    en: 'Percentage charged on user subscription fee',
+    es: 'Porcentaje cobrado en la tarifa de suscripción del usuario',
+    fr: "Pourcentage facturé sur les frais d'abonnement de l'utilisateur",
+    de: 'Prozentsatz, der auf die Abonnementgebühr des Benutzers erhoben wird',
+    cn: '用户订阅费用的百分比',
+    ja: 'ユーザーのサブスクリプション料金に対する課金率',
+    ru: 'Процент, взимаемый с абонентской платы пользователя'
+  },
+  {
+    en: 'Premium',
+    es: 'Prima',
+    fr: 'Prime',
+    de: 'Prämie',
+    cn: '高级',
+    ja: 'プレミアム',
+    ru: 'Премиум'
+  },
+  {
+    en: 'Premium post',
+    es: 'Publicación premium',
+    fr: 'Publication premium',
+    de: 'Premium-Beitrag',
+    cn: '高级帖子',
+    ja: 'プレミアム投稿',
+    ru: 'Премиум пост'
+  },
+  {
+    en: 'Icon',
+    es: 'Icono',
+    fr: 'Icône',
+    de: 'Symbol',
+    cn: '图标',
+    ja: 'アイコン',
+    ru: 'Иконка'
+  },
+  {
+    en: 'Transactions',
+    es: 'Transacciones',
+    fr: 'Transactions',
+    de: 'Transaktionen',
+    cn: '交易',
+    ja: '取引',
+    ru: 'Транзакции'
+  },
+  {
+    en: 'Subscriptions',
+    es: 'Suscripciones',
+    fr: 'Abonnements',
+    de: 'Abonnements',
+    cn: '订阅',
+    ja: 'サブスクリプション',
+    ru: 'Подписки'
+  },
+  {
+    en: 'Amount',
+    es: 'Cantidad',
+    fr: 'Montant',
+    de: 'Betrag',
+    cn: '金额',
+    ja: '金額',
+    ru: 'Сумма'
+  },
+  {
+    en: 'Narration',
+    es: 'Narración',
+    fr: 'Narration',
+    de: 'Erzählung',
+    cn: '叙述',
+    ja: 'ナレーション',
+    ru: 'Повествование'
+  },
+  {
+    en: 'Success',
+    es: 'Éxito',
+    fr: 'Succès',
+    de: 'Erfolg',
+    cn: '成功',
+    ja: '成功',
+    ru: 'Успех'
+  },
+  {
+    en: 'Failure',
+    es: 'Fracaso',
+    fr: 'Échec',
+    de: 'Fehler',
+    cn: '失败',
+    ja: '失敗',
+    ru: 'Неудача'
+  },
+  {
+    en: 'Pending',
+    es: 'Pendiente',
+    fr: 'En attente',
+    de: 'Ausstehend',
+    cn: '待定',
+    ja: '保留中',
+    ru: 'В ожидании'
+  },
+  {
+    en: 'Subscribers',
+    es: 'Suscriptores',
+    fr: 'Abonnés',
+    de: 'Abonnenten',
+    cn: '订阅者',
+    ja: '購読者',
+    ru: 'Подписчики'
+  },
+  {
+    en: 'Get access',
+    es: 'Obtener acceso',
+    fr: "Obtenir l'accès",
+    de: 'Zugang erhalten',
+    cn: '获取访问权限',
+    ja: 'アクセスを取得',
+    ru: 'Получить доступ'
+  },
+  {
+    en: 'Subscription is required to access premium content',
+    es: 'Se requiere suscripción para acceder al contenido premium',
+    fr: "L'abonnement est requis pour accéder au contenu premium",
+    de: 'Ein Abonnement ist erforderlich, um auf Premium-Inhalte zuzugreifen',
+    cn: '需要订阅才能访问高级内容',
+    ja: 'プレミアムコンテンツにアクセスするにはサブスクリプションが必要です',
+    ru: 'Для доступа к премиум-контенту требуется подписка'
+  },
+  {
+    en: 'Subscribed',
+    es: 'Suscrito',
+    fr: 'Abonné',
+    de: 'Abonniert',
+    cn: '已订阅',
+    ja: '購読中',
+    ru: 'Подписан'
+  },
+  {
+    en: 'This month',
+    es: 'Este mes',
+    fr: 'Ce mois-ci',
+    de: 'Diesen Monat',
+    cn: '这个月',
+    ja: '今月',
+    ru: 'Этот месяц'
+  },
+  {
+    en: 'Last month',
+    es: 'El mes pasado',
+    fr: 'Le mois dernier',
+    de: 'Letzten Monat',
+    cn: '上个月',
+    ja: '先月',
+    ru: 'В прошлом месяце'
+  },
+  {
+    en: '2 months ago',
+    es: 'hace 2 meses',
+    fr: 'il y a 2 mois',
+    de: 'vor 2 Monaten',
+    cn: '2个月前',
+    ja: '2ヶ月前',
+    ru: '2 месяца назад'
+  },
+  {
+    en: '3 months ago',
+    es: 'hace 3 meses',
+    fr: 'il y a 3 mois',
+    de: 'vor 3 Monaten',
+    cn: '3个月前',
+    ja: '3ヶ月前',
+    ru: '3 месяца назад'
+  },
+  {
+    en: '4 months ago',
+    es: 'hace 4 meses',
+    fr: 'il y a 4 mois',
+    de: 'vor 4 Monaten',
+    cn: '4个月前',
+    ja: '4ヶ月前',
+    ru: '4 месяца назад'
+  },
+  {
+    en: '5 months ago',
+    es: 'hace 5 meses',
+    fr: 'il y a 5 mois',
+    de: 'vor 5 Monaten',
+    cn: '5个月前',
+    ja: '5ヶ月前',
+    ru: '5 месяца назад'
+  },
+  {
+    en: '6 months ago',
+    es: 'hace 6 meses',
+    fr: 'il y a 6 mois',
+    de: 'vor 6 Monaten',
+    cn: '6个月前',
+    ja: '6ヶ月前',
+    ru: '6 месяца назад'
+  },
+  {
+    en: '1 year ago',
+    es: 'hace 1 año',
+    fr: 'il y a 1 an',
+    de: 'vor 1 Jahr',
+    cn: '1年前',
+    ja: '1年前',
+    ru: '1 год назад'
+  },
+  {
+    en: 'Pinned post',
+    es: 'Publicación fijada',
+    fr: 'Post épinglé',
+    de: 'Angehefteter Beitrag',
+    cn: '置顶帖子',
+    ja: '固定された投稿',
+    ru: 'Закрепленный пост',
+    ko: '고정된 게시물'
+  },
+  {
+    en: 'Locked post',
+    es: 'Publicación bloqueada',
+    fr: 'Publication verrouillée',
+    de: 'Gesperrter Beitrag',
+    cn: '锁定的帖子',
+    ja: 'ロックされた投稿',
+    ru: 'Заблокированный пост',
+    ko: '잠긴 게시물'
+  },
+  {
+    en: 'Background color',
+    es: 'Color de fondo',
+    fr: 'Couleur de fond',
+    de: 'Hintergrundfarbe',
+    cn: '背景颜色',
+    ja: '背景色',
+    ru: 'Цвет фона',
+    ko: '배경 색상'
+  },
+  {
+    en: 'Background image (optional)',
+    es: 'Imagen de fondo (opcional)',
+    fr: 'Image de fond (facultatif)',
+    de: 'Hintergrundbild (optional)',
+    cn: '背景图片（可选）',
+    ja: '背景画像（オプション）',
+    ru: 'Фоновое изображение (необязательно)',
+    ko: '배경 이미지 (선택 사항)'
+  },
+  {
+    en: 'Background image (optional)',
+    es: 'Imagen de fondo (opcional)',
+    fr: 'Image de fond (facultatif)',
+    de: 'Hintergrundbild (optional)',
+    cn: '背景图片（可选）',
+    ja: '背景画像（オプション）',
+    ru: 'Фоновое изображение (необязательно)',
+    ko: '배경 이미지 (선택 사항)'
+  },
+  {
+    en: 'Homepage text',
+    es: 'Texto de la página de inicio',
+    fr: "Texte de la page d'accueil",
+    de: 'Startseitentext',
+    cn: '主页文本',
+    ja: 'ホームページのテキスト',
+    ru: 'Текст главной страницы',
+    ko: '홈페이지 텍스트'
+  },
+  {
+    en: 'Upload',
+    es: 'Subir',
+    fr: 'Télécharger',
+    de: 'Hochladen',
+    cn: '上传',
+    ja: 'アップロード',
+    ru: 'Загрузить',
+    ko: '업로드'
+  },
+  {
+    en: 'Your post has been banned by a moderator due to a privacy violation.',
+    es: 'Tu publicación ha sido prohibida por un moderador debido a una violación de privacidad.',
+    fr: "Votre publication a été interdite par un modérateur en raison d'une violation de la vie privée.",
+    de: 'Ihr Beitrag wurde von einem Moderator wegen eines Datenschutzverstoßes gesperrt.',
+    cn: '由于隐私违规，您的帖子已被版主禁止。',
+    ja: 'プライバシー違反のため、モデレーターによってあなたの投稿が禁止されました。',
+    ru: 'Ваш пост был заблокирован модератором из-за нарушения конфиденциальности.',
+    ko: '개인정보 침해로 인해 귀하의 게시물이 중재자에 의해 금지되었습니다.'
+  },
+  {
+    en: '2FA Login',
+    es: 'Inicio de sesión 2FA',
+    fr: 'Connexion 2FA',
+    de: '2FA-Anmeldung',
+    cn: '2FA登录',
+    ja: '2FAログイン',
+    ru: '2FA Вход',
+    ko: '2FA 로그인'
+  },
+  {
+    en: 'Expired code',
+    es: 'Código caducado',
+    fr: 'Code expiré',
+    de: 'Abgelaufener Code',
+    cn: '过期代码',
+    ja: '期限切れのコード',
+    ru: 'Просроченный код',
+    ko: '만료된 코드'
+  },
+  {
+    en: 'Get a new code',
+    es: 'Obtener un nuevo código',
+    fr: 'Obtenir un nouveau code',
+    de: 'Einen neuen Code erhalten',
+    cn: '获取新代码',
+    ja: '新しいコードを取得',
+    ru: 'Получить новый код',
+    ko: '새 코드 받기'
+  },
+  {
+    en: 'Verification code sent to your email!',
+    es: '¡Código de verificación enviado a tu correo electrónico!',
+    fr: 'Code de vérification envoyé à votre e-mail !',
+    de: 'Bestätigungscode an Ihre E-Mail gesendet!',
+    cn: '验证码已发送到您的电子邮件！',
+    ja: '確認コードがあなたのメールに送信されました！',
+    ru: 'Код подтверждения отправлен на вашу электронную почту!',
+    ko: '인증 코드가 이메일로 전송되었습니다!'
+  },
+  {
+    en: 'Discussion UI',
+    es: 'Interfaz de discusión',
+    fr: 'Interface de discussion',
+    de: 'Diskussions-Benutzeroberfläche',
+    cn: '讨论界面',
+    ja: 'ディスカッションUI',
+    ru: 'Интерфейс обсуждения',
+    ko: '토론 인터페이스'
+  },
+  {
+    en: 'Social',
+    es: 'Social',
+    fr: 'Social',
+    de: 'Sozial',
+    cn: '社交',
+    ja: 'ソーシャル',
+    ru: 'Социальный',
+    ko: '사회적인'
+  },
+  {
+    en: 'Twitter / Facebook style',
+    es: 'Estilo de Twitter / Facebook',
+    fr: 'Style Twitter / Facebook',
+    de: 'Twitter / Facebook-Stil',
+    cn: '推特/脸书风格',
+    ja: 'Twitter / Facebookスタイル',
+    ru: 'Стиль Twitter / Facebook',
+    ko: '트위터 / 페이스북 스타일'
+  },
+  {
+    en: 'Minforum style',
+    es: 'Estilo Minforum',
+    fr: 'Style Minforum',
+    de: 'Minforum-Stil',
+    cn: 'Minforum 风格',
+    ja: 'Minforumスタイル',
+    ru: 'Стиль Minforum',
+    ko: 'Minforum 스타일'
+  },
+  {
+    en: 'Classic Forum UI',
+    es: 'Interfaz de Foro Clásico',
+    fr: 'Interface de Forum Classique',
+    de: 'Klassische Forum-Benutzeroberfläche',
+    cn: '经典论坛界面',
+    ja: 'クラシックフォーラムUI',
+    ru: 'Классический интерфейс форума',
+    ko: '클래식 포럼 UI'
+  },
+  {
+    en: 'Classic',
+    es: 'Clásico',
+    fr: 'Classique',
+    de: 'Klassisch',
+    cn: '经典',
+    ja: 'クラシック',
+    ru: 'Классический',
+    ko: '클래식'
+  },
+  {
+    en: 'Default',
+    es: 'Predeterminado',
+    fr: 'Par défaut',
+    de: 'Standard',
+    cn: '默认',
+    ja: 'デフォルト',
+    ru: 'По умолчанию',
+    ko: '기본값'
+  },{
+  en: 'Table',
+  es: 'Tabla',
+  fr: 'Tableau',
+  de: 'Tabelle',
+  cn: '表格',
+  ja: '表',
+  ru: 'Таблица',
+  ko: '표'
+}
+
 ];
 
 export default dict;

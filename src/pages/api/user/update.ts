@@ -1,12 +1,19 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { User } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 import bcrypt from 'bcryptjs';
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
+      req.body.updatedAt = undefined;
+      req.body.createdAt = undefined;
+
+      if (req.body.email) {
+        req.body.email = req?.body?.email?.toLowerCase();
+      }
+
       if (req.body.password) {
         const salt = bcrypt.genSaltSync(10);
         const password = bcrypt.hashSync(req.body.password, salt);

@@ -1,14 +1,14 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, User, Discussion } from '../../../components/api/model';
-import { asyncForEach, withAuth } from '../../../components/api/utils';
+import { r, User, Discussion } from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
 import { userProp } from 'interfaces/user';
 import { discussionProp } from 'interfaces/discussion';
 
 const contributors = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
-      await User.orderBy(r.desc('createdAt'))
+      await User.orderBy(r.desc('point'))
         .limit(10)
         .then(async (data: any) => {
           data = data.map((item: userProp) => ({

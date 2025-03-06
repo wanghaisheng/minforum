@@ -7,9 +7,9 @@ import {
   User,
   Discussion,
   Notification
-} from '../../../components/api/model';
-import { withAuth, slug } from '../../../components/api/utils';
-import { settingsProp } from './../../../interfaces/settings';
+} from 'components/api/model';
+import { withAuth, asyncForEach, slug } from 'components/api/utils';
+import { settingsProp } from 'interfaces/settings';
 
 const getSettings = async () => {
   return await Settings.orderBy(r.asc('createdAt'))
@@ -18,6 +18,30 @@ const getSettings = async () => {
       return config;
     })
     .catch((err: any) => signale.fatal(err));
+};
+
+const notifyMentionedUser = (discussion, userId, postId) => {
+  const usernameRegex = /@(\w+)/g;
+
+  const matches = discussion.match(usernameRegex);
+  if (matches) {
+    asyncForEach(matches, async (item) => {
+      let username = item.replace('@', '');
+      let user = await User.filter({ username });
+      user = user[0] || {};
+      if (user.id !== userId) {
+        new Notification({
+          receiver: user.id,
+          filterType: 'mentioned',
+          type: 'post',
+          sender: userId,
+          message: 'mentioned you in their reply',
+          action: postId,
+          read: false
+        }).save();
+      }
+    });
+  }
 };
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -33,20 +57,27 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
             await User.get(data.userId).then(async (p: any) => {
               await User.get(data.userId)
                 .update({
-                  coin: Number(p.coin + config.coin?.comment)
+                  point: Number(p.point + config.point?.comment)
                 })
                 .then(async () => {
                   await Discussion.get(req.body.discussionId)
                     .getJoin()
                     .then(async (d: any) => {
-                      const notify = new Notification({
-                        sender: data.userId,
-                        receiver: d.userId,
-                        name: p.name,
-                        filterType: 'reply-comment',
-                        action: `${d.slug}#${data.slug}`
-                      });
-                      await notify.save().then(() => {});
+                      notifyMentionedUser(
+                        d.content,
+                        data.userId,
+                        `${d.slug}#${data.slug}`
+                      );
+                      if (d.userId !== data.userId) {
+                        const notify = new Notification({
+                          sender: data.userId,
+                          receiver: d.userId,
+                          name: p.name,
+                          filterType: 'reply-comment',
+                          action: `${d.slug}#${data.slug}`
+                        });
+                        await notify.save().then(() => {});
+                      }
                     });
                   res.send({ success: true, data });
                 });

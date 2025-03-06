@@ -4,12 +4,19 @@ const nextConfig = {
   swcMinify: true,
   poweredByHeader: false,
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true
   },
   compiler: {
     removeConsole: false
+  },
+  webpack: (config, { isServer }) => {
+    // Exclude .md files from being processed by Webpack
+    config.module.rules.push({
+      test: /\.md$/,
+      loader: 'ignore-loader'
+    });
+
+    return config;
   }
 };
 

@@ -1,14 +1,14 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, Discussion } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { r, Discussion } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const search = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
       let { search } = req.query;
 
-      await Discussion.orderBy(r.desc('createdAt'))
+      await Discussion.orderBy(r.desc('timestamp'))
         .filter((profile: any) =>
           profile('title')
             .match('(?i)' + search)

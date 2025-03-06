@@ -16,13 +16,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/components/Mention.js"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "**/*.md"]
 }

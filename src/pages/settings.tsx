@@ -9,7 +9,8 @@ import {
   Loading,
   Tooltip,
   Avatar,
-  Tabs
+  Tabs,
+  Textarea
 } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import {
@@ -21,22 +22,23 @@ import {
 import { setCookie } from 'nookies';
 import Router from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import UserStore from 'stores/user';
-import useToken from 'components/Token';
-import { validateEmail } from 'components/api/utils';
-import Auth from 'components/Auth';
-import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import useToken from 'components/token';
+import { formatNumber, validateEmail } from 'components/api/utils';
+import Auth from 'components/auth';
+import { Translation, translation } from 'components/intl/translation';
+import useSettings from 'components/settings';
 
 const Settings = observer(() => {
   const token = useToken();
+  const settings = useSettings();
   const [status, setStatus] = useState('');
   const [_password, setPassword] = useState({
     password: '',
     newPassword: ''
   });
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+
   const [
     {
       loading,
@@ -52,7 +54,6 @@ const Settings = observer(() => {
   ] = useState(() => new UserStore());
 
   useEffect(() => {
-    getSettings();
     token.id
       ? getUser(token.id).then((res: any) => {
           if (res.success) {
@@ -60,7 +61,7 @@ const Settings = observer(() => {
           }
         })
       : null;
-  }, [token]);
+  }, [token?.id]);
 
   const processUsername = (val: string) => {
     if (val.length) {
@@ -83,7 +84,7 @@ const Settings = observer(() => {
 
   const handleUpload = async (id: string) => {
     let t = toast.loading(
-      useTranslation({ lang: settings?.language, value: 'Uploading image....' })
+      translation({ lang: settings?.language, value: 'Uploading image....' })
     );
 
     let upload: any = document.querySelector(id);
@@ -115,7 +116,7 @@ const Settings = observer(() => {
             );
             toast.dismiss(t);
             toast.success(
-              useTranslation({
+              translation({
                 lang: settings?.language,
                 value: 'Image uploaded successfully!'
               })
@@ -139,28 +140,28 @@ const Settings = observer(() => {
     const { name, email, username, password } = user;
     if (!name || name?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Fullname is too short.'
         })
       );
     } else if (!username || username?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Username is too short. Minimum character is three.'
         })
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Invalid email address'
         })
       );
     } else if (!password || password?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Current password is required to make changes.'
         })
@@ -182,7 +183,59 @@ const Settings = observer(() => {
           setUser({ ...user, password: '' });
 
           toast.success(
-            useTranslation({
+            translation({
+              lang: settings?.language,
+              value: 'Account updated successfully!'
+            })
+          );
+        } else {
+          toast.error(res.message);
+        }
+      });
+    }
+  };
+
+  const saveSocialUser = async () => {
+    const { name, email, username } = user;
+    if (!name || name?.length < 3) {
+      toast.error(
+        translation({
+          lang: settings?.language,
+          value: 'Fullname is too short.'
+        })
+      );
+    } else if (!username || username?.length < 3) {
+      toast.error(
+        translation({
+          lang: settings?.language,
+          value: 'Username is too short. Minimum character is three.'
+        })
+      );
+    } else if (validateEmail(email) === false) {
+      toast.error(
+        translation({
+          lang: settings?.language,
+          value: 'Invalid email address'
+        })
+      );
+    } else {
+      await updateUser({ ...user, password: undefined }).then((res: any) => {
+        if (res.success) {
+          const { name, id, role, photo, username } = user;
+          setCookie(
+            null,
+            '_w_auth',
+            JSON.stringify({ name, id, role, photo, username }),
+            {
+              maxAge: 30 * 24 * 60 * 60,
+              path: '/'
+            }
+          );
+
+          setUser({ ...user, password: '' });
+
+          toast.success(
+            translation({
               lang: settings?.language,
               value: 'Account updated successfully!'
             })
@@ -198,14 +251,14 @@ const Settings = observer(() => {
     const { password, newPassword } = _password;
     if (!newPassword || newPassword?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Password is too short! Minimum character is six.'
         })
       );
     } else if (!password) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Current password is required to make changes.'
         })
@@ -217,14 +270,14 @@ const Settings = observer(() => {
         if (res.success) {
           setPassword({ password: '', newPassword: '' });
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Password updated successfully!'
             })
           );
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to change password. Please try again.'
             })
@@ -234,17 +287,69 @@ const Settings = observer(() => {
     }
   };
 
+  const saveSub = async () => {
+    const { id, subAmount, subDescription } = user;
+    if (!subAmount) {
+      toast.error(
+        translation({
+          lang: settings?.language,
+          value: 'Subscription amount cannot be empty or zero.'
+        })
+      );
+    } else if (subAmount < settings.payment.subscription) {
+      toast.error(
+        translation({
+          lang: settings?.language,
+          value: 'Subscription amount is lesser than minimum amount.'
+        })
+      );
+    } else {
+      let description =
+        subDescription ||
+        'Subscribe to get access to my exclusive contents via premium posts and priority DM';
+
+      await updateUser({ id, subAmount, subDescription: description }).then(
+        (res: any) => {
+          if (res.success) {
+            const { name, id, role, photo, username } = user;
+            setCookie(
+              null,
+              '_w_auth',
+              JSON.stringify({ name, id, role, photo, username }),
+              {
+                maxAge: 30 * 24 * 60 * 60,
+                path: '/'
+              }
+            );
+
+            setUser({ ...user, password: '' });
+
+            toast.success(
+              translation({
+                lang: settings?.language,
+                value: 'Account updated successfully!'
+              })
+            );
+          } else {
+            toast.error(res.message);
+          }
+        }
+      );
+    }
+  };
+
   return (
     <Auth>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Account settings'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Account settings'
         })}
+        norobot
       />
       <Toaster />
       <div className="page-container top-100">
@@ -263,7 +368,7 @@ const Settings = observer(() => {
                   w={3}
                   h={3}
                   src={
-                    user.photo ? `/storage/${user.photo}` : '/images/avatar.png'
+                    user.photo ? `/static/${user.photo}` : '/images/avatar.png'
                   }
                 />
                 <Spacer h={1.5} />
@@ -277,152 +382,414 @@ const Settings = observer(() => {
                   />
                 </Button>
               </div>
-              <Tabs initialValue="1">
-                <Tabs.Item
-                  label={useTranslation({
-                    lang: settings?.language,
-                    value: 'Change details'
-                  })}
-                  value="1"
-                >
-                  <Input
-                    width="100%"
-                    scale={4 / 3}
-                    value={user.name}
-                    onChange={(e) => setUser({ ...user, name: e.target.value })}
-                  >
-                    <Translation lang={settings?.language} value="Fullname" />
-                  </Input>
+
+              {user.platform ? (
+                <div>
                   <Spacer h={1.5} />
-                  <Input
-                    value={user.username}
-                    width="100%"
-                    scale={4 / 3}
-                    iconClickable
-                    onChange={(e) => processUsername(e.target.value)}
-                    iconRight={
-                      status === 'success' ? (
-                        <Tooltip
-                          placement="topEnd"
-                          text="Username is available."
-                          type="success"
+                  <Tabs initialValue="1">
+                    <Tabs.Item
+                      label={translation({
+                        lang: settings?.language,
+                        value: 'Change details'
+                      })}
+                      value="1"
+                    >
+                      <Input
+                        width="100%"
+                        scale={4 / 3}
+                        value={user.name}
+                        onChange={(e) =>
+                          setUser({ ...user, name: e.target.value })
+                        }
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Fullname"
+                        />
+                      </Input>
+                      <Spacer h={1.5} />
+                      <Input
+                        value={user.username}
+                        width="100%"
+                        scale={4 / 3}
+                        iconClickable
+                        onChange={(e) => processUsername(e.target.value)}
+                        iconRight={
+                          status === 'success' ? (
+                            <Tooltip
+                              placement="topEnd"
+                              text="Username is available."
+                              type="success"
+                            >
+                              <CheckInCircleFill color="#0070F3" />
+                            </Tooltip>
+                          ) : status === 'error' ? (
+                            <Tooltip
+                              placement="topEnd"
+                              text="Username is not available. Try another name."
+                              trigger="click"
+                              type="error"
+                            >
+                              <XCircleFill color="#cb0000" />
+                            </Tooltip>
+                          ) : status === 'loading' ? (
+                            <Loading />
+                          ) : (
+                            <CheckInCircle />
+                          )
+                        }
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Username"
+                        />
+                      </Input>
+                      <Spacer h={1.5} />
+                      <Input
+                        width="100%"
+                        scale={4 / 3}
+                        value={user.email}
+                        onChange={(e) =>
+                          setUser({ ...user, email: e.target.value })
+                        }
+                      >
+                        <Translation lang={settings?.language} value="Email" />
+                      </Input>
+                      <Spacer h={1.5} />
+                      <Button
+                        shadow
+                        type="secondary"
+                        width="100%"
+                        loading={loading}
+                        disabled={
+                          status === 'error' || status === 'loading'
+                            ? true
+                            : false
+                        }
+                        onClick={saveSocialUser}
+                      >
+                        <Translation lang={settings?.language} value="Save" />
+                      </Button>
+                    </Tabs.Item>
+
+                    {settings?.payment?.currency &&
+                    settings?.payment?.subscription &&
+                    settings?.payment?.percentage ? (
+                      <Tabs.Item
+                        label={translation({
+                          lang: settings?.language,
+                          value: 'Subscription'
+                        })}
+                        value="3"
+                      >
+                        <div>
+                          <Spacer h={1.5} />
+                          <div>
+                            <Translation
+                              lang={settings.language}
+                              value="Minimum amount"
+                            />{' '}
+                            ({settings?.payment?.currency}{' '}
+                            {formatNumber(settings?.payment?.subscription)})
+                          </div>
+                          <Input
+                            htmlType="number"
+                            placeholder={translation({
+                              lang: settings?.language,
+                              value: 'Monthly subscription fee'
+                            })}
+                            width="100%"
+                            scale={4 / 3}
+                            value={`${user.subAmount}`}
+                            onChange={(e: any) =>
+                              setUser({
+                                ...user,
+                                subAmount: e.target.value
+                              })
+                            }
+                          />
+                        </div>
+                        <Spacer h={1.5} />
+                        <Textarea
+                          rows={3}
+                          placeholder={translation({
+                            lang: settings?.language,
+                            value: 'Description'
+                          })}
+                          width="100%"
+                          scale={4 / 3}
+                          value={
+                            user?.subDescription ||
+                            translation({
+                              lang: settings?.language,
+                              value:
+                                'Subscribe to get access to my exclusive contents via premium posts and priority DM'
+                            })
+                          }
+                          onChange={(e: any) =>
+                            setUser({
+                              ...user,
+                              subDescription: e.target.value
+                            })
+                          }
+                        />
+                        <Spacer h={1.5} />
+                        <Button
+                          shadow
+                          type="secondary"
+                          width="100%"
+                          loading={loading}
+                          disabled={
+                            status === 'error' || status === 'loading'
+                              ? true
+                              : false
+                          }
+                          onClick={saveSub}
                         >
-                          <CheckInCircleFill color="#0070F3" />
-                        </Tooltip>
-                      ) : status === 'error' ? (
-                        <Tooltip
-                          placement="topEnd"
-                          text="Username is not available. Try another name."
-                          trigger="click"
-                          type="error"
-                        >
-                          <XCircleFill color="#cb0000" />
-                        </Tooltip>
-                      ) : status === 'loading' ? (
-                        <Loading />
-                      ) : (
-                        <CheckInCircle />
-                      )
-                    }
-                  >
-                    <Translation lang={settings?.language} value="Username" />
-                  </Input>
-                  <Spacer h={1.5} />
-                  <Input
-                    width="100%"
-                    scale={4 / 3}
-                    value={user.email}
-                    onChange={(e) =>
-                      setUser({ ...user, email: e.target.value })
-                    }
-                  >
-                    <Translation lang={settings?.language} value="Email" />
-                  </Input>
-                  <Spacer h={1.5} />
-                  <Input.Password
-                    placeholder={useTranslation({
+                          <Translation lang={settings?.language} value="Save" />
+                        </Button>
+                      </Tabs.Item>
+                    ) : (
+                      ''
+                    )}
+                  </Tabs>
+                </div>
+              ) : (
+                <Tabs initialValue="1">
+                  <Tabs.Item
+                    label={translation({
                       lang: settings?.language,
-                      value: 'Type current password to update changes'
+                      value: 'Change details'
                     })}
-                    width="100%"
-                    scale={4 / 3}
-                    value={user.password}
-                    onChange={(e) =>
-                      setUser({ ...user, password: e.target.value })
-                    }
+                    value="1"
                   >
-                    <Translation lang={settings?.language} value="Password" />
-                  </Input.Password>
-                  <Spacer h={1.5} />
-                  <Button
-                    shadow
-                    type="secondary"
-                    width="100%"
-                    loading={loading}
-                    disabled={
-                      status === 'error' || status === 'loading' ? true : false
-                    }
-                    onClick={save}
-                  >
-                    <Translation lang={settings?.language} value="Save" />
-                  </Button>
-                </Tabs.Item>
-                <Tabs.Item
-                  label={useTranslation({
-                    lang: settings?.language,
-                    value: 'Change password'
-                  })}
-                  value="2"
-                >
-                  <div>
+                    <Input
+                      width="100%"
+                      scale={4 / 3}
+                      value={user.name}
+                      onChange={(e) =>
+                        setUser({ ...user, name: e.target.value })
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Fullname" />
+                    </Input>
+                    <Spacer h={1.5} />
+                    <Input
+                      value={user.username}
+                      width="100%"
+                      scale={4 / 3}
+                      iconClickable
+                      onChange={(e) => processUsername(e.target.value)}
+                      iconRight={
+                        status === 'success' ? (
+                          <Tooltip
+                            placement="topEnd"
+                            text="Username is available."
+                            type="success"
+                          >
+                            <CheckInCircleFill color="#0070F3" />
+                          </Tooltip>
+                        ) : status === 'error' ? (
+                          <Tooltip
+                            placement="topEnd"
+                            text="Username is not available. Try another name."
+                            trigger="click"
+                            type="error"
+                          >
+                            <XCircleFill color="#cb0000" />
+                          </Tooltip>
+                        ) : status === 'loading' ? (
+                          <Loading />
+                        ) : (
+                          <CheckInCircle />
+                        )
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Username" />
+                    </Input>
+                    <Spacer h={1.5} />
+                    <Input
+                      width="100%"
+                      scale={4 / 3}
+                      value={user.email}
+                      onChange={(e) =>
+                        setUser({ ...user, email: e.target.value })
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Email" />
+                    </Input>
                     <Spacer h={1.5} />
                     <Input.Password
-                      placeholder={useTranslation({
+                      placeholder={translation({
                         lang: settings?.language,
-                        value: 'Type new password'
+                        value: 'Type current password to update changes'
                       })}
                       width="100%"
                       scale={4 / 3}
-                      value={_password.newPassword}
+                      value={user.password}
+                      onChange={(e) =>
+                        setUser({ ...user, password: e.target.value })
+                      }
+                    >
+                      <Translation lang={settings?.language} value="Password" />
+                    </Input.Password>
+                    <Spacer h={1.5} />
+                    <Button
+                      shadow
+                      type="secondary"
+                      width="100%"
+                      loading={loading}
+                      disabled={
+                        status === 'error' || status === 'loading'
+                          ? true
+                          : false
+                      }
+                      onClick={save}
+                    >
+                      <Translation lang={settings?.language} value="Save" />
+                    </Button>
+                  </Tabs.Item>
+                  <Tabs.Item
+                    label={translation({
+                      lang: settings?.language,
+                      value: 'Change password'
+                    })}
+                    value="2"
+                  >
+                    <div>
+                      <Spacer h={1.5} />
+                      <Input.Password
+                        width="100%"
+                        scale={4 / 3}
+                        value={_password.newPassword}
+                        onChange={(e: any) =>
+                          setPassword({
+                            ..._password,
+                            newPassword: e.target.value
+                          })
+                        }
+                      >
+                        {translation({
+                          lang: settings?.language,
+                          value: 'Type new password'
+                        })}
+                      </Input.Password>
+                    </div>
+                    <Spacer h={1.5} />
+                    <Input.Password
+                      width="100%"
+                      scale={4 / 3}
+                      value={_password.password}
                       onChange={(e: any) =>
                         setPassword({
                           ..._password,
-                          newPassword: e.target.value
+                          password: e.target.value
                         })
                       }
-                    />
-                  </div>
-                  <Spacer h={1.5} />
-                  <Input.Password
-                    placeholder={useTranslation({
-                      lang: settings?.language,
-                      value: 'Type current password to update changes'
-                    })}
-                    width="100%"
-                    scale={4 / 3}
-                    value={_password.password}
-                    onChange={(e: any) =>
-                      setPassword({
-                        ..._password,
-                        password: e.target.value
-                      })
-                    }
-                  />
-                  <Spacer h={1.5} />
-                  <Button
-                    shadow
-                    type="secondary"
-                    width="100%"
-                    loading={loading}
-                    disabled={
-                      status === 'error' || status === 'loading' ? true : false
-                    }
-                    onClick={savePassword}
-                  >
-                    <Translation lang={settings?.language} value="Save" />
-                  </Button>
-                </Tabs.Item>
-              </Tabs>
+                    >
+                      {translation({
+                        lang: settings?.language,
+                        value: 'Type current password to update changes'
+                      })}
+                    </Input.Password>
+                    <Spacer h={1.5} />
+                    <Button
+                      shadow
+                      type="secondary"
+                      width="100%"
+                      loading={loading}
+                      disabled={
+                        status === 'error' || status === 'loading'
+                          ? true
+                          : false
+                      }
+                      onClick={savePassword}
+                    >
+                      <Translation lang={settings?.language} value="Save" />
+                    </Button>
+                  </Tabs.Item>
+                  {settings?.payment?.currency &&
+                  settings?.payment?.subscription &&
+                  settings?.payment?.percentage ? (
+                    <Tabs.Item
+                      label={translation({
+                        lang: settings?.language,
+                        value: 'Subscription'
+                      })}
+                      value="3"
+                    >
+                      <div>
+                        <Spacer h={1.5} />
+                        <div>
+                          <Translation
+                            lang={settings.language}
+                            value="Minimum amount"
+                          />{' '}
+                          ({settings?.payment?.currency}{' '}
+                          {formatNumber(settings?.payment?.subscription)})
+                        </div>
+                        <Input
+                          htmlType="number"
+                          placeholder={translation({
+                            lang: settings?.language,
+                            value: 'Monthly subscription fee'
+                          })}
+                          width="100%"
+                          scale={4 / 3}
+                          value={`${user.subAmount}`}
+                          onChange={(e: any) =>
+                            setUser({
+                              ...user,
+                              subAmount: e.target.value
+                            })
+                          }
+                        />
+                      </div>
+                      <Spacer h={1.5} />
+                      <Textarea
+                        rows={3}
+                        placeholder={translation({
+                          lang: settings?.language,
+                          value: 'Description'
+                        })}
+                        width="100%"
+                        scale={4 / 3}
+                        value={
+                          user?.subDescription ||
+                          translation({
+                            lang: settings?.language,
+                            value:
+                              'Subscribe to get access to my exclusive contents via premium posts and priority DM'
+                          })
+                        }
+                        onChange={(e: any) =>
+                          setUser({
+                            ...user,
+                            subDescription: e.target.value
+                          })
+                        }
+                      />
+                      <Spacer h={1.5} />
+                      <Button
+                        shadow
+                        type="secondary"
+                        width="100%"
+                        loading={loading}
+                        disabled={
+                          status === 'error' || status === 'loading'
+                            ? true
+                            : false
+                        }
+                        onClick={saveSub}
+                      >
+                        <Translation lang={settings?.language} value="Save" />
+                      </Button>
+                    </Tabs.Item>
+                  ) : (
+                    ''
+                  )}
+                </Tabs>
+              )}
             </Card>
           </Grid>
         </Grid.Container>

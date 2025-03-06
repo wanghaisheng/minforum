@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Spacer,
   Text,
@@ -8,36 +8,36 @@ import {
   Card,
   Loading,
   Image,
-  Tooltip
+  Tooltip,
+  Divider,
+  Checkbox
 } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import { setCookie } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { CheckInCircle, CheckInCircleFill, XCircleFill } from '@geist-ui/icons';
 import Turnstile, { useTurnstile } from 'react-turnstile';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import UserStore from 'stores/user';
-import useToken from 'components/Token';
-import { validateEmail } from 'components/api/utils';
-import Router from 'next/router';
+import { validateEmail, validateUsername } from 'components/api/utils';
+import { useRouter } from 'next/router';
 import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, translation } from 'components/intl/translation';
+import { useGoogleLogin } from '@react-oauth/google';
+import FacebookLogin from '@greatsumini/react-facebook-login';
+import useSettings from 'components/settings';
+import { Authorized } from 'components/auth';
 
 const Signup = observer(() => {
-  const token = useToken();
+  const settings = useSettings();
+  const router = useRouter();
   const [status, setStatus] = useState('');
   const [show, showButton] = useState(false);
+  const [checked, toggleCheck] = useState(false);
   const turnstile = useTurnstile();
-  const [{ settings, getSettings, verifyTurnstile }] = useState(
-    () => new SettingsStore()
-  );
-  const [
-    { loading, user, setUser, getUser, signup, checkUsername, updateUser }
-  ] = useState(() => new UserStore());
-
-  useEffect(() => {
-    getSettings();
-  }, [token]);
+  const [{ verifyTurnstile }] = useState(() => new SettingsStore());
+  const [{ loading, user, setUser, signup, checkUsername, socialConnect }] =
+    useState(() => new UserStore());
 
   const processUsername = (val: string) => {
     if (val.length) {
@@ -62,55 +62,58 @@ const Signup = observer(() => {
     const { name, email, username, password } = user;
     if (!name || name?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Fullname is too short.'
         })
       );
-    } else if (!username || username?.length < 3) {
+    } else if (!username || validateUsername(username) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
-          value: 'Username is too short. Minimum character is three.'
+          value:
+            'Please enter a username with at least 3 characters. Only letters, numbers, and underscores are supported.'
         })
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Invalid email address'
         })
       );
     } else if (!password || password?.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Password is too short. Minimum character is six.'
+        })
+      );
+    } else if (!checked) {
+      toast.error(
+        translation({
+          lang: settings?.language,
+          value: 'Please accept the terms of use and privacy policy'
         })
       );
     } else {
       await signup(user).then((res: any) => {
         if (res.success) {
-          setCookie(
-            null,
-            '_w_code',
-            JSON.stringify({ type: 'signup', code: res.code, data: res.data }),
-            {
-              maxAge: 2 * 60 * 60,
-              path: '/'
-            }
-          );
+          setCookie(null, '_w_code', res.token, {
+            maxAge: 2 * 60 * 60,
+            path: '/'
+          });
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value:
                 'Account created successfully! Please verify account to continue.'
             })
           );
-          Router.push('/signup/verify');
+          router.push('/signup/verify');
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: res.message
             })
@@ -120,11 +123,67 @@ const Signup = observer(() => {
     }
   };
 
+  const socialAccount = async (body) => {
+    await socialConnect(body).then((res) => {
+      if (res.success) {
+        const { name, id, role, photo, username, status } = res.data;
+        setCookie(
+          null,
+          '_w_auth',
+          JSON.stringify({ name, id, role, photo, username }),
+          {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/'
+          }
+        );
+        toast.success(
+          translation({
+            lang: settings?.language,
+            value: 'Successfully signed in!'
+          })
+        );
+        status === 'new' ? router.push('/settings') : router.push('/');
+      }
+    });
+  };
+
+  const googleAuth = useGoogleLogin({
+    scope: 'email profile',
+    onSuccess: async (tokenResponse) => {
+      // Use the access token to fetch user info
+      try {
+        const userInfoResponse = await fetch(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`
+            }
+          }
+        );
+
+        if (!userInfoResponse.ok) {
+          toast.error('Unable to connect to google');
+        }
+
+        const userInfo = await userInfoResponse.json();
+        let body = {
+          name: `${userInfo?.name}`,
+          email: userInfo?.email,
+          platform: 'Google'
+        };
+
+        socialAccount(body);
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      }
+    }
+  });
+
   return (
-    <div>
+    <Authorized>
       <Navbar
-        title={useTranslation({ lang: settings?.language, value: 'Signup' })}
-        description={useTranslation({
+        title={translation({ lang: settings?.language, value: 'Signup' })}
+        description={translation({
           lang: settings?.language,
           value: 'Signup'
         })}
@@ -136,7 +195,7 @@ const Signup = observer(() => {
           <div className="boxed">
             <div className="logo-container center">
               {settings.siteLogo ? (
-                <Image src={`/storage/${settings.siteLogo}`} height={'65px'} />
+                <Image src={`/static/${settings.siteLogo}`} height={'65px'} />
               ) : (
                 <Text h2 width={'100%'}>
                   {settings.siteName}
@@ -152,8 +211,61 @@ const Signup = observer(() => {
                 />
               </Text>
               <Spacer h={1} />
+              {settings?.socialAccount?.facebook && (
+                <>
+                  <FacebookLogin
+                    appId={settings?.socialAccount?.facebook}
+                    onFail={() => {
+                      toast.error('Login Failed!');
+                    }}
+                    onProfileSuccess={(response) => {
+                      const body = {
+                        name: response.name,
+                        email: response.email,
+                        platform: 'Facebook'
+                      };
+                      socialAccount(body);
+                    }}
+                    render={({ onClick }) => (
+                      <Button
+                        onClick={onClick}
+                        width="100%"
+                        icon={<img src="/images/facebook.svg" height={20} />}
+                      >
+                        <span style={{ textTransform: 'none' }}>
+                          <Translation
+                            lang={settings?.language}
+                            value="Signup using Facebook"
+                          />
+                        </span>
+                      </Button>
+                    )}
+                  />
+                  <Spacer h={1} />
+                </>
+              )}
+              {settings?.socialAccount?.google && (
+                <>
+                  <Button
+                    width="100%"
+                    icon={<img src="/images/google.svg" height={20} />}
+                    onClick={() => googleAuth()}
+                  >
+                    <span style={{ textTransform: 'none' }}>
+                      <Translation
+                        lang={settings?.language}
+                        value="Signup using Google"
+                      />
+                    </span>
+                  </Button>
+                  <Spacer h={1} />
+                </>
+              )}
+              {(settings?.socialAccount?.facebook ||
+                settings?.socialAccount?.google) && <Divider>OR</Divider>}
+              <Spacer h={1} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Fullname'
                 })}
@@ -165,7 +277,7 @@ const Signup = observer(() => {
               />
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Username'
                 })}
@@ -178,7 +290,7 @@ const Signup = observer(() => {
                   status === 'success' ? (
                     <Tooltip
                       placement="topEnd"
-                      text={useTranslation({
+                      text={translation({
                         lang: settings?.language,
                         value: 'Username is available.'
                       })}
@@ -189,7 +301,7 @@ const Signup = observer(() => {
                   ) : status === 'error' ? (
                     <Tooltip
                       placement="topEnd"
-                      text={useTranslation({
+                      text={translation({
                         lang: settings?.language,
                         value: 'Username is not available. Try another name.'
                       })}
@@ -207,7 +319,7 @@ const Signup = observer(() => {
               />
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Email'
                 })}
@@ -219,7 +331,7 @@ const Signup = observer(() => {
               />
               <Spacer h={1.5} />
               <Input.Password
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: settings?.language,
                   value: 'Password'
                 })}
@@ -230,20 +342,58 @@ const Signup = observer(() => {
                 }}
               />
               <Spacer h={1} />
-              <div className="center">
-                <Turnstile
-                  sitekey={settings.cloudflarePublicKey}
-                  onVerify={(token) => {
-                    verifyTurnstile({ token }).then((res: any) => {
-                      if (res.success) {
-                        showButton(true);
-                      } else {
-                        turnstile.reset();
-                      }
-                    });
-                  }}
-                />
-              </div>
+              <Checkbox
+                scale={1}
+                checked={checked}
+                onChange={() => toggleCheck(!checked)}
+              >
+                I accept and agree with{' '}
+                <Link
+                  target="_blank"
+                  underline
+                  href="/terms"
+                  style={{ color: '#F6821E' }}
+                >
+                  terms of use
+                </Link>{' '}
+                and{' '}
+                <Link
+                  target="_blank"
+                  underline
+                  href="/privacy"
+                  style={{ color: '#F6821E' }}
+                >
+                  privacy policy
+                </Link>
+              </Checkbox>
+
+              <Spacer h={1} />
+              {settings.cloudflarePublicKey ? (
+                <div className="center">
+                  <Turnstile
+                    sitekey={settings.cloudflarePublicKey}
+                    onVerify={(token) => {
+                      verifyTurnstile({ token }).then((res: any) => {
+                        if (res.success) {
+                          showButton(true);
+                        } else {
+                          turnstile.reset();
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              ) : (
+                <Button
+                  shadow
+                  type="secondary"
+                  width="100%"
+                  loading={loading}
+                  onClick={save}
+                >
+                  <Translation lang={settings?.language} value="Signup" />
+                </Button>
+              )}
               {show && (
                 <Button
                   shadow
@@ -271,7 +421,7 @@ const Signup = observer(() => {
           <Spacer h={3} />
         </div>
       </div>
-    </div>
+    </Authorized>
   );
 });
 

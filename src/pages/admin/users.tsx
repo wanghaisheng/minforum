@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import {
   Text,
   Link,
-  Badge,
   Table,
   Pagination,
   Button,
@@ -11,22 +10,24 @@ import {
   Spacer
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
-import UserModal from 'components/modals/UserModal';
-import Sidebar from 'components/admin/Sidebar';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
+import UserModal from 'components/modals/user-modal';
+import Sidebar from 'components/admin/sidebar';
 import UserStore from 'stores/user';
 import { userProp } from 'interfaces/user';
 import toast, { Toaster } from 'react-hot-toast';
-import Auth from 'components/admin/Auth';
+import Auth from 'components/admin/auth';
 import { format } from 'date-fns';
 import { es, fr, enUS } from 'date-fns/locale';
-import SettingsStore from 'stores/settings';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { translation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
+import useSettings from 'components/settings';
 
 const Admin = observer(() => {
+  const token = useToken();
   const [modal, toggleModal] = useState(false);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
 
   const [
     {
@@ -45,35 +46,34 @@ const Admin = observer(() => {
   ] = useState(() => new UserStore());
 
   useEffect(() => {
-    getSettings();
-    getUsers();
-  }, []);
+    getUsers('newest');
+  }, [token?.id]);
 
   const paginate = (val: number) => {
     setPage(val);
-    getUsers();
+    getUsers('newest');
   };
 
   const handleSearch = (e: any) => {
     setPage(1);
     let value = e.target.value;
-    value.length ? searchUsers(value) : getUsers();
+    value.length ? searchUsers(value) : getUsers('newest');
   };
 
   const handleChange = async (val: userProp) => {
     await updateUser(val).then((res: any) => {
       if (res.success) {
         setUser(val);
-        getUsers();
+        getUsers('newest');
         toast.success(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Profile updated successfully'
           })
         );
       } else {
         toast.error(
-          useTranslation({
+          translation({
             lang: settings?.language,
             value: 'Unable to update profile. Please try again.'
           })
@@ -94,10 +94,10 @@ const Admin = observer(() => {
             settings?.language === 'es'
               ? es
               : settings?.language === 'fr'
-              ? fr
-              : settings?.language === 'en'
-              ? enUS
-              : null
+                ? fr
+                : settings?.language === 'en'
+                  ? enUS
+                  : null
         })
       : '';
     return <span className="locale-time">{date}</span>;
@@ -132,13 +132,13 @@ const Admin = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Users'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Users'
         })}
@@ -153,15 +153,15 @@ const Admin = observer(() => {
         actionTrigger={handleChange}
       />
       <div className="page-container top-100">
-        <Sidebar active="users" lang={settings?.language} />
+        <Sidebar role={token?.role} active="users" lang={settings?.language} />
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Users'
             })} (${users.length})`}
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Search....'
             })}
@@ -171,7 +171,7 @@ const Admin = observer(() => {
           <Table width={'100%'} data={users}>
             <Table.Column
               prop="name"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Name'
               })}
@@ -179,16 +179,21 @@ const Admin = observer(() => {
             />
             <Table.Column
               prop="role"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Role'
               })}
             />
-            {/* <Table.Column prop="_" label="Status" render={renderStatus} /> */}
             <Table.Column
-              // width={220}
+              prop="subscriptions"
+              label={translation({
+                lang: settings?.language,
+                value: 'Subscribers'
+              })}
+            />
+            <Table.Column
               prop="createdAt"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Date'
               })}
@@ -196,19 +201,13 @@ const Admin = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}
-              // width={100}
               render={renderAction}
             />
-            <Table.Column
-              prop="action2"
-              label=""
-              // width={50}
-              render={renderView}
-            />
+            <Table.Column prop="action2" label="" render={renderView} />
           </Table>
           <Spacer />
           {loading ? (
@@ -223,8 +222,8 @@ const Admin = observer(() => {
             <div className="pagination">
               <Pagination
                 count={Math.round(total! / limit)}
-                initialPage={page}
-                limit={limit}
+                page={page}
+                limit={7}
                 onChange={paginate}
               >
                 <Pagination.Next>

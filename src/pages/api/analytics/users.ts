@@ -1,7 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, User } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { r, User } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const analytics = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
@@ -24,7 +24,7 @@ const analytics = async (req: NextApiRequest, res: NextApiResponse) => {
           res.send({ success: true, data });
         })
         .catch((err: any) => {
-          signale.fatal(err, req, res);
+          signale.fatal(err);
           res.send({
             success: false,
             message: 'Error fetching user analytics!'

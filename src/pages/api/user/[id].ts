@@ -1,9 +1,9 @@
-import { discussionProp } from './../../../interfaces/discussion';
-import { userProp } from './../../../interfaces/user';
+import { discussionProp } from 'interfaces/discussion';
+import { userProp } from 'interfaces/user';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User, Discussion } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { User, Discussion } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const user = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

@@ -1,15 +1,16 @@
-import { resProp } from './../interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
-import { notificationProp } from '../interfaces/notification';
+import { resProp } from 'interfaces/res';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
+import { notificationProp } from 'interfaces/notification';
+import { encrypt } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
 
 export default class NotificationStore {
   @observable loading: boolean = false;
-  @observable more: boolean = false;
+  @observable nomore: boolean = false;
   @observable page: number = 1;
-  @observable limit: number = 20;
+  @observable limit: number = 10;
   @observable total: number = 0;
   @observable unread: number = 0;
   @observable notification: notificationProp = {};
@@ -30,7 +31,7 @@ export default class NotificationStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify(body)
     })
@@ -52,7 +53,7 @@ export default class NotificationStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify({ id })
     })
@@ -74,7 +75,7 @@ export default class NotificationStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify({ userId })
     })
@@ -90,22 +91,28 @@ export default class NotificationStore {
   };
 
   @action getNotification = async (id?: string) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
     let url = `${API_URL}/notification/${id}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.notification = res.data;
-          this.loading = false;
+          runInAction(() => {
+            this.notification = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -117,26 +124,31 @@ export default class NotificationStore {
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.unread = res.data;
+          runInAction(() => {
+            this.unread = res.data;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action getNotifications = async (id: string, paginate: boolean) => {
-    this.loading = true;
+    runInAction(() => {
+      this.loading = true;
+    });
+
     let url = `${API_URL}/notification?page=${this.page}&limit=${this.limit}&userId=${id}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
@@ -144,18 +156,26 @@ export default class NotificationStore {
         if (res.success) {
           setTimeout(() => {
             if (paginate) {
-              this.more = res.count > this.limit;
-              let newNotification = this.notifications;
-              this.notifications = [...newNotification, ...res.data];
-              this.total = res.count;
+              runInAction(() => {
+                this.nomore = res.data.length < this.limit;
+                let newNotification = this.notifications;
+                this.notifications = [...newNotification, ...res.data];
+                this.total = res.count;
+                this.loading = false;
+              });
             } else {
-              this.notifications = res.data;
-              this.total = res.count;
+              runInAction(() => {
+                this.nomore = res.data.length < this.limit;
+                this.notifications = res.data;
+                this.total = res.count;
+                this.loading = false;
+              });
             }
-            this.loading = false;
-          }, 3000);
+          }, 2000);
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));

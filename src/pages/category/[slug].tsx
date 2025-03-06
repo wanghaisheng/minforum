@@ -1,59 +1,58 @@
-import { useEffect, useState } from 'react';
-import {
-  Loading,
-  Spacer,
-  Text,
-  Pagination,
-  Card,
-  Button
-} from '@geist-ui/core';
+import { useEffect, useState, useCallback } from 'react';
+import { Loading, Spacer, Text, Card, Button } from '@geist-ui/core';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import toast, { Toaster } from 'react-hot-toast';
-import { ChevronRightCircle, ChevronLeftCircle, Lock } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
-import Post from 'components/Post';
-import Sidebar from 'components/Sidebar';
+import Navbar from 'components/navbar';
+import Post from 'components/post';
+import Sidebar from 'components/sidebar';
 import CategoryStore from 'stores/category';
-import SettingsStore from 'stores/settings';
 import DiscussionStore from 'stores/discussion';
-import useToken from 'components/Token';
-import Contributors from 'components/Contributors';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import useToken from 'components/token';
+import Contributors from 'components/contributors';
+import { Translation } from 'components/intl/translation';
+import useSettings from 'components/settings';
+import CustomIcon from 'components/data/icon/icon';
+import Footer from 'components/footer';
+import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
 
 const Category = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const { slug }: any = router.query;
   const [modal, toggleModal] = useState(false);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [{ category, getCategory }] = useState(() => new CategoryStore());
   const [
-    {
-      loading,
-      page,
-      total,
-      limit,
-      discussions,
-      setPage,
-      getDiscussionsByCategory
-    }
+    { loading, page, nomore, discussions, setPage, getDiscussionsByCategory }
   ] = useState(() => new DiscussionStore());
 
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getDiscussionsByCategory(slug, true);
+      }
+    }
+  }, [discussions, nomore, page]);
+
   useEffect(() => {
-    getSettings();
     router.isReady
       ? getCategory(slug).then(() => {
-          getDiscussionsByCategory(slug);
+          getDiscussionsByCategory(slug, false);
         })
       : null;
-  }, [router, token]);
+  }, [router, token?.id]);
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getDiscussionsByCategory(slug);
-  };
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -71,25 +70,37 @@ const Category = observer(() => {
     return data;
   };
 
+  const UI =
+    settings.ui === 'social'
+      ? SocialUI
+      : settings.ui === 'classic'
+        ? ClassicUI
+        : DefaultUI;
+
   return (
     <div>
-      <Toaster />
       {!token.id && category && category.authRequired === true ? (
         <div className="custom-modal all">
           <div className="inner">
             <Card shadow>
               <div className="center">
-                <Lock size={30} />
-                <Text>
+                <CustomIcon name="lock-alt" size={50} type="solid" />
+                <Spacer h={2} />
+                <Text h4>
                   <Translation
                     lang={settings?.language}
                     value="You are required to login to access this page"
                   />
                 </Text>
-                <Spacer />
+                <Spacer h={2} />
                 <Link href="/login">
                   <Button type="secondary">
-                    <Translation lang={settings?.language} value={'Sign in'} />
+                    <b>
+                      <Translation
+                        lang={settings?.language}
+                        value={'Sign in'}
+                      />
+                    </b>
                   </Button>
                 </Link>
                 <Spacer />
@@ -130,22 +141,24 @@ const Category = observer(() => {
             </Link>
           }
           fluid
+          advert={
+            settings.advert?.left ? (
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingTop: 20,
+                  paddingRight: 20
+                }}
+                dangerouslySetInnerHTML={{ __html: settings.advert?.left! }}
+              ></div>
+            ) : (
+              ''
+            )
+          }
         />
 
         <main className="main with-right">
-          {loading ? (
-            <div>
-              <Spacer h={3} />
-              <Loading>
-                <Translation lang={settings?.language} value="Loading" />
-                &nbsp;
-                <Translation lang={settings?.language} value="discussions" />
-              </Loading>
-            </div>
-          ) : (
-            ''
-          )}
-
           {token.id ? (
             <div className="mobile">
               <Link href={`/start-discussion?channel=${category.slug}`}>
@@ -162,39 +175,59 @@ const Category = observer(() => {
             ''
           )}
 
+          {loading ? (
+            <div>
+              <Spacer h={3} />
+              <Loading>
+                <Translation lang={settings?.language} value="Loading" />
+                &nbsp;
+                <Translation lang={settings?.language} value="discussions" />
+              </Loading>
+            </div>
+          ) : (
+            ''
+          )}
+
+          <div
+            style={{ marginBottom: 10 }}
+            dangerouslySetInnerHTML={{ __html: settings.advert?.top! }}
+          ></div>
+
           {discussions.map((item) => (
-            <Post
-              lang={settings?.language}
+            <UI
               key={item.id}
+              lang={settings?.language}
               category={item.category?.title}
+              color={item.category?.color}
               slug={item.slug}
+              data={item.content}
               avatar={
                 item.profile && item.profile.photo
-                  ? `/storage/${item.profile.photo}`
+                  ? `/static/${item.profile.photo}`
                   : '/images/avatar.png'
               }
+              active={item.activeUsers}
               author={item.profile?.name}
+              authorRole={item.profile?.role}
+              authorUsername={item.profile?.username}
               title={removeBanWords(item.title)}
               comment={item.comment}
+              premium={item.premium}
+              pinned={item.isPinned}
+              view={item.view}
               date={item.createdAt}
             />
           ))}
 
-          {total >= limit ? (
-            <div className="pagination">
-              <Pagination
-                count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
-                onChange={paginate}
-              >
-                <Pagination.Next>
-                  <ChevronRightCircle />
-                </Pagination.Next>
-                <Pagination.Previous>
-                  <ChevronLeftCircle />
-                </Pagination.Previous>
-              </Pagination>
+          {!loading && discussions.length === 0 ? (
+            <div className="center">
+              <Spacer h={3} />
+              <Text>
+                <Translation
+                  lang={settings?.language}
+                  value={`No Discussion`}
+                />
+              </Text>
             </div>
           ) : (
             ''
@@ -204,16 +237,15 @@ const Category = observer(() => {
           <div className="sidenav fluid">
             <Contributors lang={settings?.language} />
             {settings.advert?.right ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.right!
-                  }}
-                ></div>
-              </Card>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: settings.advert?.right!
+                }}
+              ></div>
             ) : (
               ''
             )}
+            <Footer siteName={settings?.siteName} />
           </div>
         </aside>
       </div>

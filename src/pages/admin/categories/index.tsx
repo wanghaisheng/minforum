@@ -10,18 +10,20 @@ import {
 } from '@geist-ui/core';
 import { ChevronRightCircle, ChevronLeftCircle, Plus } from '@geist-ui/icons';
 import Link from 'next/link';
-import AdminNavbar from 'components/admin/Navbar';
-import SearchHeading from 'components/SearchHeading';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import SearchHeading from 'components/search-heading';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { translation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
+import useSettings from 'components/settings';
 
 const Categories = observer(() => {
+  const token = useToken();
+  const settings = useSettings();
   const [{ users, getModerators }] = useState(() => new UserStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
     {
       loading,
@@ -36,10 +38,9 @@ const Categories = observer(() => {
   ] = useState(() => new CategoryStore());
 
   useEffect(() => {
-    getSettings();
     getModerators();
     getCategories();
-  }, []);
+  }, [token?.id]);
 
   const handleSearch = (e: any) => {
     setPage(1);
@@ -77,28 +78,32 @@ const Categories = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Categories'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Categories'
         })}
       />
 
       <div className="page-container top-100">
-        <Sidebar active="categories" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="categories"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <SearchHeading
-            title={`${useTranslation({
+            title={`${translation({
               lang: settings?.language,
               value: 'Categories'
             })} (${categories.length})`}
-            placeholder={useTranslation({
+            placeholder={translation({
               lang: settings?.language,
               value: 'Search....'
             })}
@@ -113,14 +118,14 @@ const Categories = observer(() => {
           <Table width={'100%'} data={categories}>
             <Table.Column
               prop="title"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Title'
               })}
             />
             <Table.Column
               prop="color"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Color'
               })}
@@ -128,14 +133,14 @@ const Categories = observer(() => {
             />
             <Table.Column
               prop="discussion"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Discussions'
               })}
             />
             <Table.Column
               prop="authRequired"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Authentication'
               })}
@@ -143,7 +148,7 @@ const Categories = observer(() => {
             />
             <Table.Column
               prop="action"
-              label={useTranslation({
+              label={translation({
                 lang: settings?.language,
                 value: 'Action'
               })}
@@ -165,8 +170,8 @@ const Categories = observer(() => {
             <div className="pagination">
               <Pagination
                 count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
+                page={page}
+                limit={7}
                 onChange={paginate}
               >
                 <Pagination.Next>

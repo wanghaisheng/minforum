@@ -12,13 +12,13 @@ import {
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 import { ChevronRight } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import SettingsStore from 'stores/settings';
 import toast, { Toaster } from 'react-hot-toast';
 import { validateEmail } from 'components/api/utils';
 import { setCookie, parseCookies } from 'nookies';
-import SetupVerify from 'components/admin/SetupVerify';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import SetupVerify from 'components/admin/setup-verify';
+import { Translation, translation } from 'components/intl/translation';
 
 const Setup = observer(() => {
   const cookie = parseCookies();
@@ -28,6 +28,7 @@ const Setup = observer(() => {
   const { admin, setAdmin, settings, setSettings, getSettings } = store;
 
   useEffect(() => {
+    getSettings();
     setTimeout(() => {
       let setup =
         cookie && cookie._w_setup ? JSON.parse(cookie._w_setup) : null;
@@ -43,39 +44,40 @@ const Setup = observer(() => {
   const lang = settings?.language ? settings?.language : 'en';
 
   const _next = async () => {
-    const { username, email, password } = admin;
+    const { name, email, password } = admin;
 
     if (!settings.language) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Please select a language'
         })
       );
-    } else if (!username || username.length < 3) {
+    } else if (!name || name.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Username is too short. Minimum character is three.'
         })
       );
     } else if (validateEmail(email) === false) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Invalid email address'
         })
       );
     } else if (!password || password.length < 6) {
       toast.error(
-        useTranslation({
+        translation({
           lang: lang,
           value: 'Password is too short. Minimum character is six.'
         })
       );
     } else {
-      admin.name = admin.username;
-      admin.username = admin.username.toLowerCase();
+      settings.language = settings.language || 'en';
+      admin.name = admin.name;
+      admin.username = admin.username;
       const setup = { settings, admin };
       setCookie(null, '_w_setup', JSON.stringify(setup), {
         maxAge: 30 * 24 * 60 * 60,
@@ -88,22 +90,24 @@ const Setup = observer(() => {
   return (
     <SetupVerify>
       <Navbar
-        title="Welcome - Setup Weiss"
-        description="Welcome - Setup Weiss"
+        title="Welcome - Setup Minforum"
+        description="Welcome - Setup Minforum"
         hide
+        norobot
       />
       <Toaster />
       <div className="polkadot">
         {loading ? (
-          <div style={{ width: 500, margin: '20% auto' }}>
-            <Loading scale={4}>Initializing</Loading>
+          <div className="center" style={{ width: 500, margin: '20% auto' }}>
+            <img src="/images/logo-wordmark.svg" height={100} />
+            <Loading scale={2}>Initializing</Loading>
           </div>
         ) : (
           <div className="page-container top-100">
             <div className="boxed">
-              <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-                Weiss
-              </Text>
+              <div className="center">
+                <img src="/images/logo-wordmark.svg" height={80} />
+              </div>
 
               <Card shadow width="100%">
                 <Text h3>
@@ -115,7 +119,7 @@ const Setup = observer(() => {
                 <Spacer h={2} />
                 <Select
                   scale={4 / 3}
-                  placeholder={useTranslation({
+                  placeholder={translation({
                     lang: lang,
                     value: 'Select language'
                   })}
@@ -150,27 +154,31 @@ const Setup = observer(() => {
                 </Select>
                 <Spacer h={1.5} />
                 <Input
-                  placeholder={`${useTranslation({
+                  placeholder={`${translation({
                     lang: lang,
                     value: 'Admin'
-                  })} ${useTranslation({
+                  })} ${translation({
                     lang: lang,
                     value: 'Username'
                   })}`}
                   width="100%"
                   scale={4 / 3}
-                  value={admin.username}
+                  value={admin.name}
                   onChange={(e) =>
-                    setAdmin({ ...admin, username: e.target.value })
+                    setAdmin({
+                      ...admin,
+                      name: e.target.value,
+                      username: e.target.value.toLowerCase().replace(/\s/, '')
+                    })
                   }
                 />
                 <Spacer h={1.5} />
                 <Input
                   htmlType={'email'}
-                  placeholder={`${useTranslation({
+                  placeholder={`${translation({
                     lang: lang,
                     value: 'Admin'
-                  })} ${useTranslation({
+                  })} ${translation({
                     lang: lang,
                     value: 'Email'
                   })}`}
@@ -183,10 +191,10 @@ const Setup = observer(() => {
                 />
                 <Spacer h={1.5} />
                 <Input.Password
-                  placeholder={`${useTranslation({
+                  placeholder={`${translation({
                     lang: lang,
                     value: 'Admin'
-                  })} ${useTranslation({
+                  })} ${translation({
                     lang: lang,
                     value: 'Password'
                   })}`}

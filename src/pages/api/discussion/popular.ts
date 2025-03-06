@@ -1,12 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  r,
-  Discussion,
-  Comment,
-  Category
-} from '../../../components/api/model';
-import { asyncForEach, withAuth } from '../../../components/api/utils';
+import { r, Discussion, Comment, Category } from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
 
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
@@ -21,13 +16,13 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         offset = offset - limit;
       }
 
-      await Discussion.orderBy(r.desc('createdAt'))
+      await Discussion.orderBy(r.desc('view'))
         .filter((post: any) => post('status').ne('banned'))
         .getJoin()
         .skip(offset)
         .limit(limit)
         .then(async (data: any) => {
-          await Discussion.orderBy(r.desc('createdAt')).then(async (c: any) => {
+          await Discussion.orderBy(r.desc('view')).then(async (c: any) => {
             let discussions: any = [];
             await asyncForEach(data, async (item: any) => {
               await Comment.filter({ discussionId: item.id }).then(

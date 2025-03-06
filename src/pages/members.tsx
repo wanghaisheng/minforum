@@ -3,107 +3,91 @@ import NextLink from 'next/link';
 import {
   Spacer,
   Text,
-  User,
   Card,
   Loading,
   Pagination,
-  Avatar
+  Avatar,
+  Popover,
+  useMediaQuery
 } from '@geist-ui/core';
-import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
+import {
+  ChevronRightCircle,
+  ChevronLeftCircle,
+  ChevronDown
+} from '@geist-ui/icons';
+import { LicenseIcon, Medal06Icon } from 'hugeicons-react';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
-import { format } from 'date-fns';
-import { es, fr, enUS, de, ja, ru, zhCN, ko } from 'date-fns/locale';
 import UserStore from 'stores/user';
-import useToken from 'components/Token';
-import { useRouter } from 'next/router';
-import SettingsStore from 'stores/settings';
-import { pluralize, formatNumber } from 'components/api/utils';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import useToken from 'components/token';
+import { pluralize, oneKFormat, formatNumber } from 'components/api/utils';
+import { Translation } from 'components/intl/translation';
+import useSettings from 'components/settings';
 
 const Members = observer(() => {
   const token = useToken();
-  const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const settings = useSettings();
+  const isXS = useMediaQuery('mobile');
+  const [filter, setFilter] = useState('Newest');
   const [{ loading, page, limit, total, users, setPage, getUsers }] = useState(
     () => new UserStore()
   );
 
   useEffect(() => {
-    getSettings();
-    getUsers();
-  }, [token]);
+    getUsers(filter);
+  }, [token?.id, filter]);
 
-  const paginate = () => {
-    setPage(page + 1);
-    getUsers();
+  const handleFilter = (value: string) => {
+    setFilter(value);
+    setPage(1);
+    getUsers(value);
   };
 
-  const lang = settings.language;
-  const renderDate = (value: any) => {
-    const date: any = value
-      ? format(new Date(value), 'MMM d, yyyy @ h:mm a', {
-          locale:
-            lang === 'es'
-              ? es
-              : lang === 'fr'
-              ? fr
-              : lang === 'en'
-              ? enUS
-              : lang === 'ru'
-              ? ru
-              : lang === 'de'
-              ? de
-              : lang === 'cn'
-              ? zhCN
-              : lang === 'ja'
-              ? ja
-              : lang === 'ko'
-              ? ko
-              : null
-        })
-      : '';
-    return <span className="locale-time">{date}</span>;
+  const paginate = (value: number) => {
+    setPage(value);
+    getUsers(filter);
   };
+
   const user = users.map((item) => (
-    <div className="pointer" key={item.id}>
+    <div className="pointer" key={item.id} style={{}}>
       <NextLink href={`/u/${item.username}`}>
         <Card shadow className="notification-card">
           <div className="notification">
             <div className="one">
               <Avatar
                 src={
-                  item.photo ? `/storage/${item.photo}` : '/images/avatar.png'
+                  item.photo ? `/static/${item.photo}` : '/images/avatar.png'
                 }
                 w={2}
                 h={2}
               />
             </div>
             <div className="two">
-              <Text h4 className="text">
+              <Text h4={isXS == false} h5={isXS} className="text">
                 {item.name}
                 <Spacer inline />
                 <small>@{item.username}</small>
               </Text>
-              <Text small>
-                <Translation lang={settings?.language} value="Joined" />{' '}
-                {renderDate(item.createdAt)}
-              </Text>
-              <Spacer inline />
-              <Text small>
-                {formatNumber(item.discussion!)}{' '}
-                {useTranslation({
-                  lang: settings?.language,
-                  value: `Discussion${pluralize(item.discussion!)}`
-                })}
-              </Text>
-              <Spacer inline />
-              <Text small>
-                {formatNumber(item.coin!)}{' '}
-                {useTranslation({
-                  lang: settings?.language,
-                  value: `Coin${pluralize(item.coin!)}`
-                })}
+              <Text small className="lowercase">
+                <span className="icon-fit">
+                  <LicenseIcon size={14} />
+                </span>
+                {oneKFormat(item.discussion!)}{' '}
+                <Translation
+                  lang={settings?.language}
+                  value={`Discussion${pluralize(item.discussion!)}`}
+                />
+                <Spacer w={1} inline />
+                <span className="icon-fit">
+                  <Medal06Icon size={14} />
+                </span>
+                {oneKFormat(item.point!)}{' '}
+                <span>
+                  <Translation
+                    lang={settings?.language}
+                    value={`point${pluralize(item.point!)}`}
+                  />
+                </span>
               </Text>
             </div>
           </div>
@@ -117,11 +101,60 @@ const Members = observer(() => {
       <Navbar title="Members" description="Members" />
       <div className="page-container top-100">
         <div className="notification-container">
-          <div className="column">
+          <div className="column auto no-gap">
             <div>
-              <Text h3>
-                <Translation lang={settings?.language} value={'Members'} />
+              <Text h3={isXS == false} h4={isXS}>
+                <Translation lang={settings?.language} value={'Members'} /> (
+                {formatNumber(total)})
               </Text>
+            </div>
+            <div>
+              <div
+                className="pointer right-align"
+                style={{ position: 'relative', top: 5 }}
+              >
+                <Popover
+                  placement={isXS ? 'bottomEnd' : 'bottom'}
+                  content={
+                    <div className="popover-adjust min-width">
+                      <Popover.Item onClick={() => handleFilter('Newest')}>
+                        <span className="pointer">
+                          <Translation
+                            lang={settings?.language}
+                            value="Newest"
+                          />
+                        </span>
+                      </Popover.Item>
+                      <Popover.Item onClick={() => handleFilter('Popular')}>
+                        <span className="pointer">
+                          <Translation
+                            lang={settings?.language}
+                            value="Popular"
+                          />
+                        </span>
+                      </Popover.Item>
+                      <Popover.Item onClick={() => handleFilter('decorated')}>
+                        <span className="pointer">
+                          <Translation
+                            lang={settings?.language}
+                            value="Most Active"
+                          />
+                        </span>
+                      </Popover.Item>
+                    </div>
+                  }
+                >
+                  <span className="capitalize">
+                    <Translation
+                      lang={settings?.language}
+                      value={filter === 'decorated' ? 'Most Active' : filter}
+                    />
+                  </span>{' '}
+                  <span style={{ position: 'relative', top: 5 }}>
+                    <ChevronDown size={18} />
+                  </span>
+                </Popover>
+              </div>
             </div>
           </div>
 
@@ -136,12 +169,11 @@ const Members = observer(() => {
 
           <Spacer />
 
-          {total! >= limit ? (
+          {total >= limit ? (
             <div className="pagination">
               <Pagination
-                count={Math.round(total! / limit)}
-                initialPage={page}
-                limit={limit}
+                count={Math.round(total / limit)}
+                page={page}
                 onChange={paginate}
               >
                 <Pagination.Next>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { format } from 'date-fns';
 import { es, fr, enUS, de, ja, ru, zhCN } from 'date-fns/locale';
 import { Card, Text, Grid, Input } from '@geist-ui/core';
@@ -9,27 +9,30 @@ import dynamic from 'next/dynamic';
 const Chart = dynamic(() => import('react-apexcharts'), {
   ssr: false
 });
-import Navbar from 'components/admin/Navbar';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
-import DateModal from 'components/modals/DateModal';
+import Navbar from 'components/admin/navbar';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
+import DateModal from 'components/modals/date-modal';
 import AnalyticsStore from 'stores/analytics';
-import SettingsStore from 'stores/settings';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { translation, Translation } from 'components/intl/translation';
+import useSocket from 'components/socket';
+import useToken from 'components/token';
+import useSettings from 'components/settings';
 
 const Dashboard = observer(() => {
+  const token = useToken();
+  const socket = useSocket();
+  const settings = useSettings();
   const [modal, toggleDate] = useState(false);
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
-
+  const [active, setActive] = useState(0);
   const [
     {
-      loading,
       users,
       discussions,
       pageviews,
       getUsers,
       getDiscussions,
-      getPageviews
+      getPageAnalytics
     }
   ] = useState(() => new AnalyticsStore());
 
@@ -42,40 +45,47 @@ const Dashboard = observer(() => {
   ]);
 
   useEffect(() => {
-    getSettings();
-    let from = moment(date[0].startDate).format('YYYY-MM-DD');
-    let to = moment(date[0].endDate).format('YYYY-MM-DD');
+    let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
+    let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);
     getDiscussions(from, to);
-    getPageviews(from, to);
-  }, []);
+    getPageAnalytics(from, to);
+
+    return () => {
+      socket ? socket.close() : null;
+    };
+  }, [active, token?.id]);
+
+  socket?.on('activeUsers', (count) => {
+    setActive(count);
+  });
 
   const processAnalytics = async () => {
-    let from = moment(date[0].startDate).format('YYYY-MM-DD');
-    let to = moment(date[0].endDate).format('YYYY-MM-DD');
+    let from = dayjs(date[0].startDate).format('YYYY-MM-DD');
+    let to = dayjs(date[0].endDate).format('YYYY-MM-DD');
     getUsers(from, to);
     getDiscussions(from, to);
-    getPageviews(from, to);
+    getPageAnalytics(from, to);
     toggleDate(false);
   };
 
   const series = [
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Users'
       }),
       data: users.map((item: any) => item.count)
     },
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Discussions'
       }),
       data: discussions.map((item: any) => item.count)
     },
     {
-      name: useTranslation({
+      name: translation({
         lang: settings?.language,
         value: 'Pageviews'
       }),
@@ -124,13 +134,13 @@ const Dashboard = observer(() => {
   const lang = settings.language;
 
   return (
-    <Auth>
+    <Auth roles={['admin', 'moderator']}>
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Dashboard'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Dashboard'
         })}
@@ -144,7 +154,11 @@ const Dashboard = observer(() => {
         actionTrigger={processAnalytics}
       />
       <div className="page-container top-100">
-        <Sidebar active="dashboard" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="dashboard"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <div className="dashboard-header">
@@ -161,35 +175,35 @@ const Dashboard = observer(() => {
                     lang === 'es'
                       ? es
                       : lang === 'fr'
-                      ? fr
-                      : lang === 'en'
-                      ? enUS
-                      : lang === 'ru'
-                      ? ru
-                      : lang === 'de'
-                      ? de
-                      : lang === 'cn'
-                      ? zhCN
-                      : lang === 'ja'
-                      ? ja
-                      : null
+                        ? fr
+                        : lang === 'en'
+                          ? enUS
+                          : lang === 'ru'
+                            ? ru
+                            : lang === 'de'
+                              ? de
+                              : lang === 'cn'
+                                ? zhCN
+                                : lang === 'ja'
+                                  ? ja
+                                  : null
                 })} - ${format(date[0].endDate, 'MMM d, yyyy', {
                   locale:
                     lang === 'es'
                       ? es
                       : lang === 'fr'
-                      ? fr
-                      : lang === 'en'
-                      ? enUS
-                      : lang === 'ru'
-                      ? ru
-                      : lang === 'de'
-                      ? de
-                      : lang === 'cn'
-                      ? zhCN
-                      : lang === 'ja'
-                      ? ja
-                      : null
+                        ? fr
+                        : lang === 'en'
+                          ? enUS
+                          : lang === 'ru'
+                            ? ru
+                            : lang === 'de'
+                              ? de
+                              : lang === 'cn'
+                                ? zhCN
+                                : lang === 'ja'
+                                  ? ja
+                                  : null
                 })}`}
                 onClick={() => toggleDate(true)}
               />
@@ -197,7 +211,18 @@ const Dashboard = observer(() => {
           </div>
 
           <Grid.Container gap={2}>
-            <Grid xs={24} md={8}>
+            <Grid xs={24} md={6}>
+              <Card shadow width={'100%'}>
+                <Text h3 my={0}>
+                  <CountUp prefix="" start={0} end={active} separator="," />
+                </Text>
+                <Text h6 my={0}>
+                  <span style={{ color: '#36AF61' }}>&#x25cf; </span>
+                  <Translation lang={settings?.language} value="Online users" />
+                </Text>
+              </Card>
+            </Grid>
+            <Grid xs={24} md={6}>
               <Card shadow width={'100%'}>
                 <Text h3 my={0}>
                   <CountUp prefix="" start={0} end={userTotal} separator="," />
@@ -207,7 +232,7 @@ const Dashboard = observer(() => {
                 </Text>
               </Card>
             </Grid>
-            <Grid xs={24} md={8}>
+            <Grid xs={24} md={6}>
               <Card shadow width={'100%'}>
                 <Text h3 my={0}>
                   <CountUp
@@ -222,7 +247,7 @@ const Dashboard = observer(() => {
                 </Text>
               </Card>
             </Grid>
-            <Grid xs={24} md={8}>
+            <Grid xs={24} md={6}>
               <Card shadow width={'100%'}>
                 <Text h3 my={0}>
                   <CountUp

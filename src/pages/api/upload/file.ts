@@ -4,8 +4,8 @@ import formidable from 'formidable';
 import path from 'path';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Upload } from '../../../components/api/model';
-import { slug, isDoc, getEXT } from '../../../components/api/utils';
+import { Upload } from 'components/api/model';
+import { slug, isDoc, getEXT } from 'components/api/utils';
 
 const uploadFile = (req: NextApiRequest, res: NextApiResponse) => {
   const id = req.query.id;
@@ -17,7 +17,7 @@ const uploadFile = (req: NextApiRequest, res: NextApiResponse) => {
 
     if (isDoc(type)) {
       let newFile = `${Date.now()}.${type}`;
-      file.filepath = path.resolve('./public/storage/docs/', newFile);
+      file.filepath = path.resolve('./storage/', newFile);
 
       let data = {
         file: newFile,
@@ -52,3 +52,9 @@ const uploadFile = (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default uploadFile;
+
+export const config = {
+  api: {
+    bodyParser: false
+  }
+};

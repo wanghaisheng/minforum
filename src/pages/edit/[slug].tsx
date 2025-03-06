@@ -6,29 +6,35 @@ import {
   Select,
   Button,
   Card,
-  Modal
+  Modal,
+  Grid,
+  useMediaQuery
 } from '@geist-ui/core';
 import { Lock, Trash2 } from '@geist-ui/icons';
 import Link from 'next/link';
 import toast, { Toaster } from 'react-hot-toast';
-import Navbar from 'components/Navbar';
+import Navbar from 'components/navbar';
 import { observer } from 'mobx-react-lite';
 import DiscussionStore from 'stores/discussion';
-import useToken from 'components/Token';
+import useToken from 'components/token';
 import { useRouter } from 'next/router';
-import Editor from 'components/Editor';
+import Editor from 'components/editor';
 import CategoryStore from 'stores/category';
-import SettingsStore from 'stores/settings';
+import UserStore from 'stores/user';
 import { resProp } from 'interfaces/res';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, translation } from 'components/intl/translation';
+import useSettings from 'components/settings';
+import Auth from 'components/auth';
 
 const EditDiscussion = observer(() => {
   const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const { slug } = router.query;
+  const isXS = useMediaQuery('mobile');
   const [modal, toggleModal] = useState(false);
   const [content, setContent] = useState('');
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+  const [{ profile, getProfile }] = useState(() => new UserStore());
   const [{ categories, getCategories }] = useState(() => new CategoryStore());
   const [
     {
@@ -42,14 +48,15 @@ const EditDiscussion = observer(() => {
   ] = useState(() => new DiscussionStore());
 
   useEffect(() => {
-    getSettings();
-    token.id ? getCategories() : null;
+    token.id ? getProfile(token?.id) : null;
+    getCategories();
+
     router.isReady
       ? getDiscussion(slug).then((data) => {
           setContent(data.content!);
         })
       : null;
-  }, [token, router]);
+  }, [token?.id, router]);
 
   const deletePost = async (id: string) => {
     await deleteDiscussion({ id }).then((res: resProp) => {
@@ -66,21 +73,21 @@ const EditDiscussion = observer(() => {
     const { title, categoryId } = discussion;
     if (!title) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Title is too short!'
         })
       );
     } else if (!categoryId) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Please choose a category!'
         })
       );
     } else if (!content) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Content is blank.'
         })
@@ -90,7 +97,9 @@ const EditDiscussion = observer(() => {
         id: discussion.id,
         title,
         content,
-        categoryId
+        categoryId,
+        edited: true,
+        premium: discussion.premium
       };
 
       await updateDiscussion(data).then((res: any) => {
@@ -103,8 +112,12 @@ const EditDiscussion = observer(() => {
     }
   };
 
+  if (discussion.id && discussion.userId !== token?.id) {
+    router.push('/404');
+  }
+
   return (
-    <div>
+    <Auth>
       <Toaster />
       {!token.id ? (
         <div className="custom-modal all">
@@ -133,11 +146,11 @@ const EditDiscussion = observer(() => {
         ''
       )}
       <Navbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Edit discussion'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Edit discussion'
         })}
@@ -171,82 +184,136 @@ const EditDiscussion = observer(() => {
             <Translation lang={settings?.language} value={'Edit discussion'} />
           </Text>
           <Spacer />
-          <div className="discuss-grid">
-            <div className="item">
-              <Input
-                width="100%"
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Discussion Title'
-                })}
-                value={discussion.title}
-                onChange={(e) =>
-                  setDiscussion({ ...discussion, title: e.target.value })
-                }
-              ></Input>
+
+          {isXS ? (
+            <div>
+              <Grid.Container gap={1}>
+                <Grid xs={profile?.subAmount ? 24 : 16} lg={16}>
+                  <Input
+                    width="100%"
+                    placeholder={translation({
+                      lang: settings?.language,
+                      value: 'Discussion Title'
+                    })}
+                    value={discussion?.title}
+                    onChange={(e) =>
+                      setDiscussion({ ...discussion, title: e.target.value })
+                    }
+                  ></Input>
+                </Grid>
+                <Grid xs={24} lg={16}>
+                  <Select
+                    placeholder={translation({
+                      lang: settings?.language,
+                      value: 'Choose a Category'
+                    })}
+                    value={discussion.categoryId}
+                    onChange={(val) =>
+                      setDiscussion({ ...discussion, categoryId: val })
+                    }
+                  >
+                    {categories.map((item: any) => (
+                      <Select.Option key={item.id} value={item.slug}>
+                        {item.title}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Grid>
+              </Grid.Container>
+              <Spacer />
             </div>
-            <div className="item">
-              <Select
-                disableMatchWidth={true}
-                width={'100%'}
-                placeholder={useTranslation({
-                  lang: settings?.language,
-                  value: 'Choose a Category'
-                })}
-                value={discussion.categoryId}
-                onChange={(val) =>
-                  setDiscussion({ ...discussion, categoryId: val })
-                }
-              >
-                {categories.map((item: any) => (
-                  <Select.Option key={item.id} value={item.slug}>
-                    {item.title}
-                  </Select.Option>
-                ))}
-              </Select>
+          ) : (
+            <div className={`discuss-grid`}>
+              <div className="item">
+                <Input
+                  width="100%"
+                  value={discussion?.title}
+                  placeholder={translation({
+                    lang: settings?.language,
+                    value: 'Discussion Title'
+                  })}
+                  onChange={(e) =>
+                    setDiscussion({ ...discussion, title: e.target.value })
+                  }
+                ></Input>
+              </div>
+              <div className="item">
+                <Select
+                  disableMatchWidth={true}
+                  width={'100%'}
+                  placeholder={translation({
+                    lang: settings?.language,
+                    value: 'Choose a Category'
+                  })}
+                  value={discussion.categoryId}
+                  onChange={(val) =>
+                    setDiscussion({ ...discussion, categoryId: val })
+                  }
+                >
+                  {categories.map((item: any) => (
+                    <Select.Option key={item.id} value={item.slug}>
+                      {item.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
             </div>
-          </div>
+          )}
+
           {discussion.content ? (
             <Editor
               lang={settings?.language}
               value={content}
-              height="200px"
-              placeholder={useTranslation({
+              height="280px"
+              placeholder={translation({
                 lang: settings?.language,
                 value: 'Type something memorable...'
               })}
+              mentionButton
+              showEmoji
+              button={
+                <>
+                  {token.id ? (
+                    <>
+                      <Button
+                        auto
+                        loading={loading}
+                        type="secondary-light"
+                        onClick={save}
+                      >
+                        <Translation lang={settings?.language} value="Save" />
+                      </Button>
+                      <Spacer inline />
+                      <Button
+                        type="error"
+                        auto
+                        onClick={() => toggleModal(true)}
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  ) : (
+                    <Link href="/login">
+                      <Button auto loading={loading} type="secondary-light">
+                        <Translation
+                          lang={settings?.language}
+                          value={'Sign in to publish'}
+                        />
+                      </Button>
+                    </Link>
+                  )}
+                </>
+              }
               onChange={(val) => setContent(val)}
             />
           ) : (
             ''
           )}
 
-          {token.id ? (
-            <>
-              <Button loading={loading} type="secondary-light" onClick={save}>
-                <Translation lang={settings?.language} value="Save" />
-              </Button>
-              <Button
-                type="abort"
-                auto
-                icon={<Trash2 />}
-                onClick={() => toggleModal(true)}
-              />
-            </>
-          ) : (
-            <Link href="/login">
-              <Button loading={loading} type="secondary-light">
-                <Translation
-                  lang={settings?.language}
-                  value={'Sign in to publish'}
-                />
-              </Button>
-            </Link>
-          )}
           <Spacer h={5} />
         </div>
       </div>
-    </div>
+    </Auth>
   );
 });
 

@@ -1,8 +1,8 @@
-import { userProp } from '../../../interfaces/user';
+import { userProp } from 'interfaces/user';
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { r, User } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { r, User } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const search = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {

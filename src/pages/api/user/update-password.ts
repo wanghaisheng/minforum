@@ -1,13 +1,14 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { User } from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+import { User } from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 import bcrypt from 'bcryptjs';
 
 const update = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
     if (auth.success) {
       const { id, password, newPassword } = req.body;
+
       await User.get(id)
         .then(async (data: any) => {
           data = data.id ? data : { password: '' };

@@ -7,8 +7,8 @@ import {
   User,
   Reply,
   Notification
-} from '../../../components/api/model';
-import { withAuth } from '../../../components/api/utils';
+} from 'components/api/model';
+import { withAuth } from 'components/api/utils';
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
@@ -32,15 +32,17 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
                     .then(async (d: any) => {
                       await Discussion.get(discussionId).then(
                         async (disc: any) => {
-                          const notify = new Notification({
-                            type: 'post',
-                            sender: data.userId,
-                            receiver: d.userId,
-                            name: p.name,
-                            filterType: 'like-reply',
-                            action: `${disc.slug}#${d.slug}`
-                          });
-                          await notify.save().then(() => {});
+                          if (disc.userId !== userId) {
+                            const notify = new Notification({
+                              type: 'post',
+                              sender: data.userId,
+                              receiver: d.userId,
+                              name: p.name,
+                              filterType: 'like-reply',
+                              action: `${disc.slug}#${d.slug}`
+                            });
+                            await notify.save().then(() => {});
+                          }
                         }
                       );
                     });

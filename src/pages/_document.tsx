@@ -1,5 +1,13 @@
 import { Fragment } from 'react';
-import Document, { DocumentContext, DocumentInitialProps } from 'next/document';
+
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentContext,
+  DocumentInitialProps
+} from 'next/document';
 import { CssBaseline } from '@geist-ui/core';
 
 class MyDocument extends Document {
@@ -9,7 +17,7 @@ class MyDocument extends Document {
     const initialProps = await Document.getInitialProps(ctx);
     const styles = CssBaseline.flush();
 
-    return {
+    let components = {
       ...initialProps,
       styles: [
         <Fragment key="1">
@@ -18,6 +26,20 @@ class MyDocument extends Document {
         </Fragment>
       ]
     };
+
+    return components;
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }
 

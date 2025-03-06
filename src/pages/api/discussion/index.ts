@@ -1,12 +1,7 @@
 import signale from 'signale';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  r,
-  Discussion,
-  Comment,
-  Category
-} from '../../../components/api/model';
-import { asyncForEach, withAuth } from '../../../components/api/utils';
+import { r, Discussion, Comment, Category } from 'components/api/model';
+import { asyncForEach, withAuth } from 'components/api/utils';
 
 const index = async (req: NextApiRequest, res: NextApiResponse) => {
   await withAuth(req).then(async (auth) => {
@@ -21,34 +16,33 @@ const index = async (req: NextApiRequest, res: NextApiResponse) => {
         offset = offset - limit;
       }
 
-      await Discussion.orderBy(r.desc('createdAt'))
-        .filter((post: any) => post('status').ne('banned'))
+      await Discussion.orderBy(r.desc('timestamp'))
         .getJoin()
         .skip(offset)
         .limit(limit)
         .then(async (data: any) => {
-          await Discussion.orderBy(r.desc('createdAt')).then(async (c: any) => {
-            let discussions: any = [];
-            await asyncForEach(data, async (item: any) => {
-              await Comment.filter({ discussionId: item.id }).then(
-                async (comment: any) => {
-                  await Category.filter({ slug: item.categoryId }).then(
-                    (category: any) => {
-                      item = {
-                        ...item,
-                        comment: comment.length,
-                        category: category[0]
-                      };
-                      discussions.push(item);
-                    }
-                  );
-                }
-              );
-            }).finally(() => {
-              res
-                .status(200)
-                .json({ success: true, data: discussions, count: c.length });
-            });
+          let total = await r.table('discussions').count();
+
+          let discussions: any = [];
+          await asyncForEach(data, async (item: any) => {
+            await Comment.filter({ discussionId: item.id }).then(
+              async (comment: any) => {
+                await Category.filter({ slug: item.categoryId }).then(
+                  (category: any) => {
+                    item = {
+                      ...item,
+                      comment: comment.length,
+                      category: category[0]
+                    };
+                    discussions.push(item);
+                  }
+                );
+              }
+            );
+          }).finally(() => {
+            res
+              .status(200)
+              .json({ success: true, data: discussions, count: total });
           });
         })
         .catch((err: any) => signale.fatal(err));

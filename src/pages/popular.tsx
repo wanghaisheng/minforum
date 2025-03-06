@@ -1,45 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import NextLink from 'next/link';
-import {
-  Spacer,
-  Pagination,
-  Link,
-  Button,
-  Card,
-  Loading
-} from '@geist-ui/core';
-import { ChevronRightCircle, ChevronLeftCircle } from '@geist-ui/icons';
-import { useRouter } from 'next/router';
+import { Spacer, Link, Button, Popover, Loading } from '@geist-ui/core';
 import { Toaster } from 'react-hot-toast';
 import { observer } from 'mobx-react-lite';
-import Navbar from 'components/Navbar';
-import Post from 'components/Post';
-import Sidebar from 'components/Sidebar';
-import useToken from 'components/Token';
-import SettingsStore from 'stores/settings';
+import Navbar from 'components/navbar';
+import Sidebar from 'components/sidebar';
+import useToken from 'components/token';
 import DiscussionStore from 'stores/discussion';
-import Contributors from 'components/Contributors';
-import { Translation } from 'components/intl/Translation';
-import CategoryHeader from 'components/CategoryHeader';
+import Contributors from 'components/contributors';
+import { Translation } from 'components/intl/translation';
+import Footer from 'components/footer';
+import { DefaultUI, ClassicUI, SocialUI } from 'components/ui';
+import SettingsStore from 'stores/settings';
+import { Sliders } from '@geist-ui/icons';
 
 const Home = observer(() => {
   const token = useToken();
-  const router = useRouter();
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
   const [
-    { loading, page, total, limit, discussions, setPage, getPopularDiscussions }
+    { loading, page, nomore, discussions, setPage, getPopularDiscussions }
   ] = useState(() => new DiscussionStore());
   const [modal, toggleModal] = useState(false);
+  const [{ settings, update, setSettings, getSettings }] = useState(
+    () => new SettingsStore()
+  );
 
   useEffect(() => {
     getSettings();
-    getPopularDiscussions();
-  }, [token]);
+    getPopularDiscussions(false);
+  }, [token?.id, settings?.ui]);
 
-  const paginate = (val: number) => {
-    setPage(val);
-    getPopularDiscussions();
+  const changeUI = async (value: any) => {
+    await update({ ...settings, ui: value }).then(() => {
+      setSettings({ ...settings, ui: value });
+    });
   };
+
+  const handleScroll = useCallback(() => {
+    const offset = 50;
+
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - offset
+    ) {
+      if (nomore === false) {
+        setPage(page + 1);
+        getPopularDiscussions(true);
+      }
+    }
+  }, [discussions, nomore, page]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   const removeBanWords = (data: string) => {
     let banWords: any = settings && settings.banWords ? settings.banWords : '';
@@ -56,6 +69,13 @@ const Home = observer(() => {
 
     return data;
   };
+
+  const UI =
+    settings.ui === 'social'
+      ? SocialUI
+      : settings.ui === 'classic'
+        ? ClassicUI
+        : DefaultUI;
 
   return (
     <div>
@@ -80,13 +100,15 @@ const Home = observer(() => {
           }
           advert={
             settings.advert?.left ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.left!
-                  }}
-                ></div>
-              </Card>
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingTop: 20,
+                  paddingRight: 20
+                }}
+                dangerouslySetInnerHTML={{ __html: settings.advert?.left! }}
+              ></div>
             ) : (
               ''
             )
@@ -94,7 +116,7 @@ const Home = observer(() => {
         />
         <main className="main with-right">
           <div
-            style={{ marginBottom: 10 }}
+            style={{ marginBottom: 10, width: '100%' }}
             dangerouslySetInnerHTML={{ __html: settings.advert?.top! }}
           ></div>
 
@@ -113,25 +135,105 @@ const Home = observer(() => {
           ) : (
             ''
           )}
-          <CategoryHeader />
-          <div className="custom-tab">
-            <NextLink href="/popular">
-              <Link className="active">
-                {' '}
-                <Translation lang={settings?.language} value="Popular" />
-              </Link>
-            </NextLink>
-            <NextLink href="/">
-              <Link>
-                <Translation lang={settings?.language} value="Recent" />
-              </Link>
-            </NextLink>
-            <NextLink href="/unanswered">
-              <Link>
-                <Translation lang={settings?.language} value="Unanswered" />
-              </Link>
-            </NextLink>
+
+          <div className="column ui">
+            <div>
+              <div className="custom-tab">
+                <NextLink href="/popular">
+                  <Link className="active">
+                    <Translation lang={settings?.language} value="Popular" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/">
+                  <Link>
+                    <Translation lang={settings?.language} value="Recent" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/unanswered">
+                  <Link>
+                    <Translation lang={settings?.language} value="Unanswered" />
+                  </Link>
+                </NextLink>
+                <NextLink href="/category">
+                  <Link>
+                    <Translation lang={settings?.language} value="Categories" />
+                  </Link>
+                </NextLink>
+              </div>
+            </div>
+            <div className="desktop">
+              <div>
+                <Popover
+                  placement="leftStart"
+                  content={
+                    <div style={{ width: 130 }}>
+                      <Popover.Item title>
+                        <Translation
+                          lang={settings?.language}
+                          value="Discussion UI"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('default')}
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Default"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('classic')}
+                      >
+                        <Translation
+                          lang={settings?.language}
+                          value="Classic"
+                        />
+                      </Popover.Item>
+                      <Popover.Item
+                        className="pointer"
+                        onClick={() => changeUI('social')}
+                      >
+                        <Translation lang={settings?.language} value="Social" />
+                      </Popover.Item>
+                    </div>
+                  }
+                >
+                  <span
+                    className="pointer"
+                    style={{ position: 'relative', top: 5 }}
+                  >
+                    <Sliders size={20} />
+                  </span>
+                </Popover>
+              </div>
+            </div>
           </div>
+
+          {discussions.map((item) => (
+            <UI
+              key={item.id}
+              lang={settings?.language}
+              category={item.category?.title}
+              color={item.category?.color}
+              slug={item.slug}
+              data={item.content}
+              avatar={
+                item.profile && item.profile.photo
+                  ? `/static/${item.profile.photo}`
+                  : '/images/avatar.png'
+              }
+              author={item.profile?.name}
+              authorRole={item.profile?.role}
+              authorUsername={item.profile?.username}
+              title={removeBanWords(item.title)}
+              comment={item.comment}
+              premium={item.premium}
+              view={item.view}
+              date={item.createdAt}
+            />
+          ))}
 
           {loading ? (
             <div>
@@ -146,38 +248,15 @@ const Home = observer(() => {
             ''
           )}
 
-          {discussions.map((item) => (
-            <Post
-              key={item.id}
-              lang={settings?.language}
-              category={item.category?.title}
-              slug={item.slug}
-              avatar={
-                item.profile && item.profile.photo
-                  ? `/storage/${item.profile.photo}`
-                  : '/images/avatar.png'
-              }
-              author={item.profile?.name}
-              title={removeBanWords(item.title)}
-              comment={item.comment}
-              date={item.createdAt}
-            />
-          ))}
-          {total >= limit ? (
-            <div className="pagination">
-              <Pagination
-                count={Math.round(total / limit)}
-                initialPage={page}
-                limit={limit}
-                onChange={paginate}
-              >
-                <Pagination.Next>
-                  <ChevronRightCircle />
-                </Pagination.Next>
-                <Pagination.Previous>
-                  <ChevronLeftCircle />
-                </Pagination.Previous>
-              </Pagination>
+          {!loading && discussions.length === 0 ? (
+            <div className="center">
+              <Spacer h={3} />
+              <p>
+                <Translation
+                  lang={settings?.language}
+                  value={`No Discussion`}
+                />
+              </p>
             </div>
           ) : (
             ''
@@ -188,16 +267,20 @@ const Home = observer(() => {
           <div className="sidenav">
             <Contributors lang={settings?.language} />
             {settings.advert?.right ? (
-              <Card>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: settings.advert?.right!
-                  }}
-                ></div>
-              </Card>
+              <div
+                style={{
+                  boxSizing: 'border-box',
+                  width: '100%',
+                  paddingLeft: 10
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: settings.advert?.right!
+                }}
+              ></div>
             ) : (
               ''
             )}
+            <Footer siteName={settings?.siteName} />
           </div>
         </aside>
       </div>

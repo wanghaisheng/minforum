@@ -25,7 +25,7 @@ const sendMail = async (
 
         await transporter
           .sendMail({
-            from: `${data.siteName} <no-reply@caudal.tech>`,
+            from: `${data.senderName || data.siteName} <${data.senderEmail || `no-reply@${data.domain}`}>`,
             to: emailAddress,
             subject: title,
             html: template

@@ -1,7 +1,8 @@
-import { resProp } from './../interfaces/res';
-import { action, observable, makeAutoObservable } from 'mobx';
+import { resProp } from 'interfaces/res';
+import { action, observable, makeAutoObservable, runInAction } from 'mobx';
 import { userProp } from 'interfaces/user';
-import { discussionProp } from './../interfaces/discussion';
+import { discussionProp } from 'interfaces/discussion';
+import { encrypt } from 'components/api/utils';
 
 const API_URL: any = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY: any = process.env.NEXT_PUBLIC_API_KEY;
@@ -21,72 +22,90 @@ export default class AnalyticsStore {
   };
 
   @action getUsers = async (from: string, to: string) => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
+
     let url = `${API_URL}/analytics/users?from=${from}&to=${to}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.users = res.data;
-
-          this.loading = false;
+          runInAction(() => {
+            this.users = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
   @action getDiscussions = async (from: string, to: string) => {
-    this.loading = true;
-    this.users = [];
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
+
     let url = `${API_URL}/analytics/discussions?from=${from}&to=${to}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.discussions = res.data;
-
-          this.loading = false;
+          runInAction(() => {
+            this.discussions = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
   };
 
-  @action getPageviews = async (from: string, to: string) => {
-    this.loading = true;
-    this.users = [];
+  @action getPageAnalytics = async (from: string, to: string) => {
+    runInAction(() => {
+      this.loading = true;
+      this.users = [];
+    });
+
     let url = `${API_URL}/analytics/pageviews?from=${from}&to=${to}`;
 
     await fetch(url, {
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       }
     })
       .then((res) => res.json())
       .then((res: resProp) => {
         if (res.success) {
-          this.pageviews = res.data;
-
-          this.loading = false;
+          runInAction(() => {
+            this.pageviews = res.data;
+            this.loading = false;
+          });
         } else {
-          this.loading = false;
+          runInAction(() => {
+            this.loading = false;
+          });
         }
       })
       .catch((err) => console.log(err));
@@ -99,7 +118,7 @@ export default class AnalyticsStore {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        apikey: API_KEY
+        Authorization: encrypt(API_KEY)
       },
       body: JSON.stringify(body)
     })

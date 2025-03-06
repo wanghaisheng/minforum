@@ -13,10 +13,10 @@ import { useRouter } from 'next/router';
 import { setCookie, parseCookies } from 'nookies';
 import toast, { Toaster } from 'react-hot-toast';
 import { ChevronLeft, ChevronRight, Image as Picture } from '@geist-ui/icons';
-import Navbar from 'components/Navbar';
-import SetupVerify from 'components/admin/SetupVerify';
+import Navbar from 'components/navbar';
+import SetupVerify from 'components/admin/setup-verify';
 import SettingsStore from 'stores/settings';
-import { Translation, useTranslation } from 'components/intl/Translation';
+import { Translation, translation } from 'components/intl/translation';
 
 const MetaSetup = observer(() => {
   const cookie = parseCookies();
@@ -70,7 +70,7 @@ const MetaSetup = observer(() => {
     const { siteName, siteDescription } = settings;
 
     if (!siteName || siteName.length < 3) {
-      toast.error('Username is too short!');
+      toast.error('Site name is too short. Minimum character is three.');
     } else if (!siteDescription || siteDescription.length < 10) {
       toast.error('Description is too short! Minimum character is 10.');
     } else {
@@ -86,17 +86,18 @@ const MetaSetup = observer(() => {
   return (
     <SetupVerify>
       <Navbar
-        title="Metadata - Setup Weiss"
-        description="Metadata - Setup Weiss"
+        title="Metadata - Setup Minforum"
+        description="Metadata - Setup Minforum"
         hide
+        norobot
       />
       <Toaster />
       <div className="polkadot">
         <div className="page-container top-100">
           <div className="boxed">
-            <Text h2 width={'100%'} style={{ textAlign: 'center' }}>
-              Weiss
-            </Text>
+            <div className="center">
+              <img src="/images/logo-wordmark.svg" height={80} />
+            </div>
 
             <Card shadow width="100%">
               <Text h3>
@@ -117,7 +118,7 @@ const MetaSetup = observer(() => {
                 <div>
                   {settings.siteLogo ? (
                     <Image
-                      src={`/storage/${settings.siteLogo}`}
+                      src={`/static/${settings.siteLogo}`}
                       style={{ width: 'auto', height: 30 }}
                     />
                   ) : (
@@ -129,7 +130,7 @@ const MetaSetup = observer(() => {
 
               <Spacer h={1.5} />
               <Input
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'Site name'
                 })}
@@ -145,7 +146,7 @@ const MetaSetup = observer(() => {
               />
               <Spacer h={1.5} />
               <Textarea
-                placeholder={useTranslation({
+                placeholder={translation({
                   lang: lang,
                   value: 'Site description'
                 })}
@@ -162,9 +163,9 @@ const MetaSetup = observer(() => {
               <Spacer h={1.5} />
               <Button
                 onClick={() => router.back()}
-                type="secondary"
                 width="48%"
                 icon={<ChevronLeft />}
+                style={{ backgroundColor: '#f9f9f9' }}
               >
                 <Translation lang={lang} value="Back" />
               </Button>

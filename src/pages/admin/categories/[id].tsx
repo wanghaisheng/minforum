@@ -7,47 +7,58 @@ import {
   Select,
   Input,
   Textarea,
-  Toggle
+  Toggle,
+  Popover
 } from '@geist-ui/core';
 import toast, { Toaster } from 'react-hot-toast';
 import { ChromePicker } from 'react-color';
 import { useRouter } from 'next/router';
-import AdminNavbar from 'components/admin/Navbar';
-import Sidebar from 'components/admin/Sidebar';
-import Auth from 'components/admin/Auth';
+import AdminNavbar from 'components/admin/navbar';
+import Sidebar from 'components/admin/sidebar';
+import Auth from 'components/admin/auth';
 import CategoryStore from 'stores/category';
 import UserStore from 'stores/user';
-import SettingsStore from 'stores/settings';
-import { useTranslation, Translation } from 'components/intl/Translation';
+import { translation, Translation } from 'components/intl/translation';
+import useToken from 'components/token';
+import useSettings from 'components/settings';
+import CustomIcon from 'components/data/icon/icon';
+import IconWidget from 'components/data/icon/widget';
 
 const EditCategory = observer(() => {
+  const token = useToken();
   const router = useRouter();
+  const settings = useSettings();
   const { id } = router.query;
   const [showColor, toggleColor] = useState(false);
+  const [visible, setVisible] = useState(false);
+
   const [{ users, getModerators }] = useState(() => new UserStore());
-  const [{ settings, getSettings }] = useState(() => new SettingsStore());
+
   const [{ loading, category, setCategory, getCategory, updateCategory }] =
     useState(() => new CategoryStore());
-  const { title, description, color, authRequired, moderator } = category;
+  const { title, description, color, authRequired, moderator, icon } = category;
 
   useEffect(() => {
-    getSettings();
     getModerators();
     let _id: any = id;
     router.isReady ? getCategory(_id) : null;
-  }, [router]);
+  }, [router, token?.id]);
+
+  const changeHandler = (next) => {
+    setVisible(next);
+  };
 
   const save = async () => {
     if (!title || title.length < 3) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
-          value: 'Title is too short.'
+          value: 'Title is too short. Minimum of 3 characters.'
         })
       );
     } else if (!description) {
       toast.error(
-        useTranslation({
+        translation({
           lang: settings?.language,
           value: 'Description is required'
         })
@@ -63,14 +74,14 @@ const EditCategory = observer(() => {
       await updateCategory(category).then((res: any) => {
         if (res.success) {
           toast.success(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Category updated successfully'
             })
           );
         } else {
           toast.error(
-            useTranslation({
+            translation({
               lang: settings?.language,
               value: 'Unable to update category. Please try again!'
             })
@@ -81,21 +92,25 @@ const EditCategory = observer(() => {
   };
 
   return (
-    <Auth>
+    <Auth roles={['admin']}>
       <Toaster />
       <AdminNavbar
-        title={useTranslation({
+        title={translation({
           lang: settings?.language,
           value: 'Edit category'
         })}
-        description={useTranslation({
+        description={translation({
           lang: settings?.language,
           value: 'Edit category'
         })}
       />
 
       <div className="page-container top-100">
-        <Sidebar active="categories" lang={settings?.language} />
+        <Sidebar
+          role={token?.role}
+          active="categories"
+          lang={settings?.language}
+        />
 
         <main className="main for-admin">
           <div className="boxed">
@@ -137,6 +152,30 @@ const EditCategory = observer(() => {
             )}
 
             <Text>
+              <Translation lang={settings?.language} value="Icon" />
+            </Text>
+            <Popover
+              hideArrow
+              visible={visible}
+              onVisibleChange={changeHandler}
+              content={
+                <IconWidget
+                  width={350}
+                  height={300}
+                  lang={settings?.language}
+                  onPick={(val) => {
+                    setCategory({ ...category, ...{ icon: val } });
+                    setVisible(false);
+                  }}
+                />
+              }
+              width={'100%'}
+            >
+              <Button icon={<CustomIcon name={icon?.icon} type={icon?.type} />}>
+                Change icon
+              </Button>
+            </Popover>
+            <Text>
               <Translation lang={settings?.language} value="Title" />
             </Text>
             <Input
@@ -157,11 +196,11 @@ const EditCategory = observer(() => {
               }
             />
             <Spacer />
-            <Text>
+            {/* <Text>
               <Translation lang={settings?.language} value="Moderators" />
             </Text>
             <Select
-              placeholder={useTranslation({
+              placeholder={translation({
                 lang: settings?.language,
                 value: 'Choose one or more'
               })}
@@ -175,7 +214,7 @@ const EditCategory = observer(() => {
                   {item.name}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
             <Text>
               <Toggle
                 type="secondary"
